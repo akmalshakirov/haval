@@ -1,0 +1,106 @@
+.header {
+    /* display: flex;
+    align-items: center;
+    opacity: 0.9;
+    text-align: center; */
+
+    /*  */
+    /* padding: 15px 10px; */
+    background: rgba(30, 30, 30, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 20;
+}
+
+.header__inner {
+    padding: 15px 20px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.header__nav {
+    flex-grow: 1;
+}
+
+.header-nav__links {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.header-nav__link {
+    height: 100%;
+    background-color: transparent;
+}
+
+.header-nav__links li a {
+    font-weight: 500;
+    color: #fff;
+    font-family: "Roboto";
+    letter-spacing: 1.5px;
+}
+
+.header-ru .header-nav__links li a {
+    letter-spacing: 0;
+}
+
+.header__item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header__logo {
+    margin-right: 100px;
+}
+
+.fa-phone {
+    color: #fff;
+    font-size: 20px;
+}
+
+.header__lang {
+    position: relative;
+}
+
+.language-btn {
+    position: relative;
+    font-family: var(--font-mich);
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    padding: 0;
+}
+
+.header__lang:hover .ru {
+    opacity: 1;
+    pointer-events: auto;
+    background-color: #1e1e1e;
+    color: #fff;
+}
+
+.fa-angle-down {
+    margin-left: 5px;
+}
+
+.ru {
+    position: absolute;
+    top: 23px;
+    left: 0px;
+    opacity: 0;
+    transition: 0.3s all ease;
+    border-radius: 7px;
+    cursor: default;
+    padding: 10px;
+    pointer-events: none;
+}
+
+.ru:hover {
+    background: #fff !important;
+    color: #000 !important;
+}

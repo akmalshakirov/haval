@@ -1,0 +1,43 @@
+:root {
+    --font-mich: "Michroma";
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+ul,
+ol,
+li {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+button {
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-family: var(--font-mich);
+}
+
+html,
+body {
+    font-family: var(--font-mich);
+}
+
+/* --------------------------------------------- */
+
+/* .container {
+    max-width: 1349px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+} */

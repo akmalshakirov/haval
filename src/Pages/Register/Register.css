@@ -1,0 +1,52 @@
+.register {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.register h1 {
+    font-size: 26px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.register form {
+    display: flex;
+    flex-direction: column;
+}
+
+.register label {
+    margin-bottom: 8px;
+}
+
+.register input {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.register .submit {
+    padding: 10px;
+    font-size: 16px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.register .submit:hover {
+    background-color: #7bce7f;
+}
+
+.have-account {
+    font-size: 13px;
+}
+
+.have-account a:hover {
+    text-decoration: underline;
+}
