@@ -1,13 +1,6 @@
 .header {
-    /* display: flex;
-    align-items: center;
-    opacity: 0.9;
-    text-align: center; */
-
-    /*  */
-    /* padding: 15px 10px; */
-    background: rgba(30, 30, 30, 0.7);
     display: flex;
+    background: rgba(30, 30, 30, 0.7);
     align-items: center;
     justify-content: space-between;
     position: fixed;
@@ -35,18 +28,19 @@
 
 .header-nav__link {
     height: 100%;
-    background-color: transparent;
 }
 
-.header-nav__links li a {
+.header-nav__links li a,
+.header-nav__links li button {
     font-weight: 500;
     color: #fff;
     font-family: "Roboto";
     letter-spacing: 1.5px;
 }
 
-.header-ru .header-nav__links li a {
-    letter-spacing: 0;
+.header-ru .header-nav__links li a,
+.header-nav__links li button {
+    letter-spacing: 1px;
 }
 
 .header__item {
@@ -83,7 +77,6 @@
     background-color: #1e1e1e;
     color: #fff;
 }
-
 .fa-angle-down {
     margin-left: 5px;
 }
@@ -103,4 +96,77 @@
 .ru:hover {
     background: #fff !important;
     color: #000 !important;
+}
+
+.owner-btn {
+    background-color: transparent;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.owners-modal-overlay {
+    position: fixed;
+    top: 90px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.owners-modal.active {
+    padding: 20px;
+    background-color: #fff;
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.1) rotate(-10deg);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+    }
+}
+
+.owners-modal.active a {
+    color: #000;
+}
+.owners-modal.active a:hover {
+    text-decoration: underline;
+}
+
+.models-modal-cards {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.models-modal-card {
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    padding: 30px 10px;
+    transition: 0.7s;
+}
+.models-modal-card:hover {
+    box-shadow: inset 0px 10px 10px 200px #76bbc4;
+}
+.models-modal-cards img {
+    width: 397px;
+    height: 111px;
+    object-fit: cover;
+}
+
+/* .swiper-button-prev::after {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+} */
+
+.swiper-slide-3 {
+    margin-top: 50px;
+    color: #ffffff08;
 }

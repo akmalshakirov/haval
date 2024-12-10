@@ -4,7 +4,7 @@ import "./AdminLogin.css";
 
 const { Title, Text } = Typography;
 
-const LoginForm = () => {
+const AdminLogin = () => {
     const onFinish = (values) => {
         console.log("Submitted values:", values);
     };
@@ -81,4 +81,4 @@ const LoginForm = () => {
     );
 };
 
-export default LoginForm;
+export default AdminLogin;

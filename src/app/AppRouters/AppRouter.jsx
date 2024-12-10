@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Navigate, replace, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import HeaderNavBar from "../../Components/Header/HeaderNavBar";
 import Login from "../../Pages/Login/Login";
 import Dealers from "../../Pages/Dealers/Dealers";
@@ -9,9 +9,14 @@ import HavalDargo from "../../Pages/Models/Haval-Dargo/HavalDargo";
 import Models from "../../Pages/Models/Models";
 import PrivateRoute from "../../Components/PrivateRoute/Private.jsx";
 import Register from "../../Pages/Register/Register.jsx";
-import AdminEXAMPLE from "../../Components/Admin/AdminEXAMPLE.jsx";
 import AdminLogin from "../../Components/Admin_login/AdminLogin.jsx";
-import CarAnimation from "../../Components/PageTR/CarAnimation.jsx";
+import HavalJolion from "../../Pages/Models/Haval-Jolion/HavalJolion.jsx";
+import Guarantee from "../../Pages/Guarantee/Guarantee.jsx";
+import AdminLayout from "../../Components/Admin/AdminEXAMPLE.jsx";
+import WTF from "../../Components/Admin/WTF.jsx";
+import HavalM6 from "../../Pages/Models/Haval-M6/HavalM6.jsx";
+import HavalH6 from "../../Pages/Models/HavalH6/HavalH6.jsx";
+import GWMwignle7 from "../../Pages/Models/GWM-wingle-7/GWM-wignle-7.jsx";
 
 function AppRouter() {
     const [isAuthenticated, setIsAuthenticated] = useState(
@@ -23,10 +28,10 @@ function AppRouter() {
         localStorage.setItem("isAuthenticated", "true");
     };
 
-    const handleLogout = () => {
-        setIsAuthenticated(false);
-        localStorage.removeItem("isAuthenticated");
-    };
+    // const handleLogout = () => {
+    //     setIsAuthenticated(false);
+    //     localStorage.removeItem("isAuthenticated");
+    // };
 
     return (
         <div>
@@ -34,13 +39,20 @@ function AppRouter() {
                 <Route
                     path='/'
                     element={
-                        <>
+                        <PrivateRoute isAuthenticated={isAuthenticated}>
                             <HeaderNavBar />
                             <HeaderSwiper />
-                        </>
+                        </PrivateRoute>
                     }
                 />
-
+                <Route
+                    path='/admin-ex'
+                    element={
+                        <PrivateRoute isAuthenticated={isAuthenticated}>
+                            <AdminLayout />
+                        </PrivateRoute>
+                    }
+                />
                 <Route
                     path='/admin'
                     element={
@@ -49,18 +61,7 @@ function AppRouter() {
                         </PrivateRoute>
                     }
                 />
-                <Route
-                    path='/admin-example'
-                    element={
-                        <PrivateRoute isAuthenticated={isAuthenticated}>
-                            {/* <AdminPanel /> */}
-                            <AdminEXAMPLE />
-                        </PrivateRoute>
-                    }
-                />
-
                 <Route path='/admin/auth' element={<AdminLogin />} />
-
                 <Route
                     path='/dealers'
                     element={
@@ -69,7 +70,6 @@ function AppRouter() {
                         </PrivateRoute>
                     }
                 />
-
                 <Route
                     path='/models'
                     element={
@@ -78,7 +78,6 @@ function AppRouter() {
                         </PrivateRoute>
                     }
                 />
-
                 <Route
                     path='/models/haval-dargo'
                     element={
@@ -87,16 +86,68 @@ function AppRouter() {
                         </PrivateRoute>
                     }
                 />
+                <Route
+                    path='/models/haval-jolion'
+                    element={
+                        <PrivateRoute isAuthenticated={isAuthenticated}>
+                            <HavalJolion />
+                        </PrivateRoute>
+                    }
+                />
 
-                <Route path='/register' element={<Register />} />
+                <Route
+                    path='/models/haval-m6'
+                    element={
+                        <PrivateRoute isAuthenticated={isAuthenticated}>
+                            <HavalM6 />
+                        </PrivateRoute>
+                    }
+                />
+
+                <Route
+                    path='/models/haval-h6'
+                    element={
+                        <PrivateRoute isAuthenticated={isAuthenticated}>
+                            <HavalH6 />
+                        </PrivateRoute>
+                    }
+                />
+
+                <Route
+                    path='/models/gwm-wingle-7'
+                    element={
+                        <PrivateRoute isAuthenticated={isAuthenticated}>
+                            <GWMwignle7 />
+                        </PrivateRoute>
+                    }
+                />
+
+                <Route
+                    path='/owners/service/guarantee'
+                    element={
+                        <PrivateRoute isAuthenticated={isAuthenticated}>
+                            <Guarantee />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path='/register'
+                    element={<Register />}
+                    isAuthenticated={isAuthenticated}
+                />
 
                 <Route
                     path='/login'
-                    element={<Login onLogin={handleLogin} />}
+                    element={
+                        <Login
+                            onLogin={handleLogin}
+                            isAuthenticated={isAuthenticated}
+                        />
+                    }
                 />
 
                 <Route path='*' element={<Navigate to='/login' />} />
-                <Route path='/animation' element={<CarAnimation />} />
+                <Route path='/w' element={<WTF />} />
             </Routes>
         </div>
     );

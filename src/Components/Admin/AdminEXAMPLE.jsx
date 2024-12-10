@@ -1,335 +1,110 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import "./Admin.css";
+import HeaderNavBar from "../Header/HeaderNavBar";
 import {
-    Layout,
-    Menu,
-    Table,
-    Button,
-    Modal,
-    Form,
-    Input,
-    message,
-    Avatar,
-    Image,
-    Upload,
-} from "antd";
-import {
-    HomeOutlined,
-    CarOutlined,
-    SettingOutlined,
+    MenuFoldOutlined,
+    MenuUnfoldOutlined,
     UploadOutlined,
+    UserOutlined,
+    CarOutlined,
 } from "@ant-design/icons";
+import { Button, Layout, Menu, theme } from "antd";
 
-const { Header, Sider, Content, Footer } = Layout;
+const { Header, Sider, Content } = Layout;
 
-const AdminLayout = () => {
+function AdminLayout() {
+    const [collapsed, setCollapsed] = useState(false);
     const [selectedKey, setSelectedKey] = useState("1");
-    const [cars, setCars] = useState([]);
-    const [admins, setAdmins] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isImageModalOpen, setIsImageModalOpen] = useState(false);
-    const [hoveredImage, setHoveredImage] = useState(""); // Modalda ko'rsatiladigan rasm
-    const [fileList, setFileList] = useState([]); // Rasmni saqlash uchun
-    const [form] = Form.useForm();
+    const {
+        token: { colorBgContainer, borderRadiusLG },
+    } = theme.useToken();
 
-    const fetchCars = () => {
-        setCars([
-            {
-                key: "1",
-                model: "Haval H6",
-                year: 2023,
-                price: "$25,000",
-                image: "src/Images/haval-h6.jpg",
-            },
-            {
-                key: "2",
-                model: "Haval Jolion",
-                year: 2022,
-                price: "$22,000",
-                image: "src/Images/haval-jolion.jpg",
-            },
-            {
-                key: "3",
-                model: "Haval Dargo",
-                year: 2023,
-                price: "$18,000",
-                image: "src/Images/haval-dargo.jpg",
-            },
-            {
-                key: "4",
-                model: "Haval M6",
-                year: 2023,
-                price: "$23,500",
-                image: "src/Images/haval-m6.jpg",
-            },
-            {
-                key: "5",
-                model: "GWM WINGLE 7",
-                year: 2023,
-                price: "$24,430",
-                image: "src/Images/gwm-wingle-7.jpg",
-            },
-        ]);
-    };
-
-    const fetchAdmins = () => {
-        setAdmins([
-            { key: "1", username: "admin1", email: "admin1@example.com" },
-            { key: "2", username: "admin2", email: "admin2@example.com" },
-        ]);
-    };
-
-    useEffect(() => {
-        fetchCars();
-        fetchAdmins();
-    }, []);
-
-    const handleAddAdmin = (values) => {
-        setAdmins([...admins, { key: `${admins.length + 1}`, ...values }]);
-        message.success("Admin added successfully!");
-        setIsModalOpen(false);
-        form.resetFields();
-    };
-
-    const handleAddCar = (values) => {
-        if (fileList.length === 0) {
-            message.error("Please upload a car image!"); // Rasmsiz qabul qilinmasin
-            return;
+    const renderContent = () => {
+        switch (selectedKey) {
+            case "1":
+                return <div>iJEfiaupegagIUHPIUfhiufhIUPFFB f FPIF</div>;
+            case "2":
+                return <div>Models content</div>;
+            case "3":
+                return <div>NAVBAR 3 content</div>;
+            default:
+                return <div>Default content</div>;
         }
-
-        const newCar = {
-            ...values,
-            key: `${cars.length + 1}`,
-            image:
-                fileList[0].url ||
-                URL.createObjectURL(fileList[0].originFileObj),
-        };
-
-        setCars([...cars, newCar]);
-        message.success("Car added successfully!");
-        setFileList([]); // Fayllar ro'yxatini tozalash
-        setIsModalOpen(false); // Modalni yopish
-        form.resetFields(); // Formani tozalash
     };
-
-    const uploadProps = {
-        beforeUpload: (file) => {
-            setFileList([file]);
-            return false; // Faylni serverga yuborilmasin
-        },
-        onRemove: () => setFileList([]),
-        fileList,
-    };
-
-    const columnsCars = [
-        {
-            title: "Image",
-            dataIndex: "image",
-            key: "image",
-            render: (image) => (
-                <Avatar
-                    src={image}
-                    size={64}
-                    onClick={() => {
-                        setHoveredImage(image);
-                        setIsImageModalOpen(true);
-                    }}
-                    style={{ cursor: "pointer" }}
-                />
-            ),
-        },
-        { title: "Model", dataIndex: "model", key: "model" },
-        { title: "Year", dataIndex: "year", key: "year" },
-        { title: "Price", dataIndex: "price", key: "price" },
-    ];
-
-    const columnsAdmins = [
-        { title: "Username", dataIndex: "username", key: "username" },
-        { title: "Email", dataIndex: "email", key: "email" },
-    ];
 
     return (
-        <Layout style={{ minHeight: "100vh" }}>
-            <Sider collapsible>
-                <Menu
-                    theme='dark'
-                    mode='inline'
-                    defaultSelectedKeys={["1"]}
-                    onClick={(e) => setSelectedKey(e.key)}
-                    items={[
-                        { key: "1", icon: <HomeOutlined />, label: "Admin" },
-                        {
-                            key: "2",
-                            icon: <CarOutlined />,
-                            label: "Car models",
-                        },
-                        {
-                            key: "3",
-                            icon: <SettingOutlined />,
-                            label: "Settings",
-                        },
-                    ]}
-                />
-            </Sider>
-            <Layout>
-                <Header style={{ background: "#fff", padding: 0 }} />
-                <Content style={{ margin: "16px" }}>
-                    <div
+        <div className='admin'>
+            <div>
+                <HeaderNavBar />
+            </div>
+            <Layout className='layout'>
+                <Sider
+                    trigger={null}
+                    collapsible
+                    collapsed={collapsed}
+                    className='sider'>
+                    <Menu
+                        theme='dark'
+                        mode='inline'
+                        defaultSelectedKeys={["1"]}
+                        onClick={(e) => setSelectedKey(e.key)}
+                        items={[
+                            {
+                                key: "1",
+                                icon: <UserOutlined />,
+                                label: "Admin",
+                            },
+                            {
+                                key: "2",
+                                icon: <CarOutlined />,
+                                label: "Models",
+                            },
+                            {
+                                key: "3",
+                                icon: <UploadOutlined />,
+                                label: "NAVBAR 3",
+                            },
+                        ]}
+                    />
+                </Sider>
+                <Layout>
+                    <Header
                         style={{
-                            padding: 24,
-                            background: "#fff",
-                            minHeight: 360,
+                            padding: 0,
+                            background: colorBgContainer,
                         }}>
-                        {selectedKey === "1" && (
-                            <>
-                                <Button
-                                    type='primary'
-                                    style={{ marginBottom: 16 }}
-                                    onClick={() => setIsModalOpen(true)}>
-                                    Add Admin
-                                </Button>
-                                <Table
-                                    columns={columnsAdmins}
-                                    dataSource={admins}
-                                />
-                                <Modal
-                                    title='Add New Admin'
-                                    open={isModalOpen}
-                                    onCancel={() => setIsModalOpen(false)}
-                                    footer={null}>
-                                    <Form
-                                        form={form}
-                                        onFinish={handleAddAdmin}
-                                        layout='vertical'>
-                                        <Form.Item
-                                            name='username'
-                                            label='Username'
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    message:
-                                                        "Please input admin username!",
-                                                },
-                                            ]}>
-                                            <Input />
-                                        </Form.Item>
-                                        <Form.Item
-                                            name='email'
-                                            label='Email'
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    message:
-                                                        "Please input admin email!",
-                                                },
-                                            ]}>
-                                            <Input />
-                                        </Form.Item>
-                                        <Button
-                                            type='primary'
-                                            htmlType='submit'
-                                            block>
-                                            Submit
-                                        </Button>
-                                    </Form>
-                                </Modal>
-                            </>
-                        )}
-                        {selectedKey === "2" && (
-                            <>
-                                <Button
-                                    type='primary'
-                                    style={{ marginBottom: 16 }}
-                                    onClick={() => setIsModalOpen(true)}>
-                                    Add Car
-                                </Button>
-                                <Table
-                                    columns={columnsCars}
-                                    dataSource={cars}
-                                />
-                                <Modal
-                                    title='Add New Car'
-                                    open={isModalOpen}
-                                    onCancel={() => setIsModalOpen(false)}
-                                    footer={null}>
-                                    <Form
-                                        form={form}
-                                        onFinish={handleAddCar}
-                                        layout='vertical'>
-                                        <Form.Item
-                                            name='model'
-                                            label='Model'
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    message:
-                                                        "Please input car model!",
-                                                },
-                                            ]}>
-                                            <Input />
-                                        </Form.Item>
-                                        <Form.Item
-                                            name='year'
-                                            label='Year'
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    message:
-                                                        "Please input year!",
-                                                },
-                                            ]}>
-                                            <Input />
-                                        </Form.Item>
-                                        <Form.Item
-                                            name='price'
-                                            label='Price'
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    message:
-                                                        "Please input price!",
-                                                },
-                                            ]}>
-                                            <Input />
-                                        </Form.Item>
-                                        <Form.Item label='Car Image'>
-                                            <Upload
-                                                {...uploadProps}
-                                                listType='picture'>
-                                                <Button
-                                                    icon={<UploadOutlined />}>
-                                                    Upload
-                                                </Button>
-                                            </Upload>
-                                        </Form.Item>
-                                        <Button
-                                            type='primary'
-                                            htmlType='submit'
-                                            block>
-                                            Submit
-                                        </Button>
-                                    </Form>
-                                </Modal>
-                                <Modal
-                                    open={isImageModalOpen}
-                                    footer={null}
-                                    onCancel={() => setIsImageModalOpen(false)}>
-                                    <Image
-                                        src={hoveredImage}
-                                        alt='Car Image'
-                                        style={{ width: "100%" }}
-                                    />
-                                </Modal>
-                            </>
-                        )}
-                        {selectedKey === "3" && <h1>Settings Page</h1>}
-                    </div>
-                </Content>
-                <Footer style={{ textAlign: "center" }}>
-                    Haval Admin Panel ©2024
-                </Footer>
+                        <Button
+                            type='text'
+                            icon={
+                                collapsed ? (
+                                    <MenuUnfoldOutlined />
+                                ) : (
+                                    <MenuFoldOutlined />
+                                )
+                            }
+                            onClick={() => setCollapsed(!collapsed)}
+                            style={{
+                                fontSize: "16px",
+                                width: 64,
+                                height: 64,
+                            }}
+                        />
+                    </Header>
+                    <Content
+                        style={{
+                            margin: "24px 16px",
+                            padding: 24,
+                            minHeight: 280,
+                            background: colorBgContainer,
+                            borderRadius: borderRadiusLG,
+                        }}>
+                        {renderContent()}
+                    </Content>
+                </Layout>
             </Layout>
-        </Layout>
+        </div>
     );
-};
+}
 
 export default AdminLayout;

@@ -1,3 +1,20 @@
-.models {
-    font-size: 30px;
+.models-container {
+    position: relative;
+    margin-top: 90px;
+}
+
+.to-home {
+    position: relative;
+    display: flex;
+    gap: 5px;
+    transition: 0.3s;
+}
+
+.to-home li a:hover {
+    text-decoration: underline;
+}
+
+.to-home li:first-child::after {
+    content: ">";
+    margin-left: 5px;
 }

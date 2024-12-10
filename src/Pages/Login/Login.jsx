@@ -1,69 +1,3 @@
-// import React, { useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import "./login.css";
-
-// function Login({ onLogin }) {
-//     const [email, setEmail] = useState("");
-//     const [password, setPassword] = useState("");
-
-//     const navigate = useNavigate();
-
-//     const handleSubmit = (e) => {
-//         e.preventDefault();
-
-//         if (email === "admin@gmail.com" && password === "admin") {
-//             alert("Login qilding...");
-//             onLogin();
-//             navigate("/");
-//         } else {
-//             alert("Username yoki parol xato kiritildi!");
-//         }
-//     };
-
-//     return (
-//         <div className='login'>
-//             <div>
-//                 <h1>Kirish</h1>
-//             </div>
-//             <div>
-//                 <form onSubmit={handleSubmit}>
-//                     <div className='email'>
-//                         <label htmlFor='email'>Email:</label>
-//                         <input
-//                             type='email'
-//                             name='email'
-//                             id='email'
-//                             value={email}
-//                             onChange={(e) => setEmail(e.target.value)}
-//                         />
-//                     </div>
-//                     <div className='password'>
-//                         <label htmlFor='password'>Password:</label>
-//                         <input
-//                             type='password'
-//                             name='password'
-//                             id='password'
-//                             value={password}
-//                             onChange={(e) => setPassword(e.target.value)}
-//                         />
-//                     </div>
-//                     <div className='to-register'>
-//                         Sizda xaligacha akkaunt yoqmi?{" "}
-//                         <a href='/register'>Registratsiya</a>
-//                     </div>
-//                     <div>
-//                         <button type='submit' className='submit'>
-//                             Login
-//                         </button>
-//                     </div>
-//                 </form>
-//             </div>
-//         </div>
-//     );
-// }
-
-// export default Login;
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./login.css";
@@ -82,7 +16,7 @@ function Login({ onLogin }) {
         );
 
         if (isUserValid) {
-            alert("Login qilding...");
+            alert("Login ...");
             onLogin();
             navigate("/");
         } else {

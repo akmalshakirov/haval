@@ -1,8 +1,11 @@
-.admin > * :not(ul, li, ol) {
-    position: relative;
+.action {
+    display: flex;
+    font-size: 18px;
+    gap: 20px;
 }
-
-.layout {
-    width: 100%;
-    height: 85.8vh;
+.anticon .anticon-close .ant-modal-close-icon {
+    display: none;
+}
+:where(.css-dev-only-do-not-override-1x0dypw).ant-modal-root .ant-modal-wrap {
+    scrollbar-color: transparent transparent;
 }
