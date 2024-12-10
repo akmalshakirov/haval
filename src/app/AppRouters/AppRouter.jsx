@@ -28,11 +28,6 @@ function AppRouter() {
         localStorage.setItem("isAuthenticated", "true");
     };
 
-    // const handleLogout = () => {
-    //     setIsAuthenticated(false);
-    //     localStorage.removeItem("isAuthenticated");
-    // };
-
     return (
         <div>
             <Routes>
@@ -147,6 +142,7 @@ function AppRouter() {
                 />
 
                 <Route path='*' element={<Navigate to='/login' />} />
+
                 <Route path='/w' element={<WTF />} />
             </Routes>
         </div>
