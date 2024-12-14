@@ -11,16 +11,21 @@ import {
     Avatar,
     Image,
     Upload,
+    Tooltip,
 } from "antd";
 import {
     HomeOutlined,
     CarOutlined,
-    SettingOutlined,
     UploadOutlined,
-    VideoCameraAddOutlined,
     DeleteOutlined,
     EditOutlined,
+    VideoCameraOutlined,
+    StockOutlined,
+    NotificationOutlined,
+    LogoutOutlined,
 } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+import AdminVideos from "./AdminVideos";
 // import axios from "axios";
 
 const { Header, Sider, Content, Footer } = Layout;
@@ -35,24 +40,9 @@ const AdminPanel = () => {
     const [fileList, setFileList] = useState([]);
     const [form] = Form.useForm();
     const [actionModal, setActionModal] = useState(false);
-
-    const [data, setData] = useState();
-
-    // useEffect(() => {
-    //     axios
-    //         .get(
-    //             `https://66def146de4426916ee30952.mockapi.io/haval/headerLinks`
-    //         )
-    //         .then((response) => {
-    //             setData(response.data);
-    //             setLoading(false);
-    //         })
-    //         .catch((error) => {
-    //             setError(error);
-    //             setLoading(false);
-    //         });
-    // }, []);
-    // console.log(data);
+    const [aActionModal, setAactionModal] = useState(false);
+    const [editingAdmin, setEditingAdmin] = useState(null);
+    const navigate = useNavigate();
 
     const fetchCars = () => {
         setCars([
@@ -66,7 +56,7 @@ const AdminPanel = () => {
             {
                 key: 2,
                 model: "Haval Jolion",
-                year: 2022,
+                year: 2024,
                 price: "$22,000",
                 image: "src/Images/haval-jolion.jpg",
             },
@@ -80,7 +70,7 @@ const AdminPanel = () => {
             {
                 key: 4,
                 model: "Haval M6",
-                year: 2023,
+                year: 2024,
                 price: "$23,500",
                 image: "src/Images/haval-m6.jpg",
             },
@@ -108,27 +98,38 @@ const AdminPanel = () => {
 
     const handleAddAdmin = (values) => {
         setAdmins([...admins, { key: `${admins.length + 1}`, ...values }]);
-        message.success("Admin added successfully!");
+        message.success("Admin muvaffaqiyatli qo'shildi!");
         setIsModalOpen(false);
         form.resetFields();
     };
 
-    useEffect(() => {
-        const storedCars = localStorage.getItem("cars");
-        if (storedCars) {
-            setCars(JSON.parse(storedCars));
-        }
-    }, []);
+    const handleEditAdmin = (values) => {
+        setAdmins(
+            admins.map((admin) =>
+                admin.key === editingAdmin.key ? { ...admin, ...values } : admin
+            )
+        );
+        message.success("Admin muvaffaqiyatli tahrirlandi!");
+        setAactionModal(false);
+        setEditingAdmin(null);
+    };
+
+    const handleDeleteAdmin = (key) => {
+        setAdmins(admins.filter((admin) => admin.key !== key));
+        message.success("Admin muvaffaqiyatli o'chirildi!");
+    };
 
     const handleAddCar = (values) => {
         if (fileList.length === 0) {
-            message.error("Please upload a car image!");
+            message.error("Iltimos, avtomobil rasmni yuklang!");
             return;
         }
 
         const file = fileList[0];
         if (!file.originFileObj) {
-            message.error("Invalid file format or missing file object!");
+            message.error(
+                "Noto'g'ri fayl formati yoki fayl obyekti mavjud emas!"
+            );
             console.log(fileList);
             return;
         }
@@ -143,7 +144,7 @@ const AdminPanel = () => {
         localStorage.setItem("cars", JSON.stringify(updatedCars));
 
         setCars([...cars, newCar]);
-        message.success("Car added successfully!");
+        message.success("Avtomobil muvaffaqiyatli qo'shildi!");
 
         setFileList([]);
         setIsModalOpen(false);
@@ -155,11 +156,9 @@ const AdminPanel = () => {
         setFileList(fileList);
     };
 
-    // const handleDelete = (key) => {const newData = };
-
     const columnsCars = [
         {
-            title: "Image",
+            title: "Rasm",
             dataIndex: "image",
             key: "image",
             render: (image) => (
@@ -175,10 +174,10 @@ const AdminPanel = () => {
             ),
         },
         { title: "Model", dataIndex: "model", key: "model" },
-        { title: "Year", dataIndex: "year", key: "year" },
-        { title: "Price", dataIndex: "price", key: "price" },
+        { title: "Yili", dataIndex: "year", key: "year" },
+        { title: "Narxi", dataIndex: "price", key: "price" },
         {
-            title: "Action",
+            title: "Harakat",
             dataIndex: "",
             key: "x",
             render: () => (
@@ -186,33 +185,14 @@ const AdminPanel = () => {
                     <a onClick={() => setActionModal(true)}>
                         {<EditOutlined />}
                         <Modal
-                            title={"Edit"}
+                            title={"Tahrirlash"}
                             open={actionModal}
-                            // onCancel={() => setActionModal(false)}
-                            onCancel={() =>
-                                console.log("clodeModal:", actionModal)
-                            }
+                            onCancel={() => setActionModal(false)}
                             footer={null}>
-                            <h1>adijugio</h1>
+                            <h1>Tahrirlash oynasi</h1>
                         </Modal>
-                        {/* {actionModal && (
-                            <Modal
-                                title='Edit Car'
-                                open={actionModal}
-                                onOk={() => setActionModal(false)}
-                                onCancel={() => setActionModal(false)}
-                                onClose={() => setActionModal(false)}
-                                footer={null}
-                                width={600}
-                                centered
-                                // maskClosable={false}
-                                // closable={false}
-                            >
-                                aaiuweghaiuwghiu
-                            </Modal>
-                        )} */}
                     </a>
-                    <a onClick={() => console.log("delete: ")}>
+                    <a onClick={(e) => console.log(`delete: ${e.type}`)}>
                         {<DeleteOutlined />}
                     </a>
                 </div>
@@ -221,9 +201,37 @@ const AdminPanel = () => {
     ];
 
     const columnsAdmins = [
-        { title: "Username", dataIndex: "username", key: "username" },
+        { title: "Foydalanuvchi nomi", dataIndex: "username", key: "username" },
         { title: "Email", dataIndex: "email", key: "email" },
+        {
+            title: "Action",
+            dataIndex: "action",
+            render: (_, record) => (
+                <div>
+                    <a
+                        onClick={() => {
+                            setEditingAdmin(record);
+                            setAactionModal(true);
+                            form.setFieldsValue(record);
+                        }}>
+                        {<EditOutlined />}
+                    </a>
+                    <a
+                        onClick={() => handleDeleteAdmin(record.key)}
+                        style={{ marginLeft: 8 }}>
+                        {<DeleteOutlined />}
+                    </a>
+                </div>
+            ),
+        },
     ];
+
+    const handleLogout = () => {
+        localStorage.removeItem("users");
+        localStorage.removeItem("isAuthenticated");
+        navigate("/register");
+        window.location.reload();
+    };
 
     return (
         <Layout style={{ minHeight: "100vh" }} className='admin'>
@@ -234,43 +242,42 @@ const AdminPanel = () => {
                     defaultSelectedKeys={["1"]}
                     onClick={(e) => setSelectedKey(e.key)}
                     items={[
-                        { key: "1", icon: <HomeOutlined />, label: "Admin" },
+                        { key: "1", icon: <HomeOutlined />, label: "Adminlar" },
                         {
                             key: "2",
                             icon: <CarOutlined />,
-                            label: "Car models",
+                            label: "Avtomobil modellari",
                         },
-                        // {
-                        //     key: "3",
-                        //     icon: <SettingOutlined />,
-                        //     label: "Settings",
-                        // },
                         {
-                            // key: "4",
                             key: "3",
-                            icon: <VideoCameraAddOutlined />,
-                            label: "News",
+                            icon: <NotificationOutlined />,
+                            label: "Yangiliklar",
                         },
                         {
                             key: "4",
-                            // key: "5",
-                            icon: <SettingOutlined />,
-                            label: "Video",
+                            icon: <VideoCameraOutlined />,
+                            label: "Videolar",
                         },
                         {
                             key: "5",
-                            // key: "5",
-                            icon: <SettingOutlined />,
+                            icon: <StockOutlined />,
                             label: "Savdo statistikasi",
                         },
                     ]}
                 />
             </Sider>
+            <div style={{ position: "absolute", top: 0, right: 0, margin: 16 }}>
+                <Tooltip title='Logout'>
+                    <Button
+                        type='text'
+                        icon={<LogoutOutlined />}
+                        onClick={handleLogout}
+                    />
+                </Tooltip>
+            </div>
             <Layout>
                 <Header style={{ background: "#fff", padding: 0 }} />
                 <Content style={{ margin: "16px" }}>
-                    {" "}
-                    {/* Admins======================== */}
                     <div
                         style={{
                             padding: 24,
@@ -283,13 +290,14 @@ const AdminPanel = () => {
                                     type='primary'
                                     style={{ marginBottom: 16 }}
                                     onClick={() => setIsModalOpen(true)}>
-                                    Add Admin
+                                    Admin qo'shish
                                 </Button>
                                 <Table
                                     columns={columnsAdmins}
-                                    dataSource={admins}></Table>
+                                    dataSource={admins}
+                                />
                                 <Modal
-                                    title='Add New Admin'
+                                    title='Yangi Admin Qoshish'
                                     open={isModalOpen}
                                     onCancel={() => setIsModalOpen(false)}
                                     footer={null}>
@@ -299,12 +307,12 @@ const AdminPanel = () => {
                                         layout='vertical'>
                                         <Form.Item
                                             name='username'
-                                            label='Username'
+                                            label='Foydalanuvchi nomi'
                                             rules={[
                                                 {
                                                     required: true,
                                                     message:
-                                                        "Please input admin username!",
+                                                        "Iltimos, foydalanuvchi nomini kiriting!",
                                                 },
                                             ]}>
                                             <Input />
@@ -316,7 +324,7 @@ const AdminPanel = () => {
                                                 {
                                                     required: true,
                                                     message:
-                                                        "Please input admin email!",
+                                                        "Iltimos, emailni kiriting!",
                                                 },
                                             ]}>
                                             <Input />
@@ -325,27 +333,67 @@ const AdminPanel = () => {
                                             type='primary'
                                             htmlType='submit'
                                             block>
-                                            Submit
+                                            Tasdiqlash
+                                        </Button>
+                                    </Form>
+                                </Modal>
+                                <Modal
+                                    title='Adminni Tahrirlash'
+                                    open={aActionModal}
+                                    onCancel={() => setAactionModal(false)}
+                                    footer={null}>
+                                    <Form
+                                        form={form}
+                                        onFinish={handleEditAdmin}
+                                        layout='vertical'>
+                                        <Form.Item
+                                            name='username'
+                                            label='Foydalanuvchi nomi'
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message:
+                                                        "Iltimos, foydalanuvchi nomini kiriting!",
+                                                },
+                                            ]}>
+                                            <Input />
+                                        </Form.Item>
+                                        <Form.Item
+                                            name='email'
+                                            label='Email'
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message:
+                                                        "Iltimos, emailni kiriting!",
+                                                },
+                                            ]}>
+                                            <Input />
+                                        </Form.Item>
+                                        <Button
+                                            type='primary'
+                                            htmlType='submit'
+                                            block>
+                                            Tasdiqlash
                                         </Button>
                                     </Form>
                                 </Modal>
                             </>
-                        )}{" "}
-                        {/* CARS============================= */}
+                        )}
                         {selectedKey === "2" && (
                             <>
                                 <Button
                                     type='primary'
                                     style={{ marginBottom: 16 }}
                                     onClick={() => setIsModalOpen(true)}>
-                                    Add Car
+                                    Avtomobil qo'shish
                                 </Button>
                                 <Table
                                     columns={columnsCars}
                                     dataSource={cars}
                                 />
                                 <Modal
-                                    title='Add New Car'
+                                    title='Yangi Avtomobil Qoshish'
                                     open={isModalOpen}
                                     onCancel={() => setIsModalOpen(false)}
                                     footer={null}>
@@ -360,36 +408,36 @@ const AdminPanel = () => {
                                                 {
                                                     required: true,
                                                     message:
-                                                        "Please input car model!",
+                                                        "Iltimos, avtomobil modelini kiriting!",
                                                 },
                                             ]}>
                                             <Input />
                                         </Form.Item>
                                         <Form.Item
                                             name='year'
-                                            label='Year'
+                                            label='Yili'
                                             rules={[
                                                 {
                                                     required: true,
                                                     message:
-                                                        "Please input year!",
+                                                        "Iltimos, yilni kiriting!",
                                                 },
                                             ]}>
                                             <Input />
                                         </Form.Item>
                                         <Form.Item
                                             name='price'
-                                            label='Price'
+                                            label='Narxi'
                                             rules={[
                                                 {
                                                     required: true,
                                                     message:
-                                                        "Please input price!",
+                                                        "Iltimos, narxni kiriting!",
                                                 },
                                             ]}>
                                             <Input />
                                         </Form.Item>
-                                        <Form.Item label='Car Image'>
+                                        <Form.Item label='Avtomobil rasmi'>
                                             <Upload
                                                 listType='picture-card'
                                                 fileList={fileList}
@@ -397,7 +445,7 @@ const AdminPanel = () => {
                                                 beforeUpload={() => false}>
                                                 {fileList.length >= 1
                                                     ? null
-                                                    : "Upload "}
+                                                    : "Yuklash "}
                                                 <UploadOutlined />
                                             </Upload>
                                         </Form.Item>
@@ -405,7 +453,7 @@ const AdminPanel = () => {
                                             type='primary'
                                             htmlType='submit'
                                             block>
-                                            Submit
+                                            Tasdiqlash
                                         </Button>
                                     </Form>
                                 </Modal>
@@ -415,14 +463,18 @@ const AdminPanel = () => {
                                     onCancel={() => setIsImageModalOpen(false)}>
                                     <Image
                                         src={hoveredImage}
-                                        alt='Car Image'
+                                        alt='Avtomobil rasmi'
                                         style={{ width: "100%" }}
                                     />
                                 </Modal>
                             </>
                         )}
-                        {selectedKey === "4" && <h1>News</h1>}
-                        {selectedKey === "4" && <h1>Video add / video edit</h1>}
+                        {selectedKey === "3" && <h1>Yangiliklar</h1>}
+                        {selectedKey === "4" && (
+                            <div>
+                                <AdminVideos />
+                            </div>
+                        )}
                         {selectedKey === "5" && <h1>Savdo statistikasi</h1>}
                     </div>
                 </Content>

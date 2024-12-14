@@ -13,7 +13,6 @@ import AdminLogin from "../../Components/Admin_login/AdminLogin.jsx";
 import HavalJolion from "../../Pages/Models/Haval-Jolion/HavalJolion.jsx";
 import Guarantee from "../../Pages/Guarantee/Guarantee.jsx";
 import AdminLayout from "../../Components/Admin/AdminEXAMPLE.jsx";
-import WTF from "../../Components/Admin/WTF.jsx";
 import HavalM6 from "../../Pages/Models/Haval-M6/HavalM6.jsx";
 import HavalH6 from "../../Pages/Models/HavalH6/HavalH6.jsx";
 import GWMwignle7 from "../../Pages/Models/GWM-wingle-7/GWM-wignle-7.jsx";
@@ -142,8 +141,6 @@ function AppRouter() {
                 />
 
                 <Route path='*' element={<Navigate to='/login' />} />
-
-                <Route path='/w' element={<WTF />} />
             </Routes>
         </div>
     );
