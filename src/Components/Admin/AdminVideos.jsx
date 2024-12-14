@@ -27,7 +27,7 @@ const AdminVideos = () => {
             },
             {
                 key: 2,
-                title: "Haval Olmazor - Olmazor",
+                title: "Haval Olmazor - Olmazor - Haval",
                 image: AdminVideoImg2,
                 url: "https://www.youtube.com/embed/vp-I_oZPRCY?si=DUke0gv8GQRAESMh",
             },
