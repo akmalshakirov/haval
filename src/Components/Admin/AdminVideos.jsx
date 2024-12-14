@@ -156,7 +156,7 @@ const AdminVideos = () => {
                         <SettingOutlined key='setting' />,
                         <EditOutlined key='edit' onClick={showModal} />,
                     ]}>
-                    <Meta title={setVideoUrl} />
+                    <Meta title={"a"} />
                 </Card>
                 <Modal
                     title='Edit Video Title'
