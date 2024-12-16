@@ -13,7 +13,10 @@ app.use(cookieParser());
 db()
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: "http://192.168.0.119",
+  methods: ["POST", "GET"],
+}));
 app.use(helmet());
 
 

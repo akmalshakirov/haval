@@ -70,6 +70,8 @@ exports.deleteAdmin = async (req, res) => {
 };
 
 exports.loginAdmin = async (req, res) => {
+  console.log(req.body);
+  
   const { email, password } = req.body; 
   try {
     const admin = await Admin.findOne({ email });
