@@ -22,33 +22,77 @@ exports.getAllAdmin = async (req, res) => {
 
 exports.createAdmin = async (req, res) => {
   const { adminName, email, password } = req.body;
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
   try {
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: "Email noto'g'ri formatda." });
+    }
+
+    const existingAdmin = await Admin.findOne({ email });
+    if (existingAdmin) {
+      return res
+        .status(400)
+        .json({ error: "Bu email bilan admin allaqachon mavjud." });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
+
     await Admin.create({ adminName, email, password: hashedPassword });
- 
-    return res.send("Yaratildi")
+
+    return res.status(201).json({ message: "Admin muvaffaqiyatli yaratildi" });
   } catch (error) {
-    console.error('Error creating admin:', error);
-    res.status(500).send('Server error');
+    console.error("Admin yaratishda xatolik:", error);
+    res.status(500).json({ error: "Server xatosi yuz berdi" });
   }
 };
+
 
 exports.updateAdmin = async (req, res) => {
   const { adminId } = req.params;
   const { adminName, email, password } = req.body;
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
   try {
-    const updateData = { adminName, email };
+    const updateData = {};
+
+    if (adminName) {
+      updateData.adminName = adminName;
+    }
+
+    if (email) {
+      if (!emailRegex.test(email)) {
+        return res.status(400).json({ error: "Email noto'g'ri formatda." });
+      }
+
+      const existingAdmin = await Admin.findOne({ email, _id: { $ne: adminId } });
+      if (existingAdmin) {
+        return res
+          .status(400)
+          .json({ error: "Bu email bilan boshqa admin allaqachon mavjud." });
+      }
+      updateData.email = email;
+    }
+
     if (password) {
       const hashedPassword = await bcrypt.hash(password, 10);
       updateData.password = hashedPassword;
     }
 
-    await Admin.findByIdAndUpdate(adminId, updateData, { new: true });
-    
-    return res.status(200).send("Yangilandi")
+    const updatedAdmin = await Admin.findByIdAndUpdate(adminId, updateData, {
+      new: true,
+    });
+
+    if (!updatedAdmin) {
+      return res.status(404).json({ error: "Admin topilmadi." });
+    }
+
+    return res.status(200).json({ message: "Admin muvaffaqiyatli yangilandi", data: updatedAdmin });
   } catch (error) {
-    console.error('Error updating admin:', error);
-    res.status(500).send('Server error');
+    console.error("Adminni yangilashda xatolik:", error);
+    res.status(500).json({ error: "Server xatosi yuz berdi" });
   }
 };
 
