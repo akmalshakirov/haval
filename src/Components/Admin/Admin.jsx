@@ -26,7 +26,7 @@ import {
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import AdminVideos from "./AdminVideos";
-// import axios from "axios";
+import axios from "axios";
 
 const { Header, Sider, Content, Footer } = Layout;
 
@@ -84,11 +84,23 @@ const AdminPanel = () => {
         ]);
     };
 
-    const fetchAdmins = () => {
-        setAdmins([
-            { key: "1", username: "admin1", email: "admin1@example.com" },
-            { key: "2", username: "admin2", email: "admin2@example.com" },
-        ]);
+    const fetchAdmins = async () => {
+        // setAdmins([
+        //     { key: "1", username: "admin1", email: "admin1@example.com" },
+        //     { key: "2", username: "admin2", email: "admin2@example.com" },
+        // ]);
+        try {
+            const token = localStorage.getItem("authToken");
+            console.log(token);
+            const response = await axios.get("http://localhost:3000/admins", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setAdmins(response.data);
+        } catch (error) {
+            console.error("Adminlar yuklanishda xatolik:", error);
+        }
     };
 
     useEffect(() => {
@@ -109,14 +121,14 @@ const AdminPanel = () => {
                 admin.key === editingAdmin.key ? { ...admin, ...values } : admin
             )
         );
-        message.success("Admin muvaffaqiyatli tahrirlandi!");
+        message.success("Admin muvaffaqiyatli o'zgartirildi!");
         setAactionModal(false);
         setEditingAdmin(null);
     };
 
     const handleDeleteAdmin = (key) => {
         setAdmins(admins.filter((admin) => admin.key !== key));
-        message.success("Admin muvaffaqiyatli o'chirildi!");
+        message.info("Admin muvaffaqiyatli o'chirildi!");
     };
 
     const handleAddCar = (values) => {
@@ -201,7 +213,7 @@ const AdminPanel = () => {
     ];
 
     const columnsAdmins = [
-        { title: "Foydalanuvchi nomi", dataIndex: "username", key: "username" },
+        { title: "Admin Name", dataIndex: "adminName", key: "adminName" },
         { title: "Email", dataIndex: "email", key: "email" },
         {
             title: "Action",
@@ -229,13 +241,14 @@ const AdminPanel = () => {
     const handleLogout = () => {
         localStorage.removeItem("users");
         localStorage.removeItem("isAuthenticated");
+        localStorage.removeItem("authToken");
         navigate("/register");
         window.location.reload();
     };
 
     return (
         <Layout style={{ minHeight: "100vh" }} className='admin'>
-            <Sider collapsible>
+            <Sider collapsible collapsedWidth={90}>
                 <Menu
                     theme='dark'
                     mode='inline'
@@ -307,12 +320,12 @@ const AdminPanel = () => {
                                         layout='vertical'>
                                         <Form.Item
                                             name='username'
-                                            label='Foydalanuvchi nomi'
+                                            label='Admin nomi'
                                             rules={[
                                                 {
                                                     required: true,
                                                     message:
-                                                        "Iltimos, foydalanuvchi nomini kiriting!",
+                                                        "Iltimos, Admin nomini kiriting!",
                                                 },
                                             ]}>
                                             <Input />
@@ -325,6 +338,11 @@ const AdminPanel = () => {
                                                     required: true,
                                                     message:
                                                         "Iltimos, emailni kiriting!",
+                                                },
+                                                {
+                                                    type: "email",
+                                                    message:
+                                                        "Iltimos, to'g'ri email formatini kiriting! (misol: example@gmail.com)",
                                                 },
                                             ]}>
                                             <Input />
@@ -347,13 +365,13 @@ const AdminPanel = () => {
                                         onFinish={handleEditAdmin}
                                         layout='vertical'>
                                         <Form.Item
-                                            name='username'
-                                            label='Foydalanuvchi nomi'
+                                            name='adminName'
+                                            label='Admin nomi'
                                             rules={[
                                                 {
                                                     required: true,
                                                     message:
-                                                        "Iltimos, foydalanuvchi nomini kiriting!",
+                                                        "Iltimos, Admin nomini kiriting!",
                                                 },
                                             ]}>
                                             <Input />
@@ -366,6 +384,11 @@ const AdminPanel = () => {
                                                     required: true,
                                                     message:
                                                         "Iltimos, emailni kiriting!",
+                                                },
+                                                {
+                                                    type: "email",
+                                                    message:
+                                                        "Iltimos, to'g'ri email formatini kiriting! (misol: example@mail.com)",
                                                 },
                                             ]}>
                                             <Input />
@@ -479,7 +502,7 @@ const AdminPanel = () => {
                     </div>
                 </Content>
                 <Footer style={{ textAlign: "center" }}>
-                    Haval Admin Panel ©2024
+                    Haval Admin Panel &copy; 2024
                 </Footer>
             </Layout>
         </Layout>

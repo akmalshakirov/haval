@@ -1,13 +1,16 @@
 import React, { useState } from "react";
-import { Form, Input, Button, Checkbox, Typography, Card } from "antd";
+import { Form, Input, Button, Checkbox, Typography, Card, message } from "antd";
 import "./AdminLogin.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
 
 const AdminLogin = () => {
     const [email, setEmail] = useState("");
     const [inputPasswordValue, setInputPasswordValue] = useState("");
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setEmail(e.target.value);
@@ -17,10 +20,10 @@ const AdminLogin = () => {
         setInputPasswordValue(e.target.value);
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (res) => {
         try {
             const response = await axios.post(
-                "https://192.168.0.111/login",
+                "http://localhost:3000/login",
                 {
                     email: email,
                     password: inputPasswordValue,
@@ -32,9 +35,15 @@ const AdminLogin = () => {
                 }
             );
 
-            console.log("Login successful:", response.data);
+            if (res) {
+                navigate("/admin");
+                message.success("Admin panelga muvaffaqiyatli kirildi!");
+            }
+
+            const token = response.data.token;
+            localStorage.setItem("authToken", token);
         } catch (error) {
-            console.error("Login failed:", error);
+            message.error("Username yoki password noto'g'ri!");
         }
     };
 
@@ -62,6 +71,9 @@ const AdminLogin = () => {
                             type='email'
                             placeholder='john@doe.com'
                             className='admin-login-name-input'
+                            prefix={
+                                <UserOutlined className='admin-login-name-icon' />
+                            }
                         />
                     </Form.Item>
 
@@ -74,7 +86,11 @@ const AdminLogin = () => {
                         <Input.Password
                             value={inputPasswordValue}
                             onChange={handleChangePassword}
+                            className='admin-login-password-input'
                             placeholder='********'
+                            prefix={
+                                <LockOutlined className='admin-login-password-icon' />
+                            }
                         />
                     </Form.Item>
 
