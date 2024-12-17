@@ -91,7 +91,6 @@ const AdminPanel = () => {
         // ]);
         try {
             const token = localStorage.getItem("authToken");
-            console.log(token);
             const response = await axios.get("http://localhost:3000/admins", {
                 headers: {
                     Authorization: `Bearer ${token}`,
