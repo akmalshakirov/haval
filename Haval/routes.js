@@ -1,7 +1,7 @@
 const { getAllAdmin, createAdmin, updateAdmin, deleteAdmin, loginAdmin, logoutAdmin } = require('./controllers/adminController');
   const { getCars, addCar, updateCar, deleteCar } = require('./controllers/carController');
   const { register } = require('./controllers/authController');
-  const { getDiler, addDiler, deleteDiler } = require('./controllers/dilerController');
+  const { getDiler, addDiler, deleteDiler, updateDiler } = require('./controllers/dilerController');
   const { getAllNews, addNews, updateNews, deleteNews } = require('./controllers/newsController');
   const { getVideos, addVideo, updateVideo, deleteVideo } = require('./controllers/videoController');
   const { createCategory, getAllCategories, getCategoryById, deleteCategory } = require('./controllers/categoryController');
@@ -17,6 +17,7 @@ const { getAllAdmin, createAdmin, updateAdmin, deleteAdmin, loginAdmin, logoutAd
     .get("/admins", jwtAccessMiddleware,roleAccessMiddleware(['admin']),  getAllAdmin)
     .post("/add-admin", jwtAccessMiddleware, roleAccessMiddleware(['admin']),  createAdmin) 
     .post("/login", loginLimiter, loginAdmin) 
+    .post("/register", register)
     .post("/logoutAdmin", jwtAccessMiddleware, roleAccessMiddleware(['admin']), logoutAdmin)
     .put("/admins/:id", jwtAccessMiddleware, roleAccessMiddleware(['admin']), updateAdmin)
     .delete("/admins/:id", jwtAccessMiddleware, roleAccessMiddleware(['admin']), deleteAdmin)
@@ -26,11 +27,10 @@ const { getAllAdmin, createAdmin, updateAdmin, deleteAdmin, loginAdmin, logoutAd
     .put("/cars/:id",jwtAccessMiddleware, roleAccessMiddleware(['admin']), updateCar)
     .delete("/cars:id",jwtAccessMiddleware, roleAccessMiddleware(['admin']), deleteCar)
 
-    .post("/register", register)
 
     .get("/dilers", getDiler)
     .post("/add-diler",jwtAccessMiddleware, roleAccessMiddleware(['admin']), addDiler)
-    // .put("/dilers/:id", updat)
+    .put("/dilers/:id",jwtAccessMiddleware, roleAccessMiddleware(['admin']), updateDiler)
     .delete("/dilers/:id",jwtAccessMiddleware, roleAccessMiddleware(['admin']), deleteDiler)
 
     .get("/news", getAllNews)

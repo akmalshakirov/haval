@@ -29,6 +29,29 @@ const addDiler = async (req, res) => {
   }
 };
 
+const updateDiler = async (req, res) => {
+  const { id } = req.params;
+  const { dilerId, title, manzil, workHours, phone } = req.body;
+  try {
+    const diler = await Diler.findByIdAndUpdate(
+      id,
+      { dilerId, title, manzil, workHours, phone},
+      { new: true } 
+    );
+
+    if (diler) {
+      res.status(200).json({
+        message: 'Diler ma\'lumotlari yangilandi',
+        data: diler,
+      });
+    } else {
+      res.status(404).json({ error: 'Diler topilmadi' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Ma\'lumotni yangilashda xatolik yuz berdi' });
+  }
+}
+
 // Dilerni o'chirish
 const deleteDiler = async (req, res) => {
   const { id } = req.params; 
@@ -44,4 +67,4 @@ const deleteDiler = async (req, res) => {
   }
 };
 
-module.exports = { getDiler, addDiler, deleteDiler };
+module.exports = { getDiler, addDiler, updateDiler, deleteDiler };
