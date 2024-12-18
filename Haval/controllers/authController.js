@@ -1,11 +1,10 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();  
 
 
 const register = async (req, res) => {
-  console.log(req.body);
-  
   try {
     const { name, email, password, role } = req.body;
 
@@ -28,16 +27,24 @@ const register = async (req, res) => {
       role: role || 'user',
     });
 
-    const token = jwt.sign(
-      { id: user._id, email: user.email, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: '1h' }
-    );
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET muhit o\'zgaruvchisi mavjud emas!');
+    }
 
+    const token = jwt.sign(
+      { 
+        id: user._id, 
+        email: user.email, 
+        role: user.role 
+      },
+      process.env.JWT_SECRET,  
+      { expiresIn: '1h' } 
+    );
     res.status(201).json({ message: 'Foydalanuvchi muvaffaqiyatli ro\'yxatdan o\'tdi', token });
+
   } catch (error) {
     console.error('Ro\'yxatdan o\'tishda xato:', error);
-    res.status(500).json({ error: 'Serverda xato yuz berdi' });
+    res.status(500).json({ error: error.message });
   }
 };
 
