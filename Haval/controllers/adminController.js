@@ -20,6 +20,24 @@ exports.getAllAdmin = async (req, res) => {
   }
 };
 
+exports.getAdminById = async (req, res) => {
+  const { adminId } = req.params;  
+
+  try {
+    const admin = await Admin.findById(adminId);
+
+    if (!admin) {
+      return res.status(404).send({ error: "Admin topilmadi!" });  
+    }
+
+    return res.status(200).send(admin);  
+
+  } catch (error) {
+    console.error('Adminni olishda xato:', error);
+    res.status(500).send('Server xatosi');  
+  }
+};
+
 exports.createAdmin = async (req, res) => {
   const { adminName, email, password } = req.body;
 
@@ -96,20 +114,26 @@ exports.updateAdmin = async (req, res) => {
   }
 };
 
-exports.deleteAdmin = async (req, res) => {
-  const { adminId } = req.params;
+exports.deleteAdmin = async (req, res) => { 
+  const { adminId } = req.params; 
   try {
-    const userId = req.cookies.userId;
+    const userId = req.cookies.userId; 
 
     const admin = await Admin.findById(adminId);
-    if (admin && admin._id.toString() !== userId) {
-      await Admin.findByIdAndDelete(id);
+    if (!admin) {
+      return res.status(404).send({ error: "Admin topilmadi!" });
     }
 
-    return res.send("O'chirildi")
+    if (admin._id.toString() !== userId) {
+      return res.status(403).send({ error: "Siz bu adminni o'chirishga ruxsatga ega emassiz!" });
+    }
+
+    await Admin.findByIdAndDelete(adminId);
+
+    return res.send("Admin muvaffaqiyatli o'chirildi");
   } catch (error) {
-    console.error('Error deleting admin:', error);
-    res.status(500).send('Server error');
+    console.error('Adminni o\'chirishda xato:', error);
+    res.status(500).send('Server xatosi');
   }
 };
 
@@ -152,7 +176,7 @@ exports.loginAdmin = async (req, res) => {
 
 exports.logoutAdmin = (req, res) => {
   res.clearCookie('token');
-  res.redirect('/admin/login');
+  res.redirect('/login');
   
   return res.send("Chiqish")
 };

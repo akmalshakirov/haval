@@ -1,4 +1,4 @@
-const { getAllAdmin, createAdmin, updateAdmin, deleteAdmin, loginAdmin, logoutAdmin } = require('./controllers/adminController');
+const { getAllAdmin, createAdmin, updateAdmin, deleteAdmin, loginAdmin, logoutAdmin, getAdminById } = require('./controllers/adminController');
   const { getCars, addCar, updateCar, deleteCar } = require('./controllers/carController');
   const { register } = require('./controllers/authController');
   const { getDiler, addDiler, deleteDiler, updateDiler } = require('./controllers/dilerController');
@@ -11,11 +11,13 @@ const { getAllAdmin, createAdmin, updateAdmin, deleteAdmin, loginAdmin, logoutAd
   const { loginLimiter } = require('./middlewares/loginLimiter');
   const {  jwtAccessMiddleware } = require('./middlewares/jwt-access.middleware');
   const { roleAccessMiddleware } = require('./middlewares/role-access.middleware');
+  const { getAllUsers, deleteUser } = require('./controllers/userController');
   const router = require("express").Router();
   
   router
-    .get("/admins", jwtAccessMiddleware,roleAccessMiddleware(['admin']),  getAllAdmin)
-    .post("/add-admin", jwtAccessMiddleware, roleAccessMiddleware(['admin']),  createAdmin) 
+    .get("/admins", jwtAccessMiddleware,roleAccessMiddleware(['admin']), getAllAdmin)
+    .get("/admins/:id", jwtAccessMiddleware,roleAccessMiddleware(['admin']), getAdminById)
+    .post("/add-admin", jwtAccessMiddleware, roleAccessMiddleware(['admin']), createAdmin) 
     .post("/login", loginLimiter, loginAdmin) 
     .post("/register", register)
     .post("/logoutAdmin", jwtAccessMiddleware, roleAccessMiddleware(['admin']), logoutAdmin)
@@ -59,6 +61,9 @@ const { getAllAdmin, createAdmin, updateAdmin, deleteAdmin, loginAdmin, logoutAd
 
     .get("/test-driver", getTestDrivers)
     .post("/add-test-driver", addTestDriver)
+
+    .get("/users", getAllUsers)
+    .delete("/users/:id", deleteUser)
 
   module.exports = router;
   
