@@ -8,6 +8,7 @@ import havalJolion from "../../Images/haval-jolion.jpg";
 import havalM6 from "../../Images/haval-m6.jpg";
 import havalH6 from "../../Images/haval-h6.jpg";
 import gwmWingle7 from "../../Images/gwm-wingle-7.jpg";
+import headerSwiperServices5Year from "../../Images/header-swiper-services-5-year.svg";
 import havalSwiperVideo from "../../Images/HavalSwiperVideo.mp4";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "./Header.css";
@@ -16,28 +17,9 @@ import "./HeaderSwiper.css";
 import { Autoplay, Parallax } from "swiper/modules";
 
 const SwiperComponent = () => {
-    // useEffect(() => {
-    //     const swiper = new Swiper(".swiper-wrapper", {
-    //         pagination: {
-    //             el: ".swiper-pagination",
-    //             clickable: true,
-    //             renderBullet: function (index, className) {
-    //                 return `<span class="${className} custom-bullet">${
-    //                     index + 1
-    //                 }</span>`;
-    //             },
-    //         },
-    //     });
-
-    //     return () => {
-    //         swiper.destroy(true, true);
-    //     };
-    // }, []);
-
     return (
-        // <div className='swiper-container'>
         <Swiper
-            className='swiper-wrapper'
+            className='header-swiper-wrapper'
             autoplay={{
                 delay: 6565,
                 disableOnInteraction: false,
@@ -46,7 +28,7 @@ const SwiperComponent = () => {
             speed={2277}
             modules={[Parallax, Autoplay]}>
             {/* Slide 1 */}
-            <SwiperSlide className='swiper-slide'>
+            <SwiperSlide className='swiper-slide1'>
                 <img
                     src={havalDargo}
                     alt='haval-dargo'
@@ -69,11 +51,13 @@ const SwiperComponent = () => {
                     </a>
                 </div>
                 <div className='slide-service'>
-                    <img src='' alt='' />
+                    <img src={headerSwiperServices5Year} alt='5-year' />
+                    <img src={headerSwiperServices5Year} alt='service' />
+                    <img src={headerSwiperServices5Year} alt='asl-' />
                 </div>
             </SwiperSlide>
             {/* Slide 2 */}
-            <SwiperSlide className='swiper-slide'>
+            <SwiperSlide className='swiper-slide1'>
                 <img
                     src={havalJolion}
                     alt='haval-dargo'
@@ -97,7 +81,7 @@ const SwiperComponent = () => {
                 </div>
             </SwiperSlide>
             {/* Slide 3 */}
-            <SwiperSlide className='swiper-slide '>
+            <SwiperSlide className='swiper-slide1'>
                 <img src={havalM6} alt='haval-dargo' data-swiper-parallax='1' />
                 <div className='swiper-slide-content swiper-slide-3'>
                     <h2 className='slide-title' data-swiper-parallax='-500'>
@@ -117,7 +101,7 @@ const SwiperComponent = () => {
                 </div>
             </SwiperSlide>
             {/* Slide 4 */}
-            <SwiperSlide className='swiper-slide'>
+            <SwiperSlide className='swiper-slide1'>
                 <img src={havalH6} alt='haval-dargo' data-swiper-parallax='1' />
                 <div className='swiper-slide-content'>
                     <h2 className='slide-title' data-swiper-parallax='-500'>
@@ -137,7 +121,7 @@ const SwiperComponent = () => {
                 </div>
             </SwiperSlide>
             {/* Slide 5 */}
-            <SwiperSlide className='swiper-slide '>
+            <SwiperSlide className='swiper-slide1'>
                 <img
                     src={gwmWingle7}
                     alt='haval-dargo'
@@ -161,7 +145,7 @@ const SwiperComponent = () => {
                 </div>
             </SwiperSlide>
             {/* Slide 6 */}
-            <SwiperSlide className='swiper-slide swiper-video'>
+            <SwiperSlide className='swiper-slide1 swiper-video'>
                 <video src={havalSwiperVideo} muted autoPlay loop></video>
                 <div className='swiper-slide-content third-swiper-slide'>
                     <h2 className='slide-title' data-swiper-parallax='-500'>
@@ -175,9 +159,8 @@ const SwiperComponent = () => {
                     </p>
                 </div>
             </SwiperSlide>
-            <div className='swiper-pagination'></div>
+            {/* <div className='swiper-pagination'></div> */}
         </Swiper>
-        // </div>
     );
 };
 

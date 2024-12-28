@@ -16,11 +16,11 @@ const AdminLogin = () => {
         setEmail(e.target.value);
     };
 
-    const handleChangePassword = (e) => {
+    const handleShowPassword = (e) => {
         setInputPasswordValue(e.target.value);
     };
 
-    const handleSubmit = async (res) => {
+    const handleSubmit = async () => {
         try {
             const response = await axios.post(
                 "http://localhost:3000/login",
@@ -35,13 +35,14 @@ const AdminLogin = () => {
                 }
             );
 
-            if (res) {
+            if (response.data.success) {
                 navigate("/admin");
                 message.success("Admin panelga muvaffaqiyatli kirildi!");
+                const token = response.data.token;
+                localStorage.setItem("authToken", token);
+            } else {
+                message.error("Username yoki password noto'g'ri!");
             }
-
-            const token = response.data.token;
-            localStorage.setItem("authToken", token);
         } catch (error) {
             message.error("Username yoki password noto'g'ri!");
         }
@@ -64,6 +65,10 @@ const AdminLogin = () => {
                         name='admin'
                         rules={[
                             { required: true, message: "Введите ваш логин!" },
+                            {
+                                type: "email",
+                                message: "Введите правильный email!",
+                            },
                         ]}>
                         <Input
                             value={email}
@@ -85,7 +90,7 @@ const AdminLogin = () => {
                         ]}>
                         <Input.Password
                             value={inputPasswordValue}
-                            onChange={handleChangePassword}
+                            onChange={handleShowPassword}
                             className='admin-login-password-input'
                             placeholder='********'
                             prefix={

@@ -12,6 +12,8 @@ import HavalDargo from "../../Pages/Models/Haval-Dargo/HavalDargo";
 import AdminLogin from "../../Components/Admin_login/AdminLogin.jsx";
 import GWMwignle7 from "../../Pages/Models/GWM-wingle-7/GWM-wignle-7.jsx";
 import HavalJolion from "../../Pages/Models/Haval-Jolion/HavalJolion.jsx";
+import ProtectedRoute from "../../Components/ProtectedRoute/ProtectedRoute";
+import MainModels from "../../Components/MainModels/MainModels.jsx";
 
 function AppRouter() {
     return (
@@ -23,10 +25,18 @@ function AppRouter() {
                         <>
                             <HeaderNavBar />
                             <HeaderSwiper />
+                            <MainModels />
                         </>
                     }
                 />
-                <Route path='/admin' element={<AdminPanel />} />
+                <Route
+                    path='/admin'
+                    element={
+                        <ProtectedRoute>
+                            <AdminPanel />
+                        </ProtectedRoute>
+                    }
+                />
                 <Route path='/admin/auth' element={<AdminLogin />} />
                 <Route path='/dealers' element={<Dealers />} />
                 <Route path='/models' element={<Models />} />

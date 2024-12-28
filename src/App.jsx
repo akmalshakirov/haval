@@ -1,18 +1,44 @@
-// import React from "react";
-// import { useTranslation } from "react-i18next";
-// import HeaderNavBar from "./Components/HeaderNavBar";
+import React, { useState, useEffect } from "react";
+import AppRouter from "./app/AppRouters/AppRouter";
+import Preloader from "./Components/Preloader/Preloader";
 
-// function App() {
-//     const { t, i18n } = useTranslation();
+function App() {
+    const [isLoading, setIsLoading] = useState(false);
 
-//     const changeLanguage = (lang) => {
-//         i18n.changeLanguage(lang);
-//     };
-//     return (
-//         <div className='App'>
-//             <div><HeaderNavBar /></div>
-//         </div>
-//     );
-// }
+    useEffect(() => {
+        const handleContentLoaded = () => {
+            setTimeout(() => {
+                setIsLoading(true);
+            }, 1000);
+        };
 
-// export default App;
+        if (document.readyState === "complete") {
+            setTimeout(() => {
+                setIsLoading(true);
+            }, 1000);
+        } else {
+            document.addEventListener("DOMContentLoaded", handleContentLoaded);
+        }
+
+        return () => {
+            document.removeEventListener(
+                "DOMContentLoaded",
+                handleContentLoaded
+            );
+        };
+    }, []);
+
+    const handleFinish = () => {
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 300);
+    };
+
+    return (
+        <div>
+            {isLoading ? <Preloader onFinish={handleFinish} /> : <AppRouter />}
+        </div>
+    );
+}
+
+export default App;

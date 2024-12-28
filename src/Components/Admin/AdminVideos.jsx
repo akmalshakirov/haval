@@ -60,6 +60,7 @@ const AdminVideos = () => {
 
     const handleCancel = () => {
         setIsModalOpen(false);
+        setNewVideoUrl("");
     };
 
     const handleTitleChange = (e) => {
@@ -68,13 +69,12 @@ const AdminVideos = () => {
 
     const handleUrlChange = (e) => {
         const url = e.target.value;
-        // YouTube URL ekanligini tekshirish
         if (url.includes("youtube.com/embed/") || url.includes("youtu.be/")) {
             setNewVideoUrl(url);
         } else {
-            // Agar oddiy YouTube havolasi bo'lsa, uni embed formatiga o'zgartirish
             const youtubeRegex =
                 /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+
             const match = url.match(youtubeRegex);
 
             if (match && match[1]) {
@@ -119,7 +119,8 @@ const AdminVideos = () => {
                 onCancel={handleCancel}
                 width={800}
                 footer={<Button onClick={handleOk}>Saqlash</Button>}
-                style={{ margin: "-50px auto" }}>
+                style={{ margin: "-50px auto" }}
+                destroyOnClose={true}>
                 <div
                     style={{
                         display: "flex",
