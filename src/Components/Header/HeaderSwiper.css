@@ -5,6 +5,7 @@ body {
     background-color: #3c3c3c;
 }
 .swiper-slide1 {
+    display: flex;
     width: 100vw;
     height: 100vh;
     user-select: none;
@@ -52,9 +53,27 @@ body {
 }
 .slide-service {
     position: absolute;
-    right: 20%;
-    bottom: 34%;
-    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    right: 26px;
+    bottom: 196px;
+    display: flex;
+    align-items: start;
+}
+.slide-service-year,
+.slide-service-services,
+.slide-service-original {
+    max-width: 140px;
+    max-height: 56px;
+}
+.slide-service-year img,
+.slide-service-services img,
+.slide-service-original-details img {
+    width: 130px;
+    height: 56px;
+    object-fit: contain;
 }
 .third-swiper-slide {
     top: 41%;

@@ -1,24 +1,24 @@
 .header {
     display: flex;
     background: rgba(30, 30, 30, 0.7);
+    position: fixed;
+    width: 100%;
+    z-index: 100;
+    transition: 0.6s all;
     align-items: center;
     justify-content: space-between;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 20;
-    transition: 0.3s;
 }
-.header-section.header-active {
-    transition: all 0.7s;
-    background-color: #fff;
+
+.header.header-section.header-active {
+    background-color: #ffffff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 .header-section.header-active .header__inner .header-nav__links li a,
 .header-section.header-active .header__inner .header-nav__links .owner-btn {
     color: #000 !important;
 }
 .header-section.header-active .header__inner .header__item a img {
-    filter: invert(200%);
+    filter: invert(100%);
 }
 .header__inner {
     padding: 15px 20px;
@@ -26,21 +26,17 @@
     display: flex;
     align-items: center;
 }
-
 .header__nav {
     flex-grow: 1;
 }
-
 .header-nav__links {
     display: flex;
     align-items: center;
     gap: 30px;
 }
-
 .header-nav__link {
     height: 100%;
 }
-
 .header-nav__links li a,
 .header-nav__links li button {
     font-weight: 500;
@@ -48,32 +44,38 @@
     font-family: "Roboto";
     letter-spacing: 1.5px;
 }
-
 .header-ru .header-nav__links li a,
 .header-nav__links li button {
     padding: 0;
     letter-spacing: 1px;
 }
-
+.header-item-active a i,
+.header-item-active .header__lang ul li button {
+    color: #000;
+}
+.header-item-active .header__lang ul li ul {
+    background-color: #fff !important;
+    color: #000 !important;
+}
+.header-item-active .header__lang ul li ul:hover {
+    background-color: #000 !important;
+    color: #fff !important;
+}
 .header__item {
     display: flex;
     align-items: center;
     gap: 15px;
 }
-
 .header__logo {
     margin-right: 100px;
 }
-
 .fa-phone {
     color: #fff;
     font-size: 20px;
 }
-
 .header__lang {
     position: relative;
 }
-
 .language-btn {
     position: relative;
     font-family: var(--font-mich);
@@ -82,7 +84,6 @@
     cursor: pointer;
     padding: 0;
 }
-
 .header__lang:hover .ru {
     opacity: 1;
     pointer-events: auto;
@@ -92,7 +93,6 @@
 .fa-angle-down {
     margin-left: 5px;
 }
-
 .ru {
     position: absolute;
     top: 23px;
@@ -104,19 +104,16 @@
     padding: 10px;
     pointer-events: none;
 }
-
 .ru:hover {
     background: #fff !important;
     color: #000 !important;
 }
-
 .owner-btn {
     background-color: transparent;
     color: #fff;
     font-size: 16px;
     font-weight: 500;
 }
-
 .owners-modal-overlay {
     position: fixed;
     top: 90px;
@@ -124,13 +121,11 @@
     width: 100%;
     height: 100%;
 }
-
 .owners-modal.active {
     padding: 20px;
     background-color: #fff;
     animation: fadeIn 10s ease-in-out;
 }
-
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -141,14 +136,12 @@
         transform: scale(1) scaleX(1);
     }
 }
-
 .owners-modal.active a {
     color: #000;
 }
 .owners-modal.active a:hover {
     text-decoration: underline;
 }
-
 .models-modal-cards {
     display: flex;
     align-items: center;
@@ -156,7 +149,6 @@
     gap: 10px;
     margin-top: 30px;
 }
-
 .models-modal-card {
     border-radius: 20px;
     border: 1px solid #ccc;
@@ -171,7 +163,6 @@
     height: 111px;
     object-fit: cover;
 }
-
 .swiper-slide-3 {
     margin-top: 50px;
     color: #ffffff08;
@@ -193,19 +184,13 @@
     display: flex;
     flex-direction: column;
     align-items: end;
+    margin-right: -7px;
     gap: 10px;
     padding: 10px;
     transition: all 0.3s;
     transform: translateY(20px);
-    max-width: 51px;
+    background-color: rgba(30, 30, 30, 0.7);
 }
-.aside__item {
-    pointer-events: none;
-}
-.aside.active .aside__item {
-    pointer-events: auto;
-}
-
 .aside.active .aside__list {
     opacity: 1;
     pointer-events: auto;
@@ -213,20 +198,60 @@
     background-color: rgba(30, 30, 30, 0.7);
     border-radius: 10px;
     backdrop-filter: blur(4px);
-    cursor: pointer;
 }
-
-.aside__link-text {
+.aside__item {
+    /* max-width: 120px; */
+    pointer-events: none;
+}
+.aside.active .aside__item {
+    pointer-events: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+.aside__list.hovered .aside__item {
+    transition: all 0.6s;
+}
+.aside__list.hovered:hover .aside__item,
+.aside__list.hovered:hover .aside__item .aside__link,
+.aside__list.hovered:hover .aside__item .aside__link .aside__link-text {
+    transition: all 0.5s;
+}
+.aside__list.hovered:hover .aside__item .aside__link .aside__link-text {
+    /* HOVER EFFECT */
     position: relative;
+    right: 10px;
+    opacity: 1;
+    pointer-events: painted;
+    /* transition: all 0.5s; */
+}
+.aside__list.hovered:hover .aside__list .aside__link,
+.aside__list.hovered:hover .aside__list .aside__link .aside__link-text {
+    pointer-events: painted;
+}
+.aside__list.active.hovered:hover .aside__link,
+.aside__list.active.hovered:hover .aside__link .aside__link-text {
+    pointer-events: painted;
+}
+.aside__link-text {
+    position: absolute;
+    z-index: -1;
+    right: -100%;
 }
 .aside__link {
     display: flex;
     justify-content: space-between;
     pointer-events: none;
 }
-
+.aside__link-text {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out, background-color 0.7s ease;
+}
 .aside__btn-call {
     position: relative;
+    bottom: 0px;
+    right: 0px;
     cursor: pointer;
     padding: 5px;
     border-radius: 6px;
@@ -240,24 +265,29 @@
 }
 .aside__btn-call svg {
     pointer-events: none;
-    fill: #fff;
 }
 .aside__btn-call {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-}
-.aside__btn-call svg {
-    fill: #fff;
 }
 .aside .aside__btn-call:hover {
     background-color: #1e1e1e;
 }
 .aside__btn {
-    height: max-content !important;
-    background-color: rgba(220, 110, 133, 0.7);
-    transition: all 0.5s ease-in-out !important;
+    padding: 9px 11px;
+    border-radius: 6px;
+    background-color: #454d52;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    height: max-content;
+    transition: all 0.5s ease-in-out;
 }
-.aside__link-text {
-    opacity: 0;
-    pointer-events: none !important;
-    transition: opacity 0.3s ease-in-out, background-color 0.7s ease;
+.aside__btn:hover {
+    background-color: #1e1e1e;
+}
+.aside__btn img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+}
+svg {
+    fill: #fff;
 }

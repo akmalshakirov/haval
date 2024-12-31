@@ -8,7 +8,9 @@ import havalJolion from "../../Images/haval-jolion.jpg";
 import havalM6 from "../../Images/haval-m6.jpg";
 import havalH6 from "../../Images/haval-h6.jpg";
 import gwmWingle7 from "../../Images/gwm-wingle-7.jpg";
-import headerSwiperServices5Year from "../../Images/header-swiper-services-5-year.svg";
+import headerSwiperServices5Year from "../../Images/header-swiper-services-5-year.png";
+import headerSwiperServicesServices from "../../Images/header-swiper-services-service.png";
+import headerSwiperServicesOriginalDetails from "../../Images/header-swiper-service-original-details.png";
 import havalSwiperVideo from "../../Images/HavalSwiperVideo.mp4";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "./Header.css";
@@ -20,15 +22,15 @@ const SwiperComponent = () => {
     return (
         <Swiper
             className='header-swiper-wrapper'
-            autoplay={{
+            /* autoplay={{
                 delay: 6565,
                 disableOnInteraction: false,
-            }}
+            }} */
             parallax={true}
             speed={2277}
-            modules={[Parallax, Autoplay]}>
+            modules={[Parallax /* Autoplay */]}>
             {/* Slide 1 */}
-            <SwiperSlide className='swiper-slide1'>
+            <SwiperSlide className='swiper-slide1 intro-slide'>
                 <img
                     src={havalDargo}
                     alt='haval-dargo'
@@ -50,10 +52,19 @@ const SwiperComponent = () => {
                         Batafsil
                     </a>
                 </div>
-                <div className='slide-service'>
-                    <img src={headerSwiperServices5Year} alt='5-year' />
-                    <img src={headerSwiperServices5Year} alt='service' />
-                    <img src={headerSwiperServices5Year} alt='asl-' />
+                <div className='slide-service' data-swiper-parallax='-400'>
+                    <div className='slide-service-year'>
+                        <img src={headerSwiperServices5Year} alt='5-year' />
+                    </div>
+                    <div className='slide-service-services'>
+                        <img src={headerSwiperServicesServices} alt='service' />
+                    </div>
+                    <div className='slide-service-original-details'>
+                        <img
+                            src={headerSwiperServicesOriginalDetails}
+                            alt='asl'
+                        />
+                    </div>
                 </div>
             </SwiperSlide>
             {/* Slide 2 */}
@@ -79,6 +90,20 @@ const SwiperComponent = () => {
                         Batafsil
                     </a>
                 </div>
+                <div className='slide-service' data-swiper-parallax='-400'>
+                    <div className='slide-service-year'>
+                        <img src={headerSwiperServices5Year} alt='5-year' />
+                    </div>
+                    <div className='slide-service-services'>
+                        <img src={headerSwiperServicesServices} alt='service' />
+                    </div>
+                    <div className='slide-service-original-details'>
+                        <img
+                            src={headerSwiperServicesOriginalDetails}
+                            alt='asl'
+                        />
+                    </div>
+                </div>
             </SwiperSlide>
             {/* Slide 3 */}
             <SwiperSlide className='swiper-slide1'>
@@ -99,6 +124,20 @@ const SwiperComponent = () => {
                         Batafsil
                     </a>
                 </div>
+                <div className='slide-service' data-swiper-parallax='-400'>
+                    <div className='slide-service-year'>
+                        <img src={headerSwiperServices5Year} alt='5-year' />
+                    </div>
+                    <div className='slide-service-services'>
+                        <img src={headerSwiperServicesServices} alt='service' />
+                    </div>
+                    <div className='slide-service-original-details'>
+                        <img
+                            src={headerSwiperServicesOriginalDetails}
+                            alt='asl'
+                        />
+                    </div>
+                </div>
             </SwiperSlide>
             {/* Slide 4 */}
             <SwiperSlide className='swiper-slide1'>
@@ -118,6 +157,20 @@ const SwiperComponent = () => {
                         data-swiper-parallax='-400'>
                         Batafsil
                     </a>
+                </div>
+                <div className='slide-service' data-swiper-parallax='-400'>
+                    <div className='slide-service-year'>
+                        <img src={headerSwiperServices5Year} alt='5-year' />
+                    </div>
+                    <div className='slide-service-services'>
+                        <img src={headerSwiperServicesServices} alt='service' />
+                    </div>
+                    <div className='slide-service-original-details'>
+                        <img
+                            src={headerSwiperServicesOriginalDetails}
+                            alt='asl'
+                        />
+                    </div>
                 </div>
             </SwiperSlide>
             {/* Slide 5 */}
@@ -143,6 +196,20 @@ const SwiperComponent = () => {
                         Batafsil
                     </a>
                 </div>
+                <div className='slide-service' data-swiper-parallax='-400'>
+                    <div className='slide-service-year'>
+                        <img src={headerSwiperServices5Year} alt='5-year' />
+                    </div>
+                    <div className='slide-service-services'>
+                        <img src={headerSwiperServicesServices} alt='service' />
+                    </div>
+                    <div className='slide-service-original-details'>
+                        <img
+                            src={headerSwiperServicesOriginalDetails}
+                            alt='asl'
+                        />
+                    </div>
+                </div>
             </SwiperSlide>
             {/* Slide 6 */}
             <SwiperSlide className='swiper-slide1 swiper-video'>
@@ -157,6 +224,20 @@ const SwiperComponent = () => {
                         ASOSIDA ODAMLAR. ULARNING EMOYTSIYALARI, HISSIYOTLARI VA
                         HAYOT LAZZLARI BO"LGAN HAVAL BRENDINING FALSAFASI
                     </p>
+                </div>
+                <div className='slide-service' data-swiper-parallax='-400'>
+                    <div className='slide-service-year'>
+                        <img src={headerSwiperServices5Year} alt='5-year' />
+                    </div>
+                    <div className='slide-service-services'>
+                        <img src={headerSwiperServicesServices} alt='service' />
+                    </div>
+                    <div className='slide-service-original-details'>
+                        <img
+                            src={headerSwiperServicesOriginalDetails}
+                            alt='asl'
+                        />
+                    </div>
                 </div>
             </SwiperSlide>
             {/* <div className='swiper-pagination'></div> */}

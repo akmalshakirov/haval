@@ -28,19 +28,6 @@ function MainModels() {
             );
         },
     };
-    const navigation = {
-        prevEl: ".swiper-button-prev",
-        nextEl: ".swiper-button-next",
-        renderBullet: function (index, className) {
-            return (
-                '<span class="pagination-buttons ' +
-                className +
-                '">' +
-                (index + 1) +
-                "</span>"
-            );
-        },
-    };
     return (
         <div className='models-container'>
             <div className='models-header'>
@@ -127,10 +114,10 @@ function MainModels() {
                 </SwiperSlide>
             </Swiper>
             <div className='custom-pagination'></div>
-            <div className='models-swiper-pagination pagination-buttons'>
+            {/* <div className='models-swiper-pagination pagination-buttons'>
                 <div className='swiper-button-prev'></div>
                 <div className='swiper-button-next'></div>
-            </div>
+            </div> */}
         </div>
     );
 }
