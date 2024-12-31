@@ -9,3 +9,23 @@
 :where(.css-dev-only-do-not-override-1x0dypw).ant-modal-root .ant-modal-wrap {
     scrollbar-color: transparent transparent;
 }
+
+.custom-mask.custom-mask-list {
+    border-radius: 50%;
+}
+
+.custom-mask.custom-mask-card {
+    border-radius: 10px;
+    height: 95.9%;
+}
+
+.custom-preview-mask {
+    max-height: 92.5%;
+}
+.custom-preview-image {
+    height: 1% !important;
+}
+.tooltip-logout {
+    margin-right: 10px;
+    position: relative;
+}
