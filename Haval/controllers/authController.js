@@ -18,7 +18,7 @@ const register = async (req, res) => {
       return res.status(409).json({ error: "Bu email bilan foydalanuvchi allaqachon mavjud" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10); 
 
     const user = await User.create({
       name,
@@ -26,6 +26,10 @@ const register = async (req, res) => {
       password: hashedPassword,
       role: role || 'user',
     });
+
+if (!name || !email || !password) {
+  return res.status(400).json({ message: 'Barcha maydonlarni to‘ldiring.' });
+}
 
     if (!process.env.JWT_SECRET) {
       throw new Error('JWT_SECRET muhit o\'zgaruvchisi mavjud emas!');
@@ -39,13 +43,14 @@ const register = async (req, res) => {
       },
       process.env.JWT_SECRET,  
       { expiresIn: '1h' } 
-    );
-    res.status(201).json({ message: 'Foydalanuvchi muvaffaqiyatli ro\'yxatdan o\'tdi', token });
+    )
+        await user.save();
 
-  } catch (error) {
-    console.error('Ro\'yxatdan o\'tishda xato:', error);
-    res.status(500).json({ error: error.message });
+        res.status(201).json({ message: 'Foydalanuvchi muvaffaqiyatli ro‘yxatdan o‘tdi.', user });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Serverda xatolik yuz berdi.' });
+    }
   }
-};
 
 module.exports = { register }
