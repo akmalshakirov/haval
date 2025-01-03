@@ -3,59 +3,50 @@ const jwt = require('jsonwebtoken');
 
 const getAllNews = async (req, res) => {
   try {
-    const token = req.cookies.token;
-    const news = await News.find().sort({ createdAt: -1 }).limit(50).populate("author", "username");
-    const item = await News.find().sort({ createdAt: -1 }).limit(4).populate("author", "username");
-
-    if (req.cookies.token) {
-      const user = jwt.verify(token, process.env.JWT_SECRET_KEY);
-      const userId = req.cookies.userId;
-
-      if (user.roles === "ADMIN") {
-        return res.render("index", {
-          news,
-          item,
-          user,
-          token,
-          userId,
-          isAdmin: true,
-        });
-      } else if (user.roles === "USER") {
-        return res.render("index", {
-          news,
-          item,
-          token,
-          user,
-          userId,
-        });
-      }
-    } else {
-      return res.render("index", {
-        news,
-        item,
-      });
-    }
+    const news = await News.find();
+        
+        if(!news){
+          return res.status(404).send({
+            error: "Yangiliklar  topilmadi!"
+          })
+        }
+    
+        return res.status(200).send(news)
+    
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ error: 'Database error' });
+    res.status(500).json({ error: 'Bazaga ulanishda xatolik yuz berdi' });
   }
 };
 
 const addNews = async (req, res) => {
-  const { title, description, image, createdAt } = req.body;
+  const { title, description, image } = req.body;
+
+  function formatDate(date) {
+    const d = new Date(date);
+    const hours = d.getHours();
+    const minutes = d.getMinutes();
+    const day = d.getDate();
+    const month = d.getMonth() + 1;
+    const year = String(d.getFullYear()).slice(-2);
+    return `${day}/${month}/${year}, ${hours}:${String(minutes).padStart(2, "0")}`;
+  }
+
   try {
     const news = await News.create({
       title,
       description,
       image,
-      createdAt,
-      updatedAt: createdAt, 
+      createdAt: formatDate(new Date()), 
+      updatedAt: formatDate(new Date()), 
     });
+
     res.status(201).json({
       message: 'Yangilik muvaffaqiyatli qo\'shildi',
       data: news,
     });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ error: 'Bazaga yangilik qo\'shishda xatolik yuz berdi' });
   }
 };

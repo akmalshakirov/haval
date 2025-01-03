@@ -6,6 +6,7 @@ const getDiler = async (req, res) => {
     const dilers = await Diler.find(); 
     res.json(dilers);
   } catch (err) {
+    console.log(err)
     res.status(500).json({ error: 'Bazaga ulanishda xatolik yuz berdi' });
   }
 };
@@ -13,18 +14,21 @@ const getDiler = async (req, res) => {
 
 // Yangi Diler qo'shish
 const addDiler = async (req, res) => {
-  const { dilerId, title, manzil, workHours, phone } = req.body;
+  const { dilerId, title, manzil, workHoursDays, workHoursStart, workHoursEnd, phone } = req.body;
   try {
     const newDiler = new Diler({
       dilerId,
       title,
       manzil,
-      workHours,
+      workHoursDays,
+      workHoursStart,
+      workHoursEnd,
       phone,
     });
     await newDiler.save(); 
     res.status(201).json({ message: 'Ma\'lumotlar muvaffaqiyatli yuborildi:', data: newDiler });
   } catch (err) {
+    console.log(err)
     res.status(500).json({ error: 'Bazaga ma\'lumot qo\'shishda xatolik yuz berdi' });
   }
 };

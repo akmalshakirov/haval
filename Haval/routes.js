@@ -24,46 +24,46 @@ const { getAllAdmin, createAdmin, updateAdmin, deleteAdmin, loginAdmin, logoutAd
     .put("/admins/:id", jwtAccessMiddleware, roleAccessMiddleware(['admin']), updateAdmin)
     .delete("/admins/:id", jwtAccessMiddleware, roleAccessMiddleware(['admin']), deleteAdmin)
   
-    .get("/cars", getCars)
+    .get("/cars", jwtAccessMiddleware, getCars)
     .post("/add-car",jwtAccessMiddleware, roleAccessMiddleware(['admin']), addCar)
     .put("/cars/:id",jwtAccessMiddleware, roleAccessMiddleware(['admin']), updateCar)
-    .delete("/cars:id",jwtAccessMiddleware, roleAccessMiddleware(['admin']), deleteCar)
+    .delete("/cars/:id",jwtAccessMiddleware, roleAccessMiddleware(['admin']), deleteCar)
 
 
-    .get("/dilers", getDiler)
+    .get("/dilers", jwtAccessMiddleware, getDiler)
     .post("/add-diler",jwtAccessMiddleware, roleAccessMiddleware(['admin']), addDiler)
     .put("/dilers/:id",jwtAccessMiddleware, roleAccessMiddleware(['admin']), updateDiler)
     .delete("/dilers/:id",jwtAccessMiddleware, roleAccessMiddleware(['admin']), deleteDiler)
 
-    .get("/news", getAllNews)
+    .get("/news",jwtAccessMiddleware, getAllNews)
     .post("/add-news",jwtAccessMiddleware, roleAccessMiddleware(['admin']), addNews)
     .put("/news/:id",jwtAccessMiddleware, roleAccessMiddleware(['admin']), updateNews)
     .delete("/news/:id",jwtAccessMiddleware, roleAccessMiddleware(['admin']), deleteNews)
 
-    .get("/videos", getVideos)
+    .get("/videos",jwtAccessMiddleware, getVideos)
     .post("/add-video", jwtAccessMiddleware, roleAccessMiddleware(['admin']), addVideo)
     .put("/videos/:id", jwtAccessMiddleware, roleAccessMiddleware(['admin']), updateVideo)
     .delete("/videos/:id", jwtAccessMiddleware, roleAccessMiddleware(['admin']), deleteVideo)
 
-    .get("/categories", getAllCategories)
+    .get("/categories",jwtAccessMiddleware, getAllCategories)
     .get("/categories/:id", jwtAccessMiddleware, roleAccessMiddleware(['admin']),  getCategoryById)
     .post("/add-category", jwtAccessMiddleware, roleAccessMiddleware(['admin']), createCategory)
     .delete("/categories/:id", jwtAccessMiddleware, roleAccessMiddleware(['admin']), deleteCategory)
 
-    .get("/dealerCall", getAllDealerCalls)
+    .get("/dealerCall",jwtAccessMiddleware, getAllDealerCalls)
     .post("/add-dealerCall", addDealerCall)
     .delete("/dealerCall/:id", jwtAccessMiddleware, roleAccessMiddleware(['admin']), deleteDealerCall)
 
-    .get("/savdo-statistikasi", getAllSavdoStatistikasi)
+    .get("/savdo-statistikasi",jwtAccessMiddleware, getAllSavdoStatistikasi)
     .post("/add-savdo-statistikasi", jwtAccessMiddleware, roleAccessMiddleware(['admin']), addSavdoStatistikasi)
     .put("/savdo-statistikasi/:id", jwtAccessMiddleware, roleAccessMiddleware(['admin']), updateSavdoStatistikasi)
     .delete("/savdo-statistikasi/:id", jwtAccessMiddleware, roleAccessMiddleware(['admin']), deleteSavdoStatistikasi)
 
-    .get("/test-driver", getTestDrivers)
-    .post("/add-test-driver", addTestDriver)
+    .get("/test-driver",jwtAccessMiddleware, getTestDrivers)
+    .post("/add-test-driver",jwtAccessMiddleware, addTestDriver)
 
-    .get("/users", getAllUsers)
-    .delete("/users/:id", deleteUser)
+    .get("/users",jwtAccessMiddleware, roleAccessMiddleware(['admin']), getAllUsers)
+    .delete("/users/:id",jwtAccessMiddleware, roleAccessMiddleware(['admin']), deleteUser)
 
   module.exports = router;
   

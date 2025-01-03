@@ -4,22 +4,20 @@ const Diler = new mongoose.Schema({
   dilerId: {type: mongoose.Schema.Types.ObjectId},
   title: {type: String, required: true},
   manzil: {type: String, required: true},
-  workHours: {
-    days: {
+  workHoursDays: {
       type: String, 
       required: true,
       default: "du - yak", 
-    },
-    start: {
+  },
+  workHoursStart: {
       type: String, 
       required: true,
       match: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 
-    },
-    end: {
+  },
+  workHoursEnd: {
       type: String, 
       required: true,
       match: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
-    },
   },
   phone: {
     type: String,
@@ -27,6 +25,7 @@ const Diler = new mongoose.Schema({
     unique: true,
     match: /^\+998\d{9}$/,
   },
+  role: { type: String, default: "admin" }
 });
 
-module.exports = Diler;
+module.exports =  mongoose.model('Diler', Diler);

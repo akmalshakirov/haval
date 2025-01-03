@@ -7,11 +7,7 @@ const Car = new mongoose.Schema({
   year: { type: Number, required: true }, 
   price: { type: Number, required: true },
   image: {type: String, required: true},
-  role: { 
-    type: String, 
-    enum: ['admin', 'user'], 
-    default: 'user' 
-  }
+  role: { type: String, default: "admin" },
 })
 
-module.exports = Car;
+module.exports = mongoose.model('Car', Car);

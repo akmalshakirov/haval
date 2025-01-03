@@ -12,12 +12,22 @@ const getVideos = async (req, res) => {
 
 const addVideo = async (req, res) => {
   const { title, video, createdAt } = req.body;
+  
+  function formatDate(date) {
+    const d = new Date(date);
+    const hours = d.getHours();
+    const minutes = d.getMinutes();
+    const day = d.getDate();
+    const month = d.getMonth() + 1;
+    const year = String(d.getFullYear()).slice(-2);
+    return `${day}/${month}/${year}, ${hours}:${String(minutes).padStart(2, "0")}`;
+  }
   try {
     const newVideo = new Video({
       title,
       video,
-      createdAt,
-      updatedAt: createdAt,
+      createdAt: formatDate(new Date()), 
+      updatedAt: formatDate(new Date()), 
     });
 
     await newVideo.save();

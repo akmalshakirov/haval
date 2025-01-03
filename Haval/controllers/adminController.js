@@ -66,14 +66,17 @@ exports.createAdmin = async (req, res) => {
   }
 };
 
-
 exports.updateAdmin = async (req, res) => {
-  const { adminId } = req.params;
-  const { adminName, email, password } = req.body;
+  const { adminId } = req.params; 
+  const { adminName, email, password } = req.body; 
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 0
 
   try {
+    if (!mongoose.Types.ObjectId.isValid(adminId)) {
+      return res.status(400).json({ error: "Noto'g'ri admin ID." });
+    }
+
     const updateData = {};
 
     if (adminName) {
@@ -87,32 +90,36 @@ exports.updateAdmin = async (req, res) => {
 
       const existingAdmin = await Admin.findOne({ email, _id: { $ne: adminId } });
       if (existingAdmin) {
-        return res
-          .status(400)
-          .json({ error: "Bu email bilan boshqa admin allaqachon mavjud." });
+        return res.status(400).json({ error: "Bu email bilan boshqa admin allaqachon mavjud." });
       }
       updateData.email = email;
     }
 
     if (password) {
+      if (password.length < 6) {
+        return res.status(400).json({ error: "Parol kamida 6 ta belgidan iborat bo'lishi kerak." });
+      }
       const hashedPassword = await bcrypt.hash(password, 10);
       updateData.password = hashedPassword;
     }
 
-    const updatedAdmin = await Admin.findByIdAndUpdate(adminId, updateData, {
-      new: true,
-    });
+
+    const updatedAdmin = await Admin.findByIdAndUpdate(adminId, updateData, { new: true });
 
     if (!updatedAdmin) {
       return res.status(404).json({ error: "Admin topilmadi." });
     }
 
-    return res.status(200).json({ message: "Admin muvaffaqiyatli yangilandi", data: updatedAdmin });
+    return res.status(200).json({
+      message: "Admin muvaffaqiyatli yangilandi",
+      data: updatedAdmin,
+    });
   } catch (error) {
     console.error("Adminni yangilashda xatolik:", error);
-    res.status(500).json({ error: "Server xatosi yuz berdi" });
+    res.status(500).json({ error: "Server xatosi yuz berdi." });
   }
 };
+
 
 exports.deleteAdmin = async (req, res) => { 
   const { adminId } = req.params; 
@@ -180,6 +187,3 @@ exports.logoutAdmin = (req, res) => {
   
   return res.send("Chiqish")
 };
-
-
-// module.exports = { getAllAdmin, createAdmin, updateAdmin, deleteAdmin, getAdminDashboard, loginAdmin, logoutAdmin };
