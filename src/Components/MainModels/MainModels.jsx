@@ -12,7 +12,7 @@ import "swiper/css/navigation";
 import "./MainModels.css";
 
 import { Pagination, Navigation } from "swiper/modules";
-import { render } from "react-dom";
+// import { render } from "react-dom";
 
 function MainModels() {
     const pagination = {
@@ -57,11 +57,13 @@ function MainModels() {
                                 2024 | Benzin
                             </div>
                             <div className='card-content-center'>
-                                <a
-                                    href='/models/gwm-wingle-7'
-                                    className='card-content-link'>
-                                    GWM WINGLE 7
-                                </a>
+                                <h3>
+                                    <a
+                                        href='/models/gwm-wingle-7'
+                                        className='card-content-link'>
+                                        GWM WINGLE 7
+                                    </a>
+                                </h3>
                                 <p className='card-content-description'>
                                     KO‘PROQ JOY - KO‘PROQ IMKONIYATLAR
                                 </p>
@@ -80,44 +82,115 @@ function MainModels() {
                     </div>
                 </SwiperSlide>
                 <SwiperSlide>
-                    <div className='custom-card'>
+                    <div className='custom-card second-card'>
                         <div className='card-image'>
-                            <img src={HavalJolion} alt='haval jolion' />
+                            <a href='models/gwm-wingle-7'>
+                                <img src={HavalDargo} alt='haval h6' />
+                            </a>
                         </div>
                         <div className='card-content'>
-                            <h3>HAVAL JOLION</h3>
-                            <p>Shahar uchun ideal krossover</p>
+                            <div className='card-content-top'>
+                                2024 | Benzin
+                            </div>
+                            <div className='card-content-center'>
+                                <h3>
+                                    <a
+                                        href='/models/gwm-wingle-7'
+                                        className='card-content-link'>
+                                        GWM WINGLE 7
+                                    </a>
+                                </h3>
+                                <p className='card-content-description'>
+                                    KO‘PROQ JOY - KO‘PROQ IMKONIYATLAR
+                                </p>
+                                <ul>
+                                    <li>9.1 L/100 km</li>
+                                    <li>Shahardan tashqarida tsikli *</li>
+                                </ul>
+                                <div className='card-content-bottom'>
+                                    <p>NARXI: </p>
+                                    <p>359 900 000 so'm</p>
+                                    <button>Batafsilroq</button>
+                                    <span>Konfigurator</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </SwiperSlide>
                 <SwiperSlide>
-                    <div className='custom-card'>
+                    <div className='custom-card third-card'>
                         <div className='card-image'>
-                            <img src={HavalDargo} alt='haval dargo' />
+                            <a href='models/gwm-wingle-7'>
+                                <img src={HavalJolion} alt='haval h6' />
+                            </a>
                         </div>
                         <div className='card-content'>
-                            <h3>HAVAL DARGO</h3>
-                            <p>Zamonaviy va ishonchli SUV</p>
+                            <div className='card-content-top'>
+                                2024 | Benzin
+                            </div>
+                            <div className='card-content-center'>
+                                <h3>
+                                    <a
+                                        href='/models/gwm-wingle-7'
+                                        className='card-content-link'>
+                                        GWM WINGLE 7
+                                    </a>
+                                </h3>
+                                <p className='card-content-description'>
+                                    KO‘PROQ JOY - KO‘PROQ IMKONIYATLAR
+                                </p>
+                                <ul>
+                                    <li>9.1 L/100 km</li>
+                                    <li>Shahardan tashqarida tsikli *</li>
+                                </ul>
+                                <div className='card-content-bottom'>
+                                    <p>NARXI: </p>
+                                    <p>359 900 000 so'm</p>
+                                    <button>Batafsilroq</button>
+                                    <span>Konfigurator</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </SwiperSlide>
                 <SwiperSlide>
-                    <div className='custom-card'>
+                    <div className='custom-card third-card'>
                         <div className='card-image'>
-                            <img src={HavalM6} alt='haval' />
+                            <a href='models/gwm-wingle-7'>
+                                <img src={HavalM6} alt='haval h6' />
+                            </a>
                         </div>
                         <div className='card-content'>
-                            <h3>HAVAL M6</h3>
-                            <p>Premium darajadagi krossover</p>
+                            <div className='card-content-top'>
+                                2024 | Benzin
+                            </div>
+                            <div className='card-content-center'>
+                                <h3>
+                                    <a
+                                        href='/models/gwm-wingle-7'
+                                        className='card-content-link'>
+                                        GWM WINGLE 7
+                                    </a>
+                                </h3>
+                                <p className='card-content-description'>
+                                    KO‘PROQ JOY - KO‘PROQ IMKONIYATLAR
+                                </p>
+                                <ul>
+                                    <li>9.1 L/100 km</li>
+                                    <li>Shahardan tashqarida tsikli *</li>
+                                </ul>
+                                <div className='card-content-bottom'>
+                                    <p>NARXI: </p>
+                                    <p>359 900 000 so'm</p>
+                                    <button>Batafsilroq</button>
+                                    <span>Konfigurator</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </SwiperSlide>
             </Swiper>
             <div className='custom-pagination'></div>
-            {/* <div className='models-swiper-pagination pagination-buttons'>
-                <div className='swiper-button-prev'></div>
-                <div className='swiper-button-next'></div>
-            </div> */}
         </div>
     );
 }
