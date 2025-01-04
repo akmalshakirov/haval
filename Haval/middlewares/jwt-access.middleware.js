@@ -11,14 +11,6 @@ exports.jwtAccessMiddleware = function (req, res, next) {
             });
         }
 
-        const token = authHeader.split(' ')[1];
-
-        const authHeader = req.headers["authorization"];
-        if (!authHeader) {
-            return res.status(404).send({
-                error: "Token not found!",
-            });
-        }
         const token = authHeader.split(" ")[1];
 
 
