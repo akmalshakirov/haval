@@ -13,13 +13,4 @@ exports.loginLimiter = rateLimit({
     }
   });
 
-    handler: (req, res, next) => {
-        // Rate limitdan oshib ketganda xato sahifasiga yo'naltirish
-        res.status(429).render("429", {
-            message:
-                "Siz juda ko'p urinish qildingiz. Iltimos, 5 daqiqadan so'ng urinib ko'ring!.",
-        });
-        next();
-    },
-});
 
