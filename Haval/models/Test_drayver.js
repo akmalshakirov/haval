@@ -7,4 +7,4 @@ const Test_drayver = new mongoose.Schema({
     izoh: {type: String, required: true}
 })
 
-module.exports = Test_drayver;
+module.exports = mongoose.model("Test_drayver", Test_drayver);
