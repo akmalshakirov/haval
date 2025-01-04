@@ -20,7 +20,7 @@ const { getAllAdmin, createAdmin, updateAdmin, deleteAdmin, loginAdmin, getAdmin
     .post("/add-admin", jwtAccessMiddleware, roleAccessMiddleware(['admin']), createAdmin) 
     .post("/login", loginLimiter, loginAdmin) 
     .post("/register", jwtAccessMiddleware, register)
-    .put("/admins/:id", jwtAccessMiddleware, roleAccessMiddleware(['admin']), updateBackendAdmin)
+    .put("/admins/:id", jwtAccessMiddleware, roleAccessMiddleware(['admin']), updateAdmin)
     .delete("/admins/:id", jwtAccessMiddleware, roleAccessMiddleware(['admin']), deleteAdmin)
   
     .get("/cars", jwtAccessMiddleware, getCars)
