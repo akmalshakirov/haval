@@ -1,4 +1,5 @@
 const Car = require('../models/Car');
+const mongoose = require("mongoose");
 
 const getCars = async (req, res) => {
   try {
@@ -16,6 +17,12 @@ const getCars = async (req, res) => {
       currentPage: page,
       cars,
     });
+
+    if(!cars){
+      return res.status(404).send({
+        error: "Carlar  topilmadi!"
+      })
+    }
   } catch (err) {
     res.status(500).json({ error: 'Bazaga ulanishda xatolik yuz berdi' });
   }
@@ -30,6 +37,7 @@ const addCar = async (req, res) => {
       data: car,
     });
   } catch (err) {
+    console.log(err)
     res.status(500).json({ error: 'Ma\'lumot qo\'shishda xatolik yuz berdi' });
   }
 };
@@ -53,22 +61,27 @@ const updateCar = async (req, res) => {
       res.status(404).json({ error: 'Mashina topilmadi' });
     }
   } catch (err) {
+    console.log(err)
     res.status(500).json({ error: 'Ma\'lumotni yangilashda xatolik yuz berdi' });
   }
 };
 
 const deleteCar = async (req, res) => {
   const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'Yaroqsiz ID' });
+  }
+
   try {
     const car = await Car.findByIdAndDelete(id);
-
-    if (car) {
-      res.status(200).json({ message: 'Mashina muvaffaqiyatli o\'chirildi' });
-    } else {
-      res.status(404).json({ message: 'Mashina topilmadi' });
+    if (!car) {
+      return res.status(404).json({ error: 'Mashina topilmadi' });
     }
+    res.status(200).json({ message: 'Mashina muvaffaqiyatli o‘chirildi' });
   } catch (err) {
-    res.status(500).json({ error: 'Ma\'lumotni o\'chirishda xatolik yuz berdi' });
+    console.log(err);
+    res.status(500).json({ error: 'Serverda xatolik yuz berdi' });
   }
 };
 
