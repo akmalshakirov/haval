@@ -14,6 +14,7 @@ import GWMwignle7 from "../../Pages/Models/GWM-wingle-7/GWM-wignle-7.jsx";
 import HavalJolion from "../../Pages/Models/Haval-Jolion/HavalJolion.jsx";
 import ProtectedRoute from "../../Components/ProtectedRoute/ProtectedRoute";
 import MainModels from "../../Components/MainModels/MainModels.jsx";
+import MainDealers from "../../Components/MainDealers/MainDealers.jsx";
 
 function AppRouter() {
     return (
@@ -26,6 +27,7 @@ function AppRouter() {
                             <HeaderNavBar />
                             <HeaderSwiper />
                             <MainModels />
+                            <MainDealers />
                         </>
                     }
                 />

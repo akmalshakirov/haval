@@ -35,7 +35,7 @@ const AdminLogin = () => {
                 }
             );
 
-            if (response.data.success) {
+            if (response.data) {
                 navigate("/admin");
                 message.success("Admin panelga muvaffaqiyatli kirildi!");
                 const token = response.data.token;
