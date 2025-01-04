@@ -1,0 +1,71 @@
+.models-container {
+    max-width: 1820px;
+    padding: 1.464vw 1.464vw;
+    background-color: #e3e6e8;
+    margin: 0 auto;
+}
+.models-header {
+    text-align: center;
+    padding-bottom: 40px;
+}
+.models-header h1 {
+    padding-bottom: 20px;
+}
+.custom-card {
+    color: #fff;
+    border-radius: 10px;
+    background-color: #222;
+}
+.first-card {
+    background-color: #595959;
+}
+.card-image {
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.card-image a img {
+    width: 100%;
+    height: 100%;
+    transition: all 0.3s;
+    object-fit: cover;
+}
+.card-image a img:hover {
+    transform: scale(1.02);
+    position: relative;
+}
+.card-content {
+    padding: 20px 40px;
+}
+.models-swiper .swiper-pagination-bullets .swiper-pagination-bullet {
+    background-color: transparent !important;
+}
+.swiper-pagination-bullet {
+    background-color: transparent;
+}
+.models-swiper .swiper-button-prev {
+    color: #fff;
+}
+.models-swiper .swiper-button-next {
+    color: #fff;
+}
+.custom-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+.custom-pagination span {
+    transition: 0.2s;
+}
+.custom-pagination span:hover {
+    color: #000;
+}
+.second-card {
+    background-color: #857261;
+}
+.card-content-top {
+    margin-bottom: 20px;
+}

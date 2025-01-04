@@ -1,16 +1,51 @@
-import React from "react";
-import { Form, Input, Button, Checkbox, Typography, Card } from "antd";
+import React, { useState } from "react";
+import { Form, Input, Button, Checkbox, Typography, Card, message } from "antd";
 import "./AdminLogin.css";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
 
 const AdminLogin = () => {
-    const onFinish = (values) => {
-        console.log("Submitted values:", values);
+    const [email, setEmail] = useState("");
+    const [inputPasswordValue, setInputPasswordValue] = useState("");
+    const navigate = useNavigate();
+
+    const handleChange = (e) => {
+        setEmail(e.target.value);
     };
 
-    const onFinishFailed = (errorInfo) => {
-        console.log("Failed:", errorInfo);
+    const handleShowPassword = (e) => {
+        setInputPasswordValue(e.target.value);
+    };
+
+    const handleSubmit = async () => {
+        try {
+            const response = await axios.post(
+                "http://localhost:3000/login",
+                {
+                    email: email,
+                    password: inputPasswordValue,
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
+            if (response.data) {
+                navigate("/admin");
+                message.success("Admin panelga muvaffaqiyatli kirildi!");
+                const token = response.data.token;
+                localStorage.setItem("authToken", token);
+            } else {
+                message.error("Username yoki password noto'g'ri!");
+            }
+        } catch (error) {
+            message.error("Username yoki password noto'g'ri!");
+        }
     };
 
     return (
@@ -24,33 +59,26 @@ const AdminLogin = () => {
                     className='admin-login-form'
                     name='login'
                     layout='vertical'
-                    initialValues={{ remember: true }}
-                    onFinish={onFinish}
-                    onFinishFailed={onFinishFailed}>
+                    initialValues={{ remember: true }}>
                     <Form.Item
                         label='Пользователь'
-                        name='username'
+                        name='admin'
                         rules={[
                             { required: true, message: "Введите ваш логин!" },
+                            {
+                                type: "email",
+                                message: "Введите правильный email!",
+                            },
                         ]}>
-                        <svg
-                            className='admin-login-name-icon'
-                            aria-hidden='true'
-                            xmlns='http://www.w3.org/2000/svg'
-                            fill='none'
-                            viewBox='0 0 24 24'>
-                            <path
-                                stroke='currentColor'
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                                strokeWidth='2'
-                                d='M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z'
-                            />
-                        </svg>
-
                         <Input
+                            value={email}
+                            onChange={handleChange}
+                            type='email'
                             placeholder='john@doe.com'
                             className='admin-login-name-input'
+                            prefix={
+                                <UserOutlined className='admin-login-name-icon' />
+                            }
                         />
                     </Form.Item>
 
@@ -60,7 +88,15 @@ const AdminLogin = () => {
                         rules={[
                             { required: true, message: "Введите ваш пароль!" },
                         ]}>
-                        <Input.Password placeholder='********' />
+                        <Input.Password
+                            value={inputPasswordValue}
+                            onChange={handleShowPassword}
+                            className='admin-login-password-input'
+                            placeholder='********'
+                            prefix={
+                                <LockOutlined className='admin-login-password-icon' />
+                            }
+                        />
                     </Form.Item>
 
                     <Form.Item name='remember' valuePropName='checked'>
@@ -71,7 +107,8 @@ const AdminLogin = () => {
                         <Button
                             type='primary'
                             htmlType='submit'
-                            className='admin-login-button'>
+                            className='admin-login-button'
+                            onClick={handleSubmit}>
                             Вход в админ-панель
                         </Button>
                     </Form.Item>

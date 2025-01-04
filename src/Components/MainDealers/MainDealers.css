@@ -1,0 +1,25 @@
+.main-dealers {
+    max-width: 1820px;
+    width: 100%;
+    padding: 100px 20px 20px 20px;
+    display: flex;
+    max-height: 90vh;
+    background-color: #e3e6e8;
+    margin: 0 auto;
+}
+.main-dealers-list {
+    padding: 0 20px;
+    overflow-y: scroll;
+    width: 30%;
+    overflow-y: scroll;
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-radius: 10px;
+}
+.main-dealers-item-map {
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 7px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

@@ -30,23 +30,37 @@
     display: block;
     text-align: center;
     margin-bottom: 20px;
-    color: rgba(0, 0, 0, 0.45);
+    color: #b5b5b4;
+}
+
+.admin-login-name-input,
+.admin-login-password-input {
+    padding: 7px 15px;
 }
 
 .admin-login-button {
     width: 100%;
 }
-
-.admin-login-name-input {
-    padding-left: 35px;
+.admin-login-name-icon {
+    color: #1f2937;
+    border: 1px solid #1f2937;
+    border-radius: 50%;
+    padding: 1px;
+    margin-right: 10px;
 }
 
-.admin-login-name-icon {
-    position: absolute;
-    z-index: 2;
-    top: 7px;
-    left: 7px;
-    color: #00000050;
-    height: 20px;
-    width: 20px;
+.admin-login-name-icon:user-invalid {
+    border-color: red;
+}
+
+.admin-login-password-icon {
+    margin-right: 12px;
+    font-size: 16px;
+}
+
+@media screen and (max-width: 480px) {
+    .admin-login-card {
+        max-width: 90%;
+        margin: 0 10px;
+    }
 }

@@ -8,10 +8,11 @@ import {
     Form,
     Input,
     message,
-    Avatar,
     Image,
     Upload,
     Tooltip,
+    Switch,
+    Popconfirm,
 } from "antd";
 import {
     HomeOutlined,
@@ -23,10 +24,13 @@ import {
     StockOutlined,
     NotificationOutlined,
     LogoutOutlined,
+    UnorderedListOutlined,
+    IdcardOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import AdminVideos from "./AdminVideos";
-// import axios from "axios";
+import axios from "axios";
+import "./Admin.css";
 
 const { Header, Sider, Content, Footer } = Layout;
 
@@ -35,14 +39,20 @@ const AdminPanel = () => {
     const [cars, setCars] = useState([]);
     const [admins, setAdmins] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isImageModalOpen, setIsImageModalOpen] = useState(false);
-    const [hoveredImage, setHoveredImage] = useState("");
+    const [previewModal, setPreviewModal] = useState({
+        isOpen: false,
+        image: "",
+    });
     const [fileList, setFileList] = useState([]);
     const [form] = Form.useForm();
     const [actionModal, setActionModal] = useState(false);
     const [aActionModal, setAactionModal] = useState(false);
     const [editingAdmin, setEditingAdmin] = useState(null);
     const navigate = useNavigate();
+    const [isCardView, setIsCardView] = useState(true);
+    const [editingCar, setEditingCar] = useState(null);
+    const [deleteModal, setDeleteModal] = useState(false);
+    const [carToDelete, setCarToDelete] = useState(null);
 
     const fetchCars = () => {
         setCars([
@@ -84,16 +94,37 @@ const AdminPanel = () => {
         ]);
     };
 
-    const fetchAdmins = () => {
-        setAdmins([
-            { key: "1", username: "admin1", email: "admin1@example.com" },
-            { key: "2", username: "admin2", email: "admin2@example.com" },
-        ]);
+    const fetchAdmins = async () => {
+        try {
+            const token = localStorage.getItem("authToken");
+            const response = await axios.get("http://localhost:3000/admins", {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            console.log("Kelgan ma'lumotlar:", response.data);
+
+            if (response.data) {
+                const formattedAdmins = response.data.map((admin) => ({
+                    ...admin,
+                    key: admin._id,
+                }));
+                setAdmins(formattedAdmins);
+            }
+        } catch (error) {
+            console.error("Xatolik:", error.response?.data || error.message);
+            message.error("Adminlar yuklanishda xatolik yuz berdi!");
+        }
     };
 
     useEffect(() => {
-        fetchCars();
-        fetchAdmins();
+        const token = localStorage.getItem("authToken");
+        if (token) {
+            fetchCars();
+            fetchAdmins();
+        }
     }, []);
 
     const handleAddAdmin = (values) => {
@@ -103,20 +134,65 @@ const AdminPanel = () => {
         form.resetFields();
     };
 
-    const handleEditAdmin = (values) => {
-        setAdmins(
-            admins.map((admin) =>
-                admin.key === editingAdmin.key ? { ...admin, ...values } : admin
-            )
-        );
-        message.success("Admin muvaffaqiyatli tahrirlandi!");
-        setAactionModal(false);
-        setEditingAdmin(null);
+    const handleEditAdmin = async (values) => {
+        try {
+            const token = localStorage.getItem("authToken");
+            const updateData = {
+                adminName: values.adminName,
+                email: values.email,
+                password: values.password,
+            };
+
+            const response = await axios.put(
+                `http://localhost:3000/admins/${editingAdmin._id}`,
+                updateData,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            if (response.status === 200) {
+                await fetchAdmins();
+                setAactionModal(false);
+                setEditingAdmin(null);
+                form.resetFields();
+                message.success("Admin muvaffaqiyatli o'zgartirildi!");
+            }
+        } catch (error) {
+            console.error("Xatolik:", error.response?.data || error.message);
+            message.error(
+                error.response?.data?.message ||
+                    "Admin ma'lumotlarini yangilashda xatolik yuz berdi!"
+            );
+        }
     };
 
-    const handleDeleteAdmin = (key) => {
-        setAdmins(admins.filter((admin) => admin.key !== key));
-        message.success("Admin muvaffaqiyatli o'chirildi!");
+    const handleDeleteAdmin = async (adminId) => {
+        try {
+            const token = localStorage.getItem("authToken");
+            const response = await axios.delete(
+                `http://localhost:3000/admins/${adminId}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            if (response.status === 200) {
+                await fetchAdmins();
+                message.success("Admin muvaffaqiyatli o'chirildi!");
+            }
+        } catch (error) {
+            console.error("Xatolik:", error.response?.data || error.message);
+            message.error(
+                error.response?.data?.message ||
+                    "Adminni o'chirishda xatolik yuz berdi!"
+            );
+        }
     };
 
     const handleAddCar = (values) => {
@@ -141,7 +217,7 @@ const AdminPanel = () => {
         };
 
         const updatedCars = [...cars, newCar];
-        localStorage.setItem("cars", JSON.stringify(updatedCars));
+        // localStorage.setItem("cars", JSON.stringify(updatedCars));
 
         setCars([...cars, newCar]);
         message.success("Avtomobil muvaffaqiyatli qo'shildi!");
@@ -152,8 +228,53 @@ const AdminPanel = () => {
 
         URL.revokeObjectURL(file.originFileObj);
     };
-    const handleFileChange = ({ fileList }) => {
-        setFileList(fileList);
+    const handleFileChange = ({ fileList: newFileList }) => {
+        if (newFileList.length > 0 && newFileList[0].originFileObj) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                newFileList[0].url = reader.result;
+                setFileList(newFileList);
+            };
+            reader.readAsDataURL(newFileList[0].originFileObj);
+        } else {
+            setFileList(newFileList);
+        }
+    };
+
+    const handlePreviewImage = (image) => {
+        setPreviewModal({
+            image: image,
+        });
+    };
+
+    const handleEditCar = (values) => {
+        if (!editingCar) return;
+
+        const newImage = fileList[0]?.url || editingCar.image;
+
+        setCars(
+            cars.map((car) =>
+                car.key === editingCar.key
+                    ? {
+                          ...car,
+                          ...values,
+                          image: newImage,
+                      }
+                    : car
+            )
+        );
+        setActionModal(false);
+        setEditingCar(null);
+        setFileList([]);
+        form.resetFields();
+        message.success("Avtomobil muvaffaqiyatli tahrirlandi!");
+    };
+
+    const handleDeleteCar = () => {
+        setCars(cars.filter((car) => car.key !== carToDelete.key));
+        setDeleteModal(false);
+        setCarToDelete(null);
+        message.success("Avtomobil muvaffaqiyatli o'chirildi!");
     };
 
     const columnsCars = [
@@ -162,14 +283,26 @@ const AdminPanel = () => {
             dataIndex: "image",
             key: "image",
             render: (image) => (
-                <Avatar
+                <Image
                     src={image}
-                    size={64}
-                    onClick={() => {
-                        setHoveredImage(image);
-                        setIsImageModalOpen(true);
+                    style={{
+                        width: 90,
+                        height: 90,
+                        borderRadius: "50%",
+                        objectFit: "cover",
                     }}
-                    style={{ cursor: "pointer" }}
+                    preview={{
+                        mask: (
+                            <div>
+                                <span className='custom-mask-text'>
+                                    Rasmni ko'rish
+                                </span>
+                            </div>
+                        ),
+                        maskClassName: `custom-mask ${
+                            isCardView ? "custom-mask-list" : "custom-mask-card"
+                        }`,
+                    }}
                 />
             ),
         },
@@ -177,35 +310,47 @@ const AdminPanel = () => {
         { title: "Yili", dataIndex: "year", key: "year" },
         { title: "Narxi", dataIndex: "price", key: "price" },
         {
-            title: "Harakat",
-            dataIndex: "",
-            key: "x",
-            render: () => (
-                <div className='action'>
-                    <a onClick={() => setActionModal(true)}>
-                        {<EditOutlined />}
-                        <Modal
-                            title={"Tahrirlash"}
-                            open={actionModal}
-                            onCancel={() => setActionModal(false)}
-                            footer={null}>
-                            <h1>Tahrirlash oynasi</h1>
-                        </Modal>
-                    </a>
-                    <a onClick={(e) => console.log(`delete: ${e.type}`)}>
-                        {<DeleteOutlined />}
-                    </a>
+            title: "Amallar",
+            key: "actions",
+            render: (_, record) => (
+                <div style={{ display: "flex", gap: "10px" }}>
+                    <Button
+                        onClick={() => {
+                            setEditingCar(record);
+                            setActionModal(true);
+                            form.setFieldsValue(record);
+                        }}
+                        icon={<EditOutlined />}>
+                        Tahrirlash
+                    </Button>
+                    <Button
+                        danger
+                        onClick={() => {
+                            setCarToDelete(record);
+                            setDeleteModal(true);
+                        }}
+                        icon={<DeleteOutlined />}>
+                        O'chirish
+                    </Button>
                 </div>
             ),
         },
     ];
 
     const columnsAdmins = [
-        { title: "Foydalanuvchi nomi", dataIndex: "username", key: "username" },
-        { title: "Email", dataIndex: "email", key: "email" },
+        {
+            title: "Admin Name",
+            dataIndex: "adminName",
+            key: "adminName",
+        },
+        {
+            title: "Email",
+            dataIndex: "email",
+            key: "email",
+        },
         {
             title: "Action",
-            dataIndex: "action",
+            key: "action",
             render: (_, record) => (
                 <div>
                     <a
@@ -217,7 +362,7 @@ const AdminPanel = () => {
                         {<EditOutlined />}
                     </a>
                     <a
-                        onClick={() => handleDeleteAdmin(record.key)}
+                        onClick={() => handleDeleteAdmin(record._id)}
                         style={{ marginLeft: 8 }}>
                         {<DeleteOutlined />}
                     </a>
@@ -227,15 +372,16 @@ const AdminPanel = () => {
     ];
 
     const handleLogout = () => {
-        localStorage.removeItem("users");
-        localStorage.removeItem("isAuthenticated");
-        navigate("/register");
-        window.location.reload();
+        localStorage.removeItem("authToken");
+        navigate("/");
+        // localStorage.removeItem("users");
+        // localStorage.removeItem("isAuthenticated");
+        // window.location.reload(); ========= DON'T REMOVE
     };
 
     return (
         <Layout style={{ minHeight: "100vh" }} className='admin'>
-            <Sider collapsible>
+            <Sider collapsible collapsedWidth={90}>
                 <Menu
                     theme='dark'
                     mode='inline'
@@ -267,12 +413,22 @@ const AdminPanel = () => {
                 />
             </Sider>
             <div style={{ position: "absolute", top: 0, right: 0, margin: 16 }}>
-                <Tooltip title='Logout'>
+                {/* <Tooltip title='Logout'>
                     <Button
                         type='text'
                         icon={<LogoutOutlined />}
                         onClick={handleLogout}
                     />
+                </Tooltip> */}
+                <Tooltip title='Chiqish' className='tooltip-logout'>
+                    <Popconfirm
+                        title='Chiqish'
+                        description='Haqiqatan ham chiqishni istasizmi?'
+                        onConfirm={handleLogout}
+                        okText='Ha'
+                        cancelText='Yoq'>
+                        <LogoutOutlined />
+                    </Popconfirm>
                 </Tooltip>
             </div>
             <Layout>
@@ -306,13 +462,13 @@ const AdminPanel = () => {
                                         onFinish={handleAddAdmin}
                                         layout='vertical'>
                                         <Form.Item
-                                            name='username'
-                                            label='Foydalanuvchi nomi'
+                                            name='adminName'
+                                            label='Admin nomi'
                                             rules={[
                                                 {
                                                     required: true,
                                                     message:
-                                                        "Iltimos, foydalanuvchi nomini kiriting!",
+                                                        "Iltimos, Admin nomini kiriting!",
                                                 },
                                             ]}>
                                             <Input />
@@ -326,8 +482,30 @@ const AdminPanel = () => {
                                                     message:
                                                         "Iltimos, emailni kiriting!",
                                                 },
+                                                {
+                                                    type: "email",
+                                                    message:
+                                                        "Iltimos, to'g'ri email formatini kiriting! (misol: example@gmail.com)",
+                                                },
                                             ]}>
                                             <Input />
+                                        </Form.Item>
+                                        <Form.Item
+                                            name='password'
+                                            label='Parol'
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message:
+                                                        "Iltimos, parolni kiriting!",
+                                                },
+                                                {
+                                                    min: 6,
+                                                    message:
+                                                        "Parol kamida 6 ta belgi bo'lishi kerak!",
+                                                },
+                                            ]}>
+                                            <Input.Password />
                                         </Form.Item>
                                         <Button
                                             type='primary'
@@ -347,13 +525,13 @@ const AdminPanel = () => {
                                         onFinish={handleEditAdmin}
                                         layout='vertical'>
                                         <Form.Item
-                                            name='username'
-                                            label='Foydalanuvchi nomi'
+                                            name='adminName'
+                                            label='Admin nomi'
                                             rules={[
                                                 {
                                                     required: true,
                                                     message:
-                                                        "Iltimos, foydalanuvchi nomini kiriting!",
+                                                        "Iltimos, Admin nomini kiriting!",
                                                 },
                                             ]}>
                                             <Input />
@@ -367,8 +545,25 @@ const AdminPanel = () => {
                                                     message:
                                                         "Iltimos, emailni kiriting!",
                                                 },
+                                                {
+                                                    type: "email",
+                                                    message:
+                                                        "Iltimos, to'g'ri email formatini kiriting! (misol: example@mail.com)",
+                                                },
                                             ]}>
                                             <Input />
+                                        </Form.Item>
+                                        <Form.Item
+                                            name='password'
+                                            label='Parol'
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message:
+                                                        "Iltimos, parolni kiriting!",
+                                                },
+                                            ]}>
+                                            <Input.Password />
                                         </Form.Item>
                                         <Button
                                             type='primary'
@@ -382,16 +577,125 @@ const AdminPanel = () => {
                         )}
                         {selectedKey === "2" && (
                             <>
-                                <Button
-                                    type='primary'
-                                    style={{ marginBottom: 16 }}
-                                    onClick={() => setIsModalOpen(true)}>
-                                    Avtomobil qo'shish
-                                </Button>
-                                <Table
-                                    columns={columnsCars}
-                                    dataSource={cars}
-                                />
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                    }}>
+                                    <Button
+                                        type='primary'
+                                        style={{ marginBottom: 16 }}
+                                        onClick={() => setIsModalOpen(true)}>
+                                        Avtomobil qo'shish
+                                    </Button>
+                                    <Switch
+                                        checkedChildren={
+                                            <UnorderedListOutlined />
+                                        }
+                                        unCheckedChildren={<IdcardOutlined />}
+                                        checked={isCardView}
+                                        onChange={(checked) =>
+                                            setIsCardView(checked)
+                                        }
+                                    />
+                                </div>
+                                {isCardView ? (
+                                    <Table
+                                        dataSource={cars}
+                                        columns={columnsCars}
+                                    />
+                                ) : (
+                                    <div
+                                        style={{
+                                            display: "grid",
+                                            gridTemplateColumns:
+                                                "repeat(auto-fill, minmax(300px, 1fr))",
+                                            gap: "20px",
+                                        }}>
+                                        {cars.map((car) => (
+                                            <div
+                                                key={car.key}
+                                                style={{
+                                                    padding: "15px",
+                                                    borderRadius: "8px",
+                                                    border: "1px solid #eee",
+                                                }}>
+                                                <Image
+                                                    src={car.image}
+                                                    style={{
+                                                        width: "100%",
+                                                        height: "240px",
+                                                        borderRadius: "8px",
+                                                        objectFit: "cover",
+                                                        marginBottom: "10px",
+                                                    }}
+                                                    preview={{
+                                                        mask: (
+                                                            <div
+                                                                style={{
+                                                                    fontSize:
+                                                                        "14px",
+                                                                    color: "#fff",
+                                                                    display:
+                                                                        "flex",
+                                                                    flexDirection:
+                                                                        "column",
+                                                                    alignItems:
+                                                                        "center",
+                                                                    justifyContent:
+                                                                        "center",
+                                                                    height: "100%",
+                                                                }}>
+                                                                Rasmni ko'rish
+                                                            </div>
+                                                        ),
+                                                        maskClassName: `custom-mask ${
+                                                            isCardView
+                                                                ? ""
+                                                                : "custom-mask-card"
+                                                        }`,
+                                                    }}
+                                                />
+                                                <h3>{car.model}</h3>
+                                                <p>Yili: {car.year}</p>
+                                                <p>Narxi: {car.price}</p>
+                                                <div
+                                                    className='action'
+                                                    style={{
+                                                        display: "flex",
+                                                        gap: "10px",
+                                                    }}>
+                                                    <Button
+                                                        onClick={() => {
+                                                            setEditingCar(car);
+                                                            setActionModal(
+                                                                true
+                                                            );
+                                                            form.setFieldsValue(
+                                                                car
+                                                            );
+                                                        }}
+                                                        icon={<EditOutlined />}>
+                                                        Tahrirlash
+                                                    </Button>
+                                                    <Button
+                                                        danger
+                                                        onClick={() => {
+                                                            setCarToDelete(car);
+                                                            setDeleteModal(
+                                                                true
+                                                            );
+                                                        }}
+                                                        icon={
+                                                            <DeleteOutlined />
+                                                        }>
+                                                        O'chirish
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                                 <Modal
                                     title='Yangi Avtomobil Qoshish'
                                     open={isModalOpen}
@@ -442,12 +746,31 @@ const AdminPanel = () => {
                                                 listType='picture-card'
                                                 fileList={fileList}
                                                 onChange={handleFileChange}
-                                                beforeUpload={() => false}>
-                                                {fileList.length >= 1
-                                                    ? null
-                                                    : "Yuklash "}
-                                                <UploadOutlined />
+                                                beforeUpload={() => false}
+                                                maxCount={1}>
+                                                {fileList.length >= 1 ? null : (
+                                                    <div>
+                                                        <UploadOutlined />
+                                                        <div
+                                                            style={{
+                                                                marginTop: 8,
+                                                            }}>
+                                                            Yuklash
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </Upload>
+                                            {editingCar && !fileList.length && (
+                                                <Image
+                                                    src={editingCar.image}
+                                                    alt='Current image'
+                                                    style={{
+                                                        width: 100,
+                                                        marginTop: 8,
+                                                    }}
+                                                    preview={true}
+                                                />
+                                            )}
                                         </Form.Item>
                                         <Button
                                             type='primary'
@@ -458,11 +781,16 @@ const AdminPanel = () => {
                                     </Form>
                                 </Modal>
                                 <Modal
-                                    open={isImageModalOpen}
+                                    open={previewModal.isOpen}
                                     footer={null}
-                                    onCancel={() => setIsImageModalOpen(false)}>
+                                    onCancel={() =>
+                                        setPreviewModal({
+                                            isOpen: false,
+                                            image: "",
+                                        })
+                                    }>
                                     <Image
-                                        src={hoveredImage}
+                                        src={previewModal.image}
                                         alt='Avtomobil rasmi'
                                         style={{ width: "100%" }}
                                     />
@@ -479,9 +807,133 @@ const AdminPanel = () => {
                     </div>
                 </Content>
                 <Footer style={{ textAlign: "center" }}>
-                    Haval Admin Panel ©2024
+                    Haval Admin Panel &copy; 2024
                 </Footer>
             </Layout>
+            {/* LAYOUT END +-=-=-=-=-=-=-+_+_+-==-+_+=-=-=-=-=+_+_+ */}
+
+            {/* EDIT MODAL =----=-=--=-=---=-=-==- */}
+            <Modal
+                title='Avtomobilni tahrirlash'
+                open={actionModal}
+                onCancel={() => {
+                    setActionModal(false);
+                    setEditingCar(null);
+                    setFileList([]);
+                    form.resetFields();
+                }}
+                footer={null}>
+                <Form
+                    form={form}
+                    onFinish={handleEditCar}
+                    layout='vertical'
+                    initialValues={editingCar}>
+                    <Form.Item
+                        name='model'
+                        label='Model'
+                        rules={[
+                            {
+                                required: true,
+                                message:
+                                    "Iltimos, avtomobil modelini kiriting!",
+                            },
+                        ]}>
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        name='year'
+                        label='Yili'
+                        rules={[
+                            {
+                                required: true,
+                                message: "Iltimos, yilni kiriting!",
+                            },
+                        ]}>
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        name='price'
+                        label='Narxi'
+                        rules={[
+                            {
+                                required: true,
+                                message: "Iltimos, narxni kiriting!",
+                            },
+                        ]}>
+                        <Input />
+                    </Form.Item>
+                    <Form.Item label='Avtomobil rasmi'>
+                        <Upload
+                            listType='picture-card'
+                            fileList={fileList}
+                            onChange={handleFileChange}
+                            beforeUpload={() => false}
+                            maxCount={1}>
+                            {fileList.length >= 1 ? null : (
+                                <div>
+                                    <UploadOutlined />
+                                    <div style={{ marginTop: 8 }}>Yuklash</div>
+                                </div>
+                            )}
+                        </Upload>
+                        {editingCar && !fileList.length && (
+                            <Image
+                                src={editingCar.image}
+                                alt='Current image'
+                                style={{ width: 100, marginTop: 8 }}
+                                preview={true}
+                            />
+                        )}
+                    </Form.Item>
+                    <Button type='primary' htmlType='submit' block>
+                        Saqlash
+                    </Button>
+                </Form>
+            </Modal>
+            {/* EDIT MODAL =----=-=--=-=---=-=-==- */}
+            {/* ===========================DELETE MODAL =----=-=--=-=---=-=-==- */}
+            <Modal
+                title="Avtomobilni o'chirish"
+                open={deleteModal}
+                onOk={handleDeleteCar}
+                onCancel={() => {
+                    setDeleteModal(false);
+                    setCarToDelete(null);
+                }}
+                okText="O'chirish"
+                okButtonProps={{
+                    style: {
+                        backgroundColor: "red",
+                        color: "white",
+                    },
+                }}
+                cancelText='Bekor qilish'>
+                <p style={{ textAlign: "center" }}>
+                    Haqiqatan ham bu avtomobilni o'chirmoqchimisiz?
+                </p>
+                {carToDelete && (
+                    <div style={{ textAlign: "center" }}>
+                        <Image
+                            src={carToDelete.image}
+                            alt={carToDelete.model}
+                            className='custom-preview-image'
+                            style={{ width: 190, marginBottom: 8 }}
+                            preview={{
+                                maskClassName: "custom-preview-mask",
+                                mask: (
+                                    <div className='custom-preview-tex'>
+                                        Preview
+                                    </div>
+                                ),
+                            }}
+                        />
+                        <p>
+                            <strong>{carToDelete.model}</strong>
+                        </p>
+                    </div>
+                )}
+            </Modal>
+            {/* DELETE MODAL =----=-=--=-=---=-=-==- */}
         </Layout>
     );
 };
