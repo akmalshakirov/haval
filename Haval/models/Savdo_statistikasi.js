@@ -8,4 +8,4 @@ const Savdo_statistikasi = new mongoose.Schema({
     updatedAt: {type: String}
 })
 
-module.exports = Savdo_statistikasi;
+module.exports = mongoose.model("Savdo_statistikasi", Savdo_statistikasi);

@@ -14,10 +14,9 @@ const getDiler = async (req, res) => {
 
 // Yangi Diler qo'shish
 const addDiler = async (req, res) => {
-  const { dilerId, title, manzil, workHoursDays, workHoursStart, workHoursEnd, phone } = req.body;
+  const { title, manzil, workHoursDays, workHoursStart, workHoursEnd, phone } = req.body;
   try {
     const newDiler = new Diler({
-      dilerId,
       title,
       manzil,
       workHoursDays,

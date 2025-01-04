@@ -28,7 +28,6 @@ const { getAllAdmin, createAdmin, updateAdmin, deleteAdmin, loginAdmin, getAdmin
     .put("/cars/:id",jwtAccessMiddleware, roleAccessMiddleware(['admin']), updateCar)
     .delete("/cars/:id",jwtAccessMiddleware, roleAccessMiddleware(['admin']), deleteCar)
 
-
     .get("/dilers", jwtAccessMiddleware, getDiler)
     .post("/add-diler",jwtAccessMiddleware, roleAccessMiddleware(['admin']), addDiler)
     .put("/dilers/:id",jwtAccessMiddleware, roleAccessMiddleware(['admin']), updateDiler)

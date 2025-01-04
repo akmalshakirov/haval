@@ -70,7 +70,7 @@ exports.updateAdmin = async (req, res) => {
   const { adminId } = req.params; 
   const { adminName, email, password } = req.body; 
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 0
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   try {
     if (!mongoose.Types.ObjectId.isValid(adminId)) {
@@ -103,7 +103,6 @@ exports.updateAdmin = async (req, res) => {
       updateData.password = hashedPassword;
     }
 
-
     const updatedAdmin = await Admin.findByIdAndUpdate(adminId, updateData, { new: true });
 
     if (!updatedAdmin) {
@@ -120,29 +119,30 @@ exports.updateAdmin = async (req, res) => {
   }
 };
 
+exports.deleteAdmin = async (req, res) => {
+  const { adminId } = req.params;
 
-exports.deleteAdmin = async (req, res) => { 
-  const { adminId } = req.params; 
   try {
-    const userId = req.cookies.userId; 
+    const userId = req.cookies.userId;
 
     const admin = await Admin.findById(adminId);
     if (!admin) {
-      return res.status(404).send({ error: "Admin topilmadi!" });
+      return res.status(404).json({ error: "Admin topilmadi!" });
     }
 
     if (admin._id.toString() !== userId) {
-      return res.status(403).send({ error: "Siz bu adminni o'chirishga ruxsatga ega emassiz!" });
+      return res.status(403).json({ error: "Siz bu adminni o'chirishga ruxsatga ega emassiz!" });
     }
 
     await Admin.findByIdAndDelete(adminId);
 
-    return res.send("Admin muvaffaqiyatli o'chirildi");
+    return res.status(200).json({ message: "Admin muvaffaqiyatli o'chirildi." });
   } catch (error) {
-    console.error('Adminni o\'chirishda xato:', error);
-    res.status(500).send('Server xatosi');
+    console.error("Adminni o'chirishda xato:", error);
+    res.status(500).json({ error: "Server xatosi yuz berdi." });
   }
 };
+
 
 exports.loginAdmin = async (req, res) => {
   console.log(req.body);
