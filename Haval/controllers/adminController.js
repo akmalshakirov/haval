@@ -5,26 +5,25 @@ const Admin = require('../models/Admin');
 exports.getAllAdmin = async (req, res) => {
   try {
     const admins = await Admin.find();
-    
-    if(!admins){
-      return res.status(404).send({
-        error: "Adminlar  topilmadi!"
-      })
+
+    if (!admins) {
+      return res.status(404).send({ error: "Adminlar topilmadi!" }); 
     }
 
-    return res.status(200).send(admins)
-
+    return res.status(200).send({
+      message: "Adminlar",
+      admins}); 
   } catch (error) {
-    console.error('Error fetching admins:', error);
-    res.status(500).send('Server error');
+    return res.status(500).json({ error: "Server xatosi yuz berdi." });
   }
 };
 
+
 exports.getAdminById = async (req, res) => {
-  const { adminId } = req.params;  
+  const { id } = req.params;  
 
   try {
-    const admin = await Admin.findById(adminId);
+    const admin = await Admin.findById(id);
 
     if (!admin) {
       return res.status(404).send({ error: "Admin topilmadi!" });  
@@ -34,7 +33,7 @@ exports.getAdminById = async (req, res) => {
 
   } catch (error) {
     console.error('Adminni olishda xato:', error);
-    res.status(500).send('Server xatosi');  
+    return res.status(500).json({ error: "Server xatosi yuz berdi." });
   }
 };
 
@@ -62,7 +61,7 @@ exports.createAdmin = async (req, res) => {
     return res.status(201).json({ message: "Admin muvaffaqiyatli yaratildi" });
   } catch (error) {
     console.error("Admin yaratishda xatolik:", error);
-    res.status(500).json({ error: "Server xatosi yuz berdi" });
+    return res.status(500).json({ error: "Server xatosi yuz berdi" });
   }
 };
 
@@ -115,7 +114,7 @@ exports.updateAdmin = async (req, res) => {
     });
   } catch (error) {
     console.error("Adminni yangilashda xatolik:", error);
-    res.status(500).json({ error: "Server xatosi yuz berdi." });
+    return res.status(500).json({ error: "Server xatosi yuz berdi." });
   }
 };
 
@@ -139,7 +138,7 @@ exports.deleteAdmin = async (req, res) => {
     return res.status(200).json({ message: "Admin muvaffaqiyatli o'chirildi." });
   } catch (error) {
     console.error("Adminni o'chirishda xato:", error);
-    res.status(500).json({ error: "Server xatosi yuz berdi." });
+    return res.status(500).json({ error: "Server xatosi yuz berdi." });
   }
 };
 
@@ -169,7 +168,7 @@ exports.loginAdmin = async (req, res) => {
         role: admin.role
       },
       process.env.JWT_SECRET_KEY,
-      { expiresIn: '1h' } 
+      { expiresIn: '1d' } 
     );
 
     return res.status(200).send({
@@ -177,6 +176,6 @@ exports.loginAdmin = async (req, res) => {
     })
   } catch (error) {
     console.error('Error during login:', error);
-    res.status(500).send('Server error');
+    return res.status(500).json({ error: "Server xatosi yuz berdi." });
   }
 };

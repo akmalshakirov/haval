@@ -15,7 +15,7 @@ const { getAllAdmin, createAdmin, updateAdmin, deleteAdmin, loginAdmin, getAdmin
   const router = require("express").Router();
   
   router
-    .get("/admins", jwtAccessMiddleware,roleAccessMiddleware(['admin']), getAllAdmin)
+    .get("/admins", jwtAccessMiddleware, roleAccessMiddleware(['admin']), getAllAdmin)
     .get("/admins/:id", jwtAccessMiddleware,roleAccessMiddleware(['admin']), getAdminById)
     .post("/add-admin", jwtAccessMiddleware, roleAccessMiddleware(['admin']), createAdmin) 
     .post("/login", loginLimiter, loginAdmin) 

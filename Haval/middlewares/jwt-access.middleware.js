@@ -18,16 +18,7 @@ exports.jwtAccessMiddleware = function (req, res, next) {
             return res.status(401).json({ message: "Token is missing" });
         }
 
-        const user = jwt.verify(token, process.env.JWT_SECRET_KEY);
-
-
-       
-        if (user) {
-            req.user = user; 
-            next();
-        } else {
-            return res.status(401).json({ message: "Token has expired" });
-        }
+        const user = jwt.verify(token, process.env.JWT_SECRET_KEY);       
 
         next();
 
