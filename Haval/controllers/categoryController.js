@@ -12,11 +12,7 @@ const createCategory = async (req, res) => {
 
 const getAllCategories = async (req, res) => {
   try {
-    const categories = await Category.findAll({
-      include: [
-        { model: Category, as: 'subcategories' }, 
-      ],
-    });
+    const categories = await Category.find();
     res.status(200).json(categories);
   } catch (error) {
     res.status(500).json({ message: 'Xatolik yuz berdi', error });
@@ -26,11 +22,7 @@ const getAllCategories = async (req, res) => {
 const getCategoryById = async (req, res) => {
   try {
     const { id } = req.params;
-    const category = await Category.findByPk(id, {
-      include: [
-        { model: Category, as: 'subcategories' },
-      ],
-    });
+    const category = await Category.findByPk(id);
     if (!category) {
       return res.status(404).json({ message: 'Kategoriya topilmadi' });
     }

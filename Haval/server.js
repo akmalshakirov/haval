@@ -14,8 +14,8 @@ db()
 
 app.use(express.json());
 app.use(cors({
-  origin: "http://192.168.0.119",
-  methods: ["POST", "GET"],
+  origin: "http://localhost:5173", 
+  methods: ["POST", "GET", "PUT", "DELETE"],
 }));
 app.use(helmet());
 
@@ -23,6 +23,6 @@ app.use(helmet());
 app.use('/', router)
 
 
-app.listen(PORT, (rt) => {
-  console.log(`Server ${PORT} portida ishga tushdi.`);
-});
+app.listen(PORT, (res) => {
+  console.log(`🚀Server ${PORT} portida ishga tushdi.`);
+});  
