@@ -218,6 +218,7 @@ function HeaderNavBar() {
                     </a>
                 </div>
             </div>
+
             <div className={`aside ${isAsideOpen ? "active" : ""}`}>
                 <ul
                     className={`aside__list ${

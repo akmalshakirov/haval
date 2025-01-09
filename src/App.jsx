@@ -4,7 +4,6 @@ import Preloader from "./Components/Preloader/Preloader";
 
 function App() {
     const [isLoading, setIsLoading] = useState(false);
-
     useEffect(() => {
         const handleContentLoaded = () => {
             setTimeout(() => {
@@ -33,7 +32,6 @@ function App() {
             setIsLoading(false);
         }, 300);
     };
-
     return (
         <div>
             {isLoading ? <Preloader onFinish={handleFinish} /> : <AppRouter />}
