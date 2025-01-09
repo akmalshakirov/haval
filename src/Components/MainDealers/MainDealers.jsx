@@ -5,45 +5,52 @@ const locations = [
     {
         id: 1,
         name: "HAVAL Yakkasaray",
-        address: "Toshkent sh., Yakkasaroy tumani, Bobur ko'chasi, 87B/1",
-        coordinates: { lat: 41.2995, lng: 69.2401 },
+        description: "Toshkent sh., Yakkasaroy tumani, Bobur ko'chasi, 87B/1",
+        // a: "Toshkent sh., Yakkasaroy tumani, Bobur ko'chasi, 87B/1",
+        coordinates: { lat: 41.2699249144779, lng: 69.26286508142417 },
     },
     {
         id: 2,
         name: "Sayor Motors Tashkent",
-        address: "Toshkent sh., Bektemir tumani, Tuena 10",
-        coordinates: { lat: 41.2581, lng: 69.1868 },
+        description: "Toshkent sh., Bektemir tumani, Tuena 10",
+        coordinates: { lat: 41.2424, lng: 69.33754 },
     },
     {
         id: 3,
         name: "ADM-ASTER Toshkent",
-        address: "Toshkent sh., Olmazor tumani, Kichik halqa yo'li, 36",
+        description: "Toshkent sh., Olmazor tumani, Kichik halqa yo'li, 36",
         coordinates: { lat: 41.3161, lng: 69.2047 },
     },
     {
         id: 4,
         name: "HAVAL Kibray",
-        address:
+        description:
             "Toshkent viloyati, Qibray tumani, Alisher Navoiy ko'chasi, 14 uy",
         coordinates: { lat: 41.3899, lng: 69.4412 },
     },
     {
         id: 5,
-        name: "HAVAL asgfauhoieglsjnr",
-        address: "Toshkent viloyati, Qibray tumani, Aligzssher awegrhtszs",
-        coordinates: { lat: 41.3899, lng: 69.4657 },
+        name: "HAVAL Samarqand - 1",
+        description: "Samarqand sh., Chupon-ota massivi, 50A",
+        coordinates: { lat: 39.674390440223405, lng: 67.02450250871217 },
     },
     {
         id: 6,
-        name: "HAVAL aerjaejehsts",
-        address: "Toshkent viloyati, Qibray tumani, A,ccg,hg14 kyg,fuy",
-        coordinates: { lat: 41.3899, lng: 69.8734 },
+        name: "HAVAL Samarqand - 2",
+        description: "Toshkent viloyati, Qibray tumani, A,ccg,hg14 kyg,fuy",
+        coordinates: { lat: 39.609496659318545, lng: 66.89656814710446 },
     },
     {
         id: 7,
-        name: "HAVAL aagherehasgjh",
-        address: "Toshkent viloyati, Qibray tumani, sdb Navoijf uy",
-        coordinates: { lat: 41.3899, lng: 69.1222 },
+        name: "HAVAL Farg'ona",
+        description: "Farg'ona sh., Sohibqiron Temur ko'chasi, 295-son",
+        coordinates: { lat: 40.380813130712774, lng: 71.75231555107636 },
+    },
+    {
+        id: 8,
+        name: "HAVAL Namangan",
+        description: "Namangan sh, Mamarasulov ko'chasi, 15",
+        coordinates: { lat: 40.380813130712774, lng: 71.75231555107636 },
     },
 ];
 
@@ -76,13 +83,11 @@ const MainDealers = () => {
                         <p
                             style={{ margin: "5px 0 0" }}
                             className='main-dealers-list-item-address'>
-                            {location.address}
+                            {location.description}
                         </p>
                     </div>
                 ))}
             </div>
-
-            {/* Map Section */}
             <div style={{ flex: 1, position: "relative" }}>
                 <iframe
                     title='Map'
