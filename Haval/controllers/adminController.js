@@ -3,32 +3,35 @@ const jwt = require("jsonwebtoken");
 const Admin = require("../models/Admin");
 
 exports.getAllAdmin = async (req, res) => {
-    try {
-        const admins = await Admin.find();
+try {
+    const admins = await Admin.find();
 
-        if (!admins) {
-            return res.status(404).send({ error: "Adminlar topilmadi!" });
-        }
-
-        return res.status(200).send({
-            message: "Adminlar",
-            admins,
-        });
-    } catch (error) {
-        return res.status(500).json({ error: "Server xatosi yuz berdi." });
+    if (!admins) {
+      return res.status(404).send({ error: "Adminlar topilmadi!" }); 
     }
+
+    return res.status(200).send({
+      message: "Adminlar",
+      admins}); 
+  } catch (error) {
+    return res.status(500).json({ error: "Server xatosi yuz berdi." });
+  }
 };
 
-exports.getAdminById = async (req, res) => {
-    const { id } = req.params;
 
-    try {
-        const admin = await Admin.findById(id);
+exports.getAdminById = async (req, res) => {
+  const { id } = req.params;  
+
+  try {
+    const admin = await Admin.findById(id);
+
+    if (!admin) {
+      return res.status(404).send({ error: "Admin topilmadi!" });  
+    }
 
         if (!admin) {
             return res.status(404).send({ error: "Admin topilmadi!" });
         }
-
         return res.status(200).send(admin);
     } catch (error) {
         console.error("Adminni olishda xato:", error);
@@ -163,6 +166,7 @@ exports.deleteAdmin = async (req, res) => {
         return res.status(500).json({ error: "Server xatosi yuz berdi." });
     }
 };
+
 
 exports.loginAdmin = async (req, res) => {
     console.log(req.body);
