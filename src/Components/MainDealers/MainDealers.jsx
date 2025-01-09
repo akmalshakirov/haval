@@ -44,13 +44,19 @@ const locations = [
         id: 7,
         name: "HAVAL Farg'ona",
         description: "Farg'ona sh., Sohibqiron Temur ko'chasi, 295-son",
-        coordinates: { lat: 40.380813130712774, lng: 71.75231555107636 },
+        coordinates: { lat: 40.38081163718974, lng: 71.7523114820093 },
     },
     {
         id: 8,
         name: "HAVAL Namangan",
         description: "Namangan sh, Mamarasulov ko'chasi, 15 ",
-        coordinates: { lat: 40.380813130712774, lng: 71.75231555107636 },
+        coordinates: { lat: 41.01697695406887, lng: 71.67526053257912 },
+    },
+    {
+        id: 9,
+        name: "ADM-ASTER Namangan",
+        description: "Namangan sh, Mamarasulov ko'chasi, 15 ",
+        coordinates: { lat: 41.00868115192557, lng: 71.64229932834473 },
     },
 ];
 

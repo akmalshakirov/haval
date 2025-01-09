@@ -1,16 +1,17 @@
 const Video = require('../models/Video');
 
-
-const getVideos = async (req, res) => {
+exports.getVideos = async (req, res) => {
   try {
-    const videos = await Video.find();  
-    res.status(200).json(videos);
+      const videos = await Video.find();
+      
+      return res.status(200).json(videos);
   } catch (err) {
-    res.status(500).json({ error: 'Bazaga ulanishda xatolik yuz berdi' });
+      console.error('Error occurred:', err.message);
+      return res.status(500).json({ error: 'Bazaga ulanishda xatolik yuz berdi' });
   }
 };
 
-const addVideo = async (req, res) => {
+exports.addVideo = async (req, res) => {
   const { title, video, createdAt } = req.body;
   
   function formatDate(date) {
@@ -41,7 +42,7 @@ const addVideo = async (req, res) => {
 };
 
 
-const updateVideo = async (req, res) => {
+exports.updateVideo = async (req, res) => {
   const videoId = req.params.id;
   const { title, video } = req.body;
   try {
@@ -65,7 +66,7 @@ const updateVideo = async (req, res) => {
 };
 
 
-const deleteVideo = async (req, res) => {
+exports.deleteVideo = async (req, res) => {
   const videoId = req.params.id;
   try {
     const deletedVideo = await Video.findByIdAndDelete(videoId);
@@ -81,4 +82,4 @@ const deleteVideo = async (req, res) => {
   }
 };
 
-module.exports = { getVideos, addVideo, updateVideo, deleteVideo };
+// module.exports = { getVideos, addVideo, updateVideo, deleteVideo };
