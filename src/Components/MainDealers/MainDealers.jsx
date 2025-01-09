@@ -49,7 +49,7 @@ const locations = [
     {
         id: 8,
         name: "HAVAL Namangan",
-        description: "Namangan sh, Mamarasulov ko'chasi, 15",
+        description: "Namangan sh, Mamarasulov ko'chasi, 15 ",
         coordinates: { lat: 40.380813130712774, lng: 71.75231555107636 },
     },
 ];
