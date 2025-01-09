@@ -66,13 +66,13 @@ exports.createAdmin = async (req, res) => {
 };
 
 exports.updateAdmin = async (req, res) => {
-  const { adminId } = req.params; 
+  const { id } = req.params; 
   const { adminName, email, password } = req.body; 
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   try {
-    if (!mongoose.Types.ObjectId.isValid(adminId)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ error: "Noto'g'ri admin ID." });
     }
 
@@ -87,7 +87,7 @@ exports.updateAdmin = async (req, res) => {
         return res.status(400).json({ error: "Email noto'g'ri formatda." });
       }
 
-      const existingAdmin = await Admin.findOne({ email, _id: { $ne: adminId } });
+      const existingAdmin = await Admin.findOne({ email, _id: { $ne: id } });
       if (existingAdmin) {
         return res.status(400).json({ error: "Bu email bilan boshqa admin allaqachon mavjud." });
       }
@@ -119,12 +119,12 @@ exports.updateAdmin = async (req, res) => {
 };
 
 exports.deleteAdmin = async (req, res) => {
-  const { adminId } = req.params;
+  const { id } = req.params;
 
   try {
     const userId = req.cookies.userId;
 
-    const admin = await Admin.findById(adminId);
+    const admin = await Admin.findById(id);
     if (!admin) {
       return res.status(404).json({ error: "Admin topilmadi!" });
     }
@@ -133,7 +133,7 @@ exports.deleteAdmin = async (req, res) => {
       return res.status(403).json({ error: "Siz bu adminni o'chirishga ruxsatga ega emassiz!" });
     }
 
-    await Admin.findByIdAndDelete(adminId);
+    await Admin.findByIdAndDelete(id);
 
     return res.status(200).json({ message: "Admin muvaffaqiyatli o'chirildi." });
   } catch (error) {
