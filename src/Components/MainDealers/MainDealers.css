@@ -3,7 +3,7 @@
     width: 100%;
     padding: 100px 20px 20px 20px;
     display: flex;
-    max-height: 90vh;
+    max-height: calc(60vw - 200px);
     background-color: #e3e6e8;
     margin: 0 auto;
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/css/parallax";
