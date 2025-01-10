@@ -1,6 +1,6 @@
-const { getAllAdmin, createAdmin, updateAdmin, deleteAdmin, loginAdmin, getAdminById } = require('./controllers/adminController');
+const { getAllAdmin, createAdmin, updateAdmin, deleteAdmin, getAdminById } = require('./controllers/adminController');
   const { getCars, addCar, updateCar, deleteCar } = require('./controllers/carController');
-  const { register } = require('./controllers/authController');
+  const { register, loginAdmin } = require('./controllers/authController');
   const { getDiler, addDiler, deleteDiler, updateDiler } = require('./controllers/dilerController');
   const { getAllNews, addNews, updateNews, deleteNews } = require('./controllers/newsController');
   const { getVideos, addVideo, updateVideo, deleteVideo } = require('./controllers/videoController');

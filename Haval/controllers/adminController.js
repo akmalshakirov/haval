@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const mongoose = require("mongoose");
 const Admin = require('../models/Admin');
 
 exports.getAllAdmin = async (req, res) => {
@@ -17,7 +18,6 @@ exports.getAllAdmin = async (req, res) => {
     return res.status(500).json({ error: "Server xatosi yuz berdi." });
   }
 };
-
 
 exports.getAdminById = async (req, res) => {
   const { id } = req.params;  
@@ -79,6 +79,10 @@ exports.updateAdmin = async (req, res) => {
     const updateData = {};
 
     if (adminName) {
+      const existingAdmin = await Admin.findOne({ adminName, _id: { $ne: id } });
+      if (existingAdmin) {
+        return res.status(400).json({ error: "Bu ism bilan boshqa admin allaqachon mavjud." });
+      }
       updateData.adminName = adminName;
     }
 
@@ -86,7 +90,6 @@ exports.updateAdmin = async (req, res) => {
       if (!emailRegex.test(email)) {
         return res.status(400).json({ error: "Email noto'g'ri formatda." });
       }
-
       const existingAdmin = await Admin.findOne({ email, _id: { $ne: id } });
       if (existingAdmin) {
         return res.status(400).json({ error: "Bu email bilan boshqa admin allaqachon mavjud." });
@@ -102,7 +105,7 @@ exports.updateAdmin = async (req, res) => {
       updateData.password = hashedPassword;
     }
 
-    const updatedAdmin = await Admin.findByIdAndUpdate(adminId, updateData, { new: true });
+    const updatedAdmin = await Admin.findByIdAndUpdate(id, updateData, { new: true });
 
     if (!updatedAdmin) {
       return res.status(404).json({ error: "Admin topilmadi." });
@@ -122,15 +125,10 @@ exports.deleteAdmin = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const userId = req.cookies.userId;
 
     const admin = await Admin.findById(id);
     if (!admin) {
       return res.status(404).json({ error: "Admin topilmadi!" });
-    }
-
-    if (admin._id.toString() !== userId) {
-      return res.status(403).json({ error: "Siz bu adminni o'chirishga ruxsatga ega emassiz!" });
     }
 
     await Admin.findByIdAndDelete(id);
@@ -142,40 +140,3 @@ exports.deleteAdmin = async (req, res) => {
   }
 };
 
-
-exports.loginAdmin = async (req, res) => {
-  console.log(req.body);
-  
-  const { email, password } = req.body; 
-  try {
-    const admin = await Admin.findOne({ email });
-    console.log(admin);
-    
-    if (!admin) {
-      return res.status(404).send('Admin not found'); 
-    }
-
-    const isPasswordValid = await bcrypt.compare(password, admin.password);
-    if (!isPasswordValid) {
-      return res.status(401).send('Invalid credentials'); 
-    }
-
-    const token = jwt.sign(
-      {
-        id: admin._id,
-        email: admin.email,
-        adminName: admin.adminName,
-        role: admin.role
-      },
-      process.env.JWT_SECRET_KEY,
-      { expiresIn: '1d' } 
-    );
-
-    return res.status(200).send({
-      token
-    })
-  } catch (error) {
-    console.error('Error during login:', error);
-    return res.status(500).json({ error: "Server xatosi yuz berdi." });
-  }
-};
