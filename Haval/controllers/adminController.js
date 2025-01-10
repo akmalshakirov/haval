@@ -1,6 +1,8 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const Admin = require("../models/Admin");
+
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const mongoose = require("mongoose");
+const Admin = require('../models/Admin');
 
 exports.getAllAdmin = async (req, res) => {
 try {
@@ -17,7 +19,6 @@ try {
     return res.status(500).json({ error: "Server xatosi yuz berdi." });
   }
 };
-
 
 exports.getAdminById = async (req, res) => {
   const { id } = req.params;  
@@ -70,62 +71,50 @@ exports.createAdmin = async (req, res) => {
 };
 
 exports.updateAdmin = async (req, res) => {
-    const { id } = req.params;
-    const { adminName, email, password } = req.body;
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const { id } = req.params; 
+  const { adminName, email, password } = req.body; 
 
-    try {
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ error: "Noto'g'ri admin ID." });
-        }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        const updateData = {};
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Noto'g'ri admin ID." });
+    }
 
-        if (adminName) {
-            updateData.adminName = adminName;
-        }
+    const updateData = {};
 
-        if (email) {
-            if (!emailRegex.test(email)) {
-                return res
-                    .status(400)
-                    .json({ error: "Email noto'g'ri formatda." });
-            }
+    if (adminName) {
+      const existingAdmin = await Admin.findOne({ adminName, _id: { $ne: id } });
+      if (existingAdmin) {
+        return res.status(400).json({ error: "Bu ism bilan boshqa admin allaqachon mavjud." });
+      }
+      updateData.adminName = adminName;
+    }
 
-            const existingAdmin = await Admin.findOne({
-                email,
-                _id: { $ne: id },
-            });
-            if (existingAdmin) {
-                return res
-                    .status(400)
-                    .json({
-                        error: "Bu email bilan boshqa admin allaqachon mavjud.",
-                    });
-            }
-            updateData.email = email;
-        }
+    if (email) {
+      if (!emailRegex.test(email)) {
+        return res.status(400).json({ error: "Email noto'g'ri formatda." });
+      }
+      const existingAdmin = await Admin.findOne({ email, _id: { $ne: id } });
+      if (existingAdmin) {
+        return res.status(400).json({ error: "Bu email bilan boshqa admin allaqachon mavjud." });
+      }
+      updateData.email = email;
+    }
 
-        if (password) {
-            if (password.length < 6) {
-                return res
-                    .status(400)
-                    .json({
-                        error: "Parol kamida 6 ta belgidan iborat bo'lishi kerak.",
-                    });
-            }
-            const hashedPassword = await bcrypt.hash(password, 10);
-            updateData.password = hashedPassword;
-        }
+    if (password) {
+      if (password.length < 6) {
+        return res.status(400).json({ error: "Parol kamida 6 ta belgidan iborat bo'lishi kerak." });
+      }
+      const hashedPassword = await bcrypt.hash(password, 10);
+      updateData.password = hashedPassword;
+    }
 
-        const updatedAdmin = await Admin.findByIdAndUpdate(id, updateData, {
-            new: true,
-        });
+    const updatedAdmin = await Admin.findByIdAndUpdate(id, updateData, { new: true });
 
-        if (!updatedAdmin) {
-            return res.status(404).json({ error: "Admin topilmadi." });
-        }
+    if (!updatedAdmin) {
+      return res.status(404).json({ error: "Admin topilmadi." });
 
         return res.status(200).json({
             message: "Admin muvaffaqiyatli yangilandi",
@@ -134,73 +123,26 @@ exports.updateAdmin = async (req, res) => {
     } catch (error) {
         console.error("Adminni yangilashda xatolik:", error);
         return res.status(500).json({ error: "Server xatosi yuz berdi." });
+
     }
 };
 
 exports.deleteAdmin = async (req, res) => {
-    const { id } = req.params;
 
-    try {
-        const userId = req.cookies.userId;
+  const { id } = req.params;
 
-        const admin = await Admin.findById(id);
-        if (!admin) {
-            return res.status(404).json({ error: "Admin topilmadi!" });
-        }
+  try {
 
-        if (admin._id.toString() !== userId) {
-            return res
-                .status(403)
-                .json({
-                    error: "Siz bu adminni o'chirishga ruxsatga ega emassiz!",
-                });
-        }
-
-        await Admin.findByIdAndDelete(id);
-
-        return res
-            .status(200)
-            .json({ message: "Admin muvaffaqiyatli o'chirildi." });
-    } catch (error) {
-        console.error("Adminni o'chirishda xato:", error);
-        return res.status(500).json({ error: "Server xatosi yuz berdi." });
+    const admin = await Admin.findById(id);
+    if (!admin) {
+      return res.status(404).json({ error: "Admin topilmadi!" });
     }
-};
 
+    await Admin.findByIdAndDelete(id);
 
-exports.loginAdmin = async (req, res) => {
-    console.log(req.body);
-
-    const { email, password } = req.body;
-    try {
-        const admin = await Admin.findOne({ email });
-        console.log(admin);
-
-        if (!admin) {
-            return res.status(404).send("Admin not found");
-        }
-
-        const isPasswordValid = await bcrypt.compare(password, admin.password);
-        if (!isPasswordValid) {
-            return res.status(401).send("Invalid credentials");
-        }
-
-        const token = jwt.sign(
-            {
-                id: admin._id,
-                email: admin.email,
-                adminName: admin.adminName,
-                role: admin.role,
-            },
-            process.env.JWT_SECRET_KEY,
-            { expiresIn: "1d" }
-        );
-
-        return res.status(200).send({
-            token,
-        });
-    } catch (error) {
-        console.error("Error during login:", error);
-        return res.status(500).json({ error: "Server xatosi yuz berdi." });
-    }
+    return res.status(200).json({ message: "Admin muvaffaqiyatli o'chirildi." });
+  } catch (error) {
+    console.error("Adminni o'chirishda xato:", error);
+    return res.status(500).json({ error: "Server xatosi yuz berdi." });
+  }
 };

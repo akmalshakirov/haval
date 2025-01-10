@@ -1,5 +1,5 @@
-
 const User = require('../models/User');
+const Admin = require('../models/Admin');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();  
@@ -53,3 +53,41 @@ if (!name || !email || !password) {
         res.status(500).json({ message: 'Serverda xatolik yuz berdi.' });
     }
   }
+
+
+exports.loginAdmin = async (req, res) => {
+    console.log(req.body);
+    
+    const { email, password } = req.body; 
+    try {
+      const admin = await Admin.findOne({ email });
+      console.log(admin);
+      
+      if (!admin) {
+        return res.status(404).send('Admin not found'); 
+      }
+  
+      const isPasswordValid = await bcrypt.compare(password, admin.password);
+      if (!isPasswordValid) {
+        return res.status(401).send('Invalid credentials'); 
+      }
+  
+      const token = jwt.sign(
+        {
+          id: admin._id,
+          email: admin.email,
+          adminName: admin.adminName,
+          role: admin.role
+        },
+        process.env.JWT_SECRET_KEY,
+        { expiresIn: '1d' } 
+      );
+  
+      return res.status(200).send({
+        token
+      })
+    } catch (error) {
+      console.error('Error during login:', error);
+      return res.status(500).json({ error: "Server xatosi yuz berdi." });
+    }
+  };
