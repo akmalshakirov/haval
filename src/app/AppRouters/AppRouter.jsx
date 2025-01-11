@@ -15,7 +15,7 @@ import HavalJolion from "../../Pages/Models/Haval-Jolion/HavalJolion.jsx";
 import ProtectedRoute from "../../Components/ProtectedRoute/ProtectedRoute";
 import MainModels from "../../Components/MainModels/MainModels.jsx";
 import MainDealers from "../../Components/MainDealers/MainDealers.jsx";
-import Magnetic from "../../Components/Magnetic/Magnetic.jsx";
+import MainVideos from "../../Components/MainVideos/MainVideos.jsx";
 
 function AppRouter() {
     return (
@@ -29,7 +29,7 @@ function AppRouter() {
                             <HeaderSwiper />
                             <MainModels />
                             <MainDealers />
-                            <Magnetic />
+                            <MainVideos />
                         </>
                     }
                 />

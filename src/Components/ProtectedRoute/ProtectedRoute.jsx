@@ -12,14 +12,14 @@ const ProtectedRoute = ({ children }) => {
                 message: "Xatolik!",
                 description: "Bu sahifa faqat adminlar uchun!",
                 placement: "bottomRight",
-                duration: 1000,
+                duration: 500,
             });
             setIsAuthenticated(false);
         }
     }, [authToken]);
 
     if (!isAuthenticated) {
-        return <Navigate to='/' replace />;
+        return <Navigate to='/' />;
     }
 
     return children;

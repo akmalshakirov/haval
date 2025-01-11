@@ -97,24 +97,24 @@ const AdminPanel = () => {
     const fetchAdmins = async () => {
         try {
             const token = localStorage.getItem("authToken");
+            if (!token) {
+                message.error("Token topilmadi, iltimos qayta tizimga kiring!");
+                return;
+            }
+
             const response = await axios.get("http://localhost:3000/admins", {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
                 },
             });
-
-            console.log("Kelgan ma'lumotlar:", response.data);
-
-            if (response.data) {
-                const formattedAdmins = response.data.map((admin) => ({
-                    ...admin,
-                    key: admin._id,
-                }));
-                setAdmins(formattedAdmins);
-            }
+            setAdmins([response.data.admins]);
+            console.log("Kelgan ma'lumotlar:", response.data.admins);
         } catch (error) {
-            console.error("Xatolik:", error.response?.data || error.message);
+            console.error(
+                "Xatolik:",
+                error.response?.data || error.message || error
+            );
             message.error("Adminlar yuklanishda xatolik yuz berdi!");
         }
     };
@@ -449,8 +449,9 @@ const AdminPanel = () => {
                                     Admin qo'shish
                                 </Button>
                                 <Table
+                                    key={admins[0]?.id}
                                     columns={columnsAdmins}
-                                    dataSource={admins}
+                                    dataSource={admins[0]}
                                 />
                                 <Modal
                                     title='Yangi Admin Qoshish'

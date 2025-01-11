@@ -225,22 +225,7 @@ const SwiperComponent = () => {
                         HAYOT LAZZLARI BO"LGAN HAVAL BRENDINING FALSAFASI
                     </p>
                 </div>
-                <div className='slide-service' data-swiper-parallax='-400'>
-                    <div className='slide-service-year'>
-                        <img src={headerSwiperServices5Year} alt='5-year' />
-                    </div>
-                    <div className='slide-service-services'>
-                        <img src={headerSwiperServicesServices} alt='service' />
-                    </div>
-                    <div className='slide-service-original-details'>
-                        <img
-                            src={headerSwiperServicesOriginalDetails}
-                            alt='asl'
-                        />
-                    </div>
-                </div>
             </SwiperSlide>
-            {/* <div className='swiper-pagination'></div> */}
         </Swiper>
     );
 };
