@@ -120,12 +120,14 @@ exports.updateAdmin = async (req, res) => {
             message: "Admin muvaffaqiyatli yangilandi",
             data: updatedAdmin,
         });
+      }
     } catch (error) {
         console.error("Adminni yangilashda xatolik:", error);
         return res.status(500).json({ error: "Server xatosi yuz berdi." });
 
     }
-};
+}
+
 
 exports.deleteAdmin = async (req, res) => {
 
