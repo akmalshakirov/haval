@@ -233,6 +233,7 @@
     justify-content: center;
     pointer-events: auto;
     text-align: start;
+    /* d: ; */
 }
 .aside__link-text {
     position: absolute;
