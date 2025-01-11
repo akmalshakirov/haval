@@ -32,7 +32,7 @@ const addCar = async (req, res) => {
   const { model, title, description, year, price, image } = req.body;
   try {
     const car = await Car.create({ model, title, description, year, price, image });
-    res.status(201).json({
+    res.status(200).json({
       message: 'Mashina muvaffaqiyatli qo\'shildi',
       data: car,
     });
@@ -52,7 +52,7 @@ const updateCar = async (req, res) => {
 
     const updateData = {};
 
-    if (model) {
+    if (model, title, description, year, price, image) {
         await Car.find({ model, title, description, year, price, image, _id: { $ne: id } });
           updateData.model = model;
           updateData.title = title; 
@@ -85,13 +85,16 @@ const deleteCar = async (req, res) => {
   }
 
   try {
-    const car = await Car.findByIdAndDelete(id);
+    const car = await Car.findById(id);
     if (!car) {
       return res.status(404).json({ error: 'Mashina topilmadi' });
     }
+
+   await Car.findByIdAndDelete(id);
+
     res.status(200).json({ message: 'Mashina muvaffaqiyatli o‘chirildi' });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error("Carni o'chirishda xato:", error);
     res.status(500).json({ error: 'Serverda xatolik yuz berdi' });
   }
 };

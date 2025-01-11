@@ -1,5 +1,5 @@
 const News = require('../models/News');
-const jwt = require('jsonwebtoken');
+const mongoose = require("mongoose");
 
 const getAllNews = async (req, res) => {
   try {
@@ -41,7 +41,7 @@ const addNews = async (req, res) => {
       updatedAt: formatDate(new Date()), 
     });
 
-    res.status(201).json({
+    res.status(200).json({
       message: 'Yangilik muvaffaqiyatli qo\'shildi',
       data: news,
     });
@@ -55,20 +55,29 @@ const updateNews = async (req, res) => {
   const { id } = req.params;
   const { title, description, image } = req.body;
   try {
-    const news = await News.findByIdAndUpdate(
-      id,
-      { title, description, image, updatedAt: new Date() },
-      { new: true } 
-    );
+ if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Noto'g'ri car ID." });
+    }
 
-    if (news) {
-      res.status(200).json({
-        message: 'Yangilik muvaffaqiyatli yangilandi',
-        data: news,
-      });
-    } else {
+    const updateData = {};
+
+    if (title, description, image) {
+        await News.find({ title, description, image, _id: { $ne: id } });
+          updateData.title = title; 
+          updateData.description = description; 
+          updateData.image = image; 
+    }
+
+    const updatedNews = await News.findByIdAndUpdate( id,updateData, { new: true });
+
+    if (!updatedNews) {
       res.status(404).json({ error: 'Yangilik topilmadi' });
     }
+
+    res.status(200).json({
+      message: 'Yangilik muvaffaqiyatli yangilandi',
+      data: news,
+    });
   } catch (err) {
     res.status(500).json({ error: 'Yangilikni yangilashda xatolik yuz berdi' });
   }
@@ -76,14 +85,21 @@ const updateNews = async (req, res) => {
 
 const deleteNews = async (req, res) => {
   const { id } = req.params;
-  try {
-    const news = await News.findByIdAndDelete(id);
-
-    if (news) {
-      res.status(200).json({ message: 'Yangilik muvaffaqiyatli o\'chirildi' });
-    } else {
-      res.status(404).json({ message: 'Yangilik topilmadi' });
+  
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: 'Yaroqsiz ID' });
     }
+  
+  try {
+    const news = await News.findById(id);
+
+    if (!news) {
+      return res.status(404).json({ message: 'Yangilik topilmadi' });
+    }
+
+    await News.findByIdAndDelete(id);
+
+    res.status(200).json({ message: 'Yangilik muvaffaqiyatli o\'chirildi' });
   } catch (err) {
     res.status(500).json({ error: 'Yangilikni o\'chirishda xatolik yuz berdi' });
   }
