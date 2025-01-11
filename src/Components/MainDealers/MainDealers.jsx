@@ -6,7 +6,6 @@ const locations = [
         id: 1,
         name: "HAVAL Yakkasaray",
         description: "Toshkent sh., Yakkasaroy tumani, Bobur ko'chasi, 87B/1",
-        // a: "Toshkent sh., Yakkasaroy tumani, Bobur ko'chasi, 87B/1",
         coordinates: { lat: 41.2699249144779, lng: 69.26286508142417 },
     },
     {
@@ -55,7 +54,45 @@ const locations = [
     {
         id: 9,
         name: "ADM-ASTER Namangan",
-        description: "Namangan sh, Mamarasulov ko'chasi, 15 ",
+        description: "Namangan sh., Kosonsoy ko'chasi-86A",
+        coordinates: { lat: 41.00868115192557, lng: 71.64229932834473 },
+    },
+    {
+        id: 10,
+        name: "HAVAL Andijon",
+        description: "Andijon sh., Oltinqul Shox, 82",
+        coordinates: { lat: 40.756916025873615, lng: 72.28845633715235 },
+    },
+    // LOCATION =======
+    {
+        id: 11,
+        name: "HAVAL Shahrisabz",
+        description: "Qashqadaryo viloyati, Shahrisabz tumani, Ravot",
+        coordinates: { lat: 41.00868115192557, lng: 71.64229932834473 },
+    },
+    {
+        id: 12,
+        name: "HAVAL Qarshi",
+        description: "Qashqadaryo viloyati, Qarshi shahar, Jayhun ko'chasi, 33",
+        coordinates: { lat: 41.00868115192557, lng: 71.64229932834473 },
+    },
+    {
+        id: 13,
+        name: "HAVAL Termiz",
+        description:
+            "Surxondaryo viloyati, Termiz sh., Shimoliy Darvoza ko'chasi, 17k",
+        coordinates: { lat: 41.00868115192557, lng: 71.64229932834473 },
+    },
+    {
+        id: 14,
+        name: "HAVAL Buxoro",
+        description: "Buxoro sh., Ok masjid ko'chasi, 4",
+        coordinates: { lat: 41.00868115192557, lng: 71.64229932834473 },
+    },
+    {
+        id: 15,
+        name: "HAVAL Navoi",
+        description: "Navoiy sh., Me'morlar ko'chasi, 36A",
         coordinates: { lat: 41.00868115192557, lng: 71.64229932834473 },
     },
 ];
@@ -69,41 +106,44 @@ const MainDealers = () => {
 
     return (
         <div className='main-dealers'>
-            <div className='main-dealers-list'>
-                {locations.map((location) => (
-                    <div
-                        key={location.id}
-                        onClick={() => handleLocationClick(location)}
-                        style={{
-                            backgroundColor:
-                                selectedLocation.id === location.id
-                                    ? "#d1d1d1"
-                                    : "#fff",
-                        }}
-                        className='main-dealers-item-map'>
-                        <h3
-                            style={{ margin: 0 }}
-                            className='main-dealers-list-item-title'>
-                            {location.name}
-                        </h3>
-                        <p
-                            style={{ margin: "5px 0 0" }}
-                            className='main-dealers-list-item-address'>
-                            {location.description}
-                        </p>
-                    </div>
-                ))}
-            </div>
-            <div style={{ flex: 1, position: "relative" }}>
-                <iframe
-                    title='Map'
-                    width='100%'
-                    height='100%'
-                    style={{ border: 0, borderRadius: "7px" }}
-                    loading='lazy'
-                    about='Map'
-                    allowFullScreen
-                    src={`https://www.google.com/maps?q=${selectedLocation.coordinates.lat},${selectedLocation.coordinates.lng}&z=15&output=embed`}></iframe>
+            <h1>HAVAL rasmiy dilerlari</h1>
+            <div className='main-dealers-content'>
+                <div className='main-dealers-list'>
+                    {locations.map((location) => (
+                        <div
+                            key={location.id}
+                            onClick={() => handleLocationClick(location)}
+                            style={{
+                                backgroundColor:
+                                    selectedLocation.id === location.id
+                                        ? "#d1d1d1"
+                                        : "#fff",
+                            }}
+                            className='main-dealers-item-map'>
+                            <h3
+                                style={{ margin: 0 }}
+                                className='main-dealers-list-item-title'>
+                                {location.name}
+                            </h3>
+                            <p
+                                style={{ margin: "5px 0 0" }}
+                                className='main-dealers-list-item-address'>
+                                {location.description}
+                            </p>
+                        </div>
+                    ))}
+                </div>
+                <div style={{ flex: 1, position: "relative" }}>
+                    <iframe
+                        title='Map'
+                        width='100%'
+                        height='100%'
+                        style={{ border: 0, borderRadius: "7px" }}
+                        loading='lazy'
+                        about='Map'
+                        allowFullScreen
+                        src={`https://www.google.com/maps?q=${selectedLocation.coordinates.lat},${selectedLocation.coordinates.lng}&z=15&output=embed`}></iframe>
+                </div>
             </div>
         </div>
     );

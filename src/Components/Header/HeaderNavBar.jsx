@@ -6,10 +6,8 @@ import "./Header.css";
 import HavalDargo from "../../Images/m-haval-dargo.png";
 import GWMwingle7 from "../../Images/m-gwm-wingle-7.png";
 import HavalJolion from "../../Images/m-haval-jolion.png";
-import headerAsideBtnPhone from "../../Images/header-aside-btn-phone.png";
-// import headerAsideBtnCar from "../../Images/header-aside-btn-car.png";
-import a from "../../Images/header-aside-btn-car.png";
-import aa from "../../Images/aa.png";
+import headerAsideBtnCar from "../../Images/header-aside-btn-car.png";
+import headerAsideBtnPhone from "../../Images/aa.png";
 
 function HeaderNavBar() {
     const { t, i18n } = useTranslation();
@@ -232,7 +230,10 @@ function HeaderNavBar() {
                                 Modellar qatori
                             </span>
                             <button className='aside__btn'>
-                                <img src={a} alt='aside-btn-icon' />
+                                <img
+                                    src={headerAsideBtnPhone}
+                                    alt='aside-btn-icon'
+                                />
                             </button>
                         </a>
                     </li>
@@ -243,7 +244,10 @@ function HeaderNavBar() {
                                 className='aside__btn'
                                 onMouseEnter={() => setAsideListHovered(true)}
                                 onMouseLeave={() => setAsideListHovered(false)}>
-                                <img src={aa} alt='aside-btn-icon' />
+                                <img
+                                    src={headerAsideBtnCar}
+                                    alt='aside-btn-icon'
+                                />
                             </button>
                         </a>
                     </li>
