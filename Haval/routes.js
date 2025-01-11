@@ -4,14 +4,14 @@ const { getAllAdmin, createAdmin, updateAdmin, deleteAdmin, getAdminById } = req
   const { getDiler, addDiler, deleteDiler, updateDiler } = require('./controllers/dilerController');
   const { getAllNews, addNews, updateNews, deleteNews } = require('./controllers/newsController');
   const { getVideos, addVideo, updateVideo, deleteVideo } = require('./controllers/videoController');
-  const { createCategory, getAllCategories, getCategoryById, deleteCategory } = require('./controllers/categoryController');
-  const { getAllDealerCalls, addDealerCall, deleteDealerCall } = require('./controllers/oreder-dealer-callController');
+  const { createCategory, getAllCategories, getCategoryById, deleteCategory, updateCategory } = require('./controllers/categoryController');
+  const { getAllDealerCalls, addDealerCall, deleteDealerCall, updateDealerCall } = require('./controllers/oreder-dealer-callController');
   const { getAllSavdoStatistikasi, addSavdoStatistikasi, updateSavdoStatistikasi, deleteSavdoStatistikasi } = require('./controllers/savdo_statistikasiController');
   const { getTestDrivers, addTestDriver } = require('./controllers/test_drayverController');
   const { loginLimiter } = require('./middlewares/loginLimiter');
   const {  jwtAccessMiddleware } = require('./middlewares/jwt-access.middleware');
   const { roleAccessMiddleware } = require('./middlewares/role-access.middleware');
-  const { getAllUsers, deleteUser } = require('./controllers/userController');
+  const { getAllUsers, deleteUser, getUserById } = require('./controllers/userController');
   const router = require("express").Router();
   
   router
@@ -28,6 +28,12 @@ const { getAllAdmin, createAdmin, updateAdmin, deleteAdmin, getAdminById } = req
     .put("/cars/:id",jwtAccessMiddleware, roleAccessMiddleware(['admin']), updateCar)
     .delete("/cars/:id",jwtAccessMiddleware, roleAccessMiddleware(['admin']), deleteCar)
 
+    .get("/categories",jwtAccessMiddleware, getAllCategories)
+    .get("/categories/:id", jwtAccessMiddleware, roleAccessMiddleware(['admin']),  getCategoryById)
+    .post("/add-category", jwtAccessMiddleware, roleAccessMiddleware(['admin']), createCategory)
+    .put("/categories/:id", jwtAccessMiddleware, roleAccessMiddleware(['admin']), updateCategory)
+    .delete("/categories/:id", jwtAccessMiddleware, roleAccessMiddleware(['admin']), deleteCategory)
+
     .get("/dilers", jwtAccessMiddleware, getDiler)
     .post("/add-diler",jwtAccessMiddleware, roleAccessMiddleware(['admin']), addDiler)
     .put("/dilers/:id",jwtAccessMiddleware, roleAccessMiddleware(['admin']), updateDiler)
@@ -37,19 +43,10 @@ const { getAllAdmin, createAdmin, updateAdmin, deleteAdmin, getAdminById } = req
     .post("/add-news",jwtAccessMiddleware, roleAccessMiddleware(['admin']), addNews)
     .put("/news/:id",jwtAccessMiddleware, roleAccessMiddleware(['admin']), updateNews)
     .delete("/news/:id",jwtAccessMiddleware, roleAccessMiddleware(['admin']), deleteNews)
-
-    .get("/videos",jwtAccessMiddleware, getVideos)
-    .post("/add-video", jwtAccessMiddleware, roleAccessMiddleware(['admin']), addVideo)
-    .put("/videos/:id", jwtAccessMiddleware, roleAccessMiddleware(['admin']), updateVideo)
-    .delete("/videos/:id", jwtAccessMiddleware, roleAccessMiddleware(['admin']), deleteVideo)
-
-    .get("/categories",jwtAccessMiddleware, getAllCategories)
-    .get("/categories/:id", jwtAccessMiddleware, roleAccessMiddleware(['admin']),  getCategoryById)
-    .post("/add-category", jwtAccessMiddleware, roleAccessMiddleware(['admin']), createCategory)
-    .delete("/categories/:id", jwtAccessMiddleware, roleAccessMiddleware(['admin']), deleteCategory)
-
+    
     .get("/dealerCall",jwtAccessMiddleware, getAllDealerCalls)
     .post("/add-dealerCall", addDealerCall)
+    .put("/dealerCall/:id", jwtAccessMiddleware, roleAccessMiddleware(['admin']), updateDealerCall)
     .delete("/dealerCall/:id", jwtAccessMiddleware, roleAccessMiddleware(['admin']), deleteDealerCall)
 
     .get("/savdo-statistikasi",jwtAccessMiddleware, getAllSavdoStatistikasi)
@@ -61,7 +58,13 @@ const { getAllAdmin, createAdmin, updateAdmin, deleteAdmin, getAdminById } = req
     .post("/add-test-driver",jwtAccessMiddleware, addTestDriver)
 
     .get("/users",jwtAccessMiddleware, roleAccessMiddleware(['admin']), getAllUsers)
+    .get("/users/:id", jwtAccessMiddleware, roleAccessMiddleware(['admin']), getUserById)
     .delete("/users/:id",jwtAccessMiddleware, roleAccessMiddleware(['admin']), deleteUser)
 
+    .get("/videos",jwtAccessMiddleware, getVideos)
+    .post("/add-video", jwtAccessMiddleware, roleAccessMiddleware(['admin']), addVideo)
+    .put("/videos/:id", jwtAccessMiddleware, roleAccessMiddleware(['admin']), updateVideo)
+    .delete("/videos/:id", jwtAccessMiddleware, roleAccessMiddleware(['admin']), deleteVideo)
+   
   module.exports = router;
   

@@ -1,12 +1,17 @@
 const Video = require('../models/Video');
+const mongoose = require("mongoose")
 
 exports.getVideos = async (req, res) => {
   try {
       const videos = await Video.find();
       
+    if (!videos) {
+      return res.status(404).send({ error: "Videolar topilmadi!" }); 
+    }
+
       return res.status(200).json(videos);
   } catch (err) {
-      console.error('Error occurred:', err.message);
+      console.error('Xatolik yuz berdi:', err.message);
       return res.status(500).json({ error: 'Bazaga ulanishda xatolik yuz berdi' });
   }
 };
@@ -24,15 +29,14 @@ exports.addVideo = async (req, res) => {
     return `${day}/${month}/${year}, ${hours}:${String(minutes).padStart(2, "0")}`;
   }
   try {
-    const newVideo = new Video({
+    const newVideo = await Video.create({
       title,
       video,
       createdAt: formatDate(new Date()), 
       updatedAt: formatDate(new Date()), 
     });
 
-    await newVideo.save();
-    res.status(201).json({
+    return res.status(200).json({
       message: 'Video muvaffaqiyatli qo\'shildi',
       data: newVideo,
     });
@@ -41,45 +45,55 @@ exports.addVideo = async (req, res) => {
   }
 };
 
-
 exports.updateVideo = async (req, res) => {
-  const videoId = req.params.id;
+  const { id } = req.params.id;
   const { title, video } = req.body;
   try {
-    const updatedVideo = await Video.findByIdAndUpdate(
-      videoId,
-      { title, video, updatedAt: new Date().toISOString() },  
-      { new: true }  
-    );
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+          return res.status(400).json({ error: "Noto'g'ri ID." });
+        }
+    
+        const updateData = {};
+    
+        if (title, video) {
+            await Car.find({ title, video, _id: { $ne: id } });
+            updateData.title = title;
+            updateData.video = video;
+        }
+    const updatedVideo = await Video.findByIdAndUpdate(id, updateData, { new: true });
 
-    if (updatedVideo) {
-      res.status(200).json({
-        message: 'Video muvaffaqiyatli yangilandi',
-        data: updatedVideo,
-      });
-    } else {
+    if (!updatedVideo) {
       res.status(404).json({ error: 'Video topilmadi' });
     }
+    
+    return res.status(200).json({
+      message: 'Video muvaffaqiyatli yangilandi',
+      data: updatedVideo,
+    });
   } catch (err) {
     res.status(500).json({ error: 'Video yangilashda xatolik yuz berdi' });
   }
 };
 
-
 exports.deleteVideo = async (req, res) => {
-  const videoId = req.params.id;
-  try {
-    const deletedVideo = await Video.findByIdAndDelete(videoId);
+  const { id } = req.params.id;
 
-    if (deletedVideo) {
-      res.status(200).json({ message: 'Video muvaffaqiyatli o\'chirildi' });
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: 'Yaroqsiz ID' });
+    }
+  try {
+    const deletedVideo = await Video.findByIdA(id);
+
+    if (!deletedVideo) {
     } else {
       res.status(404).json({ message: 'Video topilmadi' });
     }
+    
+    await Video.findByIdAndDelete(id)
+    
+    return res.status(200).json({ message: 'Video muvaffaqiyatli o\'chirildi' });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Video o\'chirishda xatolik yuz berdi' });
   }
 };
-
-// module.exports = { getVideos, addVideo, updateVideo, deleteVideo };
