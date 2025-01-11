@@ -1,5 +1,6 @@
 :root {
     --font-mich: "Michroma";
+    --font-roboto: "Roboto";
 }
 
 * {
@@ -31,6 +32,7 @@ button {
 html,
 body {
     font-family: var(--font-mich);
+    scroll-behavior: smooth;
 }
 
 /* --------------------------------------------- */

@@ -169,7 +169,6 @@
 }
 
 /* ASIDE ===========================*/
-
 .aside {
     position: fixed;
     bottom: 20px;
@@ -200,7 +199,6 @@
     backdrop-filter: blur(4px);
 }
 .aside__item {
-    /* max-width: 120px; */
     pointer-events: none;
 }
 .aside.active .aside__item {
@@ -218,20 +216,18 @@
     transition: all 0.5s;
 }
 .aside__list.hovered:hover .aside__item .aside__link .aside__link-text {
-    /* HOVER EFFECT */
     position: relative;
-    right: 10px;
+    right: 1px;
     opacity: 1;
-    pointer-events: painted;
-    /* transition: all 0.5s; */
+    pointer-events: auto;
 }
 .aside__list.hovered:hover .aside__list .aside__link,
 .aside__list.hovered:hover .aside__list .aside__link .aside__link-text {
-    pointer-events: painted;
+    pointer-events: auto;
 }
 .aside__list.active.hovered:hover .aside__link,
 .aside__list.active.hovered:hover .aside__link .aside__link-text {
-    pointer-events: painted;
+    pointer-events: auto;
 }
 .aside__link-text {
     position: absolute;
@@ -265,6 +261,7 @@
 }
 .aside__btn-call svg {
     pointer-events: none;
+    fill: #fff;
 }
 .aside__btn-call {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
@@ -287,7 +284,4 @@
     width: 28px;
     height: 28px;
     object-fit: contain;
-}
-svg {
-    fill: #fff;
 }
