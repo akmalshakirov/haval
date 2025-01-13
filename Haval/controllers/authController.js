@@ -3,6 +3,7 @@ const Admin = require('../models/Admin');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();  
+const loginSchema = require("../validators/login.validate")
 
 
 exports.register = async (req, res) => {
@@ -28,9 +29,9 @@ exports.register = async (req, res) => {
       role: role || 'user',
     });
 
-if (!name || !email || !password) {
-  return res.status(400).json({ message: 'Barcha maydonlarni to‘ldiring.' });
-}
+  if (!name || !email || !password) {
+    return res.status(400).json({ message: 'Barcha maydonlarni to‘ldiring.' });
+  }
 
     if (!process.env.JWT_SECRET) {
       throw new Error('JWT_SECRET muhit o\'zgaruvchisi mavjud emas!');
@@ -45,9 +46,8 @@ if (!name || !email || !password) {
       process.env.JWT_SECRET,  
       { expiresIn: '1h' } 
     )
-        await user.save();
 
-        res.status(201).json({ message: 'Foydalanuvchi muvaffaqiyatli ro‘yxatdan o‘tdi.', user });
+        res.status(200).json({ message: 'Foydalanuvchi muvaffaqiyatli ro‘yxatdan o‘tdi.', user });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Serverda xatolik yuz berdi.' });
@@ -58,6 +58,13 @@ if (!name || !email || !password) {
 exports.loginAdmin = async (req, res) => {
     console.log(req.body);
     
+    // const { error } = loginSchema.validate(req.body);
+    // if (error) {
+    //     return res.status(400).send({
+    //         message: error.details[0].message, 
+    //     });
+    // }
+
     const { email, password } = req.body; 
     try {
       const admin = await Admin.findOne({ email });
