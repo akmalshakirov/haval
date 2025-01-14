@@ -45,38 +45,50 @@ const addCar = async (req, res) => {
 const updateCar = async (req, res) => {
   const { id } = req.params;
   const { model, title, description, year, price, image } = req.body;
+
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ error: "Noto'g'ri car ID." });
+      return res.status(400).json({ error: "Noto'g'ri ID." });
     }
 
     const updateData = {};
+ if (model || title || description || year || price || image) {
+      const existingCar = await Car.findOne({ 
+        model, 
+        title, 
+        description, 
+        year, 
+        price, 
+        image, 
+        _id: { $ne: id } 
+      });
+      
+      if (existingCar) {
+        return res.status(400).json({ error: 'Bunday mashina allaqachon mavjud.' });
+      }
 
-    if (model, title, description, year, price, image) {
-        await Car.find({ model, title, description, year, price, image, _id: { $ne: id } });
-          updateData.model = model;
-          updateData.title = title; 
-          updateData.description = description; 
-          updateData.year = year; 
-          updateData.price = price; 
-          updateData.image = image; 
+      updateData.model = model;
+      updateData.title = title;
+      updateData.description = description;
+      updateData.year = year;
+      updateData.price = price;
+      updateData.image = image;
     }
 
-    const updatedCar = await Car.findByIdAndUpdate(id, updateData, { new: true } );
+    const updatedCar = await Car.findByIdAndUpdate(id, updateData, { new: true });
     if (!updatedCar) {
       return res.status(404).json({ error: "Mashina topilmadi." });
     }
-   
-      return res.status(200).json({
-        message: 'Mashina ma\'lumotlari yangilandi',
-        data: updatedCar,
-      });
+
+    return res.status(200).json({
+      message: 'Mashina ma\'lumotlari yangilandi',
+      data: updatedCar,
+    });
   } catch (err) {
-    console.log(err)
+    console.log(err);
     res.status(500).json({ error: 'Ma\'lumotni yangilashda xatolik yuz berdi' });
   }
 };
-
 const deleteCar = async (req, res) => {
   const { id } = req.params;
 
