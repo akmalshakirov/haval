@@ -135,14 +135,16 @@ exports.updateAdmin = async (req, res) => {
             new: true,
         });
 
-        if (!updatedAdmin) {
-            return res.status(404).json({ error: "Admin topilmadi." });
 
-            return res.status(200).json({
-                message: "Admin muvaffaqiyatli yangilandi",
-                data: updatedAdmin,
-            });
-        }
+    if (!updatedAdmin) {
+      return res.status(404).json({ error: "Admin topilmadi." });
+    }
+        return res.status(200).json({
+            message: "Admin muvaffaqiyatli yangilandi",
+            data: updatedAdmin,
+        });
+      
+
     } catch (error) {
         console.error("Adminni yangilashda xatolik:", error);
         return res.status(500).json({ error: "Server xatosi yuz berdi." });

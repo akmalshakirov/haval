@@ -1,8 +1,11 @@
-const User = require("../models/User");
-const Admin = require("../models/Admin");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
+const User = require('../models/User');
+const Admin = require('../models/Admin');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();  
+const loginSchema = require("../validators/login.validate")
+
+
 
 exports.register = async (req, res) => {
     try {
@@ -35,25 +38,23 @@ exports.register = async (req, res) => {
                 .json({ message: "Barcha maydonlarni to‘ldiring." });
         }
 
+
         if (!process.env.JWT_SECRET) {
             throw new Error("JWT_SECRET muhit o'zgaruvchisi mavjud emas!");
         }
 
-        const token = jwt.sign(
-            {
-                id: user._id,
-                email: user.email,
-                role: user.role,
-            },
-            process.env.JWT_SECRET,
-            { expiresIn: "1h" }
-        );
-        await user.save();
+    const token = jwt.sign(
+      { 
+        id: user._id, 
+        email: user.email, 
+        role: user.role 
+      },
+      process.env.JWT_SECRET,  
+      { expiresIn: '1h' } 
+    )
 
-        res.status(201).json({
-            message: "Foydalanuvchi muvaffaqiyatli ro‘yxatdan o‘tdi.",
-            user,
-        });
+        res.status(200).json({ message: 'Foydalanuvchi muvaffaqiyatli ro‘yxatdan o‘tdi.', user });
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Serverda xatolik yuz berdi." });
@@ -63,7 +64,18 @@ exports.register = async (req, res) => {
 exports.loginAdmin = async (req, res) => {
     console.log(req.body);
 
+
     const { email, password } = req.body;
+
+    
+    // const { error } = loginSchema.validate(req.body);
+    // if (error) {
+    //     return res.status(400).send({
+    //         message: error.details[0].message, 
+    //     });
+    // }
+
+
     try {
         const admin = await Admin.findOne({ email: email });
         console.log(admin);
