@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../MainDealers/MainDealers.css";
+import AOS from "aos";
 
 const locations = [
     {
@@ -103,12 +104,20 @@ const MainDealers = () => {
     const handleLocationClick = (location) => {
         setSelectedLocation(location);
     };
-
+    useEffect(() => {
+        AOS.init();
+    }, []);
     return (
         <div className='main-dealers'>
-            <h1>HAVAL rasmiy dilerlari</h1>
+            <h1 data-aos='fade-up' data-aos-offset='50' data-aos-duration='500'>
+                HAVAL rasmiy dilerlari
+            </h1>
             <div className='main-dealers-content'>
-                <div className='main-dealers-list'>
+                <div
+                    className='main-dealers-list'
+                    data-aos='fade-right'
+                    data-aos-duration='1'
+                    data-aos-offset='50'>
                     {locations.map((location) => (
                         <div
                             key={location.id}
@@ -133,7 +142,11 @@ const MainDealers = () => {
                         </div>
                     ))}
                 </div>
-                <div style={{ flex: 1, position: "relative" }}>
+                <div
+                    style={{ flex: 1, position: "relative" }}
+                    data-aos='fade-left'
+                    data-aos-duration='1'
+                    data-aos-offset='50'>
                     <iframe
                         title='Map'
                         width='100%'
