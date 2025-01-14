@@ -1,5 +1,6 @@
 const Car = require('../models/Car');
 const mongoose = require("mongoose");
+const multer = require('multer');
 
 const getCars = async (req, res) => {
   try {
@@ -28,8 +29,17 @@ const getCars = async (req, res) => {
   }
 };
 
+
+const storage = multer.memoryStorage(); 
+
+const upload = multer({ storage: storage });
+
+
 const addCar = async (req, res) => {
-  const { model, title, description, year, price, image } = req.body;
+  const { model, title, description, year, price } = req.body;
+
+  const image = req.file ? req.file.buffer.toString('base64') : null;
+
   try {
     const car = await Car.create({ model, title, description, year, price, image });
     res.status(200).json({
@@ -37,14 +47,17 @@ const addCar = async (req, res) => {
       data: car,
     });
   } catch (err) {
-    console.log(err)
+    console.log(err);
     res.status(500).json({ error: 'Ma\'lumot qo\'shishda xatolik yuz berdi' });
   }
 };
 
+
 const updateCar = async (req, res) => {
   const { id } = req.params;
-  const { model, title, description, year, price, image } = req.body;
+  const { model, title, description, year, price } = req.body;
+
+  const image = req.file ? req.file.buffer.toString('base64') : null;
 
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -89,6 +102,7 @@ const updateCar = async (req, res) => {
     res.status(500).json({ error: 'Ma\'lumotni yangilashda xatolik yuz berdi' });
   }
 };
+
 const deleteCar = async (req, res) => {
   const { id } = req.params;
 
@@ -109,6 +123,6 @@ const deleteCar = async (req, res) => {
     console.error("Carni o'chirishda xato:", error);
     res.status(500).json({ error: 'Serverda xatolik yuz berdi' });
   }
-};
+}
 
 module.exports = { getCars, addCar, updateCar, deleteCar };
