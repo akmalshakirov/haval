@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AppRouter from "./app/AppRouters/AppRouter";
+import AuthRouter from "./app/AuthRouters/AuthRouter";
 // import Preloader from "./Components/Preloader/Preloader";
 
 function App() {
@@ -32,10 +33,11 @@ function App() {
     //         setIsLoading(false);
     //     }, 0);
     // };
+    const isLoggin = true;
     return (
         <div>
             {/* {isLoading ? <Preloader onFinish={handleFinish} /> : <AppRouter />} */}
-            <AppRouter />
+            {isLoggin ? <AppRouter /> : <AuthRouter />}
         </div>
     );
 }

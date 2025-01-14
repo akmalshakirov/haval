@@ -1,0 +1,7 @@
+/* .admin-news {
+    background-color: red;
+} */
+.admin-news-cards {
+    display: flex;
+    gap: 20px;
+}
