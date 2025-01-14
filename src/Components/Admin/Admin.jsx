@@ -26,12 +26,14 @@ import {
     LogoutOutlined,
     UnorderedListOutlined,
     IdcardOutlined,
+    UserOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import AdminVideos from "./AdminVideos";
 import axios from "axios";
 import "./Admin.css";
 import AdminNews from "../Admin_news/AdminNews";
+import AdminUsers from "../Admin_users/AdminUsers";
 
 const { Header, Sider, Content, Footer } = Layout;
 
@@ -55,44 +57,32 @@ const AdminPanel = () => {
     const [deleteModal, setDeleteModal] = useState(false);
     const [carToDelete, setCarToDelete] = useState(null);
 
-    const fetchCars = () => {
-        setCars([
-            {
-                key: 1,
-                model: "Haval H6",
-                year: 2023,
-                price: "$25,000",
-                image: "src/Images/haval-h6.jpg",
-            },
-            {
-                key: 2,
-                model: "Haval Jolion",
-                year: 2024,
-                price: "$22,000",
-                image: "src/Images/haval-jolion.jpg",
-            },
-            {
-                key: 3,
-                model: "Haval Dargo",
-                year: 2023,
-                price: "$18,000",
-                image: "src/Images/haval-dargo.jpg",
-            },
-            {
-                key: 4,
-                model: "Haval M6",
-                year: 2024,
-                price: "$23,500",
-                image: "src/Images/haval-m6.jpg",
-            },
-            {
-                key: 5,
-                model: "GWM WINGLE 7",
-                year: 2023,
-                price: "$24,430",
-                image: "src/Images/gwm-wingle-7.jpg",
-            },
-        ]);
+    const fetchCars = async () => {
+        try {
+            const token = localStorage.getItem("authToken");
+            if (!token) {
+                message.error("Token topilmadi, iltimos qayta tizimga kiring!");
+                return;
+            }
+
+            const response = await axios.get("http://localhost:3000/cars", {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setCars([response.data.cars]);
+            console.log(
+                "Kelgan ma'lumotlar (avtomobillar):",
+                response.data.cars
+            );
+        } catch (error) {
+            console.error(
+                "Xatolik:",
+                error.response?.data || error.message || error
+            );
+            message.error("Avtomobillarni yuklanishda xatolik yuz berdi!");
+        }
     };
 
     // FETCH_ADMIN ===============================
@@ -239,9 +229,6 @@ const AdminPanel = () => {
             image: file.url || URL.createObjectURL(file.originFileObj),
         };
 
-        const updatedCars = [...cars, newCar];
-        // localStorage.setItem("cars", JSON.stringify(updatedCars));
-
         setCars([...cars, newCar]);
         message.success("Avtomobil muvaffaqiyatli qo'shildi!");
 
@@ -264,33 +251,62 @@ const AdminPanel = () => {
         }
     };
 
-    // const handlePreviewImage = (image) => {
-    //     setPreviewModal({
-    //         image: image,
-    //     });
-    // };
+    const handleEditCar = async (values) => {
+        // if (!editingCar) return;
 
-    const handleEditCar = (values) => {
-        if (!editingCar) return;
+        // const newImage = fileList[0]?.url || editingCar.image;
 
-        const newImage = fileList[0]?.url || editingCar.image;
+        // setCars(
+        //     cars.map((car) =>
+        //         car.key === editingCar.key
+        //             ? {
+        //                   ...car,
+        //                   ...values,
+        //                   image: newImage,
+        //               }
+        //             : car
+        //     )
+        // );
+        // setActionModal(false);
+        // setEditingCar(null);
+        // setFileList([]);
+        // form.resetFields();
+        // message.success("Avtomobil muvaffaqiyatli tahrirlandi!");
+        try {
+            const token = localStorage.getItem("authToken");
+            const updateData = {
+                carsModel: values.model,
+                year: values.year,
+                price: values.price,
+                image: values.image,
+            };
 
-        setCars(
-            cars.map((car) =>
-                car.key === editingCar.key
-                    ? {
-                          ...car,
-                          ...values,
-                          image: newImage,
-                      }
-                    : car
-            )
-        );
-        setActionModal(false);
-        setEditingCar(null);
-        setFileList([]);
-        form.resetFields();
-        message.success("Avtomobil muvaffaqiyatli tahrirlandi!");
+            const response = await axios.put(
+                `http://localhost:3000/cars/${editingCar._id}`,
+                updateData,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            if (response.status === 200) {
+                await fetchCars();
+                setActionModal(false);
+                setEditingCar(null);
+                form.resetFields();
+                window.location.reload();
+                message.success("Avtomobil muvaffaqicyatli o'zgartirildi!");
+            }
+        } catch (error) {
+            console.error("Xatolik:", error.response?.data || error.message);
+            message.error(
+                error.response?.data?.message ||
+                    "Avtomobil ma'lumotlarini yangilashda xatolik yuz berdi!"
+            );
+        }
     };
 
     const handleDeleteCar = () => {
@@ -397,9 +413,6 @@ const AdminPanel = () => {
     const handleLogout = () => {
         localStorage.removeItem("authToken");
         navigate("/");
-        // localStorage.removeItem("users");
-        // localStorage.removeItem("isAuthenticated");
-        // window.location.reload(); ========= DON'T REMOVE
     };
 
     return (
@@ -431,6 +444,11 @@ const AdminPanel = () => {
                             key: "5",
                             icon: <StockOutlined />,
                             label: "Savdo statistikasi",
+                        },
+                        {
+                            key: "6",
+                            icon: <UserOutlined />,
+                            label: "Foydalanuvchilar",
                         },
                     ]}
                 />
@@ -570,18 +588,6 @@ const AdminPanel = () => {
                                             ]}>
                                             <Input />
                                         </Form.Item>
-                                        {/* <Form.Item
-                                            name='password'
-                                            label='Parol'
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    message:
-                                                        "Iltimos, parolni kiriting!",
-                                                },
-                                            ]}>
-                                            <Input.Password />
-                                        </Form.Item> */}
                                         <Button
                                             type='primary'
                                             htmlType='submit'
@@ -617,10 +623,15 @@ const AdminPanel = () => {
                                     />
                                 </div>
                                 {isCardView ? (
+                                    // <Table
+                                    //     dataSource={cars}
+                                    //     columns={columnsCars}
+                                    //     key={cars[0]?.id}
+                                    // />
                                     <Table
-                                        dataSource={cars}
+                                        key={cars[0]?.id}
                                         columns={columnsCars}
-                                        key={cars.key}
+                                        dataSource={cars[0]}
                                     />
                                 ) : (
                                     <div
@@ -630,9 +641,9 @@ const AdminPanel = () => {
                                                 "repeat(auto-fill, minmax(300px, 1fr))",
                                             gap: "20px",
                                         }}>
-                                        {cars.map((car) => (
+                                        {cars[0].map((car) => (
                                             <div
-                                                key={car.key}
+                                                key={car.id}
                                                 style={{
                                                     padding: "15px",
                                                     borderRadius: "8px",
@@ -826,6 +837,11 @@ const AdminPanel = () => {
                             </div>
                         )}
                         {selectedKey === "5" && <h1>Savdo statistikasi</h1>}
+                        {selectedKey === "6" && (
+                            <>
+                                <AdminUsers />
+                            </>
+                        )}
                     </div>
                 </Content>
                 <Footer style={{ textAlign: "center" }}>
