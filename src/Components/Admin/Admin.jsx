@@ -31,6 +31,7 @@ import { useNavigate } from "react-router-dom";
 import AdminVideos from "./AdminVideos";
 import axios from "axios";
 import "./Admin.css";
+import AdminNews from "../Admin_news/AdminNews";
 
 const { Header, Sider, Content, Footer } = Layout;
 
@@ -94,6 +95,8 @@ const AdminPanel = () => {
         ]);
     };
 
+    // FETCH_ADMIN ===============================
+
     const fetchAdmins = async () => {
         try {
             const token = localStorage.getItem("authToken");
@@ -127,11 +130,31 @@ const AdminPanel = () => {
         }
     }, []);
 
-    const handleAddAdmin = (values) => {
-        setAdmins([...admins, { key: `${admins.length + 1}`, ...values }]);
-        message.success("Admin muvaffaqiyatli qo'shildi!");
-        setIsModalOpen(false);
-        form.resetFields();
+    const handleAddAdmin = async (values) => {
+        try {
+            const token = localStorage.getItem("authToken");
+            const addAdmin = {
+                adminName: values.adminName,
+                email: values.email,
+                password: values.password,
+            };
+            const response = await axios.post(
+                `http://localhost:3000/add-admin/`,
+                addAdmin,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            setAdmins([...admins, { key: `${admins.length + 1}`, ...values }]);
+            message.success("Admin muvaffaqiyatli qo'shildi!");
+            setIsModalOpen(false);
+            form.resetFields();
+        } catch (error) {
+            message.error(error.response?.data?.message);
+        }
     };
 
     const handleEditAdmin = async (values) => {
@@ -241,11 +264,11 @@ const AdminPanel = () => {
         }
     };
 
-    const handlePreviewImage = (image) => {
-        setPreviewModal({
-            image: image,
-        });
-    };
+    // const handlePreviewImage = (image) => {
+    //     setPreviewModal({
+    //         image: image,
+    //     });
+    // };
 
     const handleEditCar = (values) => {
         if (!editingCar) return;
@@ -413,13 +436,6 @@ const AdminPanel = () => {
                 />
             </Sider>
             <div style={{ position: "absolute", top: 0, right: 0, margin: 16 }}>
-                {/* <Tooltip title='Logout'>
-                    <Button
-                        type='text'
-                        icon={<LogoutOutlined />}
-                        onClick={handleLogout}
-                    />
-                </Tooltip> */}
                 <Tooltip title='Chiqish' className='tooltip-logout'>
                     <Popconfirm
                         title='Chiqish'
@@ -554,7 +570,7 @@ const AdminPanel = () => {
                                             ]}>
                                             <Input />
                                         </Form.Item>
-                                        <Form.Item
+                                        {/* <Form.Item
                                             name='password'
                                             label='Parol'
                                             rules={[
@@ -565,7 +581,7 @@ const AdminPanel = () => {
                                                 },
                                             ]}>
                                             <Input.Password />
-                                        </Form.Item>
+                                        </Form.Item> */}
                                         <Button
                                             type='primary'
                                             htmlType='submit'
@@ -604,6 +620,7 @@ const AdminPanel = () => {
                                     <Table
                                         dataSource={cars}
                                         columns={columnsCars}
+                                        key={cars.key}
                                     />
                                 ) : (
                                     <div
@@ -798,7 +815,11 @@ const AdminPanel = () => {
                                 </Modal>
                             </>
                         )}
-                        {selectedKey === "3" && <h1>Yangiliklar</h1>}
+                        {selectedKey === "3" && (
+                            <>
+                                <AdminNews />
+                            </>
+                        )}
                         {selectedKey === "4" && (
                             <div>
                                 <AdminVideos />
@@ -808,7 +829,7 @@ const AdminPanel = () => {
                     </div>
                 </Content>
                 <Footer style={{ textAlign: "center" }}>
-                    Haval Admin Panel &copy; 2024
+                    Haval Admin Panel &copy; 2025
                 </Footer>
             </Layout>
             {/* LAYOUT END +-=-=-=-=-=-=-+_+_+-==-+_+=-=-=-=-=+_+_+ */}
