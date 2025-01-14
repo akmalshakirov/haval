@@ -1,8 +1,8 @@
-
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mongoose = require("mongoose");
 const Admin = require('../models/Admin');
+const adminSchema = require("../validators/add_admin.validate.js")
 
 exports.getAllAdmin = async (req, res) => {
 try {
@@ -46,23 +46,30 @@ exports.createAdmin = async (req, res) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     try {
-        if (!emailRegex.test(email)) {
-            return res.status(400).json({ error: "Email noto'g'ri formatda." });
-        }
+        // if (!emailRegex.test(email)) {
+        //     return res.status(400).json({ error: "Email noto'g'ri formatda." });
+        // }
 
-        const existingAdmin = await Admin.findOne({ email });
-        if (existingAdmin) {
-            return res
-                .status(400)
-                .json({ error: "Bu email bilan admin allaqachon mavjud." });
-        }
+        // const existingAdmin = await Admin.findOne({ email });
+        // if (existingAdmin) {
+        //     return res
+        //         .status(400)
+        //         .json({ error: "Bu email bilan admin allaqachon mavjud." });
+        // }
 
+        const { value, error } = adminSchema.validate(req.body);
+
+        if (error) {
+            const errMsg = error.details[0].message;
+            req.flash("adminError", errMsg);
+        }
+        
         const hashedPassword = await bcrypt.hash(password, 10);
 
         await Admin.create({ adminName, email, password: hashedPassword });
 
         return res
-            .status(201)
+            .status(200)
             .json({ message: "Admin muvaffaqiyatli yaratildi" });
     } catch (error) {
         console.error("Admin yaratishda xatolik:", error);
