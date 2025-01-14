@@ -252,26 +252,6 @@ const AdminPanel = () => {
     };
 
     const handleEditCar = async (values) => {
-        // if (!editingCar) return;
-
-        // const newImage = fileList[0]?.url || editingCar.image;
-
-        // setCars(
-        //     cars.map((car) =>
-        //         car.key === editingCar.key
-        //             ? {
-        //                   ...car,
-        //                   ...values,
-        //                   image: newImage,
-        //               }
-        //             : car
-        //     )
-        // );
-        // setActionModal(false);
-        // setEditingCar(null);
-        // setFileList([]);
-        // form.resetFields();
-        // message.success("Avtomobil muvaffaqiyatli tahrirlandi!");
         try {
             const token = localStorage.getItem("authToken");
             const updateData = {
