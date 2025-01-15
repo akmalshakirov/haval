@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const { Schema,  mongoose } = require("mongoose");
 
 const Car = new mongoose.Schema({
   model: {type: String, required: true},
@@ -6,7 +6,7 @@ const Car = new mongoose.Schema({
   description: {type: String, required: true},
   year: { type: Number, required: true }, 
   price: { type: Number, required: true },
-  image: {type: String, required: true},
+  image: { type: Buffer },
   role: { type: String, default: "admin" },
 })
 
