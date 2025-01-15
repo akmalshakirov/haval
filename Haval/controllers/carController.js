@@ -31,7 +31,17 @@ const getCars = async (req, res) => {
 
 
 
+
+const storage = multer.memoryStorage(); 
+
+const upload = multer({ storage: storage });
+
+
 const addCar = async (req, res) => {
+  const { model, title, description, year, price } = req.body;
+
+  const image = req.file ? req.file.buffer.toString('base64') : null;
+
   const { model, title, description, year, price, image } = req.body;
 
   try {
@@ -50,9 +60,12 @@ const addCar = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    res.status(500).json({ error: 'Ma\'lumot qo\'shishda xatolik yuz berdi' });
+    console.log(err);
     res.status(500).json({ error: 'Ichki server xatosi yuz berdi.' });
   }
 };
+
 
 const updateCar = async (req, res) => {
   const { id } = req.params;
@@ -96,13 +109,56 @@ const updateCar = async (req, res) => {
 
     if (!data.length) {
       return res.status(404).json({ error: 'Mashina topilmadi.' });
+  const { model, title, description, year, price } = req.body;
+
+  const image = req.file ? req.file.buffer.toString('base64') : null;
+
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Noto'g'ri ID." });
+    }
+
+    const updateData = {};
+ if (model || title || description || year || price || image) {
+      const existingCar = await Car.findOne({ 
+        model, 
+        title, 
+        description, 
+        year, 
+        price, 
+        image, 
+        _id: { $ne: id } 
+      });
+      
+      if (existingCar) {
+        return res.status(400).json({ error: 'Bunday mashina allaqachon mavjud.' });
+      }
+
+      updateData.model = model;
+      updateData.title = title;
+      updateData.description = description;
+      updateData.year = year;
+      updateData.price = price;
+      updateData.image = image;
+    }
+
+    const updatedCar = await Car.findByIdAndUpdate(id, updateData, { new: true });
+    if (!updatedCar) {
+      return res.status(404).json({ error: "Mashina topilmadi." });
     }
 
     res.status(200).json({
       message: 'Mashina ma\'lumotlari yangilandi',
       data: data[0],
     });
+
+    return res.status(200).json({
+      message: 'Mashina ma\'lumotlari yangilandi',
+      data: updatedCar,
+    });
   } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Ma\'lumotni yangilashda xatolik yuz berdi' });
     console.log(err);
     res.status(500).json({ error: 'Ichki server xatosi yuz berdi.' });
   }
@@ -130,6 +186,7 @@ const deleteCar = async (req, res) => {
     console.error("Carni o'chirishda xato:", error);
     res.status(500).json({ error: 'Serverda xatolik yuz berdi' });
   }
+}
 }
 
 module.exports = { getCars, addCar, updateCar, deleteCar };
