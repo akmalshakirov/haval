@@ -1,126 +1,63 @@
-import { Card, Button, Modal, Form, Input } from "antd";
-import { EditOutlined } from "@ant-design/icons";
-import React, { useState } from "react";
-import AdminNewsW7hdH6 from "../../Images/admin-news-w7-hd-h6.jpg";
+import { Card, message } from "antd";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "./AdminNews.css";
 
 function AdminNews() {
-    const [adminNewsList, setAdminNewsList] = useState([
-        {
-            title: "20.12.2024",
-            description:
-                "HAVAL brendi - O'zbekiston avtomobil bozorida bir yil",
-            link: "/",
-        },
-        {
-            title: "26.11.2024",
-            description:
-                "Toshkentda HAVAL avtomobil brendi dilerlik konferensiyasi bo'lib o'tdi",
-            link: "/",
-        },
-        {
-            title: "22.12.2024",
-            description: "O'zbekiston avtomobil bozorida yangi o'zgarishlar",
-            link: "/",
-        },
-    ]);
+    const [adminNewsList, setAdminNewsList] = useState([]);
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [currentEdit, setCurrentEdit] = useState(null);
-    const [form] = Form.useForm();
+    const fetchNews = async () => {
+        try {
+            const token = localStorage.getItem("authToken");
+            if (!token) {
+                message.error("Token topilmadi, iltimos qayta tizimga kiring!");
+                return;
+            }
 
-    const showEditModal = (news, index) => {
-        setCurrentEdit(index);
-        form.setFieldsValue(news);
-        setIsModalOpen(true);
+            const response = await axios.get("http://localhost:3000/news/", {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setAdminNewsList(response.data);
+        } catch (error) {
+            message.error(
+                error.response?.data?.message ||
+                    error.message ||
+                    "Xatolik yuz berdi!"
+            );
+        }
     };
 
-    const handleModalOk = () => {
-        form.validateFields().then((values) => {
-            const updatedNewsList = [...adminNewsList];
-            updatedNewsList[currentEdit] = values;
-            setAdminNewsList(updatedNewsList);
-            setIsModalOpen(false);
-            form.resetFields();
-        });
+    const shortText = (text) => {
+        if (text.length > 15) {
+            return text.slice(0, 18) + "...";
+        }
+        return text;
     };
 
-    const handleModalCancel = () => {
-        setIsModalOpen(false);
-        form.resetFields();
-    };
+    useEffect(() => {
+        fetchNews();
+    }, []);
 
     return (
         <div className='admin-news'>
             <div className='admin-news-cards'>
-                {adminNewsList.map((news, index) => (
-                    <Card
-                        key={index}
-                        className='admin-news-card'
-                        hoverable
-                        style={{ maxWidth: 240 }}
-                        cover={
-                            <img
-                                src={AdminNewsW7hdH6}
-                                alt={`news-${index}`}
-                                className='admin-news-cover-img'
-                            />
-                        }>
-                        <h4 className='admin-news-card-title'>{news.title}</h4>
-                        <p className='admin-news-card-description'>
-                            {news.description}
-                        </p>
-                        <a className='admin-news-card-link' href={news.link}>
-                            Batafsil -{">"}
-                        </a>
-                        <Button onClick={() => showEditModal(news, index)}>
-                            <EditOutlined />
-                        </Button>
-                    </Card>
+                {adminNewsList.map((item, index) => (
+                    <div key={index}>
+                        <Card
+                            cover={<img src={item.image} />}
+                            style={{ maxWidth: 240 }}>
+                            <p>{item.title}</p>
+                            <p>{shortText(item.description)}</p>
+                            <footer>
+                                <a href={item.link}>Batafsil {item.link}</a>
+                            </footer>
+                        </Card>
+                    </div>
                 ))}
             </div>
-
-            <Modal
-                title='Tahrirlash'
-                open={isModalOpen}
-                onOk={handleModalOk}
-                onCancel={handleModalCancel}>
-                <Form form={form} layout='vertical'>
-                    <Form.Item
-                        name='title'
-                        label='Sarlavha'
-                        rules={[
-                            {
-                                required: true,
-                                message: "Sarlavha kiritilishi shart!",
-                            },
-                        ]}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        name='description'
-                        label='Tavsif'
-                        rules={[
-                            {
-                                required: true,
-                                message: "Tavsif kiritilishi shart!",
-                            },
-                        ]}>
-                        <Input.TextArea rows={3} />
-                    </Form.Item>
-                    <Form.Item
-                        name='link'
-                        label='Havola'
-                        rules={[
-                            {
-                                required: true,
-                                message: "Havola kiritilishi shart!",
-                            },
-                        ]}>
-                        <Input />
-                    </Form.Item>
-                </Form>
-            </Modal>
         </div>
     );
 }
