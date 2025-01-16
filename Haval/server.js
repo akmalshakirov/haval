@@ -9,7 +9,6 @@ const PORT = process.env.PORT || 5000;
 const router = require("./routes.js");
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
-
 db()
 
 app.use(express.json());
