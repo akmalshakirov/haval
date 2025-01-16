@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mongoose = require("mongoose");
 const Admin = require('../models/Admin');
-const adminSchema = require("../validators/add_admin.validate.js")
+const {adminSchema} = require("../validators/add_admin.validate.js")
 
 
 exports.getAllAdmin = async (req, res) => {
@@ -43,32 +43,15 @@ exports.getAdminById = async (req, res) => {
 };
 
 exports.createAdmin = async (req, res) => {
-    const { adminName, email, password } = req.body;
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     try {
-        // if (!emailRegex.test(email)) {
-        //     return res.status(400).json({ error: "Email noto'g'ri formatda." });
-        // }
-
-        // const existingAdmin = await Admin.findOne({ email });
-        // if (existingAdmin) {
-        //     return res
-        //         .status(400)
-        //         .json({ error: "Bu email bilan admin allaqachon mavjud." });
-        // }
-
         const { value, error } = adminSchema.validate(req.body);
-
-        if (error) {
-            const errMsg = error.details[0].message;
-            req.flash("adminError", errMsg);
-        }
         
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(value.password, 10);
 
-        await Admin.create({ adminName, email, password: hashedPassword });
+        await Admin.create({ 
+            adminName: value.adminName, 
+            email: value.email, 
+            password: hashedPassword });
 
         return res
             .status(200)
@@ -80,73 +63,27 @@ exports.createAdmin = async (req, res) => {
 };
 
 exports.updateAdmin = async (req, res) => {
-    const { id } = req.params;
-    const { adminName, email, password } = req.body;
-    console.log(req.body);
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
+    const { body, params: { id } } = req
     try {
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ error: "Noto'g'ri admin ID." });
-        }
+    const oldAdmin = await Admin.findById(id)
+    if (!oldAdmin) {
+        return res.status(404).json({ error: "Admin topilmadi." });
+      }
 
-        const updateData = {};
-
-        if (adminName) {
-            const existingAdmin = await Admin.findOne({
-                adminName,
-                _id: { $ne: id },
-            });
-            if (existingAdmin) {
-                return res
-                    .status(400)
-                    .json({
-                        error: "Bu ism bilan boshqa admin allaqachon mavjud.",
-                    });
-            }
-            updateData.adminName = adminName;
-        }
-
-        if (email) {
-            if (!emailRegex.test(email)) {
-                return res
-                    .status(400)
-                    .json({ error: "Email noto'g'ri formatda." });
-            }
-            const existingAdmin = await Admin.findOne({
-                email,
-                _id: { $ne: id },
-            });
-            if (existingAdmin) {
-                return res
-                    .status(400)
-                    .json({
-                        error: "Bu email bilan boshqa admin allaqachon mavjud.",
-                    });
-            }
-            updateData.email = email;
-        }
-
-        if (password) {
-            if (password.length < 6) {
-                return res
-                    .status(400)
-                    .json({
-                        error: "Parol kamida 6 ta belgidan iborat bo'lishi kerak.",
-                    });
-            }
-            const hashedPassword = await bcrypt.hash(password, 10);
-            updateData.password = hashedPassword;
-        }
-
-        const updatedAdmin = await Admin.findByIdAndUpdate(id, updateData, {
-            new: true,
-        });
-
+    const { value, error } = adminSchema.validate(body);
+        
+    const hashedPassword = await bcrypt.hash(value.password, 10);
+  
+    const admin = {
+        adminName: value.adminName, 
+        email: value.email, 
+        password: hashedPassword
+    };
+  
+    const updatedAdmin = await Admin.findByIdAndUpdate(id, admin)
 
     if (!updatedAdmin) {
-      return res.status(404).json({ error: "Admin topilmadi." });
+      return res.status(404).json({ error: "Yangi Admin topilmadi." });
     }
         return res.status(200).json({
             message: "Admin muvaffaqiyatli yangilandi",
