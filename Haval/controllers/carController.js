@@ -1,6 +1,7 @@
 const Car = require("../models/Car");
 const mongoose = require("mongoose");
-const multer = require("multer");
+const supabase = require('../config/supabaseClient');
+
 
 const getCars = async (req, res) => {
     try {
@@ -29,91 +30,89 @@ const getCars = async (req, res) => {
     }
 };
 
-const storage = multer.memoryStorage();
 
-const upload = multer({ storage: storage });
 
 const addCar = async (req, res) => {
-    const { model, title, description, year, price } = req.body;
+  const { model, title, description, year, price, image } = req.body;
 
-    const image = req.file ? req.file.buffer.toString("base64") : null;
+  try {
+   
+    const { data, error } = await supabase
+      .from('cars') 
+      .insert([{ model, title, description, year, price, image }]);
 
-    try {
-        const car = await Car.create({
-            model,
-            title,
-            description,
-            year,
-            price,
-            image,
-        });
-        res.status(200).json({
-            message: "Mashina muvaffaqiyatli qo'shildi",
-            data: car,
-        });
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({
-            error: "Ma'lumot qo'shishda xatolik yuz berdi",
-        });
+    if (error) {
+      console.log(error);
+      return res.status(500).json({ error: 'Ma\'lumot qo\'shishda xatolik yuz berdi.' });
     }
+
+    res.status(200).json({
+      message: 'Mashina muvaffaqiyatli qo\'shildi',
+      data,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Ichki server xatosi yuz berdi.' });
+  }
+
 };
 
 const updateCar = async (req, res) => {
-    const { id } = req.params;
-    const { model, title, description, year, price } = req.body;
+  const { id } = req.params;
+  const { model, title, description, year, price } = req.body;
 
-    const image = req.file ? req.file.buffer.toString("base64") : null;
+  const image = req.file ? req.file.buffer.toString('base64') : null;
 
-    try {
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ error: "Noto'g'ri ID." });
-        }
+  try {
+    const { data: existingCar, error: checkError } = await supabase
+      .from('cars')
+      .select('*')
+      .eq('model', model)
+      .eq('title', title)
+      .eq('description', description)
+      .eq('year', year)
+      .eq('price', price)
+      .neq('id', id) 
+      .single();
 
-        const updateData = {};
-        if (model || title || description || year || price || image) {
-            const existingCar = await Car.findOne({
-                model,
-                title,
-                description,
-                year,
-                price,
-                image,
-                _id: { $ne: id },
-            });
-
-            if (existingCar) {
-                return res
-                    .status(400)
-                    .json({ error: "Bunday mashina allaqachon mavjud." });
-            }
-
-            updateData.model = model;
-            updateData.title = title;
-            updateData.description = description;
-            updateData.year = year;
-            updateData.price = price;
-            updateData.image = image;
-        }
-
-        const updatedCar = await Car.findByIdAndUpdate(id, updateData, {
-            new: true,
-        });
-        if (!updatedCar) {
-            return res.status(404).json({ error: "Mashina topilmadi." });
-        }
-
-        return res.status(200).json({
-            message: "Mashina ma'lumotlari yangilandi",
-            data: updatedCar,
-        });
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({
-            error: "Ma'lumotni yangilashda xatolik yuz berdi",
-        });
+    if (checkError) {
+      console.log(checkError);
+      return res.status(500).json({ error: 'Ma\'lumotni tekshirishda xatolik yuz berdi.' });
     }
+
+    if (existingCar) {
+      return res.status(400).json({ error: 'Bunday mashina allaqachon mavjud.' });
+    }
+
+    const updateData = { model, title, description, year, price };
+    if (image) updateData.image = image;
+
+    const { data, error } = await supabase
+      .from('cars')
+      .update(updateData)
+      .eq('id', id);
+
+    if (error) {
+      console.log(error);
+      return res.status(500).json({ error: 'Ma\'lumotni yangilashda xatolik yuz berdi.' });
+    }
+
+    if (!data.length) {
+      return res.status(404).json({ error: 'Mashina topilmadi.' });
+    }
+
+    res.status(200).json({
+      message: 'Mashina ma\'lumotlari yangilandi',
+      data: data[0],
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Ichki server xatosi yuz berdi.' });
+  }
+
 };
+
+
 
 const deleteCar = async (req, res) => {
     const { id } = req.params;
