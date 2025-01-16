@@ -1,33 +1,35 @@
-const Car = require('../models/Car');
+const Car = require("../models/Car");
 const mongoose = require("mongoose");
 const supabase = require('../config/supabaseClient');
 
+
 const getCars = async (req, res) => {
-  try {
-    let { page = 1, limit = 10 } = req.query;
-    page = parseInt(page);
-    limit = parseInt(limit);
-    const skip = (page - 1) * limit;
+    try {
+        let { page = 1, limit = 10 } = req.query;
+        page = parseInt(page);
+        limit = parseInt(limit);
+        const skip = (page - 1) * limit;
 
-    const cars = await Car.find().skip(skip).limit(limit); 
-    const total = await Car.countDocuments(); 
+        const cars = await Car.find().skip(skip).limit(limit);
+        const total = await Car.countDocuments();
 
-    res.json({
-      total,
-      totalPages: Math.ceil(total / limit),
-      currentPage: page,
-      cars,
-    });
+        res.json({
+            total,
+            totalPages: Math.ceil(total / limit),
+            currentPage: page,
+            cars,
+        });
 
-    if(!cars){
-      return res.status(404).send({
-        error: "Carlar  topilmadi!"
-      })
+        if (!cars) {
+            return res.status(404).send({
+                error: "Carlar  topilmadi!",
+            });
+        }
+    } catch (err) {
+        res.status(500).json({ error: "Bazaga ulanishda xatolik yuz berdi" });
     }
-  } catch (err) {
-    res.status(500).json({ error: 'Bazaga ulanishda xatolik yuz berdi' });
-  }
 };
+
 
 
 const addCar = async (req, res) => {
@@ -52,8 +54,8 @@ const addCar = async (req, res) => {
     console.log(err);
     res.status(500).json({ error: 'Ichki server xatosi yuz berdi.' });
   }
-};
 
+};
 
 const updateCar = async (req, res) => {
   const { id } = req.params;
@@ -107,30 +109,31 @@ const updateCar = async (req, res) => {
     console.log(err);
     res.status(500).json({ error: 'Ichki server xatosi yuz berdi.' });
   }
+
 };
 
 
 
 const deleteCar = async (req, res) => {
-  const { id } = req.params;
+    const { id } = req.params;
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ error: 'Yaroqsiz ID' });
-  }
-
-  try {
-    const car = await Car.findById(id);
-    if (!car) {
-      return res.status(404).json({ error: 'Mashina topilmadi' });
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ error: "Yaroqsiz ID" });
     }
 
-   await Car.findByIdAndDelete(id);
+    try {
+        const car = await Car.findById(id);
+        if (!car) {
+            return res.status(404).json({ error: "Mashina topilmadi" });
+        }
 
-    res.status(200).json({ message: 'Mashina muvaffaqiyatli o‘chirildi' });
-  } catch (error) {
-    console.error("Carni o'chirishda xato:", error);
-    res.status(500).json({ error: 'Serverda xatolik yuz berdi' });
-  }
-}
+        await Car.findByIdAndDelete(id);
+
+        res.status(200).json({ message: "Mashina muvaffaqiyatli o‘chirildi" });
+    } catch (error) {
+        console.error("Carni o'chirishda xato:", error);
+        res.status(500).json({ error: "Serverda xatolik yuz berdi" });
+    }
+};
 
 module.exports = { getCars, addCar, updateCar, deleteCar };

@@ -208,35 +208,62 @@ const AdminPanel = () => {
         }
     };
 
-    const handleAddCar = (values) => {
-        if (fileList.length === 0) {
-            message.error("Iltimos, avtomobil rasmni yuklang!");
-            return;
-        }
+    const handleAddCar = async (values) => {
+        // if (fileList.length === 0) {
+        //     message.error("Iltimos, avtomobil rasmni yuklang!");
+        //     return;
+        // }
 
-        const file = fileList[0];
-        if (!file.originFileObj) {
-            message.error(
-                "Noto'g'ri fayl formati yoki fayl obyekti mavjud emas!"
+        // const file = fileList[0];
+        // if (!file.originFileObj) {
+        //     message.error(
+        //         "Noto'g'ri fayl formati yoki fayl obyekti mavjud emas!"
+        //     );
+        //     console.log(fileList);
+        //     return;
+        // }
+
+        // const newCar = {
+        //     ...values,
+        //     key: `${cars.length + 1}`,
+        //     image: file.url || URL.createObjectURL(file.originFileObj),
+        // };
+
+        // setCars([...cars, newCar]);
+        // message.success("Avtomobil muvaffaqiyatli qo'shildi!");
+
+        // setFileList([]);
+        // setIsModalOpen(false);
+        // form.resetFields();
+
+        // URL.revokeObjectURL(file.originFileObj);
+        try {
+            const token = localStorage.getItem("authToken");
+            const addCar = {
+                model: values.model,
+                year: values.year,
+                price: values.price,
+                image: values.image,
+                title: values.title,
+                description: values.description,
+            };
+            const response = await axios.post(
+                `http://localhost:3000/add-car/`,
+                addCar,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
             );
-            console.log(fileList);
-            return;
+            setCars([...cars, { key: `${cars.length + 1}`, ...values }]);
+            message.success("Avtomobil muvaffaqiyatli qo'shildi!");
+            setIsModalOpen(false);
+            form.resetFields();
+        } catch (error) {
+            message.error(error.response?.data?.message);
         }
-
-        const newCar = {
-            ...values,
-            key: `${cars.length + 1}`,
-            image: file.url || URL.createObjectURL(file.originFileObj),
-        };
-
-        setCars([...cars, newCar]);
-        message.success("Avtomobil muvaffaqiyatli qo'shildi!");
-
-        setFileList([]);
-        setIsModalOpen(false);
-        form.resetFields();
-
-        URL.revokeObjectURL(file.originFileObj);
     };
     const handleFileChange = ({ fileList: newFileList }) => {
         if (newFileList.length > 0 && newFileList[0].originFileObj) {
@@ -255,10 +282,11 @@ const AdminPanel = () => {
         try {
             const token = localStorage.getItem("authToken");
             const updateData = {
-                carsModel: values.model,
+                model: values.model,
                 year: values.year,
                 price: values.price,
                 image: values.image,
+                title: values.title,
             };
 
             const response = await axios.put(
@@ -266,7 +294,7 @@ const AdminPanel = () => {
                 updateData,
                 {
                     headers: {
-                        "Content-Type": "application/json",
+                        "Content-Type": "Formdata",
                         Authorization: `Bearer ${token}`,
                     },
                 }
@@ -277,15 +305,15 @@ const AdminPanel = () => {
                 setActionModal(false);
                 setEditingCar(null);
                 form.resetFields();
-                window.location.reload();
-                message.success("Avtomobil muvaffaqicyatli o'zgartirildi!");
+                message.success("Avtomobil muvaffaqiyatli o'zgartirildi!");
             }
         } catch (error) {
-            console.error("Xatolik:", error.response?.data || error.message);
-            message.error(
-                error.response?.data?.message ||
-                    "Avtomobil ma'lumotlarini yangilashda xatolik yuz berdi!"
-            );
+            const errorMessage =
+                error?.response?.data?.message ||
+                error.message ||
+                "Avtomobil ma'lumotlarini yangilashda xatolik yuz berdi!";
+            console.error("Xatolik:", errorMessage);
+            message.error(errorMessage);
         }
     };
 
