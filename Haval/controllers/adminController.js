@@ -1,9 +1,8 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
-const Admin = require('../models/Admin');
-const adminSchema = require("../validators/add_admin.validate.js")
-
+const Admin = require("../models/Admin");
+const adminSchema = require("../validators/add_admin.validate.js");
 
 exports.getAllAdmin = async (req, res) => {
     try {
@@ -65,7 +64,7 @@ exports.createAdmin = async (req, res) => {
             const errMsg = error.details[0].message;
             req.flash("adminError", errMsg);
         }
-        
+
         const hashedPassword = await bcrypt.hash(password, 10);
 
         await Admin.create({ adminName, email, password: hashedPassword });
@@ -99,11 +98,9 @@ exports.updateAdmin = async (req, res) => {
                 _id: { $ne: id },
             });
             if (existingAdmin) {
-                return res
-                    .status(400)
-                    .json({
-                        error: "Bu ism bilan boshqa admin allaqachon mavjud.",
-                    });
+                return res.status(400).json({
+                    error: "Bu ism bilan boshqa admin allaqachon mavjud.",
+                });
             }
             updateData.adminName = adminName;
         }
@@ -119,22 +116,18 @@ exports.updateAdmin = async (req, res) => {
                 _id: { $ne: id },
             });
             if (existingAdmin) {
-                return res
-                    .status(400)
-                    .json({
-                        error: "Bu email bilan boshqa admin allaqachon mavjud.",
-                    });
+                return res.status(400).json({
+                    error: "Bu email bilan boshqa admin allaqachon mavjud.",
+                });
             }
             updateData.email = email;
         }
 
         if (password) {
             if (password.length < 6) {
-                return res
-                    .status(400)
-                    .json({
-                        error: "Parol kamida 6 ta belgidan iborat bo'lishi kerak.",
-                    });
+                return res.status(400).json({
+                    error: "Parol kamida 6 ta belgidan iborat bo'lishi kerak.",
+                });
             }
             const hashedPassword = await bcrypt.hash(password, 10);
             updateData.password = hashedPassword;
@@ -144,16 +137,13 @@ exports.updateAdmin = async (req, res) => {
             new: true,
         });
 
-
-    if (!updatedAdmin) {
-      return res.status(404).json({ error: "Admin topilmadi." });
-    }
+        if (!updatedAdmin) {
+            return res.status(404).json({ error: "Admin topilmadi." });
+        }
         return res.status(200).json({
             message: "Admin muvaffaqiyatli yangilandi",
             data: updatedAdmin,
         });
-      
-
     } catch (error) {
         console.error("Adminni yangilashda xatolik:", error);
         return res.status(500).json({ error: "Server xatosi yuz berdi." });

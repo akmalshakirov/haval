@@ -13,6 +13,7 @@ import {
     Tooltip,
     Switch,
     Popconfirm,
+    Spin,
 } from "antd";
 import {
     HomeOutlined,
@@ -46,16 +47,17 @@ const AdminPanel = () => {
         isOpen: false,
         image: "",
     });
-    const [fileList, setFileList] = useState([]);
     const [form] = Form.useForm();
+    const [fileList, setFileList] = useState([]);
     const [actionModal, setActionModal] = useState(false);
     const [aActionModal, setAactionModal] = useState(false);
     const [editingAdmin, setEditingAdmin] = useState(null);
-    const navigate = useNavigate();
     const [isCardView, setIsCardView] = useState(true);
     const [editingCar, setEditingCar] = useState(null);
     const [deleteModal, setDeleteModal] = useState(false);
     const [carToDelete, setCarToDelete] = useState(null);
+    const [loader, setLoader] = useState(true);
+    const navigate = useNavigate();
 
     const fetchCars = async () => {
         try {
@@ -65,12 +67,15 @@ const AdminPanel = () => {
                 return;
             }
 
-            const response = await axios.get("http://localhost:3000/cars", {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            const response = await axios.get(
+                "https://haval-uz.onrender.com/cars",
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
             setCars([response.data.cars]);
             console.log(
                 "Kelgan ma'lumotlar (avtomobillar):",
@@ -95,12 +100,15 @@ const AdminPanel = () => {
                 return;
             }
 
-            const response = await axios.get("http://localhost:3000/admins", {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            const response = await axios.get(
+                "https://haval-uz.onrender.com/admins",
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
             setAdmins([response.data.admins]);
             console.log("Kelgan ma'lumotlar:", response.data.admins);
         } catch (error) {
@@ -109,6 +117,8 @@ const AdminPanel = () => {
                 error.response?.data || error.message || error
             );
             message.error("Adminlar yuklanishda xatolik yuz berdi!");
+        } finally {
+            setLoader(false);
         }
     };
 
@@ -129,7 +139,7 @@ const AdminPanel = () => {
                 password: values.password,
             };
             const response = await axios.post(
-                `http://localhost:3000/add-admin/`,
+                `https://haval-uz.onrender.com/add-admin`,
                 addAdmin,
                 {
                     headers: {
@@ -157,7 +167,7 @@ const AdminPanel = () => {
             };
 
             const response = await axios.put(
-                `http://localhost:3000/admins/${editingAdmin._id}`,
+                `https://haval-uz.onrender.com/admins/${editingAdmin._id}`,
                 updateData,
                 {
                     headers: {
@@ -187,7 +197,7 @@ const AdminPanel = () => {
         try {
             const token = localStorage.getItem("authToken");
             const response = await axios.delete(
-                `http://localhost:3000/admins/${adminId}`,
+                `https://haval-uz.onrender.com/admins/${adminId}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -248,7 +258,7 @@ const AdminPanel = () => {
                 description: values.description,
             };
             const response = await axios.post(
-                `http://localhost:3000/add-car/`,
+                `https://haval-uz.onrender.com/add-car`,
                 addCar,
                 {
                     headers: {
