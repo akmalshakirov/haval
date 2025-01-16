@@ -23,7 +23,7 @@ const AdminLogin = () => {
     const handleSubmit = async () => {
         try {
             const response = await axios.post(
-                "http://localhost:3000/login",
+                "https://haval-uz.onrender.com/login",
                 {
                     email: email,
                     password: inputPasswordValue,

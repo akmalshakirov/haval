@@ -14,7 +14,7 @@ function AdminNews() {
                 return;
             }
 
-            const response = await axios.get("http://localhost:3000/news/", {
+            const response = await axios.get("http://localhost:3000/news", {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
@@ -50,7 +50,6 @@ function AdminNews() {
                             cover={<img src={item.image} />}
                             style={{ maxWidth: 240 }}>
                             <p>{item.title}</p>
-                            <p>{shortText(item.description)}</p>
                             <footer>
                                 <a href={item.link}>Batafsil {item.link}</a>
                             </footer>

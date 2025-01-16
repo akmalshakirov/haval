@@ -1,5 +1,5 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const Admin = require('../models/Admin');
 const {adminSchema} = require("../validators/add_admin.validate.js")
@@ -48,6 +48,7 @@ exports.createAdmin = async (req, res) => {
         
         const hashedPassword = await bcrypt.hash(value.password, 10);
 
+
         await Admin.create({ 
             adminName: value.adminName, 
             email: value.email, 
@@ -85,12 +86,11 @@ exports.updateAdmin = async (req, res) => {
     if (!updatedAdmin) {
       return res.status(404).json({ error: "Yangi Admin topilmadi." });
     }
+
         return res.status(200).json({
             message: "Admin muvaffaqiyatli yangilandi",
             data: updatedAdmin,
         });
-      
-
     } catch (error) {
         console.error("Adminni yangilashda xatolik:", error);
         return res.status(500).json({ error: "Server xatosi yuz berdi." });
