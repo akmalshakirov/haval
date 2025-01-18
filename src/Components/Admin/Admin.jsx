@@ -87,6 +87,8 @@ const AdminPanel = () => {
                 error.response?.data || error.message || error
             );
             message.error("Avtomobillarni yuklanishda xatolik yuz berdi!");
+        } finally {
+            setLoader(false);
         }
     };
 
@@ -128,6 +130,7 @@ const AdminPanel = () => {
             fetchCars();
             fetchAdmins();
         }
+        document.title = "Haval Admin Panel";
     }, []);
 
     const handleAddAdmin = async (values) => {
@@ -153,11 +156,14 @@ const AdminPanel = () => {
             setIsModalOpen(false);
             form.resetFields();
         } catch (error) {
-            message.error(error.response?.data?.message);
+            message.error(
+                `Admin qoshishda xatolik yuz berdi: ${error.response?.data?.message}`
+            );
         }
     };
 
     const handleEditAdmin = async (values) => {
+        // EDIT
         try {
             const token = localStorage.getItem("authToken");
             const updateData = {
@@ -167,7 +173,7 @@ const AdminPanel = () => {
             };
 
             const response = await axios.put(
-                `https://haval-uz.onrender.com/admins/${editingAdmin._id}`,
+                `http://localhost:3000/admins/${editingAdmin._id}`,
                 updateData,
                 {
                     headers: {
@@ -187,8 +193,7 @@ const AdminPanel = () => {
         } catch (error) {
             console.error("Xatolik:", error.response?.data || error.message);
             message.error(
-                error.response?.data?.message ||
-                    "Admin ma'lumotlarini yangilashda xatolik yuz berdi!"
+                `Adminni yangilashda xatolik yuz berdi: ${error.response?.data?.message}`
             );
         }
     };
@@ -212,8 +217,7 @@ const AdminPanel = () => {
         } catch (error) {
             console.error("Xatolik:", error.response?.data || error.message);
             message.error(
-                error.response?.data?.message ||
-                    "Adminni o'chirishda xatolik yuz berdi!"
+                `Adminni ochirishda xatolik yuz berdi ${error.response?.data?.message}`
             );
         }
     };
@@ -272,9 +276,12 @@ const AdminPanel = () => {
             setIsModalOpen(false);
             form.resetFields();
         } catch (error) {
-            message.error(error.response?.data?.message);
+            message.error(
+                `Avtomobil qoshishda xatolik yuz berdi: ${error.response?.data?.message}`
+            );
         }
     };
+
     const handleFileChange = ({ fileList: newFileList }) => {
         if (newFileList.length > 0 && newFileList[0].originFileObj) {
             const reader = new FileReader();
@@ -500,11 +507,25 @@ const AdminPanel = () => {
                                     onClick={() => setIsModalOpen(true)}>
                                     Admin qo'shish
                                 </Button>
-                                <Table
-                                    key={admins[0]?.id}
-                                    columns={columnsAdmins}
-                                    dataSource={admins[0]}
-                                />
+                                {loader ? (
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            gap: "20px",
+                                            marginTop: "50px",
+                                        }}>
+                                        <h1>Yuklanmoqda</h1>
+                                        <Spin size='large' />
+                                    </div>
+                                ) : (
+                                    <Table
+                                        key={admins[0]?.id}
+                                        columns={columnsAdmins}
+                                        dataSource={admins[0]}
+                                    />
+                                )}
                                 <Modal
                                     title='Yangi Admin Qoshish'
                                     open={isModalOpen}
@@ -569,6 +590,7 @@ const AdminPanel = () => {
                                     </Form>
                                 </Modal>
                                 <Modal
+                                    // GJPIQNEHGPUBHRNOFBN
                                     title='Adminni Tahrirlash'
                                     open={aActionModal}
                                     onCancel={() => setAactionModal(false)}
@@ -641,16 +663,25 @@ const AdminPanel = () => {
                                     />
                                 </div>
                                 {isCardView ? (
-                                    // <Table
-                                    //     dataSource={cars}
-                                    //     columns={columnsCars}
-                                    //     key={cars[0]?.id}
-                                    // />
-                                    <Table
-                                        key={cars[0]?.id}
-                                        columns={columnsCars}
-                                        dataSource={cars[0]}
-                                    />
+                                    loader ? (
+                                        <div
+                                            style={{
+                                                display: "flex",
+                                                justifyContent: "center",
+                                                alignItems: "center",
+                                                gap: "20px",
+                                                marginTop: "50px",
+                                            }}>
+                                            <h1>Yuklanmoqda</h1>
+                                            <Spin size='large' />
+                                        </div>
+                                    ) : (
+                                        <Table
+                                            key={cars[0]?.id}
+                                            columns={columnsCars}
+                                            dataSource={cars[0]}
+                                        />
+                                    )
                                 ) : (
                                     <div
                                         style={{
