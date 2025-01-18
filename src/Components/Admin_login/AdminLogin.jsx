@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Input, Button, Checkbox, Typography, Card, message } from "antd";
 import "./AdminLogin.css";
 import axios from "axios";
@@ -19,6 +19,10 @@ const AdminLogin = () => {
     const handleShowPassword = (e) => {
         setInputPasswordValue(e.target.value);
     };
+
+    useEffect(() => {
+        document.title = "Haval Admin Login";
+    }, []);
 
     const handleSubmit = async () => {
         try {
