@@ -33,25 +33,46 @@ const getCars = async (req, res) => {
 
 
 const addCar = async (req, res) => {
-  const { model, title, description, year, price, image } = req.body;
+  const { model, title, description, year, price } = req.body;
 
   try {
-   
-    const { data, error } = await supabase
-      .from('cars') 
-      .insert([{ model, title, description, year, price, image }]);
+    const bucketName = 'Haval';
+    const fileName = `${Date.now()}_${req.file.originalname}`;
 
-    if (error) {
-      console.log(error);
-      return res.status(500).json({ error: 'Ma\'lumot qo\'shishda xatolik yuz berdi.' });
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from(bucketName)
+      .upload(fileName, req.file.buffer, {
+        contentType: req.file.mimetype,
+      });
+
+    if (uploadError) {
+      console.error('Tasvirni yuklashda xato:', uploadError.message);
+      return res.status(500).json({ error: 'Tasvirni yuklashda xatolik yuz berdi.' });
     }
+
+    const { data: publicUrlData } = supabase.storage
+      .from(bucketName)
+      .getPublicUrl(fileName);
+
+    const imageUrl = publicUrlData.publicUrl;
+
+    const carData = {
+      model,
+      title,
+      description,
+      year,
+      price,
+      image: imageUrl,
+    };
+
+    const result = await CarModel.create(carData);
 
     res.status(200).json({
       message: 'Mashina muvaffaqiyatli qo\'shildi',
-      data,
+      data: result,
     });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: 'Ichki server xatosi yuz berdi.' });
   }
 
@@ -61,57 +82,50 @@ const updateCar = async (req, res) => {
   const { id } = req.params;
   const { model, title, description, year, price } = req.body;
 
-  const image = req.file ? req.file.buffer.toString('base64') : null;
-
   try {
-    const { data: existingCar, error: checkError } = await supabase
-      .from('cars')
-      .select('*')
-      .eq('model', model)
-      .eq('title', title)
-      .eq('description', description)
-      .eq('year', year)
-      .eq('price', price)
-      .neq('id', id) 
-      .single();
+    let imageUrl;
 
-    if (checkError) {
-      console.log(checkError);
-      return res.status(500).json({ error: 'Ma\'lumotni tekshirishda xatolik yuz berdi.' });
-    }
+    if (req.file) {
+      const bucketName = 'Haval';
+      const fileName = `${Date.now()}_${req.file.originalname}`;
 
-    if (existingCar) {
-      return res.status(400).json({ error: 'Bunday mashina allaqachon mavjud.' });
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from(bucketName)
+        .upload(fileName, req.file.buffer, {
+          contentType: req.file.mimetype,
+        });
+
+      if (uploadError) {
+        console.error('Tasvirni yuklashda xato:', uploadError.message);
+        return res.status(500).json({ error: 'Tasvirni yuklashda xatolik yuz berdi.' });
+      }
+
+      const { data: publicUrlData } = supabase.storage
+        .from(bucketName)
+        .getPublicUrl(fileName);
+
+      imageUrl = publicUrlData.publicUrl;
     }
 
     const updateData = { model, title, description, year, price };
-    if (image) updateData.image = image;
+    if (imageUrl) updateData.image = imageUrl;
 
-    const { data, error } = await supabase
-      .from('cars')
-      .update(updateData)
-      .eq('id', id);
+    const result = await CarModel.findByIdAndUpdate(id, updateData, { new: true });
 
-    if (error) {
-      console.log(error);
-      return res.status(500).json({ error: 'Ma\'lumotni yangilashda xatolik yuz berdi.' });
-    }
-
-    if (!data.length) {
+    if (!result) {
       return res.status(404).json({ error: 'Mashina topilmadi.' });
     }
 
     res.status(200).json({
       message: 'Mashina ma\'lumotlari yangilandi',
-      data: data[0],
+      data: result,
     });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: 'Ichki server xatosi yuz berdi.' });
   }
 
 };
-
 
 
 const deleteCar = async (req, res) => {
