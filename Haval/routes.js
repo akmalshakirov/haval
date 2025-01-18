@@ -1,3 +1,5 @@
+const multer = require("multer")
+const upload = multer()
 const {
     getAllAdmin,
     createAdmin,
@@ -104,6 +106,7 @@ router
         "/add-car",
         jwtAccessMiddleware,
         roleAccessMiddleware(["admin"]),
+        upload.single("image"),
         addCar
     )
     .put(

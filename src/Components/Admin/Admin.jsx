@@ -262,7 +262,7 @@ const AdminPanel = () => {
                 description: values.description,
             };
             const response = await axios.post(
-                `https://haval-uz.onrender.com/add-car`,
+                `http://localhost:3000/add-car`,
                 addCar,
                 {
                     headers: {
