@@ -8,7 +8,6 @@ import "./AdminVideos.css";
 // import AdminVideoImg2 from "../../Images/admin-video-img2.jpg";
 // import AdminVideoImg3 from "../../Images/admin-video-img3.jpg";
 import axios from "axios";
-import Video from "../Video.jsx";
 
 // const initialCardsData = [
 //     {
@@ -66,7 +65,7 @@ const AdminVideos = () => {
                     },
                 }
             );
-            setVideos([response.data]);
+            setVideos(response.data);
             console.log("Kelgan ma'lumotlar (video):", response.data);
         } catch (error) {
             console.error("Xatolik", error.response.data);
@@ -196,7 +195,6 @@ const AdminVideos = () => {
                     <p key={index}>{item.status}</p>;
                 })}
             </div>
-            <Video />
         </div>
     );
 };
