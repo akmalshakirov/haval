@@ -30,7 +30,7 @@ import {
     UserOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import AdminVideos from "./AdminVideos";
+import AdminVideos from "../Admin_videos/AdminVideos";
 import axios from "axios";
 import "./Admin.css";
 import AdminNews from "../Admin_news/AdminNews";
@@ -221,78 +221,82 @@ const AdminPanel = () => {
             );
         }
     };
+    // if (fileList.length === 0) {
+    //     message.error("Iltimos, avtomobil rasmni yuklang!");
+    //     return;
+    // }
 
+    // const file = fileList[0];
+    // if (!file.originFileObj) {
+    //     message.error(
+    //         "Noto'g'ri fayl formati yoki fayl obyekti mavjud emas!"
+    //     );
+    //     console.log(fileList);
+    //     return;
+    // }
+
+    // const newCar = {
+    //     ...values,
+    //     key: `${cars.length + 1}`,
+    //     image: file.url || URL.createObjectURL(file.originFileObj),
+    // };
+
+    // setCars([...cars, newCar]);
+    // message.success("Avtomobil muvaffaqiyatli qo'shildi!");
+
+    // setFileList([]);
+    // setIsModalOpen(false);
+    // form.resetFields();
+
+    // URL.revokeObjectURL(file.originFileObj);
     const handleAddCar = async (values) => {
-        // if (fileList.length === 0) {
-        //     message.error("Iltimos, avtomobil rasmni yuklang!");
-        //     return;
-        // }
-
-        // const file = fileList[0];
-        // if (!file.originFileObj) {
-        //     message.error(
-        //         "Noto'g'ri fayl formati yoki fayl obyekti mavjud emas!"
-        //     );
-        //     console.log(fileList);
-        //     return;
-        // }
-
-        // const newCar = {
-        //     ...values,
-        //     key: `${cars.length + 1}`,
-        //     image: file.url || URL.createObjectURL(file.originFileObj),
-        // };
-
-        // setCars([...cars, newCar]);
-        // message.success("Avtomobil muvaffaqiyatli qo'shildi!");
-
-        // setFileList([]);
-        // setIsModalOpen(false);
-        // form.resetFields();
-
-        // URL.revokeObjectURL(file.originFileObj);
         try {
             const token = localStorage.getItem("authToken");
-            const addCar = {
-                model: values.model,
-                year: values.year,
-                price: values.price,
-                image: values.image,
-                title: values.title,
-                description: values.description,
-            };
+
+            const formData = new FormData();
+            formData.append("model", values.model);
+            formData.append("year", values.year);
+            formData.append("price", values.price);
+            formData.append("image", fileList);
+
             const response = await axios.post(
                 `https://haval-uz.onrender.com/add-car`,
-                addCar,
+                formData,
                 {
                     headers: {
-                        "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,
                     },
                 }
             );
+
             setCars([...cars, { key: `${cars.length + 1}`, ...values }]);
             message.success("Avtomobil muvaffaqiyatli qo'shildi!");
             setIsModalOpen(false);
             form.resetFields();
         } catch (error) {
+            console.error("Error:", error);
             message.error(
-                `Avtomobil qoshishda xatolik yuz berdi: ${error.response?.data?.message}`
+                `Avtomobil qo'shishda xatolik yuz berdi: ${
+                    error.response?.data?.message || error.message
+                }`
             );
         }
     };
 
-    const handleFileChange = ({ fileList: newFileList }) => {
-        if (newFileList.length > 0 && newFileList[0].originFileObj) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                newFileList[0].url = reader.result;
-                setFileList(newFileList);
-            };
-            reader.readAsDataURL(newFileList[0].originFileObj);
-        } else {
-            setFileList(newFileList);
-        }
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        // if (newFileList.length > 0 && newFileList[0].originFileObj) {
+        //     const reader = new FileReader();
+        //     reader.onload = () => {
+        //         newFileList[0].url = reader.result;
+        //         setFileList(newFileList);
+        //     };
+        //     reader.readAsDataURL(newFileList[0].originFileObj);
+        // } else {
+        //     setFileList(newFileList);
+        // }
+        setFileList(file);
+        console.log("ok", file);
     };
 
     const handleEditCar = async (values) => {
@@ -820,10 +824,12 @@ const AdminPanel = () => {
                                             <Input />
                                         </Form.Item>
                                         <Form.Item label='Avtomobil rasmi'>
-                                            <Upload
+                                            {/* <Upload
                                                 listType='picture-card'
                                                 fileList={fileList}
-                                                onChange={handleFileChange}
+                                                onChange={(fileList) =>
+                                                    handleFileChange(fileList)
+                                                }
                                                 beforeUpload={() => false}
                                                 maxCount={1}>
                                                 {fileList.length >= 1 ? null : (
@@ -837,7 +843,18 @@ const AdminPanel = () => {
                                                         </div>
                                                     </div>
                                                 )}
-                                            </Upload>
+                                            </Upload> */}
+                                            <input
+                                                accept='/image*'
+                                                type='file'
+                                                name='image'
+                                                id='pic'
+                                                // value
+                                                onChange={(e) =>
+                                                    handleFileChange(e)
+                                                }
+                                            />
+
                                             {editingCar && !fileList.length && (
                                                 <Image
                                                     src={editingCar.image}
