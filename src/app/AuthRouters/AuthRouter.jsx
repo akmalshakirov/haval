@@ -1,9 +1,13 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import "./AuthRouters.css";
 
 function AuthRouter() {
     return (
-        <div>
-            <h1>NOTHING</h1> <a href='/'>{window.location.href}</a>
+        <div className='not-found-page'>
+            <Link to='/' className='not-found-page-link'>
+                Orqaga qaytish
+            </Link>
         </div>
     );
 }
