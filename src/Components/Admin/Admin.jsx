@@ -262,6 +262,8 @@ const AdminPanel = () => {
             const response = await axios.post(
                 `https://haval-uz.onrender.com/add-car`,
                 formData,
+                `http://localhost:3000/add-car`,
+                addCar,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
