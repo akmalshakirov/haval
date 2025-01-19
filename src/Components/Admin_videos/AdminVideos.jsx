@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import { EditOutlined } from "@ant-design/icons";
-import { Card, Modal, Input, Button, message } from "antd";
+import { Card, Modal, Input, Button, message, Spin } from "antd";
 // const { Meta } = Card;
 import "./AdminVideos.css";
 
@@ -39,6 +39,7 @@ const AdminVideos = () => {
     // const [newTitle, ssetNewTitle] = useState("");
     // const [newVideoUrls, setNewVideoUrl] = useState("");
     const [videos, setVideos] = useState([]);
+    const [loader, setLoader] = useState(true);
 
     // const showModal = (id) => {
     //     setActiveCardId(id);
@@ -69,6 +70,8 @@ const AdminVideos = () => {
             console.log("Kelgan ma'lumotlar (video):", response.data);
         } catch (error) {
             console.error("Xatolik", error.response.data);
+        } finally {
+            setLoader(false);
         }
     };
     useEffect(() => {
@@ -118,7 +121,7 @@ const AdminVideos = () => {
     // };
 
     return (
-        <div className='cards'>
+        <div className='admin-videos'>
             {/* {cards.map((card) => (
                 <div className='card' key={card.id}>
                     <Card
@@ -189,12 +192,41 @@ const AdminVideos = () => {
                     </div>
                 </div>
             </Modal> */}
-            Videos,
-            <div>
-                {videos.map((item, index) => {
-                    <p key={index}>{item.status}</p>;
-                })}
-            </div>
+            {loader ? (
+                <div
+                    style={{
+                        display: "flex",
+                        width: "100%",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: "20px",
+                        marginTop: "50px",
+                    }}>
+                    <h1>Yuklanmoqda</h1>
+                    <Spin size='large' />
+                </div>
+            ) : (
+                <div className='admin-cards'>
+                    <h1>Videos</h1>
+                    {videos.map((item, index) => {
+                        return (
+                            <>
+                                <Card key={index} style={{ maxWidth: 240 }}>
+                                    <video
+                                        src={item.video}
+                                        muted
+                                        autoPlay></video>
+                                    <h3>{item.title}</h3>
+                                    <p>{item.description}</p>
+                                    <a href={item.video} target='_blank'>
+                                        Batafsil
+                                    </a>
+                                </Card>
+                            </>
+                        );
+                    })}
+                </div>
+            )}
         </div>
     );
 };

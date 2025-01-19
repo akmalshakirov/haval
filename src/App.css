@@ -35,6 +35,10 @@ body {
     scroll-behavior: smooth;
 }
 
+/* .ant-layout-content .css-dev-only-do-not-override-1x0dypw,
+.ant-layout-header .css-dev-only-do-not-override-1x0dypw {
+    background-color: #141414 !important;
+} */
 /* --------------------------------------------- */
 
 /* .container {

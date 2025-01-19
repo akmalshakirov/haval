@@ -61,9 +61,9 @@ function AdminNews() {
                                 cover={<img src={item.image} />}
                                 style={{ maxWidth: 240 }}>
                                 <p>{item.title}</p>
-                                <footer>
+                                <div>
                                     <a href={item.link}>Batafsil {item.link}</a>
-                                </footer>
+                                </div>
                             </Card>
                         </div>
                     ))}

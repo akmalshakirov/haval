@@ -57,6 +57,7 @@ const AdminPanel = () => {
     const [deleteModal, setDeleteModal] = useState(false);
     const [carToDelete, setCarToDelete] = useState(null);
     const [loader, setLoader] = useState(true);
+    const [onClickBtn, setOnClickBtn] = useState(false);
     const navigate = useNavigate();
 
     const fetchCars = async () => {
@@ -92,7 +93,7 @@ const AdminPanel = () => {
         }
     };
 
-    // FETCH_ADMIN ===============================
+    // FETCH_ADMINS===========
 
     const fetchAdmins = async () => {
         try {
@@ -221,34 +222,7 @@ const AdminPanel = () => {
             );
         }
     };
-    // if (fileList.length === 0) {
-    //     message.error("Iltimos, avtomobil rasmni yuklang!");
-    //     return;
-    // }
 
-    // const file = fileList[0];
-    // if (!file.originFileObj) {
-    //     message.error(
-    //         "Noto'g'ri fayl formati yoki fayl obyekti mavjud emas!"
-    //     );
-    //     console.log(fileList);
-    //     return;
-    // }
-
-    // const newCar = {
-    //     ...values,
-    //     key: `${cars.length + 1}`,
-    //     image: file.url || URL.createObjectURL(file.originFileObj),
-    // };
-
-    // setCars([...cars, newCar]);
-    // message.success("Avtomobil muvaffaqiyatli qo'shildi!");
-
-    // setFileList([]);
-    // setIsModalOpen(false);
-    // form.resetFields();
-
-    // URL.revokeObjectURL(file.originFileObj);
     const handleAddCar = async (values) => {
         try {
             const token = localStorage.getItem("authToken");
@@ -262,8 +236,6 @@ const AdminPanel = () => {
             const response = await axios.post(
                 `https://haval-uz.onrender.com/add-car`,
                 formData,
-                `http://localhost:3000/add-car`,
-                addCar,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -287,18 +259,7 @@ const AdminPanel = () => {
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
-        // if (newFileList.length > 0 && newFileList[0].originFileObj) {
-        //     const reader = new FileReader();
-        //     reader.onload = () => {
-        //         newFileList[0].url = reader.result;
-        //         setFileList(newFileList);
-        //     };
-        //     reader.readAsDataURL(newFileList[0].originFileObj);
-        // } else {
-        //     setFileList(newFileList);
-        // }
         setFileList(file);
-        console.log("ok", file);
     };
 
     const handleEditCar = async (values) => {
@@ -444,6 +405,14 @@ const AdminPanel = () => {
     const handleLogout = () => {
         localStorage.removeItem("authToken");
         navigate("/");
+        message.info("BYE BYE🤫");
+    };
+
+    const handleClickBtn = () => {
+        setOnClickBtn(true);
+        setTimeout(() => {
+            setOnClickBtn(false);
+        }, 3000);
     };
 
     return (
@@ -485,6 +454,7 @@ const AdminPanel = () => {
                 />
             </Sider>
             <div style={{ position: "absolute", top: 0, right: 0, margin: 16 }}>
+                <Button type='primary'>Day/night</Button>
                 <Tooltip title='Chiqish' className='tooltip-logout'>
                     <Popconfirm
                         title='Chiqish'
@@ -590,7 +560,9 @@ const AdminPanel = () => {
                                         <Button
                                             type='primary'
                                             htmlType='submit'
-                                            block>
+                                            block
+                                            loading={onClickBtn}
+                                            onClick={handleClickBtn}>
                                             Tasdiqlash
                                         </Button>
                                     </Form>
@@ -637,7 +609,9 @@ const AdminPanel = () => {
                                         <Button
                                             type='primary'
                                             htmlType='submit'
-                                            block>
+                                            block
+                                            loading={onClickBtn}
+                                            onClick={handleClickBtn}>
                                             Tasdiqlash
                                         </Button>
                                     </Form>
@@ -872,7 +846,9 @@ const AdminPanel = () => {
                                         <Button
                                             type='primary'
                                             htmlType='submit'
-                                            block>
+                                            block
+                                            loading={onClickBtn}
+                                            onClick={handleClickBtn}>
                                             Tasdiqlash
                                         </Button>
                                     </Form>
