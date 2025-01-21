@@ -60,6 +60,11 @@ const AdminPanel = () => {
     const [onClickBtn, setOnClickBtn] = useState(false);
     const navigate = useNavigate();
 
+    // [FILE]
+    const hanleCheckFile = (e) => {
+        alert(`Checked ${e.target}`);
+    };
+
     const fetchCars = async () => {
         try {
             const token = localStorage.getItem("authToken");
@@ -113,7 +118,7 @@ const AdminPanel = () => {
                 }
             );
             setAdmins([response.data.admins]);
-            console.log("Kelgan ma'lumotlar:", response.data.admins);
+            console.log("Kelgan ma'lumotlar (admin):", response.data.admins);
         } catch (error) {
             console.error(
                 "Xatolik:",
@@ -234,7 +239,8 @@ const AdminPanel = () => {
             formData.append("image", fileList);
 
             const response = await axios.post(
-                `https://haval-uz.onrender.com/add-car`,
+                // `https://haval-uz.onrender.com/add-car`,
+                `http://localhost:3000/add-car`,
                 formData,
                 {
                     headers: {
@@ -259,6 +265,7 @@ const AdminPanel = () => {
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
+        alert(file);
         setFileList(file);
     };
 
@@ -453,7 +460,15 @@ const AdminPanel = () => {
                     ]}
                 />
             </Sider>
-            <div style={{ position: "absolute", top: 0, right: 0, margin: 16 }}>
+            <div
+                style={{
+                    display: "flex",
+                    gap: "20px",
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                    margin: 16,
+                }}>
                 <Button type='primary'>Day/night</Button>
                 <Tooltip title='Chiqish' className='tooltip-logout'>
                     <Popconfirm
@@ -568,7 +583,7 @@ const AdminPanel = () => {
                                     </Form>
                                 </Modal>
                                 <Modal
-                                    // GJPIQNEHGPUBHRNOFBN
+                                    // EDITADMIN
                                     title='Adminni Tahrirlash'
                                     open={aActionModal}
                                     onCancel={() => setAactionModal(false)}
@@ -799,7 +814,7 @@ const AdminPanel = () => {
                                             ]}>
                                             <Input />
                                         </Form.Item>
-                                        <Form.Item label='Avtomobil rasmi'>
+                                        <Form.Item label='Avtomobil rasmi:'>
                                             {/* <Upload
                                                 listType='picture-card'
                                                 fileList={fileList}
@@ -821,11 +836,8 @@ const AdminPanel = () => {
                                                 )}
                                             </Upload> */}
                                             <input
-                                                accept='/image*'
+                                                accept='image/*'
                                                 type='file'
-                                                name='image'
-                                                id='pic'
-                                                // value
                                                 onChange={(e) =>
                                                     handleFileChange(e)
                                                 }
@@ -944,11 +956,11 @@ const AdminPanel = () => {
                         ]}>
                         <Input />
                     </Form.Item>
-                    <Form.Item label='Avtomobil rasmi'>
-                        <Upload
+                    <Form.Item label='Avtomobil rasmi:'>
+                        {/* <Upload
                             listType='picture-card'
                             fileList={fileList}
-                            onChange={handleFileChange}
+                         Kelgan ma'lumotlar
                             beforeUpload={() => false}
                             maxCount={1}>
                             {fileList.length >= 1 ? null : (
@@ -962,10 +974,23 @@ const AdminPanel = () => {
                             <Image
                                 src={editingCar.image}
                                 alt='Current image'
-                                style={{ width: 100, marginTop: 8 }}
+                                style={{ width: 100, margninTop: 8 }}
                                 preview={true}
                             />
-                        )}
+                        )} */}
+                        <input
+                            type='file'
+                            accept='image/*'
+                            id='edit-car'
+                            className='edit-car-input'
+                            onChange={hanleCheckFile}
+                        />
+                        <label
+                            htmlFor='edit-car'
+                            title='Rasm tanlash'
+                            className='edit-car-label'>
+                            Rasm tanlash
+                        </label>
                     </Form.Item>
                     <Button type='primary' htmlType='submit' block>
                         Saqlash

@@ -22,10 +22,24 @@
 .custom-preview-mask {
     max-height: 92.5%;
 }
-.custom-preview-image {
+/* .custom-preview-image {
     height: 1% !important;
-}
+} */
 .tooltip-logout {
     margin-right: 10px;
     position: relative;
+}
+.edit-car-input {
+    /* display: none !important; */
+    content-visibility: hidden;
+}
+.edit-car-label {
+    border: 3px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.edit-car-label:hover {
+    border-color: #868686;
 }
