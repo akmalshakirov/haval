@@ -12,10 +12,7 @@ app.use(cookieParser());
 db()
 
 app.use(express.json());
-app.use(cors({
-  origin: "http://localhost:5173", 
-  methods: ["POST", "GET", "PUT", "DELETE"],
-}));
+app.use(cors());
 app.use(helmet());
 
 
