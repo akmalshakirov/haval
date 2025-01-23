@@ -62,7 +62,7 @@ const AdminPanel = () => {
 
     // [FILE]
     const hanleCheckFile = (e) => {
-        alert(`Checked ${e.target}`);
+        alert(`Checked ${e.target.image[0]}`);
     };
 
     const fetchCars = async () => {
@@ -676,6 +676,11 @@ const AdminPanel = () => {
                                             columns={columnsCars}
                                             dataSource={cars[0]}
                                         />
+                                        // <Table
+                                        //     key={cars.id}
+                                        //     columns={columnsCars}
+                                        //     dataSource={cars}
+                                        // />
                                     )
                                 ) : (
                                     <div
@@ -685,6 +690,7 @@ const AdminPanel = () => {
                                                 "repeat(auto-fill, minmax(300px, 1fr))",
                                             gap: "20px",
                                         }}>
+                                        {/* {cars.map((car) => ( */}
                                         {cars[0].map((car) => (
                                             <div
                                                 key={car.id}
