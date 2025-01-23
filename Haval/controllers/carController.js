@@ -139,25 +139,38 @@ const updateCar = async (req, res) => {
 };
 
 const deleteCar = async (req, res) => {
-    const { id } = req.params;
+    const carId = req.params.id;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).json({ error: "Yaroqsiz ID" });
+  try {
+    const car = await Car.findOne({ _id: new ObjectId(carId) });
+
+    if (!car) {
+      return res.status(404).json({ message: "Mashina topilmadi" });
     }
 
-    try {
-        const car = await Car.findById(id);
-        if (!car) {
-            return res.status(404).json({ error: "Mashina topilmadi" });
-        }
+    if (car.imagePath) {
+      const { error: deleteError } = await supabase
+        .storage
+        .from("Haval")
+        .remove([car.imagePath]);
 
-        await Car.findByIdAndDelete(id);
-
-        res.status(200).json({ message: "Mashina muvaffaqiyatli o‘chirildi" });
-    } catch (error) {
-        console.error("Carni o'chirishda xato:", error);
-        res.status(500).json({ error: "Serverda xatolik yuz berdi" });
+      if (deleteError) {
+        console.error("Supabase rasmni o'chirishda xatolik:", deleteError.message);
+        return res.status(500).json({ message: "Rasmni o'chirishda xatolik yuz berdi." });
+      }
     }
+
+    const deleteResult = await Car.deleteOne({ _id: new ObjectId(carId) });
+
+    if (deleteResult.deletedCount === 0) {
+      return res.status(404).json({ message: "Mashina o'chirilmadi" });
+    }
+
+    res.status(200).json({ message: "Mashina muvaffaqiyatli o'chirildi" });
+  } catch (error) {
+    console.error("Xatolik:", error);
+    res.status(500).json({ message: "Xatolik yuz berdi" });
+  }
 };
 
 module.exports = { getCars, addCar, updateCar, deleteCar };
