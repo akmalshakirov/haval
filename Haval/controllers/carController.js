@@ -41,7 +41,7 @@ const addCar = async (req, res) => {
         }
         const bucketName = "Haval";
         const { buffer, originalname } = req.file;
-        const fileName = `${Date.now()}_${originalname}`;
+        const fileName = `cars/${Date.now()}_${originalname}`;
 
         const { data: uploadData, error: uploadError } = await supabase.storage
             .from(bucketName)
@@ -66,14 +66,14 @@ const addCar = async (req, res) => {
 
         const carData = {
             model,
-            title,
-            description,
+            // title,
+            // description,
             year,
             price,
             image: imageUrl,
         };
 
-        const result = await CarModel.create(carData);
+        const result = await Car.create(carData);
 
         res.status(200).json({
             message: "Mashina muvaffaqiyatli qo'shildi",
