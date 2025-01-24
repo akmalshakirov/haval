@@ -90,32 +90,38 @@ const updateCar = async (req, res) => {
     const { model, title, description, year, price } = req.body;
 
     try {
-        let imageUrl;
 
-        if (req.file) {
-            const bucketName = "Haval";
-            const fileName = `${Date.now()}_${req.file.originalname}`;
-
-            const { data: uploadData, error: uploadError } =
-                await supabase.storage
-                    .from(bucketName)
-                    .upload(fileName, req.file.buffer, {
-                        contentType: req.file.mimetype,
-                    });
-
-            if (uploadError) {
-                console.error("Tasvirni yuklashda xato:", uploadError.message);
-                return res
-                    .status(500)
-                    .json({ error: "Tasvirni yuklashda xatolik yuz berdi." });
-            }
-
-            const { data: publicUrlData } = supabase.storage
-                .from(bucketName)
-                .getPublicUrl(fileName);
-
-            imageUrl = publicUrlData.publicUrl;
+        if (!req.file) {
+            console.log(req.file);
+            return res.status(404).json({
+                message: "Fayl topilmadi",
+            });
         }
+        const bucketName = "Haval";
+        const { buffer, originalname } = req.file;
+        const fileName = `${Date.now()}_${originalname}`;
+
+        const { data: uploadData, error: uploadError } = await supabase.storage
+            .from(bucketName)
+            .upload(fileName, buffer, {
+                casheControl: "3600",
+                upsert: false,
+                contentType: req.file.mimetype,
+            });
+
+        if (uploadError) {
+            console.error("Tasvirni yuklashda xato:", uploadError.message);
+            return res
+                .status(500)
+                .json({ error: "Tasvirni yuklashda xatolik yuz berdi." });
+        }
+
+        const { data: publicUrlData } = supabase.storage
+            .from(bucketName)
+            .getPublicUrl(fileName);
+
+        const imageUrl = publicUrlData.publicUrl;
+
 
         const updateData = { model, title, description, year, price };
         if (imageUrl) updateData.image = imageUrl;
@@ -123,10 +129,6 @@ const updateCar = async (req, res) => {
         const result = await CarModel.findByIdAndUpdate(id, updateData, {
             new: true,
         });
-
-        if (!result) {
-            return res.status(404).json({ error: "Mashina topilmadi." });
-        }
 
         res.status(200).json({
             message: "Mashina ma'lumotlari yangilandi",

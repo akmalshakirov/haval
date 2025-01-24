@@ -75,23 +75,34 @@ exports.updateAdmin = async (req, res) => {
 
         const { value, error } = adminSchema.validate(body);
 
-        // const hashedPassword = await bcrypt.hash(value.password, 10);
+        const hashedPassword = await bcrypt.hash(value.password, 10);
 
-        const admin = {
-            adminName: value.adminName,
-            email: value.email,
-            // password: hashedPassword,
-        };
-
+      if(value.password){
+            const admin = {
+                adminName: value.adminName,
+                email: value.email,
+                password: hashedPassword,
+            };
         const updatedAdmin = await Admin.findByIdAndUpdate(id, admin);
 
-        if (!updatedAdmin) {
-            return res.status(404).json({ error: "Yangi Admin topilmadi." });
-        }
         return res.status(200).json({
             message: "Admin muvaffaqiyatli yangilandi",
             data: updatedAdmin,
         });
+        
+        } else {
+            const admin = {
+                adminName: value.adminName,
+                email: value.email
+            }
+        const updatedAdmin = await Admin.findByIdAndUpdate(id, admin);    
+        
+        return res.status(200).json({
+            message: "Admin muvaffaqiyatli yangilandi",
+            data: updatedAdmin,
+        });        
+        }        
+
     } catch (error) {
         console.error("Adminni yangilashda xatolik:", error);
         return res.status(500).json({ error: "Server xatosi yuz berdi." });
