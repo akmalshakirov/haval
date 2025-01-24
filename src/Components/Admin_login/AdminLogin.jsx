@@ -11,7 +11,7 @@ const AdminLogin = () => {
     const [email, setEmail] = useState("");
     const [inputPasswordValue, setInputPasswordValue] = useState("");
     const navigate = useNavigate();
-
+    const [onClick, setOnClick] = useState(false);
     const handleChange = (e) => {
         setEmail(e.target.value);
     };
@@ -25,6 +25,7 @@ const AdminLogin = () => {
     }, []);
 
     const handleSubmit = async () => {
+        setOnClick(true);
         try {
             const response = await axios.post(
                 "https://haval-uz.onrender.com/login",
@@ -49,6 +50,8 @@ const AdminLogin = () => {
             }
         } catch (error) {
             message.error("Username yoki password noto'g'ri!");
+        } finally {
+            setOnClick(false);
         }
     };
 
@@ -112,6 +115,7 @@ const AdminLogin = () => {
                             type='primary'
                             htmlType='submit'
                             className='admin-login-button'
+                            loading={onClick}
                             onClick={handleSubmit}>
                             Вход в админ-панель
                         </Button>
