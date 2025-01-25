@@ -1,13 +1,18 @@
 .admin-videos {
     display: flex;
+    flex-direction: column;
     align-items: center;
     gap: 20px;
 }
 
 .admin-cards {
     display: flex;
-    flex-direction: column;
+    gap: 20px;
     align-items: center;
     justify-content: center;
     text-align: center;
+}
+
+.admin-cards-item {
+    min-height: 200px !important;
 }
