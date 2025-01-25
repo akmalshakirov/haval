@@ -28,6 +28,7 @@ import {
     UnorderedListOutlined,
     IdcardOutlined,
     UserOutlined,
+    ArrowRightOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import AdminVideos from "../Admin_videos/AdminVideos";
@@ -58,11 +59,15 @@ const AdminPanel = () => {
     const [carToDelete, setCarToDelete] = useState(null);
     const [loader, setLoader] = useState(true);
     const [onClickBtn, setOnClickBtn] = useState(false);
+    const [changePass, setChangePass] = useState(false);
+    const [changePassInputValue, setChangePassInputValue] = useState("");
     const navigate = useNavigate();
 
-    // [FILE]
-    const hanleCheckFile = (e) => {
-        alert(`Checked ${e.target.image[0]}`);
+    const handleChangePassInput = (e) => {
+        setChangePassInputValue(e.target.value);
+    };
+    const handleChangePassRight = () => {
+        setChangePass(true);
     };
 
     const fetchCars = async () => {
@@ -74,6 +79,7 @@ const AdminPanel = () => {
             }
 
             const response = await axios.get(
+                // "http://localhost:3000/cars",
                 "https://haval-uz.onrender.com/cars",
                 {
                     headers: {
@@ -165,6 +171,8 @@ const AdminPanel = () => {
             message.error(
                 `Admin qoshishda xatolik yuz berdi: ${error.response?.data?.message}`
             );
+        } finally {
+            setOnClickBtn(false);
         }
     };
 
@@ -175,10 +183,11 @@ const AdminPanel = () => {
             const updateData = {
                 adminName: values.adminName,
                 email: values.email,
-                password: values.password,
+                password: changePassInputValue,
             };
 
             const response = await axios.put(
+                // `https://haval-uz.onrender.com/admins/${editingAdmin._id}`,
                 `http://localhost:3000/admins/${editingAdmin._id}`,
                 updateData,
                 {
@@ -201,6 +210,8 @@ const AdminPanel = () => {
             message.error(
                 `Adminni yangilashda xatolik yuz berdi: ${error.response?.data?.message}`
             );
+        } finally {
+            setOnClickBtn(false);
         }
     };
 
@@ -260,12 +271,13 @@ const AdminPanel = () => {
                     error.response?.data?.message || error.message
                 }`
             );
+        } finally {
+            setOnClickBtn(false);
         }
     };
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
-        alert(file);
         setFileList(file);
     };
 
@@ -417,9 +429,6 @@ const AdminPanel = () => {
 
     const handleClickBtn = () => {
         setOnClickBtn(true);
-        setTimeout(() => {
-            setOnClickBtn(false);
-        }, 3000);
     };
 
     return (
@@ -621,6 +630,32 @@ const AdminPanel = () => {
                                             ]}>
                                             <Input />
                                         </Form.Item>
+                                        <div className='admin-change-password'>
+                                            <p
+                                                onClick={handleChangePassRight}
+                                                className='admin-change-password-text'>
+                                                Parolni o'zgartirish
+                                                {changePass && (
+                                                    <ArrowRightOutlined
+                                                        style={{
+                                                            marginLeft: "5px",
+                                                        }}
+                                                    />
+                                                )}
+                                            </p>
+                                            {changePass && (
+                                                <>
+                                                    <Input.Password
+                                                        value={
+                                                            changePassInputValue
+                                                        }
+                                                        onChange={
+                                                            handleChangePassInput
+                                                        }
+                                                        className='admin-change-password-input'></Input.Password>
+                                                </>
+                                            )}
+                                        </div>
                                         <Button
                                             type='primary'
                                             htmlType='submit'
@@ -989,7 +1024,6 @@ const AdminPanel = () => {
                             accept='image/*'
                             id='edit-car'
                             className='edit-car-input'
-                            onChange={hanleCheckFile}
                         />
                         <label
                             htmlFor='edit-car'

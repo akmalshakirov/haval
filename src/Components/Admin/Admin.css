@@ -43,3 +43,31 @@
 .edit-car-label:hover {
     border-color: #868686;
 }
+.admin-change-password {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    transition: 0.4s all !important;
+}
+.admin-change-password-text {
+    border-radius: 4px;
+    padding: 5px;
+    cursor: pointer;
+    border: 1px solid #b6b6b6;
+    user-select: none;
+    transition: 0.2s;
+}
+.admin-change-password-text:hover {
+    background-color: #d1cfcfa8;
+}
+.admin-change-password-text:active {
+    background-color: #d1cfcf;
+}
+.admin-change-password-input {
+    max-width: 65%;
+    width: 100%;
+}
+.ant-modal-wrap {
+    scrollbar-color: transparent transparent;
+}
