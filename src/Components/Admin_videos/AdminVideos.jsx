@@ -122,6 +122,7 @@ const AdminVideos = () => {
 
     return (
         <div className='admin-videos'>
+            <h1>Videos</h1>
             {/* {cards.map((card) => (
                 <div className='card' key={card.id}>
                     <Card
@@ -207,17 +208,26 @@ const AdminVideos = () => {
                 </div>
             ) : (
                 <div className='admin-cards'>
-                    <h1>Videos</h1>
                     {videos.map((item, index) => {
                         return (
                             <>
-                                <Card key={index} style={{ maxWidth: 240 }}>
-                                    <video
+                                <Card
+                                    key={index}
+                                    style={{ maxWidth: 340 }}
+                                    className='admin-cards-item'>
+                                    <iframe
                                         src={item.video}
-                                        muted
-                                        autoPlay></video>
+                                        frameborder='0'
+                                        allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+                                        allowfullscreen></iframe>
                                     <h3>{item.title}</h3>
                                     <p>{item.description}</p>
+                                    <div>
+                                        <p>
+                                            Yaratilgan vaqti:{" "}
+                                            <b>{item.createdAt}</b>
+                                        </p>
+                                    </div>
                                     <a href={item.video} target='_blank'>
                                         Batafsil
                                     </a>

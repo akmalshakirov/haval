@@ -187,8 +187,8 @@ const AdminPanel = () => {
             };
 
             const response = await axios.put(
-                // `https://haval-uz.onrender.com/admins/${editingAdmin._id}`,
-                `http://localhost:3000/admins/${editingAdmin._id}`,
+                `https://haval-uz.onrender.com/admins/${editingAdmin._id}`,
+                // `http://localhost:3000/admins/${editingAdmin._id}`,
                 updateData,
                 {
                     headers: {
@@ -293,7 +293,8 @@ const AdminPanel = () => {
             };
 
             const response = await axios.put(
-                `http://localhost:3000/cars/${editingCar._id}`,
+                // `http://localhost:3000/cars/${editingCar._id}`,
+                `https://haval-uz.onrender.com/cars/${editingCar._id}`,
                 updateData,
                 {
                     headers: {
@@ -645,7 +646,33 @@ const AdminPanel = () => {
                                             </p>
                                             {changePass && (
                                                 <>
+                                                    {/* <Form.Item
+                                                        name='changePass'
+                                                        rules={[
+                                                            {
+                                                                required: true,
+                                                                message:
+                                                                    "Iltimos, parolni kiriting!",
+                                                            },
+                                                            {
+                                                                min: 6,
+                                                                message:
+                                                                    "Parol kamida 6 ta belgi bo'lishi kerak!",
+                                                            },
+                                                        ]}> */}
                                                     <Input.Password
+                                                        rules={[
+                                                            {
+                                                                required: true,
+                                                                message:
+                                                                    "Iltimos, parolni kiriting!",
+                                                            },
+                                                            {
+                                                                min: 6,
+                                                                message:
+                                                                    "Parol kamida 6 ta belgi bo'lishi kerak!",
+                                                            },
+                                                        ]}
                                                         value={
                                                             changePassInputValue
                                                         }
@@ -653,6 +680,7 @@ const AdminPanel = () => {
                                                             handleChangePassInput
                                                         }
                                                         className='admin-change-password-input'></Input.Password>
+                                                    {/* </Form.Item> */}
                                                 </>
                                             )}
                                         </div>
