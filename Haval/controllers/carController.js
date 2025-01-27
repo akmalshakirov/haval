@@ -86,93 +86,101 @@ const addCar = async (req, res) => {
 };
 
 const updateCar = async (req, res) => {
-    const { id } = req.params;
-    const { model, title, description, year, price } = req.body;
+    const carId = req.params.id;
+    const { model, year, price, image } = req.body;
 
     try {
+        const car = await Car.findOne({ _id: carId });
+
+        if (!car) {
+            return res.status(404).json({ message: "Mashina topilmadi" });
+        }
 
         if (!req.file) {
-            console.log(req.file);
-            return res.status(404).json({
-                message: "Fayl topilmadi",
-            });
+            return res.status(404).json({ message: "Rasm topilmadi" });
         }
-        const bucketName = "Haval";
-        const { buffer, originalname } = req.file;
-        const fileName = `${Date.now()}_${originalname}`;
 
-        const { data: uploadData, error: uploadError } = await supabase.storage
-            .from(bucketName)
-            .upload(fileName, buffer, {
-                casheControl: "3600",
-                upsert: false,
-                contentType: req.file.mimetype,
-            });
+        if (image && car.newImage) {
+            const { error: deleteError } = await supabase.storage
+                .from("Haval")
+                .remove([car.newImage]);
 
-        if (uploadError) {
-            console.error("Tasvirni yuklashda xato:", uploadError.message);
+            if (deleteError) {
+                console.error(
+                    "Eski rasmni o'chirishda xatolik:",
+                    deleteError.message
+                );
+                return res.status(500).json({
+                    message: "Eski rasmni o'chirishda xatolik yuz berdi.",
+                });
+            }
+        }
+
+        const updateData = {
+            model: model || car.model,
+            year: year || car.year,
+            price: price || car.price,
+            image: image || car.newImage,
+        };
+
+        const updateResult = await Car.updateOne(
+            { _id: carId },
+            { $set: updateData }
+        );
+
+        if (updateResult.modifiedCount === 0) {
             return res
-                .status(500)
-                .json({ error: "Tasvirni yuklashda xatolik yuz berdi." });
+                .status(400)
+                .json({ message: "Ma'lumotlar yangilanmadi." });
         }
-
-        const { data: publicUrlData } = supabase.storage
-            .from(bucketName)
-            .getPublicUrl(fileName);
-
-        const imageUrl = publicUrlData.publicUrl;
-
-
-        const updateData = { model, title, description, year, price };
-        if (imageUrl) updateData.image = imageUrl;
-
-        const result = await CarModel.findByIdAndUpdate(id, updateData, {
-            new: true,
-        });
 
         res.status(200).json({
-            message: "Mashina ma'lumotlari yangilandi",
-            data: result,
+            message: "Mashina muvaffaqiyatli yangilandi",
+            updatedData: updateData,
         });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Ichki server xatosi yuz berdi." });
+    } catch (error) {
+        console.error("Xatolik:", error);
+        res.status(500).json({ message: "Xatolik yuz berdi" });
     }
 };
 
 const deleteCar = async (req, res) => {
     const carId = req.params.id;
 
-  try {
-    const car = await Car.findOne({ _id: new ObjectId(carId) });
+    try {
+        const car = await Car.findOne({ _id: new ObjectId(carId) });
 
-    if (!car) {
-      return res.status(404).json({ message: "Mashina topilmadi" });
+        if (!car) {
+            return res.status(404).json({ message: "Mashina topilmadi" });
+        }
+
+        if (car.imagePath) {
+            const { error: deleteError } = await supabase.storage
+                .from("Haval")
+                .remove([car.imagePath]);
+
+            if (deleteError) {
+                console.error(
+                    "Supabase rasmni o'chirishda xatolik:",
+                    deleteError.message
+                );
+                return res
+                    .status(500)
+                    .json({ message: "Rasmni o'chirishda xatolik yuz berdi." });
+            }
+        }
+
+        const deleteResult = await Car.deleteOne({ _id: new ObjectId(carId) });
+
+        if (deleteResult.deletedCount === 0) {
+            return res.status(404).json({ message: "Mashina o'chirilmadi" });
+        }
+
+        res.status(200).json({ message: "Mashina muvaffaqiyatli o'chirildi" });
+    } catch (error) {
+        console.error("Xatolik:", error);
+        res.status(500).json({ message: "Xatolik yuz berdi" });
     }
-
-    if (car.imagePath) {
-      const { error: deleteError } = await supabase
-        .storage
-        .from("Haval")
-        .remove([car.imagePath]);
-
-      if (deleteError) {
-        console.error("Supabase rasmni o'chirishda xatolik:", deleteError.message);
-        return res.status(500).json({ message: "Rasmni o'chirishda xatolik yuz berdi." });
-      }
-    }
-
-    const deleteResult = await Car.deleteOne({ _id: new ObjectId(carId) });
-
-    if (deleteResult.deletedCount === 0) {
-      return res.status(404).json({ message: "Mashina o'chirilmadi" });
-    }
-
-    res.status(200).json({ message: "Mashina muvaffaqiyatli o'chirildi" });
-  } catch (error) {
-    console.error("Xatolik:", error);
-    res.status(500).json({ message: "Xatolik yuz berdi" });
-  }
 };
 
 module.exports = { getCars, addCar, updateCar, deleteCar };
