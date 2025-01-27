@@ -293,8 +293,8 @@ const AdminPanel = () => {
             };
 
             const response = await axios.put(
-                // `http://localhost:3000/cars/${editingCar._id}`,
-                `https://haval-uz.onrender.com/cars/${editingCar._id}`,
+                `http://localhost:3000/cars/${editingCar._id}`,
+                // `https://haval-uz.onrender.com/cars/${editingCar._id}`,
                 updateData,
                 {
                     headers: {

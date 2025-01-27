@@ -90,55 +90,78 @@ const updateCar = async (req, res) => {
     const { model, title, description, year, price } = req.body;
 
     try {
-
         if (!req.file) {
-            console.log(req.file);
-            return res.status(404).json({
-                message: "Fayl topilmadi",
+            return res.status(400).json({
+                message: "Fayl topilmadi. Iltimos, tasvirni yuklang.",
             });
         }
+
         const bucketName = "Haval";
         const { buffer, originalname } = req.file;
-        const fileName = `${Date.now()}_${originalname}`;
+        const fileName = `cars/${Date.now()}_${originalname}`;
+
+        const existingCar = await CarModel.findById(id);
+        if (!existingCar) {
+            return res.status(404).json({ message: "Mashina topilmadi." });
+        }
+        const oldImagePath = existingCar.image
+            ? existingCar.image.split('/').pop()
+            : null;
 
         const { data: uploadData, error: uploadError } = await supabase.storage
             .from(bucketName)
             .upload(fileName, buffer, {
-                casheControl: "3600",
+                cacheControl: "3600",
                 upsert: false,
                 contentType: req.file.mimetype,
             });
 
         if (uploadError) {
             console.error("Tasvirni yuklashda xato:", uploadError.message);
-            return res
-                .status(500)
-                .json({ error: "Tasvirni yuklashda xatolik yuz berdi." });
+            return res.status(500).json({
+                error: "Tasvirni yuklashda xatolik yuz berdi.",
+            });
         }
 
-        const { data: publicUrlData } = supabase.storage
+        const { data: publicUrlData, error: publicUrlError } = supabase.storage
             .from(bucketName)
             .getPublicUrl(fileName);
 
+        if (publicUrlError || !publicUrlData) {
+            console.error("Tasvir URL-ni olishda xato:", publicUrlError.message);
+            return res.status(500).json({
+                error: "Tasvir URL-ni olishda xatolik yuz berdi.",
+            });
+        }
+
         const imageUrl = publicUrlData.publicUrl;
 
+        if (oldImagePath) {
+            const { error: removeError } = await supabase.storage
+                .from(bucketName)
+                .remove([oldImagePath]);
 
-        const updateData = { model, title, description, year, price };
-        if (imageUrl) updateData.image = imageUrl;
+            if (removeError) {
+                console.error("Eski tasvirni o'chirishda xato:", removeError.message);
+            }
+        }
+
+        const updateData = { model, title, description, year, price, image: imageUrl };
 
         const result = await CarModel.findByIdAndUpdate(id, updateData, {
             new: true,
         });
 
         res.status(200).json({
-            message: "Mashina ma'lumotlari yangilandi",
+            message: "Mashina ma'lumotlari muvaffaqiyatli yangilandi.",
             data: result,
         });
     } catch (err) {
-        console.error(err);
+        console.error("Server xatosi:", err);
         res.status(500).json({ error: "Ichki server xatosi yuz berdi." });
     }
 };
+
 
 const deleteCar = async (req, res) => {
     const carId = req.params.id;
