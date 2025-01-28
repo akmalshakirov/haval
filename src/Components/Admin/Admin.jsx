@@ -292,8 +292,8 @@ const AdminPanel = () => {
             formData.append("image", fileList[0]);
 
             const response = await axios.put(
-                `https://haval-uz.onrender.com/cars/${editingCar._id}`,
-                // `http://localhost:3000/cars/${editingCar._id}`,
+                // `https://haval-uz.onrender.com/cars/${editingCar._id}`,
+                `http://localhost:3000/cars/${editingCar._id}`,
                 formData,
                 {
                     headers: {

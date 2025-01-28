@@ -86,8 +86,8 @@ const addCar = async (req, res) => {
 };
 
 const updateCar = async (req, res) => {
-    const carId = req.params.id;
-    const { model, year, price, image } = req.body;
+    const id = req.params.id;
+    const { model, year, price } = req.body;
 
     try {
         if (!req.file) {
@@ -100,7 +100,7 @@ const updateCar = async (req, res) => {
         const { buffer, originalname } = req.file;
         const fileName = `cars/${Date.now()}_${originalname}`;
 
-        const existingCar = await CarModel.findById(id);
+        const existingCar = await Car.findById(id);
         if (!existingCar) {
             return res.status(404).json({ message: "Mashina topilmadi." });
         }
@@ -146,9 +146,9 @@ const updateCar = async (req, res) => {
             }
         }
 
-        const updateData = { model, title, description, year, price, image: imageUrl };
+        const updateData = { model, year, price, image: imageUrl };
 
-        if (updateResult.modifiedCount === 0) {
+        if (updateData.modifiedCount === 0) {
             return res
                 .status(400)
                 .json({ message: "Ma'lumotlar yangilanmadi." });
@@ -156,7 +156,7 @@ const updateCar = async (req, res) => {
 
         res.status(200).json({
             message: "Mashina ma'lumotlari muvaffaqiyatli yangilandi.",
-            data: result,
+            data: updateData
         });
     } catch (err) {
         console.error("Server xatosi:", err);
