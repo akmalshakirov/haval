@@ -1,4 +1,4 @@
-const Car = require("../models/Car");
+const { Car } = require("../models/Car");
 const mongoose = require("mongoose");
 const { supabase } = require("../config/supabaseClient");
 
@@ -105,7 +105,7 @@ const updateCar = async (req, res) => {
             return res.status(404).json({ message: "Mashina topilmadi." });
         }
         const oldImagePath = existingCar.image
-            ? existingCar.image.split('/').pop()
+            ? existingCar.image.split("/").pop()
             : null;
 
         const { data: uploadData, error: uploadError } = await supabase.storage
@@ -128,7 +128,10 @@ const updateCar = async (req, res) => {
             .getPublicUrl(fileName);
 
         if (publicUrlError || !publicUrlData) {
-            console.error("Tasvir URL-ni olishda xato:", publicUrlError.message);
+            console.error(
+                "Tasvir URL-ni olishda xato:",
+                publicUrlError.message
+            );
             return res.status(500).json({
                 error: "Tasvir URL-ni olishda xatolik yuz berdi.",
             });
@@ -142,28 +145,25 @@ const updateCar = async (req, res) => {
                 .remove([oldImagePath]);
 
             if (removeError) {
-                console.error("Eski tasvirni o'chirishda xato:", removeError.message);
+                console.error(
+                    "Eski tasvirni o'chirishda xato:",
+                    removeError.message
+                );
             }
         }
 
         const updateData = { model, year, price, image: imageUrl };
 
-        if (updateData.modifiedCount === 0) {
-            return res
-                .status(400)
-                .json({ message: "Ma'lumotlar yangilanmadi." });
-        }
-
-        res.status(200).json({
+        await Car.findByIdAndUpdate(id, updateData, { new: true });
+        return res.status(200).json({
             message: "Mashina ma'lumotlari muvaffaqiyatli yangilandi.",
-            data: updateData
+            data: updateData,
         });
     } catch (err) {
         console.error("Server xatosi:", err);
         res.status(500).json({ error: "Ichki server xatosi yuz berdi." });
     }
 };
-
 
 const deleteCar = async (req, res) => {
     const carId = req.params.id;

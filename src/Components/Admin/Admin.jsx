@@ -79,8 +79,8 @@ const AdminPanel = () => {
             }
 
             const response = await axios.get(
-                // "http://localhost:3000/cars",
-                "https://haval-uz.onrender.com/cars",
+                "http://localhost:3000/cars",
+                // "https://haval-uz.onrender.com/cars",
                 {
                     headers: {
                         "Content-Type": "application/json",
