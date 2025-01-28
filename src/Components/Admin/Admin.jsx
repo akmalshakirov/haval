@@ -320,11 +320,25 @@ const AdminPanel = () => {
         }
     };
 
-    const handleDeleteCar = () => {
-        setCars(cars.filter((car) => car.key !== carToDelete.key));
-        setDeleteModal(false);
-        setCarToDelete(null);
-        message.success("Avtomobil muvaffaqiyatli o'chirildi!");
+    const handleDeleteCar = async () => {
+        try {
+            const token = localStorage.getItem("authToken");
+            const response = await axios.delete(
+                `http://localhost:3000/cars/${carToDelete._id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+        } catch (error) {
+            console.error("Xatolik:", error.response?.data || error.message);
+            message.error(
+                `Avtomobilni o'chirishda xatolik yuz berdi: ${
+                    error.response?.data?.message || error.message
+                }`
+            );
+        }
     };
 
     const columnsCars = [
