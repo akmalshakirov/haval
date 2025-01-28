@@ -169,7 +169,7 @@ const deleteCar = async (req, res) => {
     const carId = req.params.id;
 
     try {
-        const car = await Car.findOne({ _id: new ObjectId(carId) });
+        const car = await Car.findOne({ _id: carId });
 
         if (!car) {
             return res.status(404).json({ message: "Mashina topilmadi" });
@@ -191,7 +191,7 @@ const deleteCar = async (req, res) => {
             }
         }
 
-        const deleteResult = await Car.deleteOne({ _id: new ObjectId(carId) });
+        const deleteResult = await Car.deleteOne({ _id: carId });
 
         if (deleteResult.deletedCount === 0) {
             return res.status(404).json({ message: "Mashina o'chirilmadi" });
