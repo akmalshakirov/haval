@@ -9,11 +9,11 @@ import {
     Input,
     message,
     Image,
-    Upload,
     Tooltip,
     Switch,
     Popconfirm,
     Spin,
+    InputNumber,
 } from "antd";
 import {
     HomeOutlined,
@@ -247,7 +247,7 @@ const AdminPanel = () => {
             formData.append("model", values.model);
             formData.append("year", values.year);
             formData.append("price", values.price);
-            formData.append("image", fileList);
+            formData.append("image", fileList[0]);
 
             const response = await axios.post(
                 // `https://haval-uz.onrender.com/add-car`,
@@ -276,26 +276,25 @@ const AdminPanel = () => {
         }
     };
 
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        setFileList(file);
+    const handleFileChange = () => {
+        const formData = new FormData();
+        formData.append("image", fileList);
+        console.log("qwerfgh", formData);
     };
 
     const handleEditCar = async (values) => {
         try {
             const token = localStorage.getItem("authToken");
-            const updateData = {
-                model: values.model,
-                year: values.year,
-                price: values.price,
-                image: values.image,
-                title: values.title,
-            };
+            const formData = new FormData();
+            formData.append("model", values.model);
+            formData.append("year", values.year);
+            formData.append("price", values.price);
+            formData.append("image", fileList[0]);
 
             const response = await axios.put(
-                `http://localhost:3000/cars/${editingCar._id}`,
-                // `https://haval-uz.onrender.com/cars/${editingCar._id}`,
-                updateData,
+                `https://haval-uz.onrender.com/cars/${editingCar._id}`,
+                // `http://localhost:3000/cars/${editingCar._id}`,
+                formData,
                 {
                     headers: {
                         "Content-Type": "Formdata",
@@ -842,6 +841,7 @@ const AdminPanel = () => {
                                     title='Yangi Avtomobil Qoshish'
                                     open={isModalOpen}
                                     onCancel={() => setIsModalOpen(false)}
+                                    onFinish={handleAddCar}
                                     footer={null}>
                                     <Form
                                         form={form}
@@ -1012,7 +1012,7 @@ const AdminPanel = () => {
                                 message: "Iltimos, yilni kiriting!",
                             },
                         ]}>
-                        <Input />
+                        <InputNumber min={2020} />
                     </Form.Item>
                     <Form.Item
                         name='price'
@@ -1023,13 +1023,12 @@ const AdminPanel = () => {
                                 message: "Iltimos, narxni kiriting!",
                             },
                         ]}>
-                        <Input />
+                        <InputNumber min={19000} />
                     </Form.Item>
                     <Form.Item label='Avtomobil rasmi:'>
                         {/* <Upload
                             listType='picture-card'
                             fileList={fileList}
-                         Kelgan ma'lumotlar
                             beforeUpload={() => false}
                             maxCount={1}>
                             {fileList.length >= 1 ? null : (
@@ -1052,6 +1051,8 @@ const AdminPanel = () => {
                             accept='image/*'
                             id='edit-car'
                             className='edit-car-input'
+                            // onChange={(e) => handleFileChange(e)}
+                            onChange={(e) => setFileList(e.target.files)}
                         />
                         <label
                             htmlFor='edit-car'
