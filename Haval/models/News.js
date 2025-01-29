@@ -6,6 +6,7 @@ const News = new mongoose.Schema({
     image: {type: String, required: true},
     createdAt: {type: String, required: true},
     updatedAt: {type: String},
+    role: { type: String, default: "admin" }
 })
 
 module.exports = mongoose.model('News', News);
