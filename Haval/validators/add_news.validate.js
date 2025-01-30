@@ -19,4 +19,3 @@ exports.newsSchema = Joi.object({
         "string.empty": "Rasm bo'sh bo'lmasligi kerak!",
         "any.required": "Rasm bo'lishi shart!"
     }),
-})
