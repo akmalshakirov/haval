@@ -69,7 +69,15 @@ const AdminVideos = () => {
             setVideos(response.data);
             console.log("Kelgan ma'lumotlar (video):", response.data);
         } catch (error) {
-            console.error("Xatolik", error.response.data);
+            const response = error.response;
+            if (response.status === 401) {
+                message.info("Token vaqti tugagan!");
+            } else {
+                message.error(
+                    `Videolarni yuklashda xatolik yuz berdi: ${error.response?.data?.message}` ||
+                        error.message
+                );
+            }
         } finally {
             setLoader(false);
         }
@@ -122,7 +130,7 @@ const AdminVideos = () => {
 
     return (
         <div className='admin-videos'>
-            <h1>Videos</h1>
+            <h1>Videolar</h1>
             {/* {cards.map((card) => (
                 <div className='card' key={card.id}>
                     <Card

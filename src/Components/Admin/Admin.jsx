@@ -14,6 +14,7 @@ import {
     Popconfirm,
     Spin,
     InputNumber,
+    Upload,
 } from "antd";
 import {
     HomeOutlined,
@@ -79,8 +80,7 @@ const AdminPanel = () => {
             }
 
             const response = await axios.get(
-                "http://localhost:3000/cars",
-                // "https://haval-uz.onrender.com/cars",
+                "https://haval-uz.onrender.com/cars",
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -94,13 +94,122 @@ const AdminPanel = () => {
                 response.data.cars
             );
         } catch (error) {
-            console.error(
-                "Xatolik:",
-                error.response?.data || error.message || error
-            );
-            message.error("Avtomobillarni yuklanishda xatolik yuz berdi!");
+            const response = error.response;
+            if (response.status === 401) {
+                message.info("Token vaqti tugagan!");
+            } else {
+                message.error(
+                    `Avtomobillarni yuklashda xatolik yuz berdi: ${error.response?.data?.message}` ||
+                        error.message
+                );
+            }
         } finally {
             setLoader(false);
+        }
+    };
+
+    const handleAddCar = async (values) => {
+        try {
+            const token = localStorage.getItem("authToken");
+
+            const formData = new FormData();
+            formData.append("model", values.model);
+            formData.append("year", values.year);
+            formData.append("price", values.price);
+            formData.append("image", fileList[0]);
+
+            const response = await axios.post(
+                `https://haval-uz.onrender.com/add-car`,
+                formData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            await fetchCars();
+            setCars([...cars, { key: `${cars.length + 1}`, ...values }]);
+            message.success("Avtomobil muvaffaqiyatli qo'shildi!");
+            setIsModalOpen(false);
+            form.resetFields();
+        } catch (error) {
+            console.error("Avtomobil qoshishda xatolik yuz berdi:", error);
+            message.error(
+                `Avtomobil qo'shishda xatolik yuz berdi: ${
+                    error.response?.data?.message || error.message
+                }`
+            );
+        } finally {
+            setOnClickBtn(false);
+        }
+    };
+
+    const handleEditCar = async (values) => {
+        try {
+            const token = localStorage.getItem("authToken");
+            const formData = new FormData();
+            formData.append("model", values.model);
+            formData.append("year", values.year);
+            formData.append("price", values.price);
+            formData.append("image", fileList[0]);
+
+            const response = await axios.put(
+                // `https://haval-uz.onrender.com/cars/${editingCar._id}`,
+                `http:/localhost:3000/cars/${editingCar._id}`,
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "Formdata",
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            if (response.status === 200) {
+                await fetchCars();
+                setActionModal(false);
+                setEditingCar(null);
+                form.resetFields();
+                message.success("Avtomobil muvaffaqiyatli o'zgartirildi!");
+            }
+        } catch (error) {
+            const errorMessage =
+                error?.response?.data?.message ||
+                error.message ||
+                "Avtomobil ma'lumotlarini yangilashda xatolik yuz berdi!";
+            console.error(
+                "Avtomobil ma'lumotlarini yangilashda xatolik yuz berdi!:",
+                errorMessage
+            );
+            message.error(errorMessage);
+        }
+    };
+
+    const handleDeleteCar = async () => {
+        try {
+            const token = localStorage.getItem("authToken");
+            const response = await axios.delete(
+                `http://localhost:3000/cars/${carToDelete._id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            await fetchCars();
+            setDeleteModal(false);
+            form.resetFields();
+            message.success("Avtomobil muvaffaqiyatli o'chirildi!");
+        } catch (error) {
+            console.error(
+                "Avtomobilni o'chirishda xatolik yuz berdi:",
+                error.response?.data || error.message
+            );
+            message.error(
+                `Avtomobilni o'chirishda xatolik yuz berdi: ${
+                    error.response?.data?.message || error.message
+                }`
+            );
         }
     };
 
@@ -126,11 +235,15 @@ const AdminPanel = () => {
             setAdmins([response.data.admins]);
             console.log("Kelgan ma'lumotlar (admin):", response.data.admins);
         } catch (error) {
-            console.error(
-                "Xatolik:",
-                error.response?.data || error.message || error
-            );
-            message.error("Adminlar yuklanishda xatolik yuz berdi!");
+            const response = error.response;
+            if (response.status === 401) {
+                message.info("Token vaqti tugagan!");
+            } else {
+                message.error(
+                    `Adminlarni yuklashda xatolik yuz berdi: ${error.response?.data?.message}` ||
+                        error.message
+                );
+            }
         } finally {
             setLoader(false);
         }
@@ -163,6 +276,7 @@ const AdminPanel = () => {
                     },
                 }
             );
+            await fetchAdmins();
             setAdmins([...admins, { key: `${admins.length + 1}`, ...values }]);
             message.success("Admin muvaffaqiyatli qo'shildi!");
             setIsModalOpen(false);
@@ -206,7 +320,10 @@ const AdminPanel = () => {
                 message.success("Admin muvaffaqiyatli o'zgartirildi!");
             }
         } catch (error) {
-            console.error("Xatolik:", error.response?.data || error.message);
+            console.error(
+                "Adminni yangilashda xatolik yuz berdi:",
+                error.response?.data || error.message
+            );
             message.error(
                 `Adminni yangilashda xatolik yuz berdi: ${error.response?.data?.message}`
             );
@@ -232,111 +349,12 @@ const AdminPanel = () => {
                 message.success("Admin muvaffaqiyatli o'chirildi!");
             }
         } catch (error) {
-            console.error("Xatolik:", error.response?.data || error.message);
+            console.error(
+                "Adminni o'chirishda xatolik yuz berdi:",
+                error.response?.data || error.message
+            );
             message.error(
-                `Adminni ochirishda xatolik yuz berdi ${error.response?.data?.message}`
-            );
-        }
-    };
-
-    const handleAddCar = async (values) => {
-        try {
-            const token = localStorage.getItem("authToken");
-
-            const formData = new FormData();
-            formData.append("model", values.model);
-            formData.append("year", values.year);
-            formData.append("price", values.price);
-            formData.append("image", fileList[0]);
-
-            const response = await axios.post(
-                // `https://haval-uz.onrender.com/add-car`,
-                `http://localhost:3000/add-car`,
-                formData,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-
-            setCars([...cars, { key: `${cars.length + 1}`, ...values }]);
-            message.success("Avtomobil muvaffaqiyatli qo'shildi!");
-            setIsModalOpen(false);
-            form.resetFields();
-        } catch (error) {
-            console.error("Error:", error);
-            message.error(
-                `Avtomobil qo'shishda xatolik yuz berdi: ${
-                    error.response?.data?.message || error.message
-                }`
-            );
-        } finally {
-            setOnClickBtn(false);
-        }
-    };
-
-    const handleFileChange = () => {
-        const formData = new FormData();
-        formData.append("image", fileList);
-        console.log("qwerfgh", formData);
-    };
-
-    const handleEditCar = async (values) => {
-        try {
-            const token = localStorage.getItem("authToken");
-            const formData = new FormData();
-            formData.append("model", values.model);
-            formData.append("year", values.year);
-            formData.append("price", values.price);
-            formData.append("image", fileList[0]);
-
-            const response = await axios.put(
-                // `https://haval-uz.onrender.com/cars/${editingCar._id}`,
-                `http://localhost:3000/cars/${editingCar._id}`,
-                formData,
-                {
-                    headers: {
-                        "Content-Type": "Formdata",
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-
-            if (response.status === 200) {
-                await fetchCars();
-                setActionModal(false);
-                setEditingCar(null);
-                form.resetFields();
-                message.success("Avtomobil muvaffaqiyatli o'zgartirildi!");
-            }
-        } catch (error) {
-            const errorMessage =
-                error?.response?.data?.message ||
-                error.message ||
-                "Avtomobil ma'lumotlarini yangilashda xatolik yuz berdi!";
-            console.error("Xatolik:", errorMessage);
-            message.error(errorMessage);
-        }
-    };
-
-    const handleDeleteCar = async () => {
-        try {
-            const token = localStorage.getItem("authToken");
-            const response = await axios.delete(
-                `http://localhost:3000/cars/${carToDelete._id}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-        } catch (error) {
-            console.error("Xatolik:", error.response?.data || error.message);
-            message.error(
-                `Avtomobilni o'chirishda xatolik yuz berdi: ${
-                    error.response?.data?.message || error.message
-                }`
+                `Adminni o'chirishda xatolik yuz berdi: ${error.response?.data?.message}`
             );
         }
     };
@@ -752,11 +770,6 @@ const AdminPanel = () => {
                                             columns={columnsCars}
                                             dataSource={cars[0]}
                                         />
-                                        // <Table
-                                        //     key={cars.id}
-                                        //     columns={columnsCars}
-                                        //     dataSource={cars}
-                                        // />
                                     )
                                 ) : (
                                     <div
@@ -898,45 +911,13 @@ const AdminPanel = () => {
                                             <Input />
                                         </Form.Item>
                                         <Form.Item label='Avtomobil rasmi:'>
-                                            {/* <Upload
-                                                listType='picture-card'
-                                                fileList={fileList}
-                                                onChange={(fileList) =>
-                                                    handleFileChange(fileList)
-                                                }
-                                                beforeUpload={() => false}
-                                                maxCount={1}>
-                                                {fileList.length >= 1 ? null : (
-                                                    <div>
-                                                        <UploadOutlined />
-                                                        <div
-                                                            style={{
-                                                                marginTop: 8,
-                                                            }}>
-                                                            Yuklash
-                                                        </div>
-                                                    </div>
-                                                )}
-                                            </Upload> */}
                                             <input
                                                 accept='image/*'
                                                 type='file'
                                                 onChange={(e) =>
-                                                    handleFileChange(e)
+                                                    setFileList(e.target.files)
                                                 }
                                             />
-
-                                            {editingCar && !fileList.length && (
-                                                <Image
-                                                    src={editingCar.image}
-                                                    alt='Current image'
-                                                    style={{
-                                                        width: 100,
-                                                        marginTop: 8,
-                                                    }}
-                                                    preview={true}
-                                                />
-                                            )}
                                         </Form.Item>
                                         <Button
                                             type='primary'
@@ -1065,7 +1046,6 @@ const AdminPanel = () => {
                             accept='image/*'
                             id='edit-car'
                             className='edit-car-input'
-                            // onChange={(e) => handleFileChange(e)}
                             onChange={(e) => setFileList(e.target.files)}
                         />
                         <label
