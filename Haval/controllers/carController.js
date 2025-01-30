@@ -157,7 +157,6 @@ const deleteCar = async (req, res) => {
 
     try {
         const car = await Car.findById(carId); 
-
         if (!car) {
             return res.status(404).json({ message: "Mashina topilmadi" });
         }

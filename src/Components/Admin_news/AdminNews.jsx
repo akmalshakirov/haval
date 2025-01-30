@@ -1,4 +1,4 @@
-import { Card, message, Spin } from "antd";
+import { Card, message, Modal, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./AdminNews.css";
@@ -6,7 +6,7 @@ import "./AdminNews.css";
 function AdminNews() {
     const [adminNewsList, setAdminNewsList] = useState([]);
     const [loader, setLoader] = useState(true);
-
+    const [detailModal, setDetailModal] = useState(false);
     const fetchNews = async () => {
         try {
             const token = localStorage.getItem("authToken");
@@ -26,10 +26,15 @@ function AdminNews() {
             );
             setAdminNewsList(response.data);
         } catch (error) {
-            message.error(
-                `Yangiliklarni yuklashda xatolik yuz berdi: ${error.response?.data?.message}` ||
-                    error.message
-            );
+            const response = error.response;
+            if (response.status === 401) {
+                message.info("Token vaqti tugagan!");
+            } else {
+                message.error(
+                    `Yangiliklarni yuklashda xatolik yuz berdi: ${error.response?.data?.message}` ||
+                        error.message
+                );
+            }
         } finally {
             setLoader(false);
         }
@@ -39,6 +44,9 @@ function AdminNews() {
         fetchNews();
     }, []);
 
+    const handleDetailModal = () => {
+        setDetailModal(true);
+    };
     return (
         <div className='admin-news'>
             {loader ? (
@@ -61,10 +69,32 @@ function AdminNews() {
                                 cover={<img src={item.image} />}
                                 style={{ maxWidth: 240 }}>
                                 <p>{item.title}</p>
-                                <div>
-                                    <a href={item.link}>Batafsil {item.link}</a>
-                                </div>
+                                <a
+                                    onClick={handleDetailModal}
+                                    style={{
+                                        display: "block",
+                                        width: "30%",
+                                        cursor: "pointer",
+                                        padding: "5px",
+                                        marginTop: "10px",
+                                        borderRadius: "5px",
+                                        border: "1px solid #ddd",
+                                    }}>
+                                    Batafsil
+                                </a>
                             </Card>
+                            <Modal
+                                open={detailModal}
+                                closeIcon={false}
+                                onCancel={() => setDetailModal(false)}
+                                footer={null}>
+                                <Card
+                                    cover={<img src={item.image} />}
+                                    bordered={false}>
+                                    <p>{item.title}</p>
+                                    <p>{item.description}</p>
+                                </Card>
+                            </Modal>
                         </div>
                     ))}
                 </div>
