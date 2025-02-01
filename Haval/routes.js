@@ -246,7 +246,7 @@ router
         deleteUser
     )
 
-    .get("/videos", jwtAccessMiddleware, getVideos)
+    .get("/videos", getVideos)
     .post(
         "/add-video",
         jwtAccessMiddleware,
