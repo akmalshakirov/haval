@@ -1,5 +1,6 @@
 const Video = require('../models/Video');
 const mongoose = require("mongoose")
+const { videoSchema } = require("../validators/video.validate")
 
 exports.getVideos = async (req, res) => {
   try {
@@ -46,31 +47,35 @@ exports.addVideo = async (req, res) => {
 };
 
 exports.updateVideo = async (req, res) => {
-  const { id } = req.params.id;
-  const { title, video } = req.body;
+  const {
+    body,
+    params: { id },
+} = req;
   try {
-      if (!mongoose.Types.ObjectId.isValid(id)) {
-          return res.status(400).json({ error: "Noto'g'ri ID." });
-        }
-    
-        const updateData = {};
-    
-        if (title, video) {
-            await Car.find({ title, video, _id: { $ne: id } });
-            updateData.title = title;
-            updateData.video = video;
-        }
-    const updatedVideo = await Video.findByIdAndUpdate(id, updateData, { new: true });
-
-    if (!updatedVideo) {
-      res.status(404).json({ error: 'Video topilmadi' });
+    const existingVideo = await Video.findById(id);
+    if (!existingVideo) {
+        return res.status(404).json({ message: "Video topilmadi." });
     }
+
+    console.log(body)
+      const { value, error } = videoSchema.validate(body)
+      if (error) {
+        return res.status(400).json({ error: error.details[0].message });
+    }
+
+      const updateData = {
+            title: value.title,
+            video: value.video
+        }
+
+    const updatedVideo = await Video.findByIdAndUpdate(id, updateData, { new: true });
     
     return res.status(200).json({
       message: 'Video muvaffaqiyatli yangilandi',
       data: updatedVideo,
     });
   } catch (err) {
+    console.log(err)
     res.status(500).json({ error: 'Video yangilashda xatolik yuz berdi' });
   }
 };
