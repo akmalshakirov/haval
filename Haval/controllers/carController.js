@@ -111,11 +111,9 @@ const updateCar = async (req, res) => {
             imageUrl = supabase.storage.from(bucketName).getPublicUrl(fileName).publicUrl;
 
             if (existingCar.image) {
-                const oldImagePath = existingCar.image.replace(
-                    supabase.storage.from(bucketName).getPublicUrl("").publicUrl,
-                    ""
-                );
+                const oldImagePath = existingCar.image.replace( `${supabase.storageUrl}/object/public/Haval/`, "" )
 
+            console.log(oldImagePath)
                 const { error: removeError } = await supabase.storage
                     .from(bucketName)
                     .remove([oldImagePath]);
