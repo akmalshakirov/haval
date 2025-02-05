@@ -1,20 +1,17 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import HavalH6 from "../../Images/haval-h6-large.jpg";
 import HavalJolion from "../../Images/haval-jolion-large.jpg";
 import HavalDargo from "../../Images/haval-dargo-large.jpg";
 import HavalM6 from "../../Images/haval-m6-large.jpg";
 import HavalGwmWingle7 from "../../Images/gwm-wingle-7-large.jpg";
 
-import gsap from "gsap";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import "./MainModels.css";
 
-import { Pagination, Navigation } from "swiper/modules";
-// import { render } from "react-dom";
+import { Pagination } from "swiper/modules";
 
 function MainModels() {
     const pagination = {
@@ -42,21 +39,21 @@ function MainModels() {
             </div>
             <Swiper
                 pagination={pagination}
-                modules={[Pagination, Navigation]}
-                navigation={{
-                    nextEl: ".models-nav-next",
-                    prevEl: ".models-nav-prev",
-                }}
+                modules={[Pagination]}
                 slidesPerView={2}
                 spaceBetween={30}
                 speed={1111}
                 touchRatio={1}
                 className='mySwiper models-swiper'>
+                {/* 1 */}
                 <SwiperSlide>
                     <div className='custom-card first-card'>
                         <div className='card-image'>
                             <a href='models/gwm-wingle-7'>
-                                <img src={HavalGwmWingle7} alt='haval h6' />
+                                <img
+                                    src={HavalGwmWingle7}
+                                    alt='haval h6'
+                                />
                             </a>
                         </div>
                         <div className='card-content'>
@@ -99,7 +96,7 @@ function MainModels() {
                     </div>
                 </SwiperSlide>
                 {/* 2 */}
-                <SwiperSlide>
+                <SwiperSlide >
                     <div className='custom-card second-card'>
                         <div className='card-image'>
                             <a href='models/gwm-wingle-7'>
@@ -130,7 +127,6 @@ function MainModels() {
                                     <p>399 900 000 so'mdan</p>
                                     <button>
                                         <a
-                                            // ref={buttonRef}
                                             href='/'
                                             className='card-content-bottom-link'>
                                             Batafsilroq
@@ -147,7 +143,7 @@ function MainModels() {
                     </div>
                 </SwiperSlide>
                 {/* 3 */}
-                <SwiperSlide>
+                <SwiperSlide >
                     <div className='custom-card third-card'>
                         <div className='card-image'>
                             <a href='models/gwm-wingle-7'>
@@ -178,7 +174,6 @@ function MainModels() {
                                     <p>269 900 000 so'm</p>
                                     <button>
                                         <a
-                                            // ref={buttonRef}
                                             href='/'
                                             className='card-content-bottom-link'>
                                             Batafsilroq
@@ -195,7 +190,7 @@ function MainModels() {
                     </div>
                 </SwiperSlide>
                 {/* 4 */}
-                <SwiperSlide>
+                <SwiperSlide >
                     <div className='custom-card fourth-card'>
                         <div className='card-image'>
                             <a href='models/gwm-wingle-7'>
@@ -227,7 +222,6 @@ function MainModels() {
                                     <p>242 900 000 so'm</p>
                                     <button>
                                         <a
-                                            // ref={buttonRef}
                                             href='/'
                                             className='card-content-bottom-link'>
                                             Batafsilroq
@@ -244,7 +238,7 @@ function MainModels() {
                     </div>
                 </SwiperSlide>
                 {/* 5 */}
-                <SwiperSlide>
+                <SwiperSlide >
                     <div className='custom-card fiveth-card'>
                         <div className='card-image'>
                             <a href='models/gwm-wingle-7'>
@@ -277,7 +271,6 @@ function MainModels() {
                                     <p>342 900 000 so'm</p>
                                     <button>
                                         <a
-                                            // ref={buttonRef}
                                             href='/'
                                             className='card-content-bottom-link'>
                                             Batafsilroq
@@ -294,8 +287,6 @@ function MainModels() {
                     </div>
                 </SwiperSlide>
             </Swiper>
-            <div className='models-nav-next swiper-button-next'></div>
-            <div className='models-nav-prev swiper-button-prev'></div>
             <div className='custom-pagination'></div>
         </div>
     );

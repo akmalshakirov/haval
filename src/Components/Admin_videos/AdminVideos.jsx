@@ -232,7 +232,7 @@ const AdminVideos = () => {
                                     <p>{item.description}</p>
                                     <div>
                                         <p>
-                                            Yaratilgan vaqti:{" "}
+                                            Yaratilgan vaqti:
                                             <b>{item.createdAt}</b>
                                         </p>
                                     </div>
