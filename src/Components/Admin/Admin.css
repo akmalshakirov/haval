@@ -11,9 +11,11 @@
 }
 
 .custom-mask.custom-mask-list {
-    border-radius: 50%;
+    border-radius: 10px;
 }
-
+:where(.css-dev-only-do-not-override-nqoqt9).ant-image .ant-image-img{
+    border-radius: 10px;
+}
 .custom-mask.custom-mask-card {
     border-radius: 10px;
     height: 95.9%;

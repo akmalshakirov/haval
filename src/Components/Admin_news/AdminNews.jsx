@@ -7,6 +7,8 @@ function AdminNews() {
     const [adminNewsList, setAdminNewsList] = useState([]);
     const [loader, setLoader] = useState(true);
     const [detailModal, setDetailModal] = useState(false);
+    const [selectedNews, setSelectedNews] = useState(null);
+
     const fetchNews = async () => {
         try {
             const token = localStorage.getItem("authToken");
@@ -24,15 +26,23 @@ function AdminNews() {
                     },
                 }
             );
-            setAdminNewsList(response.data);
+            
+            // Ensure we're working with an array
+            const newsData = Array.isArray(response.data) ? response.data : 
+                           (response.data.news || response.data.data || []);
+            
+            setAdminNewsList(newsData);
+            
+            if (newsData.length === 0) {
+                message.info("Yangiliklar topilmadi");
+            }
         } catch (error) {
             const response = error.response;
-            if (response.status === 401) {
+            if (response?.status === 401) {
                 message.info("Token vaqti tugagan!");
             } else {
                 message.error(
-                    `Yangiliklarni yuklashda xatolik yuz berdi: ${error.response?.data?.message}` ||
-                        error.message
+                    `Yangiliklarni yuklashda xatolik yuz berdi: ${error.response?.data?.message || error.message}`
                 );
             }
         } finally {
@@ -44,9 +54,11 @@ function AdminNews() {
         fetchNews();
     }, []);
 
-    const handleDetailModal = () => {
+    const handleDetailModal = (item) => {
+        setSelectedNews(item);
         setDetailModal(true);
     };
+
     return (
         <div className='admin-news'>
             {loader ? (
@@ -63,14 +75,24 @@ function AdminNews() {
                 </div>
             ) : (
                 <div className='admin-news-cards'>
-                    {adminNewsList.map((item, index) => (
-                        <div key={index}>
-                            <Card
-                                cover={<img src={item.image} />}
+                    {Array.isArray(adminNewsList) &&
+                        adminNewsList.map((item, index) => (
+                            <div key={item._id || index}>
+                                <Card
+                                    cover={
+                                        <img
+                                            src={item.image}
+                                            alt={item.title}
+                                            style={{
+                                            maxHeight: 200,
+                                            objectFit: "cover",
+                                        }}
+                                    />
+                                }
                                 style={{ maxWidth: 240 }}>
                                 <p>{item.title}</p>
                                 <a
-                                    onClick={handleDetailModal}
+                                    onClick={() => handleDetailModal(item)}
                                     style={{
                                         display: "block",
                                         width: "30%",
@@ -83,22 +105,33 @@ function AdminNews() {
                                     Batafsil
                                 </a>
                             </Card>
-                            <Modal
-                                open={detailModal}
-                                closeIcon={false}
-                                onCancel={() => setDetailModal(false)}
-                                footer={null}>
-                                <Card
-                                    cover={<img src={item.image} />}
-                                    bordered={false}>
-                                    <p>{item.title}</p>
-                                    <p>{item.description}</p>
-                                </Card>
-                            </Modal>
                         </div>
                     ))}
                 </div>
             )}
+
+            <Modal
+                open={detailModal}
+                onCancel={() => {
+                    setDetailModal(false);
+                    setSelectedNews(null);
+                }}
+                footer={null}>
+                {selectedNews && (
+                    <Card
+                        cover={
+                            <img
+                                src={selectedNews.image}
+                                alt={selectedNews.title}
+                                style={{ objectFit: "cover" }}
+                            />
+                        }
+                        bordered={false}>
+                        <h3>{selectedNews.title}</h3>
+                        <p>{selectedNews.description}</p>
+                    </Card>
+                )}
+            </Modal>
         </div>
     );
 }

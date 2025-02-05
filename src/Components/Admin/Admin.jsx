@@ -119,7 +119,8 @@ const AdminPanel = () => {
             formData.append("image", fileList[0]);
 
             const response = await axios.post(
-                `https://haval-uz.onrender.com/add-car`,
+                // `https://haval-uz.onrender.com/add-car`,
+                `http://localhost:3000/add-car` /* LOCAL ADD CAR */,
                 formData,
                 {
                     headers: {
@@ -155,7 +156,7 @@ const AdminPanel = () => {
 
             const response = await axios.put(
                 // `https://haval-uz.onrender.com/cars/${editingCar._id}`,
-                `http:/localhost:3000/cars/${editingCar._id}`,
+                `http://localhost:3000/cars/${editingCar._id}` /* LOCLA EDIT CAR */,
                 formData,
                 {
                     headers: {
@@ -182,6 +183,8 @@ const AdminPanel = () => {
                 errorMessage
             );
             message.error(errorMessage);
+        } finally {
+            setOnClickBtn(false);
         }
     };
 
@@ -370,7 +373,7 @@ const AdminPanel = () => {
                     style={{
                         width: 90,
                         height: 90,
-                        borderRadius: "50%",
+                        // borderRadius: "50%",
                         objectFit: "cover",
                     }}
                     preview={{
@@ -1055,7 +1058,12 @@ const AdminPanel = () => {
                             Rasm tanlash
                         </label>
                     </Form.Item>
-                    <Button type='primary' htmlType='submit' block>
+                    <Button
+                        type='primary'
+                        htmlType='submit'
+                        block
+                        loading={onClickBtn}
+                        onClick={handleClickBtn}>
                         Saqlash
                     </Button>
                 </Form>

@@ -59,53 +59,12 @@
     font-size: 18px;
     letter-spacing: 1px;
 }
-.models-swiper {
-    position: relative;
-}
-.models-nav-next {
-    position: absolute;
-    top: 835px;
-    left: 53%;
-    cursor: pointer;
-    border: 1px solid #000;
-    color: #000;
-    padding-inline: 21px;
-    transition: 0.4s;
-}
-.models-nav-next::after,
-.models-nav-prev::after {
-    font-size: 22px;
-}
-.models-nav-next:hover {
-    background-color: #000;
-    color: #fff;
-}
-.models-nav-prev {
-    position: absolute;
-    top: 835px;
-    left: 44.5%;
-    cursor: pointer;
-    border: 1px solid #000;
-    color: #000;
-    font-size: 22px;
-    padding-inline: 21px;
-    transition: 0.4s;
-}
-.models-nav-prev:hover {
-    background-color: #000;
-    color: #fff;
-}
+
 .custom-pagination {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 20px;
-}
-.custom-pagination span {
-    transition: 0.2s;
-}
-.custom-pagination span:hover {
-    color: #000;
 }
 .card-content-link {
     font-size: 26px;
