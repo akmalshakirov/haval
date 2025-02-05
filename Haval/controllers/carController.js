@@ -2,6 +2,7 @@ const { Car } = require("../models/Car");
 const mongoose = require("mongoose");
 const { supabase } = require("../config/supabaseClient");
 const { carSchema } = require("../validators/add_car.validate.js");
+const { updatecarSchema } = require("../validators/update_Car.validate.js");
 require("dotenv").config();
 const storageUrl = process.env.SUPABASE_URL;
 
@@ -126,7 +127,7 @@ const updateCar = async (req, res) => {
             }
         }
 
-        const { value, error } = carSchema.validate(body);
+        const { value, error } = updatecarSchema.validate(body);
         if (error) {
             return res.status(400).json({ error: error.details[0].message });
         }
