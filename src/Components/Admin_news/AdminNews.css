@@ -1,7 +1,20 @@
-/* .admin-news {
-    background-color: red;
-} */
+.admin-news {
+    display: flex;
+    flex-direction: column;
+    /*width: max-content;*/
+    gap: 20px;
+}
 .admin-news-cards {
     display: flex;
     gap: 20px;
+}
+#admin-news-button-primary {
+    width: max-content;
+}
+.full-w-input {
+    width: 100%;
+}
+#edit-car-label {
+    display: inline-flex;
+    margin-bottom: 10px;
 }
