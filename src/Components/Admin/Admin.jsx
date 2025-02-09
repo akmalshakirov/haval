@@ -1,35 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
+    Button,
+    Form,
+    Image,
+    Input,
+    InputNumber,
     Layout,
     Menu,
-    Table,
-    Button,
-    Modal,
-    Form,
-    Input,
     message,
-    Image,
-    Tooltip,
-    Switch,
+    Modal,
     Popconfirm,
     Spin,
-    InputNumber,
-    Upload,
+    Switch,
+    Table,
+    Tooltip,
 } from "antd";
 import {
-    HomeOutlined,
+    ArrowRightOutlined,
     CarOutlined,
-    UploadOutlined,
     DeleteOutlined,
     EditOutlined,
-    VideoCameraOutlined,
-    StockOutlined,
-    NotificationOutlined,
-    LogoutOutlined,
-    UnorderedListOutlined,
+    HomeOutlined,
     IdcardOutlined,
+    LogoutOutlined,
+    NotificationOutlined,
+    StockOutlined,
+    UnorderedListOutlined,
     UserOutlined,
-    ArrowRightOutlined,
+    VideoCameraOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import AdminVideos from "../Admin_videos/AdminVideos";
@@ -98,6 +96,7 @@ const AdminPanel = () => {
             if (response.status === 401) {
                 message.info("Token vaqti tugagan!");
             } else {
+                // eslint-disable-next-line no-constant-binary-expression
                 message.error(
                     `Avtomobillarni yuklashda xatolik yuz berdi: ${error.response?.data?.message}` ||
                         error.message
@@ -119,8 +118,7 @@ const AdminPanel = () => {
             formData.append("image", fileList[0]);
 
             const response = await axios.post(
-                // `https://haval-uz.onrender.com/add-car`,
-                `http://localhost:3000/add-car` /* LOCAL ADD CAR */,
+                `http://localhost:3000/add-car`,
                 formData,
                 {
                     headers: {
@@ -304,8 +302,7 @@ const AdminPanel = () => {
             };
 
             const response = await axios.put(
-                `https://haval-uz.onrender.com/admins/${editingAdmin._id}`,
-                // `http://localhost:3000/admins/${editingAdmin._id}`,
+                `https://haval-uz.onrender.com/admins/${editingAdmin._id}`, // `http://localhost:3000/admins/${editingAdmin._id}`,
                 updateData,
                 {
                     headers: {
@@ -372,8 +369,7 @@ const AdminPanel = () => {
                     src={image}
                     style={{
                         width: 90,
-                        height: 90,
-                        // borderRadius: "50%",
+                        height: 90, // borderRadius: "50%",
                         objectFit: "cover",
                     }}
                     preview={{
@@ -392,7 +388,11 @@ const AdminPanel = () => {
             ),
         },
         { title: "Model", dataIndex: "model", key: "model" },
-        { title: "Yili", dataIndex: "year", key: "year" },
+        {
+            title: "Yili",
+            dataIndex: "year",
+            key: "year",
+        },
         { title: "Narxi", dataIndex: "price", key: "price" },
         {
             title: "Amallar",
@@ -681,19 +681,19 @@ const AdminPanel = () => {
                                             {changePass && (
                                                 <>
                                                     {/* <Form.Item
-                                                        name='changePass'
-                                                        rules={[
-                                                            {
-                                                                required: true,
-                                                                message:
-                                                                    "Iltimos, parolni kiriting!",
-                                                            },
-                                                            {
-                                                                min: 6,
-                                                                message:
-                                                                    "Parol kamida 6 ta belgi bo'lishi kerak!",
-                                                            },
-                                                        ]}> */}
+name='changePass'
+rules={[
+{
+required: true,
+message:
+"Iltimos, parolni kiriting!",
+},
+{
+min: 6,
+message:
+"Parol kamida 6 ta belgi bo'lishi kerak!",
+},
+]}> */}
                                                     <Input.Password
                                                         rules={[
                                                             {
@@ -913,16 +913,36 @@ const AdminPanel = () => {
                                             ]}>
                                             <Input />
                                         </Form.Item>
-                                        <Form.Item label='Avtomobil rasmi:'>
-                                            <input
-                                                accept='image/*'
-                                                type='file'
-                                                onChange={(e) =>
-                                                    setFileList(e.target.files)
-                                                }
+                                        <input
+                                            type='file'
+                                            accept='image/*'
+                                            id='add-car'
+                                            className='add-car-input edit-car-input'
+                                            onChange={(e) =>
+                                                setFileList(e.target.files)
+                                            }
+                                        />
+                                        <label
+                                            htmlFor='add-car'
+                                            title='Rasm tanlash'
+                                            id='edit-car-label'
+                                            className='add-car-label edit-car-label'>
+                                            Rasm tanlash
+                                        </label>
+                                        {fileList.length > 0 && (
+                                            <Image
+                                                src={URL.createObjectURL(
+                                                    fileList[0]
+                                                )}
+                                                alt='Rasm'
+                                                style={{
+                                                    width: 100,
+                                                    borderRadius: 5,
+                                                }}
                                             />
-                                        </Form.Item>
+                                        )}
                                         <Button
+                                            className='edit-car-button-submit'
                                             type='primary'
                                             htmlType='submit'
                                             block
@@ -1010,7 +1030,7 @@ const AdminPanel = () => {
                                 message: "Iltimos, yilni kiriting!",
                             },
                         ]}>
-                        <InputNumber min={2020} />
+                        <InputNumber min={2020} className='full-w-input' />
                     </Form.Item>
                     <Form.Item
                         name='price'
@@ -1021,29 +1041,9 @@ const AdminPanel = () => {
                                 message: "Iltimos, narxni kiriting!",
                             },
                         ]}>
-                        <InputNumber min={19000} />
+                        <InputNumber min={19000} className='full-w-input' />
                     </Form.Item>
                     <Form.Item label='Avtomobil rasmi:'>
-                        {/* <Upload
-                            listType='picture-card'
-                            fileList={fileList}
-                            beforeUpload={() => false}
-                            maxCount={1}>
-                            {fileList.length >= 1 ? null : (
-                                <div>
-                                    <UploadOutlined />
-                                    <div style={{ marginTop: 8 }}>Yuklash</div>
-                                </div>
-                            )}
-                        </Upload>
-                        {editingCar && !fileList.length && (
-                            <Image
-                                src={editingCar.image}
-                                alt='Current image'
-                                style={{ width: 100, margninTop: 8 }}
-                                preview={true}
-                            />
-                        )} */}
                         <input
                             type='file'
                             accept='image/*'
@@ -1057,8 +1057,16 @@ const AdminPanel = () => {
                             className='edit-car-label'>
                             Rasm tanlash
                         </label>
+                        {fileList.length > 0 && (
+                            <Image
+                                src={URL.createObjectURL(fileList[0])}
+                                alt='Rasm'
+                                style={{ width: 100, borderRadius: 5 }}
+                            />
+                        )}
                     </Form.Item>
                     <Button
+                        className='edit-car-button-submit'
                         type='primary'
                         htmlType='submit'
                         block
