@@ -2,6 +2,9 @@ const { Car } = require("../models/Car");
 const mongoose = require("mongoose");
 const { supabase } = require("../config/supabaseClient");
 const { carSchema } = require("../validators/add_car.validate.js");
+const { updatecarSchema } = require("../validators/update_Car.validate.js");
+require("dotenv").config();
+const storageUrl = process.env.SUPABASE_URL;
 
 const getCars = async (req, res) => {
     try {
@@ -93,12 +96,9 @@ const updateCar = async (req, res) => {
             const { buffer, originalname, mimetype } = req.file;
             const fileName = `cars/${Date.now()}_${originalname}`;
             if (existingCar.image) {
-                const oldImagePath = existingCar.image.replace(
-                    supabase.storage.from(bucketName).getPublicUrl("")
-                        .publicUrl,
-                    ""
-                );
+                const oldImagePath = existingCar.image.replace( `${storageUrl}/object/public/Haval/`, "" )
 
+            console.log(oldImagePath)
                 const { error: removeError } = await supabase.storage
                     .from(bucketName)
                     .remove([oldImagePath]);
@@ -138,7 +138,7 @@ const updateCar = async (req, res) => {
             imageUrl = publicUrlData.publicUrl;
         }
 
-        const { value, error } = carSchema.validate(body);
+        const { value, error } = updatecarSchema.validate(body);
         if (error) {
             return res.status(400).json({ error: error.details[0].message });
         }
