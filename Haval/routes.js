@@ -65,6 +65,8 @@ const {
     deleteUser,
     getUserById,
 } = require("./controllers/userController");
+const { required } = require("joi");
+const { create_pdf, download_pdf } = require("./controllers/pdfkit")
 const router = require("express").Router();
 
 router
@@ -264,6 +266,16 @@ router
         jwtAccessMiddleware,
         roleAccessMiddleware(["admin"]),
         deleteVideo
-    );
+    )
+    .post(
+        "/create-pdf",
+        jwtAccessMiddleware,
+        create_pdf
+    )
+    .post(
+        "/download-pdf/:filename",
+        jwtAccessMiddleware,
+        download_pdf
+    )
 
 module.exports = router;
