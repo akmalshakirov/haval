@@ -86,6 +86,27 @@ const AdminPanel = () => {
                     },
                 }
             );
+            // const orgToken = response.data.token;
+            // if (token !== orgToken) {
+            //     message.error("Token yaroqli emas!");
+            //     navigate("/");
+            //     localStorage.removeItem("authToken");
+            // }
+            // const orgToken = response.data.token;
+            // if (token !== orgToken) {
+            //     console.log("Token:", token, "OrgToken:", orgToken);
+            //     message.error("Token yaroqli emas!");
+            //     navigate("/");
+            //     localStorage.removeItem("authToken");
+            // } else {
+            //     console.log("Token:", token, "OrgToken:", orgToken);
+            //     message.error("Token yaroqli emas!");
+            // }
+            // if (response.status === 400) {
+            //     message.error("Token yaroqli emas");
+            //     localStorage.removeItem("authToken");
+            //     navigate("/");
+            // }
             setCars([response.data.cars]);
             console.log(
                 "Kelgan ma'lumotlar (avtomobillar):",
@@ -96,7 +117,6 @@ const AdminPanel = () => {
             if (response.status === 401) {
                 message.info("Token vaqti tugagan!");
             } else {
-                // eslint-disable-next-line no-constant-binary-expression
                 message.error(
                     `Avtomobillarni yuklashda xatolik yuz berdi: ${error.response?.data?.message}` ||
                         error.message

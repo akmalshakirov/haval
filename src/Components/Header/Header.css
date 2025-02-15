@@ -124,17 +124,53 @@
 .owners-modal.active {
     padding: 20px;
     background-color: #fff;
-    animation: fadeIn 555ms ease-in-out;
+    animation: fadeIn 333ms ease-in-out;
 }
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: scale(0.1);
+        transform: scale(0.98);
     }
     to {
         opacity: 1;
         transform: scale(1);
     }
+}
+.about-gwm-active {
+    display: flex;
+    gap: 30px;
+    padding: 20px;
+    background-color: #fff;
+    animation: fadeIn 333ms ease-in-out;
+    padding-bottom: 200px;
+}
+.about-gwm-active a {
+    font-family: var(--font-mich) !important;
+    font-weight: 400 !important;
+    color: #000 !important;
+}
+.about-gwm-active a:hover {
+    text-decoration: underline;
+}
+.about-gwm-active-one ul a {
+    letter-spacing: 0;
+}
+.about-gwm-active-one ul {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 7px;
+    max-width: 300px;
+}
+.about-gwm-active-two ul {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 7px;
+}
+.about-gwm-active h3 {
+    color: #909090;
+    font-size: 16px;
 }
 .owners-modal.active a {
     color: #000;

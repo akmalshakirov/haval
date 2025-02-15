@@ -39,7 +39,11 @@ const AdminLogin = () => {
                     },
                 }
             );
-
+            // if (response.status == 400) {
+            //     message.error("Token yaroqli emas");
+            //     navigate("/");
+            //     localStorage.removeItem("authToken");
+            // }
             if (response.data) {
                 navigate("/admin");
                 message.success("Admin panelga muvaffaqiyatli kirildi!");

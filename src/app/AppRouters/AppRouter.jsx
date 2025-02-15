@@ -18,6 +18,7 @@ import MainDealers from "../../Components/MainDealers/MainDealers.jsx";
 import MainVideos from "../../Components/MainVideos/MainVideos.jsx";
 import AuthRouter from "../AuthRouters/AuthRouter.jsx";
 import TestDrive from "../../Pages/Test-drive/TestDrive.jsx";
+import BDealer from "../../Pages/Become-dealer/BDealer.jsx";
 
 const AppRouter = () => {
     return (
@@ -51,7 +52,11 @@ const AppRouter = () => {
             <Route path='/models/haval-h6' element={<HavalH6 />} />
             <Route path='/models/gwm-wingle-7' element={<GWMwignle7 />} />
             <Route path='/owners/service/guarantee' element={<Guarantee />} />
-            <Route path='/test-drive/' element={<TestDrive />} />
+            <Route path='/test-drive' element={<TestDrive />} />
+            <Route
+                path='/about-gwm/haval-v-uzbekistane/how-become-dealer'
+                element={<BDealer />}
+            />
             <Route path='*' element={<AuthRouter />} /> {/*<- NOT FOUND PAGE */}
         </Routes>
     );
