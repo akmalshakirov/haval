@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     background-image: url("../../Images/admin-login_cover.jpg");
     background-size: cover;
     background-position: top;

@@ -1,0 +1,44 @@
+.b-dealer {
+    background-color: #e3e6e8;
+}
+.b-dealer-wrapper {
+    min-height: 100vh;
+    max-width: 100vw;
+    background-image: url("../../src/Images/haval-how-become-dealer-bg.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+.b-dealer-container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding: 20px;
+}
+.b-dealer-header-hero-title {
+    position: absolute;
+    bottom: 120px;
+    left: 20px;
+    font-size: 46px;
+    color: #fff;
+}
+.b-dealer-ul {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.b-dealer-ul a {
+    color: #909090;
+}
+.b-dealer-ul a:hover {
+    text-decoration: underline;
+}
+.b-dealer-text {
+    font-weight: 400;
+    max-width: 850px;
+    font-size: 15px;
+}
+.b-dealer-info a:hover {
+    text-decoration: underline;
+}

@@ -66,6 +66,7 @@ function AdminNews() {
             const formData = new FormData();
             formData.append("title", values.title);
             formData.append("description", values.description);
+            formData.append("createdAt", values.createdAt);
             if (fileList.length > 0) {
                 formData.append("image", fileList[0]);
             }
@@ -228,8 +229,19 @@ function AdminNews() {
                         ]}>
                         <Input />
                     </Form.Item>
+                    <Form.Item
+                        label='Video qachon yaratilgan:'
+                        name='createdAt'
+                        rules={[
+                            {
+                                required: true,
+                                message: "Iltimos, matnni kiriting!",
+                            },
+                        ]}>
+                        <Input />
+                    </Form.Item>
 
-                    <Form.Item label='Yanglikning rasmi'>
+                    <Form.Item label='Yanglikning rasmi:'>
                         <div>
                             <input
                                 type='file'

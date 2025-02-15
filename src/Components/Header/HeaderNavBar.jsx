@@ -16,6 +16,7 @@ function HeaderNavBar() {
     const [isOpenModels, setOpenModels] = useState(false);
     const [isAsideOpen, setAsideOpen] = useState(false);
     const [isAsideListHovered, setAsideListHovered] = useState(false);
+    const [isAboutGwmOpen, setAboutGwmOpen] = useState(false);
 
     const changeLanguage = (lang) => {
         i18n.changeLanguage(lang);
@@ -173,7 +174,42 @@ function HeaderNavBar() {
                             )}
                         </li>
                         <li>
-                            <a href='#'>{t("company")}</a>
+                            <button
+                                className='about-gwm owner-btn'
+                                onClick={() => setAboutGwmOpen(true)}>
+                                {t("company")}
+                            </button>
+                            {isAboutGwmOpen && (
+                                <div
+                                    className='about-gwm-modal owners-modal-overlay'
+                                    onClick={() => setAboutGwmOpen(false)}>
+                                    <div
+                                        onClick={(e) => e.stopPropagation()}
+                                        className='about-gwm-active'>
+                                        <div className='about-gwm-active-one'>
+                                            <h3>HAVAL O'zbekistonda</h3>
+                                            <ul>
+                                                <li>Biz haqimizda</li>
+                                                <a href='/about-gwm/haval-v-uzbekistane/how-become-dealer'>
+                                                    Qanday qilib diler bo'lish
+                                                    mumkin
+                                                </a>
+                                                <li>
+                                                    Diler qo'ng'irog'iga
+                                                    buyurtma berish
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div className='about-gwm-active-two'>
+                                            <h3>Media markazi</h3>
+                                            <ul>
+                                                <li>Video sharhlar</li>
+                                                <li>Yangiliklar</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </li>
                         <li>
                             <a href='#'>{t("statistics")}</a>
