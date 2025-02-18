@@ -67,6 +67,7 @@ const {
 } = require("./controllers/userController");
 const { required } = require("joi");
 const { create_pdf, download_pdf } = require("./controllers/pdfkit")
+const { createOrder, getOrders, makePayment } = require("./shartnoma/controllers/orderController");
 const router = require("express").Router();
 
 router
@@ -277,5 +278,10 @@ router
         jwtAccessMiddleware,
         download_pdf
     )
+
+    // .post("/", jwtAccessMiddleware, roleAccessMiddleware, createOrder)
+    .get("/orders", jwtAccessMiddleware, getOrders)
+    .post("/orders/pay", jwtAccessMiddleware, makePayment)
+
 
 module.exports = router;

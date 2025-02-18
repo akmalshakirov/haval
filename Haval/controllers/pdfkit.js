@@ -5,7 +5,7 @@ const multer = require("multer");
 const { GridFsStorage } = require("multer-gridfs-storage");
 const { db, getGFS } = require("../config/db");
 const router = require("express").Router();
-const PDF = require("../models/Pdfkit");
+const PDF = require("../models/Order");
 
 let gfs;
 db().then(() => {
@@ -62,9 +62,10 @@ const create_pdf = async (req, res) => {
     const uploadStream = bucket.openUploadStream(filename);
     uploadStream.end(pdfBytes);
 
-    uploadStream.on("finish", async () => {
-      res.json({ message: "PDF yaratildi va saqlandi", filename });
+    uploadStream.on("finish", async function () {
+      res.json({ message: "PDF yaratildi va saqlandi", filename, fileId: uploadStream.id });
     });
+    
 
     uploadStream.on("error", (err) => {
       console.error(err);
