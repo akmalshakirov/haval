@@ -2,14 +2,26 @@ const Order = require("../../models/Order");
 const generatePDF = require("../utils/pdfGenerator");
 
 exports.createOrder = async (req, res) => {
-  const { carModel, totalPrice } = req.body;
-  const order = new Order({ userId: req.user.userId, carModel, totalPrice });
-
+  const {fullname, phone, model, color, engine, transmission, payment, prepayment } = req.body;
   try {
-    await order.save();
-    res.status(201).json(order);
+    const newOrder = await Order.create({
+      fullname,
+      phone,
+      model,
+      color,
+      engine,
+      transmission,
+      payment,
+      prepayment
+    });
+ 
+    return res.status(200).send({
+      message: 'Muvaffaqiyatli qo\'shildi',
+      newOrder,
+    });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    console.log(err)
+    res.status(500).json({ error: 'Xatolik yuz berdi' });
   }
 };
 
