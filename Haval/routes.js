@@ -13,7 +13,7 @@ const {
     updateCar,
     deleteCar,
 } = require("./controllers/carController");
-const { register, loginAdmin } = require("./controllers/authController");
+const { register, login, loginAdmin } = require("./controllers/authController");
 const {
     getDiler,
     addDiler,
@@ -65,8 +65,8 @@ const {
     deleteUser,
     getUserById,
 } = require("./controllers/userController");
-const { required } = require("joi");
 const { create_pdf, download_pdf } = require("./controllers/pdfkit")
+const { getOrders, makePayment, createOrder } = require("./shartnoma/controllers/orderController");
 const router = require("express").Router();
 
 router
@@ -88,7 +88,7 @@ router
         roleAccessMiddleware(["admin"]),
         createAdmin
     )
-    .post("/login", loginLimiter, loginAdmin)
+    .post("/loginAdmin", loginLimiter, loginAdmin)
     .post("/register", jwtAccessMiddleware, register)
     .put(
         "/admins/:id",
@@ -229,6 +229,11 @@ router
     .get("/test-driver", jwtAccessMiddleware, getTestDrivers)
     .post("/add-test-driver", jwtAccessMiddleware, addTestDriver)
 
+    .post(
+        "/login",
+        jwtAccessMiddleware,
+        login
+    )
     .get(
         "/users",
         jwtAccessMiddleware,
@@ -277,5 +282,10 @@ router
         jwtAccessMiddleware,
         download_pdf
     )
+
+    .post("/createOrder", jwtAccessMiddleware, createOrder)
+    .get("/orders", jwtAccessMiddleware, getOrders)
+    .post("/orders/pay", jwtAccessMiddleware, makePayment)
+
 
 module.exports = router;

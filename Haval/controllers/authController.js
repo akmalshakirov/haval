@@ -36,7 +36,7 @@ exports.register = async (req, res) => {
                 .json({ message: "Barcha maydonlarni to‘ldiring." });
         }
 
-        if (!process.env.JWT_SECRET) {
+        if (!process.env.JWT_SECRET_KEY) {
             throw new Error("JWT_SECRET muhit o'zgaruvchisi mavjud emas!");
         }
 
@@ -46,10 +46,10 @@ exports.register = async (req, res) => {
                 email: user.email,
                 role: user.role,
             },
-            process.env.JWT_SECRET,
+            process.env.JWT_SECRET_KEY,
             { expiresIn: "1h" }
         );
-
+        console.log(token)
         res.status(200).json({
             message: "Foydalanuvchi muvaffaqiyatli ro‘yxatdan o‘tdi.",
             user,
@@ -59,6 +59,35 @@ exports.register = async (req, res) => {
         res.status(500).json({ message: "Serverda xatolik yuz berdi." });
     }
 };
+
+exports.login = async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      const user = await User.findOne({ email });
+      if (!user) return res.status(404).json({ message: 'Foydalanuvchi topilmadi' });
+  
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) return res.status(400).json({ message: 'Noto‘g‘ri parol' });
+  
+      const token = jwt.sign(
+        { 
+            id: user._id, 
+            email: user.email,
+            name: user.name,
+            role: user.role 
+        }, 
+        process.env.JWT_SECRET_KEY, 
+        { expiresIn: '1d' });
+
+    return res.status(200).send({
+            token,
+    });
+    } catch (error) {
+    console.log(error);
+    return res.status(400).json({ error: error.message });
+    }
+  };
+
 
 exports.loginAdmin = async (req, res) => {
     console.log(req.body);

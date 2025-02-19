@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
+const { GridFSBucket } = require("mongodb");
+
+let gfs;
 
 exports.db = async function () {
   const url = process.env.MONGODB_URL;
@@ -17,8 +20,14 @@ exports.db = async function () {
         useNewUrlParser: true,
         useUnifiedTopology: true,
       });
+
       console.log("✅ MongoDB connection successful!");
-      break; 
+
+      const conn = mongoose.connection;
+      gfs = new GridFSBucket(conn.db, { bucketName: "pdfs" });
+
+      console.log("✅ GridFS ulanishi muvaffaqiyatli!");
+      return;
     } catch (err) {
       attempts++;
       console.error(`❌ MongoDB connection failed (attempt ${attempts}):`, err);
@@ -27,7 +36,14 @@ exports.db = async function () {
         console.error("❌ Max connection attempts reached. Exiting...");
         process.exit(1);
       }
-      await new Promise((resolve) => setTimeout(resolve, 5000)); // 5 soniya kutish
+      await new Promise((resolve) => setTimeout(resolve, 5000)); 
     }
   }
+};
+
+exports.getGFS = function () {
+  if (!gfs) {
+    throw new Error("GridFS hali bog'lanmagan! MongoDB ulanayotgan bo'lishi mumkin.");
+  }
+  return gfs;
 };
