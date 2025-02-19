@@ -31,7 +31,7 @@ const create_pdf = async (req, res) => {
     const page = pdfDoc.addPage([600, 700]);
     const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
-    page.drawText("HAVAL AVTOMOBILINI SOTIB OLISH ARIZASI", { x: 50, y: 650, size: 18, font });
+    page.drawText("HAVAL AVTOMOBILINI SOTIB OLISH", { x: 50, y: 650, size: 18, font });
 
     const fields = [
       { label: "Ism, Familiya:", value: fullname, y: 600 },
