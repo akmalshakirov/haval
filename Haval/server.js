@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const { db, getGFS } = require("./config/db.js");
-const { cancelUnpaidOrders } = require("./shartnoma/cron/cancelUnpaidOrders.js");
+const cancelUnpaidOrders = require("./shartnoma/cron/cancelUnpaidOrders.js");
 const dotenv = require("dotenv").config();
 
 db().then(() => {
