@@ -1,18 +1,20 @@
 const Order = require("../../models/Order");
 const generatePDF = require("../utils/pdfGenerator");
+const { pdfSchema } = require("../../validators/pfkit");
 
 exports.createOrder = async (req, res) => {
-  const {fullname, phone, model, color, engine, transmission, payment, prepayment } = req.body;
   try {
+     const { value, error } = pdfSchema.validate(req.body);
+
     const newOrder = await Order.create({
-      fullname,
-      phone,
-      model,
-      color,
-      engine,
-      transmission,
-      payment,
-      prepayment
+      fullname: value.fullname,
+      phone: value.phone,
+      model: value.model,
+      color: value.color,
+      engine: value.engine,
+      transmission: value.transmission,
+      payment: value.payment,
+      prepayment: value.prepayment
     });
  
     return res.status(200).send({

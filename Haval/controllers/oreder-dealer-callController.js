@@ -1,5 +1,6 @@
 const Oreder_dealer_call = require('../models/Order-dealer-call');
 const mongoose = require("mongoose");
+const { oreder_dealer_callSchema } = require("../validators/Order-dealer-call.validate");
 
 const getAllDealerCalls = async (req, res) => {
   try {
@@ -21,14 +22,16 @@ const addDealerCall = async (req, res) => {
     if (!emailRegex.test(email)) {
       return res.status(400).json({ error: "Email noto'g'ri formatda." });
     }
+    
+    const { value, error } = oreder_dealer_callSchema.validate(req.body);
 
     const newDealerCall = await Oreder_dealer_call.create({
-      diler,
-      toliqIsm,
-      phone,
-      email,
-      savolTuri,
-      izoh
+      diler: value.diler,
+      toliqIsm: value.toliqIsm,
+      phone: value.phone,
+      email: value.email,
+      savolTuri: value.savolTuri,
+      izoh: value.izoh
     });
 
     return res.status(200).json({
@@ -42,36 +45,22 @@ const addDealerCall = async (req, res) => {
 
 const updateDealerCall = async (req, res) => {
   const { id } = req.params;
-  const { diler, toliqIsm, phone, email, savolTuri, izoh } = req.body;
-
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   try {
  if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ error: "Noto'g'ri car ID." });
     }
-
-    const updateData = {};
-
-    if (email) {
-          if (!emailRegex.test(email)) {
-            return res.status(400).json({ error: "Email noto'g'ri formatda." });
-          }
-          const existingAdmin = await Admin.findOne({ email, _id: { $ne: id } });
-          if (existingAdmin) {
-            return res.status(400).json({ error: "Bu email bilan boshqa admin allaqachon mavjud." });
-          }
-          updateData.email = email;
-        }
     
-    if (diler, toliqIsm, phone, savolTuri, izoh) {
-        await Car.find({diler, toliqIsm, phone,  savolTuri, izoh, _id: { $ne: id } });
-          updateData.diler = diler;
-          updateData.toliqIsm = toliqIsm; 
-          updateData.phone = phone; 
-          updateData.savolTuri = savolTuri; 
-          updateData.izoh = izoh; 
-    }
+    const { value, error } = oreder_dealer_callSchema.validate(req.body);
+
+    const updateData = {
+        diler: value.diler,
+      toliqIsm: value.toliqIsm,
+      phone: value.phone,
+      email: value.email,
+      savolTuri: value.savolTuri,
+      izoh: value.izoh
+    };
 
     const updatedDealerCall = await Oreder_dealer_call.findByIdAndUpdate(id, updateData, { new: true } )
 

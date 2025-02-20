@@ -1,5 +1,6 @@
 const Diler = require('../models/Diler');
 const mongoose = require("mongoose");
+const { dilerSchema } = require("../validators/diler.validate");
 
 const getDiler = async (req, res) => {
   try {
@@ -19,15 +20,15 @@ const getDiler = async (req, res) => {
 };
 
 const addDiler = async (req, res) => {
-  const { title, manzil, workHoursDays, workHoursStart, workHoursEnd, phone } = req.body;
+   const { value, error } = dilerSchema.validate(req.body);
   try {
     const newDiler = await Diler.create({
-      title,
-      manzil,
-      workHoursDays,
-      workHoursStart,
-      workHoursEnd,
-      phone,
+      title: value.title,
+      manzil: value.manzil,
+      workHoursDays: value.workHoursDays,
+      workHoursStart: value.workHoursStart,
+      workHoursEnd: value.workHoursEnd,
+      phone: value.phone
     });
 
     res.status(200).json({ message: 'Ma\'lumotlar muvaffaqiyatli yuborildi:', data: newDiler });
@@ -39,24 +40,23 @@ const addDiler = async (req, res) => {
 
 const updateDiler = async (req, res) => {
   const { id } = req.params;
-  const { dilerId, title, manzil, workHoursDays, workHoursStart, workHoursEnd, phone } = req.body;
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
           return res.status(400).json({ error: "Noto'g'ri ID." });
         }
 
-    const updateData = {};  
+    const { value, error } = dilerSchema.validate(req.body);
+
+    const updateData = {
+      dilerId:  value.dilerId,
+      title: value.title,
+      manzil: value.manzil,
+      workHoursDays: value.workHoursDays,
+      workHoursStart: value.workHoursStart,
+      workHoursEnd: value.workHoursEnd,
+      phone: value.phone
+    };  
     
-     if ( dilerId, title, manzil, workHours, phone) {
-            await Diler.find({ dilerId, title, manzil, workHoursDays, workHoursStart, workHoursEnd, phone, _id: { $ne: id } });
-              updateData.dilerId = dilerId;
-              updateData.title = title; 
-              updateData.manzil = manzil; 
-              updateData.workHoursDays = workHoursDays; 
-              updateData.workHoursStart = workHoursStart; 
-              updateData.workHoursEnd = workHoursEnd;
-              updateData.phone = phone;
-        }
     
     const diler = await Diler.findByIdAndUpdate(id, updateData, { new: true });
 
