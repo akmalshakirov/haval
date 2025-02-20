@@ -10,8 +10,8 @@ const PDF = require("../models/Order");
 let gfs;
 db().then(() => {
   gfs = getGFS();
-  console.log("✅ GridFS tayyor!");
-}).catch(err => console.error("❌ Ulanishda xatolik:", err));
+  console.log("GridFS tayyor!");
+}).catch(err => console.error("Ulanishda xatolik:", err));
 
 const storage = new GridFsStorage({
   url: process.env.MONGODB_URL,

@@ -23,7 +23,8 @@ const getAllNews = async (req, res) => {
 };
 
 const addNews = async (req, res) => {
-
+    const { title, description, image, } = req.body;
+    
     function formatDate(date) {
         const d = new Date(date);
         const hours = d.getHours();
@@ -40,13 +41,22 @@ const addNews = async (req, res) => {
     try {
         const { value, error } = newsSchema.validate(req.body)
 
+        // const news = await News.create({
+        //     title: value.title,
+        //     description: value.description,
+        //     image: value.image,
+        //     createdAt: formatDate(new Date()),
+        //     updatedAt: formatDate(new Date()),
+        // });
+
         const news = await News.create({
-            title: value.title,
-            description: value.description,
-            image: value.image,
-            createdAt: formatDate(new Date()),
-            updatedAt: formatDate(new Date()),
-        });
+                title,
+                description,
+                image,
+                createdAt: formatDate(new Date()),
+                updatedAt: formatDate(new Date()),
+            });
+    
 
         res.status(200).json({
             message: "Yangilik muvaffaqiyatli qo'shildi",

@@ -1,5 +1,6 @@
 const Test_drayver = require('../models/Test_drayver');
 const mongoose = require('mongoose')
+const { testDriverSchema } = require("../validators/Test_drayver.validate");
 
 const getTestDrivers = async (req, res) => {
   try {
@@ -16,13 +17,15 @@ const getTestDrivers = async (req, res) => {
 };
 
 const addTestDriver = async (req, res) => {
-  const { toliqIsm, model, phone, izoh } = req.body;
   try {
+    
+    const { value, error } = testDriverSchema.validate(req.body);
+
     const newDriver = await Test_drayver.create({
-      toliqIsm,
-      model,
-      phone,
-      izoh,
+      toliqIsm: value.toliqIsm,
+      model: value.model,
+      phone: value.phone,
+      izoh: value.izoh
     });
  
     return res.status(200).json({
