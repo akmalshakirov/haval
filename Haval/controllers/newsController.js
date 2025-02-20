@@ -1,5 +1,6 @@
 const News = require("../models/News");
 const mongoose = require("mongoose");
+const { newsSchema } = require("../validators/add_news.validate");
 
 const getAllNews = async (req, res) => {
     try {
@@ -22,8 +23,8 @@ const getAllNews = async (req, res) => {
 };
 
 const addNews = async (req, res) => {
-    const { title, description, image } = req.body;
-
+    const { title, description, image, } = req.body;
+    
     function formatDate(date) {
         const d = new Date(date);
         const hours = d.getHours();
@@ -38,13 +39,24 @@ const addNews = async (req, res) => {
     }
 
     try {
+        const { value, error } = newsSchema.validate(req.body)
+
+        // const news = await News.create({
+        //     title: value.title,
+        //     description: value.description,
+        //     image: value.image,
+        //     createdAt: formatDate(new Date()),
+        //     updatedAt: formatDate(new Date()),
+        // });
+
         const news = await News.create({
-            title,
-            description,
-            image,
-            createdAt: formatDate(new Date()),
-            updatedAt: formatDate(new Date()),
-        });
+                title,
+                description,
+                image,
+                createdAt: formatDate(new Date()),
+                updatedAt: formatDate(new Date()),
+            });
+    
 
         res.status(200).json({
             message: "Yangilik muvaffaqiyatli qo'shildi",
@@ -60,20 +72,19 @@ const addNews = async (req, res) => {
 
 const updateNews = async (req, res) => {
     const { id } = req.params;
-    const { title, description, image } = req.body;
     try {
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ error: "Noto'g'ri ID." });
         }
 
-        const updateData = {};
+        const { value, error } = newsSchema.validate(req.body)
+        
+        const updateData = {
+            title: value.title,
+            description: value.description,
+            image: value.image,
+        };
 
-        if ((title, description, image)) {
-            await News.find({ title, description, image, _id: { $ne: id } });
-            updateData.title = title;
-            updateData.description = description;
-            updateData.image = image;
-        }
 
         const updatedNews = await News.findByIdAndUpdate(id, updateData, {
             new: true,

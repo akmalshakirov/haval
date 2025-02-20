@@ -94,13 +94,7 @@ exports.loginAdmin = async (req, res) => {
 
     const { email, password } = req.body;
 
-    // const { error } = loginSchema.validate(req.body);
-    // if (error) {
-    //     return res.status(400).send({
-    //         message: error.details[0].message,
-    //     });
-    // }
-
+    // const {  error } = loginSchema.validate(req.body);
     try {
         const admin = await Admin.findOne({ email: email });
         console.log(admin);

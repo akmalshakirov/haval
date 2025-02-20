@@ -1,6 +1,6 @@
 const Joi = require("joi")
 
-exports.oreder_dealer_callSchema = Joi.object({
+exports.testDriverSchema = Joi.object({
     toliqIsm: Joi.string().min(3).max(20).required().messages({
         "string.base": "Foydalanuvchi nomi string bo'lishi kerak!",
         "string.empty": "Foydalanuvchi nomi bo'sh bo'lmasligi kerak!",
