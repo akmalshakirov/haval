@@ -22,8 +22,7 @@ const storage = new GridFsStorage({
 });
 const upload = multer({ storage });
 
-
-const create_pdf = async (req, res) => {
+const create_and_download_pdf = async (req, res) => {
   try {
     const { fullname, phone, model, color, engine, transmission, payment, prepayment } = req.body;
 
@@ -63,9 +62,11 @@ const create_pdf = async (req, res) => {
     uploadStream.end(pdfBytes);
 
     uploadStream.on("finish", async function () {
-      res.json({ message: "PDF yaratildi va saqlandi", filename, fileId: uploadStream.id });
+      res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+      res.setHeader("Content-Type", "application/pdf");
+      const readStream = bucket.openDownloadStreamByName(filename);
+      readStream.pipe(res);
     });
-    
 
     uploadStream.on("error", (err) => {
       console.error(err);
@@ -78,27 +79,4 @@ const create_pdf = async (req, res) => {
   }
 }
 
-
-const download_pdf = async (req, res) => {
-  try {
-    const bucket = new GridFSBucket(mongoose.connection.db, { bucketName: "pdfs" });
-    const filename = req.params.filename;
-
-    const files = await bucket.find({ filename }).toArray();
-    if (!files.length) {
-      return res.status(404).json({ error: "Fayl topilmadi" });
-    }
-
-    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
-    res.setHeader("Content-Type", "application/pdf");
-
-    const readStream = bucket.openDownloadStreamByName(filename);
-    readStream.pipe(res);
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Fayl yuklab olinmadi" });
-  }
-}
-
-module.exports = { create_pdf, download_pdf }
+module.exports = { create_and_download_pdf };
