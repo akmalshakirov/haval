@@ -21,7 +21,8 @@ function AdminNews() {
             }
 
             const response = await axios.get(
-                "https://haval-uz.onrender.com/news",
+                // "https://haval-uz.onrender.com/news",
+                "http://localhost:3000/news",
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -66,7 +67,6 @@ function AdminNews() {
             const formData = new FormData();
             formData.append("title", values.title);
             formData.append("description", values.description);
-            formData.append("createdAt", values.createdAt);
             if (fileList.length > 0) {
                 formData.append("image", fileList[0]);
             }
@@ -221,17 +221,6 @@ function AdminNews() {
                     <Form.Item
                         label='Yanglikning matni'
                         name='description'
-                        rules={[
-                            {
-                                required: true,
-                                message: "Iltimos, matnni kiriting!",
-                            },
-                        ]}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        label='Video qachon yaratilgan:'
-                        name='createdAt'
                         rules={[
                             {
                                 required: true,
