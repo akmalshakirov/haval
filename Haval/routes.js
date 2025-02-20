@@ -65,7 +65,7 @@ const {
     deleteUser,
     getUserById,
 } = require("./controllers/userController");
-const { create_pdf, download_pdf } = require("./controllers/pdfkit")
+const { create_an_download_pdf } = require("./controllers/pdfkit")
 const { getOrders, makePayment, createOrder } = require("./shartnoma/controllers/orderController");
 const router = require("express").Router();
 
@@ -273,14 +273,9 @@ router
         deleteVideo
     )
     .post(
-        "/create-pdf",
-        jwtAccessMiddleware,
-        create_pdf
-    )
-    .post(
         "/download-pdf/:filename",
         jwtAccessMiddleware,
-        download_pdf
+        create_an_download_pdf
     )
 
     .post("/createOrder", jwtAccessMiddleware, createOrder)
