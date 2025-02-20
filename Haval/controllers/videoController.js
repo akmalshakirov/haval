@@ -18,7 +18,6 @@ exports.getVideos = async (req, res) => {
 };
 
 exports.addVideo = async (req, res) => {
-  const { title, video, createdAt } = req.body;
   
   function formatDate(date) {
     const d = new Date(date);
@@ -30,9 +29,11 @@ exports.addVideo = async (req, res) => {
     return `${day}/${month}/${year}, ${hours}:${String(minutes).padStart(2, "0")}`;
   }
   try {
+    const { value, error } = videoSchema.validate(req.body);
+
     const newVideo = await Video.create({
-      title,
-      video,
+      title: value.title,
+      video: value.video,
       createdAt: formatDate(new Date()), 
       updatedAt: formatDate(new Date()), 
     });

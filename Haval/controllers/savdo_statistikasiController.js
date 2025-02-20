@@ -1,5 +1,6 @@
 const Savdo_statistikasi = require('../models/Savdo_statistikasi');
 const mongoose = require("mongoose");
+const { statistikaSchema } = require("../validators/savdoStatistikasi.validate");
 
 const getAllSavdoStatistikasi = async (req, res) => {
   try {
@@ -16,13 +17,31 @@ const getAllSavdoStatistikasi = async (req, res) => {
 
 const addSavdoStatistikasi = async (req, res) => {
   const { title, description, image, createdAt } = req.body;
+
+  function formatDate(date) {
+    const d = new Date(date);
+    const hours = d.getHours();
+    const minutes = d.getMinutes();
+    const day = d.getDate();
+    const month = d.getMonth() + 1;
+    const year = String(d.getFullYear()).slice(-2);
+    return `${day}/${month}/${year}, ${hours}:${String(minutes).padStart(
+        2,
+        "0"
+    )}`;
+}
+
+
   try {
+    
+    const { value, error } = statistikaSchema.validate(req.body);
+
     const newStatistika = await Savdo_statistikasi.create({
-      title,
-      description,
-      image,
-      createdAt,
-      updatedAt: createdAt, 
+      title: value.title,
+      description: value.description,
+      image: value.image,
+      createdAt: formatDate(new Date()),
+      updatedAt: formatDate(new Date()), 
     });
 
     return res.status(200).json({
@@ -36,20 +55,20 @@ const addSavdoStatistikasi = async (req, res) => {
 
 const updateSavdoStatistikasi = async (req, res) => {
   const { id } = req.params;
-  const { title, description, image } = req.body;
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
           return res.status(400).json({ error: "Noto'g'ri car ID." });
         }
     
-        const updateData = {};
+        
+    const { value, error } = statistikaSchema.validate(req.body);
     
-        if (title, description, image) {
-            await Car.find({title, description, image, _id: { $ne: id } });
-              updateData.title = title; 
-              updateData.description = description; 
-              updateData.image = image; 
-        }
+        const updateData = {
+          title: value.title,
+          description: value.description,
+          image: value.image,
+        };
+    
     
     const updatedStatistika = await Savdo_statistikasi.findByIdAndUpdate(id, updateData, { new: true } );
 

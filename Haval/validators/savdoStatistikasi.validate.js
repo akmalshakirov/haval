@@ -1,6 +1,6 @@
 const Joi = require("joi")
 
-exports.newsSchema = Joi.object({
+exports.statistikaSchema = Joi.object({
     title: Joi.string().min(10).max(255).required().messages({
         "string.base": "Sarlavha string bo'lishi kerak!",
         "string.empty": "Sarlavha bo'sh bo'lmasligi kerak!",
