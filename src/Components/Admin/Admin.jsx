@@ -60,6 +60,8 @@ const AdminPanel = () => {
     const [onClickBtn, setOnClickBtn] = useState(false);
     const [changePass, setChangePass] = useState(false);
     const [changePassInputValue, setChangePassInputValue] = useState("");
+    const [deleteAdminModal, setDeleteAdminModal] = useState(false);
+    const [adminToDelete, setAdminToDelete] = useState(null);
     const navigate = useNavigate();
 
     const handleChangePassInput = (e) => {
@@ -363,7 +365,7 @@ const AdminPanel = () => {
                     },
                 }
             );
-
+            setDeleteAdminModal(false);
             if (response.status === 200) {
                 await fetchAdmins();
                 message.success("Admin muvaffaqiyatli o'chirildi!");
@@ -389,7 +391,7 @@ const AdminPanel = () => {
                     src={image}
                     style={{
                         width: 90,
-                        height: 90, // borderRadius: "50%",
+                        height: 90,
                         objectFit: "cover",
                     }}
                     preview={{
@@ -458,19 +460,23 @@ const AdminPanel = () => {
             key: "action",
             render: (_, record) => (
                 <div>
-                    <a
+                    <span
                         onClick={() => {
                             setEditingAdmin(record);
                             setAactionModal(true);
                             form.setFieldsValue(record);
-                        }}>
+                        }}
+                        style={{ cursor: "pointer" }}>
                         {<EditOutlined />}
-                    </a>
-                    <a
-                        onClick={() => handleDeleteAdmin(record._id)}
-                        style={{ marginLeft: 8 }}>
+                    </span>
+                    <span
+                        onClick={() => {
+                            setAdminToDelete(record);
+                            setDeleteAdminModal(true);
+                        }}
+                        style={{ marginLeft: 8, cursor: "pointer" }}>
                         {<DeleteOutlined />}
-                    </a>
+                    </span>
                 </div>
             ),
         },
@@ -1098,6 +1104,38 @@ message:
             </Modal>
             {/* EDIT MODAL =----=-=--=-=---=-=-==- */}
             {/* ===========================DELETE MODAL =----=-=--=-=---=-=-==- */}
+            <Modal
+                title="Adminni o'chirish"
+                open={deleteAdminModal}
+                onOk={() => handleDeleteAdmin(adminToDelete?._id)}
+                onCancel={() => {
+                    setDeleteAdminModal(false);
+                    setAdminToDelete(null);
+                }}
+                okText="O'chirish"
+                okButtonProps={{
+                    style: {
+                        backgroundColor: "red",
+                        color: "white",
+                    },
+                }}
+                cancelText='Bekor qilish'>
+                <p style={{ textAlign: "center" }}>
+                    Haqiqatan ham bu adminni o'chirmoqchimisiz?
+                </p>
+                {adminToDelete && (
+                    <div style={{ marginLeft: "90px" }}>
+                        <p>
+                            Admin nomi:{" "}
+                            <strong>{adminToDelete.adminName}</strong>
+                        </p>
+                        <p>
+                            Admin emaili: <strong>{adminToDelete.email}</strong>
+                        </p>
+                    </div>
+                )}
+            </Modal>
+
             <Modal
                 title="Avtomobilni o'chirish"
                 open={deleteModal}

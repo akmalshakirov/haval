@@ -13,14 +13,17 @@
 .custom-mask.custom-mask-list {
     border-radius: 10px;
 }
-:where(.css-dev-only-do-not-override-nqoqt9).ant-image .ant-image-img{
+:where(.css-dev-only-do-not-override-nqoqt9).ant-image .ant-image-img {
     border-radius: 10px;
 }
 .custom-mask.custom-mask-card {
     border-radius: 10px;
     height: 95.9%;
 }
-
+.custom-mask-text {
+    display: flex;
+    text-align: center;
+}
 .custom-preview-mask {
     max-height: 92.5%;
 }
