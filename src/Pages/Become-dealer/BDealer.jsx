@@ -1,6 +1,6 @@
 import DownloadPdf from "../../Components/DownloadPdf/DownloadPdf";
 import HeaderNavBar from "../../Components/Header/HeaderNavBar";
-import "./Bdealer.css";
+import "./BDealer.css";
 
 function BDealer() {
     return (

@@ -6,7 +6,6 @@
 .download-pdf-form {
     display: flex;
     flex-direction: column;
-    align-items: center;
     min-width: calc(100% + 100px);
     justify-content: center;
     gap: 20px;
@@ -15,10 +14,26 @@
     border-radius: 7px;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     position: relative;
+    transition: 0.3s;
 }
-.download-pdf-form h3 {
-    font-size: 16px;
-    letter-spacing: 1px;
+.download-pdf-form > div {
+    display: flex;
+}
+.download-pdf-form > div > label {
+    font-size: 15px;
+}
+.download-pdf-form > div > input,
+.download-pdf-form > div > select {
+    max-width: 60%;
+    margin-left: auto;
+}
+.download-pdf-form input:invalid,
+.download-pdf-form select:invalid {
+    border-color: red;
+}
+.download-pdf-form input:valid,
+.download-pdf-form select:valid {
+    border-color: green;
 }
 .download-pdf-form input,
 .download-pdf-form select {

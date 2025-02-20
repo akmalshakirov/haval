@@ -2,6 +2,19 @@ import { useState } from "react";
 import "./DownloadPdf.css";
 
 export default function DownloadPdf() {
+    const CarModelsArr = [
+        { id: 1, model: "HAVAL Dargo", value: "Dargo", price: "399 900 000" },
+        { id: 2, model: "HAVAL Jolion", value: "Jolion", price: "279 900 000" },
+        { id: 3, model: "HAVAL M6", value: "M6", price: "249 900 000" },
+        { id: 4, model: "HAVAL H6", value: "H6", price: "324 900 000" },
+        {
+            id: 5,
+            model: "GWM WINGLE 7",
+            value: "GWM WINGLE 7",
+            price: "399 900 000",
+        },
+    ];
+
     const [formData, setFormData] = useState({
         fullname: "",
         phone: "",
@@ -11,6 +24,7 @@ export default function DownloadPdf() {
         transmission: "",
         payment: "",
         prepayment: "",
+        price: "",
     });
 
     const formatPhoneNumber = (value) => {
@@ -27,6 +41,13 @@ export default function DownloadPdf() {
         if (name === "phone") {
             let formattedValue = formatPhoneNumber(value);
             setFormData({ ...formData, [name]: formattedValue });
+        } else if (name === "model") {
+            const selectedCar = CarModelsArr.find((car) => car.value === value);
+            setFormData({
+                ...formData,
+                model: value,
+                price: selectedCar ? selectedCar.price : "",
+            });
         } else {
             setFormData({ ...formData, [name]: value });
         }
@@ -73,64 +94,102 @@ export default function DownloadPdf() {
         <div className='download-pdf-page'>
             <div className='download-pdf-container'>
                 <form onSubmit={generatePDF} className='download-pdf-form'>
-                    <h3>HAVAL Avtomobilini Sotib Olish</h3>
-                    <input
-                        name='fullname'
-                        placeholder='Ism, Familiya'
-                        onChange={handleChange}
-                        required
-                    />
-                    <input
-                        type='tel'
-                        name='phone'
-                        placeholder='Telefon raqami'
-                        value={formData.phone}
-                        onChange={handleChange}
-                        required
-                    />
-                    <select name='model' onChange={handleChange} required>
-                        <option value=''>Model tanlang</option>
-                        <option value='Dargo'>HAVAL Dargo</option>
-                        <option value='Jolion'>HAVAL Jolion</option>
-                        <option value='M6'>HAVAL M6</option>
-                        <option value='H6'>HAVAL H6</option>
-                        <option value='GWM-WINGLE-7'>GWM WINGLE 7</option>
-                    </select>
-                    <select name='color' onChange={handleChange} required>
-                        <option value=''>Rang tanlang</option>
-                        <option value='oq'>Oq</option>
-                        <option value='qora'>Qora</option>
-                        <option value='kulrang'>Kulrang</option>
-                    </select>
-                    <select name='engine' onChange={handleChange} required>
-                        <option value=''>Dvigatel hajmi</option>
-                        <option value='1.5 Turbo'>1.5 Turbo</option>
-                        <option value='2.0 Turbo'>2.0 Turbo</option>
-                    </select>
-                    <select
-                        name='transmission'
-                        onChange={handleChange}
-                        required>
-                        <option value=''>Uzatmalar qutisi</option>
-                        <option value='Avtomat'>Avtomat</option>
-                        <option value='Mexanik'>Mexanik</option>
-                    </select>
-                    <select name='payment' onChange={handleChange} required>
-                        <option value=''>To'lov turi</option>
-                        <option value='Naqd'>Naqd</option>
-                        <option value='Kredit'>Kredit</option>
-                        <option value='Lizing'>Lizing</option>
-                    </select>
-                    <input
-                        name='prepayment'
-                        placeholder="Oldindan to'lov (so'm)"
-                        type='number'
-                        min={1}
-                        onChange={handleChange}
-                        required
-                    />
+                    <div>
+                        <label htmlFor='toliq-ism'>Ism, Familiya:</label>
+                        <input
+                            id='toliq-ism'
+                            name='fullname'
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor='telefon-raqam'>Telefon raqam:</label>
+                        <input
+                            id='telefon-raqam'
+                            type='tel'
+                            name='phone'
+                            value={formData.phone}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor='modelni-tanlash'>Model:</label>
+                        <select
+                            name='model'
+                            id='modelni-tanlash'
+                            onChange={handleChange}
+                            required>
+                            <option value='' selected></option>
+                            {CarModelsArr.map((car) => (
+                                <option key={car.id} value={car.value}>
+                                    {car.model}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div>
+                        <label htmlFor='rangi'>Avtomobilni rangi:</label>
+                        <select
+                            name='color'
+                            id='rangi'
+                            onChange={handleChange}
+                            required>
+                            <option value='oq'>Oq</option>
+                            <option value='qora'>Qora</option>
+                            <option value='kulrang'>Kulrang</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label htmlFor='dvigatel-hajmi'>Dvigatel hajmi:</label>
+                        <select
+                            name='engine'
+                            id='dvigatel-hajmi'
+                            onChange={handleChange}
+                            required>
+                            <option value='1.5 Turbo'>1.5 Turbo</option>
+                            <option value='2.0 Turbo'>2.0 Turbo</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label htmlFor='uzatmalar-qutisi'>
+                            Uzatmalar qutisi:
+                        </label>
+                        <select
+                            name='transmission'
+                            id='uzatmalar-qutisi'
+                            onChange={handleChange}
+                            required>
+                            <option value='Avtomat'>Avtomat</option>
+                            <option value='Mexanik'>Mexanik</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label htmlFor='tolov-turi'>To'lov turi:</label>
+                        <select
+                            name='payment'
+                            id='tolov-turi'
+                            onChange={handleChange}
+                            required>
+                            <option value='Naqd'>Naqd</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label htmlFor='price'>
+                            Tanlangan avtomobilni narxi:
+                        </label>
+                        <input
+                            id='price'
+                            type='text'
+                            name='price'
+                            value={formData.price}
+                            readOnly
+                            placeholder='Oldin modelni tanglang'
+                        />
+                    </div>
                     <button type='submit' className='submit-btn'>
-                        PDF Yaratish
+                        Yuborish
                     </button>
                 </form>
             </div>
