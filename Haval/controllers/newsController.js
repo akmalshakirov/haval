@@ -24,7 +24,6 @@ const getAllNews = async (req, res) => {
 
 const addNews = async (req, res) => {
 
-    try {
 //         console.log("Kelgan ma'lumot:", req.body); // Req.body ni tekshiramiz
 
 //         const { value, error } = newsSchema.validate(req.body);
