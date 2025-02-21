@@ -11,7 +11,6 @@ const OrderSchema = new mongoose.Schema({
     engine: { type: String },
     transmission: { type: String },
     payment: { type: String },
-    prepayment: { type: String },
   totalPrice: { type: Number, min: 0 },
   // paidAmount: { 
   //   type: Number, 
@@ -29,5 +28,4 @@ const OrderSchema = new mongoose.Schema({
 
 OrderSchema.index({ userId: 1, createdAt: -1 });
 
-module.ex
-      messports = mongoose.model("Order", OrderSchema);
+module.exports = mongoose.model("Order", OrderSchema);
