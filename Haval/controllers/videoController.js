@@ -1,6 +1,6 @@
 const Video = require('../models/Video');
 const mongoose = require("mongoose")
-const { videoSchema } = require("../validators/video.validate")
+const { videoSchema } = require("../validators/add_video.validate")
 
 exports.getVideos = async (req, res) => {
   try {

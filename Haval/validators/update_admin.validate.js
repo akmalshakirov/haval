@@ -1,11 +1,13 @@
 const { body } = require("express-validator");
 
-const validateRegister = [
-    body("userName")
-        .isString().withMessage("Ism string bo'lishi kerak!")
-        .notEmpty().withMessage("Ism bo'sh bo'lmasligi kerak!")
-        .isLength({ min: 2 }).withMessage("Ism 2 ta belgidan kam bo'lmasligi kerak!")
-        .isLength({ max: 50 }).withMessage("Ism 50 ta belgidan ko'p bo'lmasligi kerak!"),
+const adminValidationRulesUpdate = [
+    param("id").isMongoId().withMessage("Yaroqsiz ID format!"),
+
+    body("adminName")
+        .isString().withMessage("Admin nomi string bo'lishi kerak!")
+        .notEmpty().withMessage("Admin nomi bo'sh bo'lmasligi kerak!")
+        .isLength({ min: 2 }).withMessage("Admin nomida 2 ta belgidan kam bo'lmasligi kerak!")
+        .isLength({ max: 50 }).withMessage("Admin nomi 50 ta belgidan ko'p bo'lmasligi kerak!"),
 
     body("email")
         .isString().withMessage("Email string bo'lishi kerak!")
@@ -19,4 +21,4 @@ const validateRegister = [
         .isLength({ max: 20 }).withMessage("Parol 20 ta belgidan ko'p bo'lmasligi kerak!")
 ];
 
-module.exports = validateRegister;
+module.exports = adminValidationRulesUpdate;

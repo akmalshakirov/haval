@@ -1,43 +1,44 @@
-const Joi = require("joi");
+const { body, param } = require("express-validator");
 
-const imageValidator = (value, helpers) => {
-    const allowedFormats = ['jpg', 'jpeg', 'png', 'gif'];
-    const minSize = 100 * 1024;      
-    const maxSize = 4 * 1024 * 1024;  
+const allowedFormats = ["jpg", "jpeg", "png", "gif"];
+const minSize = 100 * 1024; // 100 KB
+const maxSize = 4 * 1024 * 1024; // 4 MB
 
-    const fileExtension = value.filename.split('.').pop().toLowerCase();
-    if (!allowedFormats.includes(fileExtension)) {
-        return helpers.error('any.invalid', { message: 'Faqat JPG, JPEG, PNG yoki GIF formatlari ruxsat etiladi!' });
-    }
+const validateCarUpdate = [
+    param("id").isMongoId().withMessage("Yaroqsiz ID format!"),
 
-    if (value.length < minSize) {
-        return helpers.error('any.invalid', { message: 'Rasm hajmi kamida 100 KB bo‘lishi kerak!' });
-    }
+    body("year")
+        .isInt().withMessage("Yili raqam bo‘lishi kerak!")
+        .notEmpty().withMessage("Yili bo‘sh bo‘lmasligi kerak!"),
 
-    if (value.length > maxSize) {
-        return helpers.error('any.invalid', { message: 'Rasm hajmi 4 MB dan oshmasligi kerak!' });
-    }
+    body("model")
+        .isString().withMessage("Model matn bo‘lishi kerak!")
+        .notEmpty().withMessage("Model bo‘sh bo‘lmasligi kerak!"),
 
-    return value; 
-};
+    body("price")
+        .isFloat({ min: 0 }).withMessage("Narxi musbat son bo‘lishi kerak!")
+        .notEmpty().withMessage("Narxi bo‘sh bo‘lmasligi kerak!"),
 
-exports.updatecarSchema = Joi.object({
-    year: Joi.number().required().messages({
-        "string.base": "Yili number bo'lishi kerak!",
-        "string.empty": "Yili bo'sh bo'lmasligi kerak!",
-        "any.required": "Yili talab qilinadi"
-    }),    
-    image: Joi.binary().custom(imageValidator).messages({
-        "binary.base": "Rasm binary formatda bo‘lishi kerak!",
-    }),    
-    model: Joi.string().required().messages({
-        "string.base": "Model string bo'lishi kerak!",
-        "string.empty": "Model bo'sh bo'lmasligi kerak!",
-        "any.required": "Model talab qilinadi"
-    }), 
-    price: Joi.number().required().messages({
-        "string.base": "Narxi number bo'lishi kerak!",
-        "string.empty": "Narxi bo'sh bo'lmasligi kerak!",
-        "any.required": "Narxi talab qilinadi"
-    }),
-})
+    body("image").custom((_, { req }) => {
+        if (!req.file) return true; 
+
+        const { originalname, size } = req.file;
+        const fileExtension = originalname.split(".").pop().toLowerCase();
+
+        if (!allowedFormats.includes(fileExtension)) {
+            throw new Error("Faqat JPG, JPEG, PNG yoki GIF formatlari ruxsat etiladi!");
+        }
+
+        if (size < minSize) {
+            throw new Error("Rasm hajmi kamida 100 KB bo‘lishi kerak!");
+        }
+
+        if (size > maxSize) {
+            throw new Error("Rasm hajmi 4 MB dan oshmasligi kerak!");
+        }
+
+        return true;
+    })
+];
+
+module.exports = validateCarUpdate;
