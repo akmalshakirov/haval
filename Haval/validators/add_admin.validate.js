@@ -1,24 +1,22 @@
-const Joi = require("joi");
+const { body } = require("express-validator");
 
-exports.adminSchema = Joi.object({
-    adminName: Joi.string().max(50).min(2).required().messages({
-        "string.base": "Admin nomi string bo'lishi kerak!",
-        "string.empty": "Admin nomi bo'sh bo'lmasligi kerak!",
-        "string.min": "Admin nomida 2 ta belgidan kam bo'lmasligi kerak!",
-        "string.max": "Admin nomi 50 ta belgidan ko'p bo'lmasligi kerak!",
-        "any.required": "Admin nomi talab qilinadi!"
-    }),
-    email: Joi.string().email().required().messages({
-        "string.base": "Email string bo'lishi kerak!",
-        "string.email": "Email noto'g'ri formatda!",
-        "string.empty": "Email bo'sh bo'lmasligi kerak!",
-        "any.required": "Email talab qilinadi!"
-    }),
-    password: Joi.string().max(20).min(6).required().messages({
-        "string.base": "Parol string bo'lishi kerak!",
-        "string.empty": "Parol bo'sh bo'lmasligi kerak!",
-        "string.min": "Parol 6 ta belgidan kam bo'lmasligi kerak!",
-        "string.max": "Parol 20 ta belgidan ko'p bo'lmasligi kerak!",
-        "any.required": "Parol talab qilinadi!"
-    })
-});
+const adminValidationRules = [
+    body("adminName")
+        .isString().withMessage("Admin nomi string bo'lishi kerak!")
+        .notEmpty().withMessage("Admin nomi bo'sh bo'lmasligi kerak!")
+        .isLength({ min: 2 }).withMessage("Admin nomida 2 ta belgidan kam bo'lmasligi kerak!")
+        .isLength({ max: 50 }).withMessage("Admin nomi 50 ta belgidan ko'p bo'lmasligi kerak!"),
+
+    body("email")
+        .isString().withMessage("Email string bo'lishi kerak!")
+        .isEmail().withMessage("Email noto'g'ri formatda!")
+        .notEmpty().withMessage("Email bo'sh bo'lmasligi kerak!"),
+
+    body("password")
+        .isString().withMessage("Parol string bo'lishi kerak!")
+        .notEmpty().withMessage("Parol bo'sh bo'lmasligi kerak!")
+        .isLength({ min: 6 }).withMessage("Parol 6 ta belgidan kam bo'lmasligi kerak!")
+        .isLength({ max: 20 }).withMessage("Parol 20 ta belgidan ko'p bo'lmasligi kerak!")
+];
+
+module.exports = adminValidationRules;

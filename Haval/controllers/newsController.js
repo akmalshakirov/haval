@@ -6,9 +6,9 @@ const getAllNews = async (req, res) => {
     try {
         const news = await News.find();
 
-        if (!news) {
+        if (!news || news.length === 0) {
             return res.status(404).send({
-                error: "Yangiliklar  topilmadi!",
+                error: "Yangiliklar topilmadi!",
             });
         }
 
@@ -23,57 +23,19 @@ const getAllNews = async (req, res) => {
 };
 
 const addNews = async (req, res) => {
-
-//         console.log("Kelgan ma'lumot:", req.body); // Req.body ni tekshiramiz
-
-//         const { value, error } = newsSchema.validate(req.body);
-//         if (error) {
-//             console.log("Validatsiya xatosi:", error.details[0].message);
-//             return res.status(400).json({ error: error.details[0].message });
-//         }
-
-//         console.log("Validatsiyadan o‘tdi, saqlash boshlandi...");
-
-//         const news = await News.create({
-//             title: value.title,
-//             description: value.description,
-//             image: value.image,
-//             createdAt: new Date(),
-//             updatedAt: new Date(),
-//         });
-
-//         console.log("Bazaga muvaffaqiyatli saqlandi:", news);
-
-    const { title, description, image } = req.body;
-
-    function formatDate(date) {
-        const d = new Date(date);
-        const hours = d.getHours();
-        const minutes = d.getMinutes();
-        const day = d.getDate();
-        const month = d.getMonth() + 1;
-        const year = String(d.getFullYear()).slice(-2);
-        return `${day}/${month}/${year}, ${hours}:${String(minutes).padStart(
-            2,
-            "0"
-        )}`;
-    }
-
     try {
         const { value, error } = newsSchema.validate(req.body);
-
+       
         const news = await News.create({
-            title,
-            description,
-            image,
-            createdAt: formatDate(new Date()),
-            updatedAt: formatDate(new Date()),
+            title: value.title,
+            description: value.description,
+            image: value.image
         });
+        
 
-
-        res.status(200).json({
+        res.status(200).send({
             message: "Yangilik muvaffaqiyatli qo'shildi",
-            data: news,
+            news,
         });
     } catch (err) {
         console.error("Saqlashda xatolik yuz berdi:", err);
@@ -84,7 +46,6 @@ const addNews = async (req, res) => {
     }
 };
 
-
 const updateNews = async (req, res) => {
     const { id } = req.params;
     try {
@@ -93,11 +54,15 @@ const updateNews = async (req, res) => {
         }
 
         const { value, error } = newsSchema.validate(req.body);
+        if (error) {
+            return res.status(400).json({ error: error.details[0].message });
+        }
 
         const updateData = {
             title: value.title,
             description: value.description,
             image: value.image,
+            updatedAt: new Date(),
         };
 
         const updatedNews = await News.findByIdAndUpdate(id, updateData, {
@@ -105,12 +70,12 @@ const updateNews = async (req, res) => {
         });
 
         if (!updatedNews) {
-            res.status(404).json({ error: "Yangilik topilmadi" });
+            return res.status(404).json({ error: "Yangilik topilmadi" });
         }
 
         res.status(200).json({
             message: "Yangilik muvaffaqiyatli yangilandi",
-            data: news,
+            data: updatedNews,
         });
     } catch (err) {
         res.status(500).json({

@@ -1,6 +1,6 @@
 const Diler = require('../models/Diler');
 const mongoose = require("mongoose");
-const { dilerSchema } = require("../validators/diler.validate");
+const { dilerSchema } = require("../validators/add_diler.validate");
 
 const getDiler = async (req, res) => {
   try {

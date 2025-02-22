@@ -1,8 +1,6 @@
 const { Car } = require("../models/Car");
 const mongoose = require("mongoose");
 const { supabase } = require("../config/supabaseClient");
-const { carSchema } = require("../validators/add_car.validate.js");
-const { updatecarSchema } = require("../validators/update_Car.validate.js");
 require("dotenv").config();
 const storageUrl = process.env.SUPABASE_URL;
 
@@ -27,14 +25,15 @@ const getCars = async (req, res) => {
 
 const addCar = async (req, res) => {
     try {
-        const { value, error } = carSchema.validate(req.body);
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
 
         if (!req.file) {
-            console.log(req.file);
-            return res.status(404).json({
-                message: "Fayl topilmadi",
-            });
+            return res.status(404).json({ message: "Fayl topilmadi" });
         }
+
         const bucketName = "Haval";
         const { buffer, originalname } = req.file;
         const fileName = `cars/${Date.now()}_${originalname}`;
@@ -42,18 +41,17 @@ const addCar = async (req, res) => {
         const { data: uploadData, error: uploadError } = await supabase.storage
             .from(bucketName)
             .upload(fileName, buffer, {
-                casheControl: "3600",
+                cacheControl: "3600",
                 upsert: false,
                 contentType: req.file.mimetype,
             });
 
         if (uploadError) {
             console.error("Tasvirni yuklashda xato:", uploadError.message);
-            return res
-                .status(500)
-                .json({ error: "Tasvirni yuklashda xatolik yuz berdi." });
+            return res.status(500).json({ error: "Tasvirni yuklashda xatolik yuz berdi." });
         }
 
+        
         const { data: publicUrlData } = supabase.storage
             .from(bucketName)
             .getPublicUrl(fileName);
@@ -61,9 +59,9 @@ const addCar = async (req, res) => {
         const imageUrl = publicUrlData.publicUrl;
 
         const result = await Car.create({
-            model: value.model,
-            year: value.year,
-            price: value.price,
+            model: req.body.model,
+            year: req.body.year,
+            price: req.body.price,
             image: imageUrl,
         });
 
@@ -77,6 +75,7 @@ const addCar = async (req, res) => {
     }
 };
 
+
 const updateCar = async (req, res) => {
     const {
         body,
@@ -84,6 +83,10 @@ const updateCar = async (req, res) => {
     } = req;
 
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
         const existingCar = await Car.findById(id);
         if (!existingCar) {
             return res.status(404).json({ message: "Mashina topilmadi." });
@@ -95,19 +98,17 @@ const updateCar = async (req, res) => {
             const bucketName = "Haval";
             const { buffer, originalname, mimetype } = req.file;
             const fileName = `cars/${Date.now()}_${originalname}`;
-            if (existingCar.image) {
-                const oldImagePath = existingCar.image.replace( `${storageUrl}/object/public/Haval/`, "" )
 
-            console.log(oldImagePath)
+            if (existingCar.image) {
+                const oldImagePath = existingCar.image.replace(`${storageUrl}/object/public/Haval/`, "");
+
+                console.log(oldImagePath);
                 const { error: removeError } = await supabase.storage
                     .from(bucketName)
                     .remove([oldImagePath]);
 
                 if (removeError) {
-                    console.error(
-                        "❌ Eski tasvirni o‘chirishda xato:",
-                        removeError.message
-                    );
+                    console.error("❌ Eski tasvirni o‘chirishda xato:", removeError.message);
                     return res.status(500).json({
                         error: "Eski tasvirni o‘chirishda xatolik yuz berdi.",
                     });
@@ -123,14 +124,10 @@ const updateCar = async (req, res) => {
                 });
 
             if (uploadError) {
-                console.error(
-                    "❌ Tasvirni yuklashda xato:",
-                    uploadError.message
-                );
-                return res
-                    .status(500)
-                    .json({ error: "Tasvirni yuklashda xatolik yuz berdi." });
+                console.error("❌ Tasvirni yuklashda xato:", uploadError.message);
+                return res.status(500).json({ error: "Tasvirni yuklashda xatolik yuz berdi." });
             }
+
             const { data: publicUrlData } = supabase.storage
                 .from(bucketName)
                 .getPublicUrl(fileName);
@@ -138,21 +135,14 @@ const updateCar = async (req, res) => {
             imageUrl = publicUrlData.publicUrl;
         }
 
-        const { value, error } = updatecarSchema.validate(body);
-        if (error) {
-            return res.status(400).json({ error: error.details[0].message });
-        }
-
         const updateData = {
-            model: value.model,
-            year: value.year,
-            price: value.price,
+            model: body.model,
+            year: body.year,
+            price: body.price,
             image: imageUrl,
         };
 
-        const carUpdate = await Car.findByIdAndUpdate(id, updateData, {
-            new: true,
-        });
+        const carUpdate = await Car.findByIdAndUpdate(id, updateData, { new: true });
 
         res.status(200).json({
             message: "✅ Mashina muvaffaqiyatli yangilandi",
@@ -163,6 +153,7 @@ const updateCar = async (req, res) => {
         res.status(500).json({ error: "Ichki server xatosi yuz berdi." });
     }
 };
+
 
 const deleteCar = async (req, res) => {
     const carId = req.params.id;
