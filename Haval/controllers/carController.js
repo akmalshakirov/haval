@@ -25,6 +25,8 @@ const getCars = async (req, res) => {
 
 const addCar = async (req, res) => {
     try {
+        const { model, year, price } = require(req.body)
+        
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -59,9 +61,9 @@ const addCar = async (req, res) => {
         const imageUrl = publicUrlData.publicUrl;
 
         const result = await Car.create({
-            model: req.body.model,
-            year: req.body.year,
-            price: req.body.price,
+            model,
+            year,
+            price,
             image: imageUrl,
         });
 
