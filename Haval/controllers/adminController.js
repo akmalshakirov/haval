@@ -43,13 +43,13 @@ exports.getAdminById = async (req, res) => {
 
 exports.createAdmin = async (req, res) => {
     try {
-        const { value, error } = adminSchema.validate(req.body);
+        const { email, adminName, password } = require(req.body);
 
-        const hashedPassword = await bcrypt.hash(value.password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         await Admin.create({
-            adminName: value.adminName,
-            email: value.email,
+            adminName,
+            email,
             password: hashedPassword,
         });
 
@@ -63,24 +63,21 @@ exports.createAdmin = async (req, res) => {
 };
 
 exports.updateAdmin = async (req, res) => {
-    const {
-        body,
-        params: { id },
-    } = req;
+    const { params: { id } } = req;
+    
+    const { email, adminName, password } = require(req.body);
     try {
         const oldAdmin = await Admin.findById(id);
         if (!oldAdmin) {
             return res.status(404).json({ error: "Admin topilmadi." });
         }
 
-        const { value, error } = adminSchema.validate(body);
-
-        const hashedPassword = await bcrypt.hash(value.password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
       if(value.password){
             const admin = {
-                adminName: value.adminName,
-                email: value.email,
+                adminName,
+                email,
                 password: hashedPassword,
             };
         const updatedAdmin = await Admin.findByIdAndUpdate(id, admin);
@@ -92,8 +89,8 @@ exports.updateAdmin = async (req, res) => {
         
         } else {
             const admin = {
-                adminName: value.adminName,
-                email: value.email
+                adminName,
+                email
             }
         const updatedAdmin = await Admin.findByIdAndUpdate(id, admin);    
         
