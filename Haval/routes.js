@@ -1,3 +1,21 @@
+const validateCar = require("./validators/add_car.validate.js");
+const validateCarUpdate = require("./validators/update_car.validate.js");
+const adminValidationRules  = require("./validators/add_admin.validate.js");
+const adminValidationRulesUpdate = require("./validators/update_admin.validate.js");
+const validateNews = require("./validators/add_news.validate.js");
+const validateNewsUpdate = require("./validators/update_news.validate.js");
+const validateDiler = require("./validators/add_diler.validate.js");
+const validateDilerUpdate = require("./validators/update_diler.validate.js");
+const validateLogin = require("./validators/login.validate.js");
+const validateRegister = require("./validators/register.validate.js");
+const validateOreder_Dealer_Call = require("./validators/Order-dealer-call.validate.js");
+const validateOreder_Dealer_CallUpdate = require("./validators/update_Order-dealer-call.validate.js");
+const validateSavdoStatistikasi = require("./validators/savdoStatistikasi.validate.js");
+const validateSavdoStatistikasiUpdate = require("./validators/update_savdoStatistikasi.validate.js");
+const validateTest_drayver = require("./validators/Test_drayver.validate.js");
+const validateVideo = require("./validators/add_video.validate.js");
+const validateVideoUpdate = require("./validators/update_video.validate.js");
+const pdfValidationRules = require("./validators/pfkit.js");
 const multer = require("multer");
 const upload = multer();
 const { checkSchema } = require("express-validator"); 
@@ -66,26 +84,15 @@ const {
     deleteUser,
     getUserById,
 } = require("./controllers/userController");
-const { generate_pdf, download_pdf } = require("./controllers/pdfkit")
-const { getOrders, makePayment, createOrder } = require("./shartnoma/controllers/orderController");
-const validateCar = require("./validators/add_car.validate.js");
-const validateCarUpdate = require("./validators/update_car.validate.js");
-const adminValidationRules  = require("./validators/add_admin.validate.js");
-const adminValidationRulesUpdate = require("./validators/update_admin.validate.js");
-const validateNews = require("./validators/add_news.validate.js");
-const validateNewsUpdate = require("./validators/update_news.validate.js");
-const validateDiler = require("./validators/add_diler.validate.js");
-const validateDilerUpdate = require("./validators/update_diler.validate.js");
-const validateLogin = require("./validators/login.validate.js");
-const validateRegister = require("./validators/register.validate.js");
-const validateOreder_Dealer_Call = require("./validators/Order-dealer-call.validate.js");
-const validateOreder_Dealer_CallUpdate = require("./validators/update_Order-dealer-call.validate.js");
-const validateSavdoStatistikasi = require("./validators/savdoStatistikasi.validate.js");
-const validateSavdoStatistikasiUpdate = require("./validators/update_savdoStatistikasi.validate.js");
-const validateTest_drayver = require("./validators/Test_drayver.validate.js");
-const validateVideo = require("./validators/add_video.validate.js");
-const validateVideoUpdate = require("./validators/update_video.validate.js");
-const pdfValidationRules = require("./validators/pfkit.js");
+const { 
+    generate_pdf, 
+    download_pdf 
+} = require("./controllers/pdfkit")
+const { 
+    getOrders, 
+    makePayment, 
+    createOrder 
+} = require("./shartnoma/controllers/orderController");
 const router = require("express").Router();
 
 router
@@ -134,7 +141,11 @@ router
         deleteAdmin
     )
 
-    .get("/cars", jwtAccessMiddleware, getCars)
+    .get(
+        "/cars", 
+        jwtAccessMiddleware, 
+        getCars
+    )
     .post(
         "/add-car",
         jwtAccessMiddleware,
@@ -158,7 +169,11 @@ router
         deleteCar
     )
 
-    .get("/categories", jwtAccessMiddleware, getAllCategories)
+    .get(
+        "/categories", 
+        jwtAccessMiddleware, 
+        getAllCategories
+    )
     .get(
         "/categories/:id",
         jwtAccessMiddleware,
@@ -184,7 +199,11 @@ router
         deleteCategory
     )
 
-    .get("/dilers", jwtAccessMiddleware, getDiler)
+    .get(
+        "/dilers", 
+        jwtAccessMiddleware, 
+        getDiler
+    )
     .post(
         "/add-diler",
         jwtAccessMiddleware,
@@ -206,7 +225,11 @@ router
         deleteDiler
     )
 
-    .get("/news", jwtAccessMiddleware, getAllNews)
+    .get(
+        "/news", 
+        jwtAccessMiddleware, 
+        getAllNews
+    )
     .post(
         "/add-news",
         jwtAccessMiddleware,
@@ -293,6 +316,7 @@ router
     .post(
         "/login",
         jwtAccessMiddleware,
+        loginLimiter,
         checkSchema(validateLogin),
         login
     )

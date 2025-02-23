@@ -1,61 +1,54 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const mongoose = require("mongoose");
 const Admin = require("../models/Admin");
-const { adminSchema } = require("../validators/add_admin.validate.js");
 
 exports.getAllAdmin = async (req, res) => {
     try {
-        const admins = await Admin.find();
-
-        if (!admins) {
-            return res.status(404).send({ error: "Adminlar topilmadi!" });
+        if (req.user.role !== "superadmin") {
+            return res.status(403).json({ error: "Faqat superadmin ko‘rishi mumkin!" });
         }
 
-        return res.status(200).send({
-            message: "Adminlar",
-            admins,
-        });
+        const admins = await Admin.find();
+        return res.status(200).json({ message: "Adminlar", admins });
     } catch (error) {
+        console.error("Adminlarni olishda xatolik:", error);
         return res.status(500).json({ error: "Server xatosi yuz berdi." });
     }
 };
 
 exports.getAdminById = async (req, res) => {
-    const { id } = req.params;
-
     try {
+        const { id } = req.params;
         const admin = await Admin.findById(id);
 
         if (!admin) {
-            return res.status(404).send({ error: "Admin topilmadi!" });
+            return res.status(404).json({ error: "Admin topilmadi!" });
         }
 
-        if (!admin) {
-            return res.status(404).send({ error: "Admin topilmadi!" });
+        if (req.user.role === "superadmin" || (admin._id.toString() === req.user.id && admin.status === 0)) {
+            return res.status(200).json(admin);
         }
-        return res.status(200).send(admin);
+
+        return res.status(403).json({ error: "Sizga ruxsat yo‘q!" });
+
     } catch (error) {
-        console.error("Adminni olishda xato:", error);
+        console.error("Adminni olishda xatolik:", error);
         return res.status(500).json({ error: "Server xatosi yuz berdi." });
     }
 };
 
 exports.createAdmin = async (req, res) => {
     try {
-        const { email, adminName, password } = require(req.body);
+        if (req.user.role !== "superadmin") {
+            return res.status(403).json({ error: "Faqat superadmin yaratishi mumkin!" });
+        }
 
+        const { email, adminName, password, status } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        await Admin.create({
-            adminName,
-            email,
-            password: hashedPassword,
-        });
+        await Admin.create({ adminName, email, password: hashedPassword, status });
 
-        return res
-            .status(200)
-            .json({ message: "Admin muvaffaqiyatli yaratildi" });
+        return res.status(200).json({ message: "Admin muvaffaqiyatli yaratildi" });
     } catch (error) {
         console.error("Admin yaratishda xatolik:", error);
         return res.status(500).json({ error: "Server xatosi yuz berdi" });
@@ -63,43 +56,28 @@ exports.createAdmin = async (req, res) => {
 };
 
 exports.updateAdmin = async (req, res) => {
-    const { params: { id } } = req;
-    
-    const { email, adminName, password } = require(req.body);
     try {
-        const oldAdmin = await Admin.findById(id);
-        if (!oldAdmin) {
+        const { id } = req.params;
+        const admin = await Admin.findById(id);
+
+        if (!admin) {
             return res.status(404).json({ error: "Admin topilmadi." });
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        if (req.user.role !== "superadmin" && admin._id.toString() !== req.user.id) {
+            return res.status(403).json({ error: "Siz faqat o‘zingizni yangilay olasiz!" });
+        }
 
-      if(value.password){
-            const admin = {
-                adminName,
-                email,
-                password: hashedPassword,
-            };
-        const updatedAdmin = await Admin.findByIdAndUpdate(id, admin);
+        const { email, adminName, password } = req.body;
+        const updateData = { adminName, email };
 
-        return res.status(200).json({
-            message: "Admin muvaffaqiyatli yangilandi",
-            data: updatedAdmin,
-        });
-        
-        } else {
-            const admin = {
-                adminName,
-                email
-            }
-        const updatedAdmin = await Admin.findByIdAndUpdate(id, admin);    
-        
-        return res.status(200).json({
-            message: "Admin muvaffaqiyatli yangilandi",
-            data: updatedAdmin,
-        });        
-        }        
+        if (password) {
+            updateData.password = await bcrypt.hash(password, 10);
+        }
 
+        const updatedAdmin = await Admin.findByIdAndUpdate(id, updateData, { new: true });
+
+        return res.status(200).json({ message: "Admin muvaffaqiyatli yangilandi", data: updatedAdmin });
     } catch (error) {
         console.error("Adminni yangilashda xatolik:", error);
         return res.status(500).json({ error: "Server xatosi yuz berdi." });
@@ -107,21 +85,48 @@ exports.updateAdmin = async (req, res) => {
 };
 
 exports.deleteAdmin = async (req, res) => {
-    const { id } = req.params;
-
     try {
+        if (req.user.role !== "superadmin") {
+            return res.status(403).json({ error: "Faqat superadmin o‘chira oladi!" });
+        }
+
+        const { id } = req.params;
         const admin = await Admin.findById(id);
+
         if (!admin) {
             return res.status(404).json({ error: "Admin topilmadi!" });
         }
 
         await Admin.findByIdAndDelete(id);
 
-        return res
-            .status(200)
-            .json({ message: "Admin muvaffaqiyatli o'chirildi." });
+        return res.status(200).json({ message: "Admin muvaffaqiyatli o‘chirildi." });
     } catch (error) {
-        console.error("Adminni o'chirishda xato:", error);
+        console.error("Adminni o‘chirishda xatolik:", error);
+        return res.status(500).json({ error: "Server xatosi yuz berdi." });
+    }
+};
+
+exports.getAdminLastLogin = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const admin = await Admin.findById(id);
+
+        if (!admin) {
+            return res.status(404).json({ error: "Admin topilmadi!" });
+        }
+
+        if (req.user.role === "superadmin" || (admin._id.toString() === req.user.id && admin.status === 0)) {
+            return res.status(200).json({
+                adminName: admin.adminName,
+                lastLogin: admin.lastLogin,
+                status: admin.status
+            });
+        }
+
+        return res.status(403).json({ error: "Sizga ruxsat yo‘q!" });
+
+    } catch (error) {
+        console.error("Oxirgi kirish vaqtini olishda xatolik:", error);
         return res.status(500).json({ error: "Server xatosi yuz berdi." });
     }
 };
