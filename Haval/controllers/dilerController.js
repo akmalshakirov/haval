@@ -1,6 +1,5 @@
 const Diler = require('../models/Diler');
 const mongoose = require("mongoose");
-const { dilerSchema } = require("../validators/add_diler.validate");
 
 const getDiler = async (req, res) => {
   try {
@@ -20,15 +19,15 @@ const getDiler = async (req, res) => {
 };
 
 const addDiler = async (req, res) => {
-   const { value, error } = dilerSchema.validate(req.body);
+   const { title, manzil, workHoursDays, workHoursStart, workHoursEnd, phone } = require(req.body);
   try {
     const newDiler = await Diler.create({
-      title: value.title,
-      manzil: value.manzil,
-      workHoursDays: value.workHoursDays,
-      workHoursStart: value.workHoursStart,
-      workHoursEnd: value.workHoursEnd,
-      phone: value.phone
+      title,
+      manzil,
+      workHoursDays,
+      workHoursStart,
+      workHoursEnd,
+      phone
     });
 
     res.status(200).json({ message: 'Ma\'lumotlar muvaffaqiyatli yuborildi:', data: newDiler });
@@ -45,16 +44,16 @@ const updateDiler = async (req, res) => {
           return res.status(400).json({ error: "Noto'g'ri ID." });
         }
 
-    const { value, error } = dilerSchema.validate(req.body);
+    const { dilerId, title, manzil, workHoursDays, workHoursStart, workHoursEnd, phone } = require(req.body)
 
     const updateData = {
-      dilerId:  value.dilerId,
-      title: value.title,
-      manzil: value.manzil,
-      workHoursDays: value.workHoursDays,
-      workHoursStart: value.workHoursStart,
-      workHoursEnd: value.workHoursEnd,
-      phone: value.phone
+      dilerId,
+      title,
+      manzil,
+      workHoursDays,
+      workHoursStart,
+      workHoursEnd,
+      phone
     };  
     
     
