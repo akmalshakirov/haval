@@ -1,14 +1,16 @@
 const News = require("../models/News");
 const mongoose = require("mongoose");
-const { newsSchema } = require("../validators/add_news.validate");
+const { supabase } = require("../config/supabaseClient");
+require("dotenv").config();
+const storageUrl = process.env.SUPABASE_URL;
 
 const getAllNews = async (req, res) => {
     try {
         const news = await News.find();
 
-        if (!news) {
+        if (!news || news.length === 0) {
             return res.status(404).send({
-                error: "Yangiliklar  topilmadi!",
+                error: "Yangiliklar topilmadi!",
             });
         }
 
@@ -71,9 +73,9 @@ const addNews = async (req, res) => {
             updatedAt: formatDate(new Date()),
         });
 
-        res.status(200).json({
+        res.status(200).send({
             message: "Yangilik muvaffaqiyatli qo'shildi",
-            data: news,
+            news,
         });
     } catch (err) {
         console.error("Saqlashda xatolik yuz berdi:", err);
@@ -87,16 +89,76 @@ const addNews = async (req, res) => {
 const updateNews = async (req, res) => {
     const { id } = req.params;
     try {
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ error: "Noto'g'ri ID." });
+        const { title, description } = require(req.body);
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        const existingCar = await Car.findById(id);
+        if (!existingCar) {
+            return res.status(404).json({ message: "Mashina topilmadi." });
         }
 
-        const { value, error } = newsSchema.validate(req.body);
+        let imageUrl = existingCar.image;
+
+        if (req.file) {
+            const bucketName = "Haval";
+            const { buffer, originalname, mimetype } = req.file;
+            const fileName = `news/${Date.now()}_${originalname}`;
+
+            if (existingCar.image) {
+                const oldImagePath = existingCar.image.replace(
+                    `${storageUrl}/object/public/Haval/`,
+                    ""
+                );
+
+                console.log(oldImagePath);
+                const { error: removeError } = await supabase.storage
+                    .from(bucketName)
+                    .remove([oldImagePath]);
+
+                if (removeError) {
+                    console.error(
+                        "❌ Eski tasvirni o‘chirishda xato:",
+                        removeError.message
+                    );
+                    return res.status(500).json({
+                        error: "Eski tasvirni o‘chirishda xatolik yuz berdi.",
+                    });
+                }
+            }
+
+            const { error: uploadError } = await supabase.storage
+                .from(bucketName)
+                .upload(fileName, buffer, {
+                    cacheControl: "3600",
+                    upsert: true,
+                    contentType: mimetype,
+                });
+
+            if (uploadError) {
+                console.error(
+                    "❌ Tasvirni yuklashda xato:",
+                    uploadError.message
+                );
+                return res
+                    .status(500)
+                    .json({ error: "Tasvirni yuklashda xatolik yuz berdi." });
+            }
+
+            const { data: publicUrlData } = supabase.storage
+                .from(bucketName)
+                .getPublicUrl(fileName);
+
+            imageUrl = publicUrlData.publicUrl;
+        }
 
         const updateData = {
-            title: value.title,
-            description: value.description,
-            image: value.image,
+            title,
+            description,
+            image: imageUrl,
+            updatedAt: new Date(),
         };
 
         const updatedNews = await News.findByIdAndUpdate(id, updateData, {
@@ -104,12 +166,12 @@ const updateNews = async (req, res) => {
         });
 
         if (!updatedNews) {
-            res.status(404).json({ error: "Yangilik topilmadi" });
+            return res.status(404).json({ error: "Yangilik topilmadi" });
         }
 
         res.status(200).json({
             message: "Yangilik muvaffaqiyatli yangilandi",
-            data: news,
+            data: updatedNews,
         });
     } catch (err) {
         res.status(500).json({
@@ -120,10 +182,6 @@ const updateNews = async (req, res) => {
 
 const deleteNews = async (req, res) => {
     const { id } = req.params;
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).json({ error: "Yaroqsiz ID" });
-    }
 
     try {
         const news = await News.findById(id);

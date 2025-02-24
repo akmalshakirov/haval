@@ -1,24 +1,22 @@
-const Joi = require("joi")
+const { body, param } = require("express-validator");
 
-exports.registerSchema = Joi.object({
-    username: Joi.string().min(3).max(20).required().messages({
-        "string.base": "Foydalanuvchi nomi string bo'lishi kerak!",
-        "string.empty": "Foydalanuvchi nomi bo'sh bo'lmasligi kerak!",
-        "string.min": "Foydalanuvchi nomi 3 ta dan kam bo'lmasligi kerak!",
-        "string.max": "Foydalanuvchi nomi 20 ta dan ko'p bo'lmasligi kerak!",
-        "any.required": "Foydalanuvchi nomi talab qilinadi",
-    }),
-    email: Joi.string().email().required().messages({
-        "string.base": "Email string bo'lishi kerak!",
-        "string.empty": "Email bo'sh bo'lishi kerak emas!",
-        "string.email": "Email formati noto'g'ri!",
-        "any.required": "Email talab qilinadi"
-    }),
-    password: Joi.string().min(8).required().messages({
-        "string.base": "Parol string bo'lishi kerak!",
-        "string.empty": "Parol bo'sh bo'lishi kerak emas!",
-        "string.min": "Parol 8 ta dan kam bo'lmasligi kerak!",
-        "string.max": "Parol 32 ta dan ko'p bo'lmasligi kerak!",
-        "any.required": "Parol talab qilinadi",
-    }),
-})
+const validateRegister = [
+    body("userName")
+        .isString().withMessage("Ism string bo'lishi kerak!")
+        .notEmpty().withMessage("Ism bo'sh bo'lmasligi kerak!")
+        .isLength({ min: 2 }).withMessage("Ism 2 ta belgidan kam bo'lmasligi kerak!")
+        .isLength({ max: 50 }).withMessage("Ism 50 ta belgidan ko'p bo'lmasligi kerak!"),
+
+    body("email")
+        .isString().withMessage("Email string bo'lishi kerak!")
+        .isEmail().withMessage("Email noto'g'ri formatda!")
+        .notEmpty().withMessage("Email bo'sh bo'lmasligi kerak!"),
+
+    body("password")
+        .isString().withMessage("Parol string bo'lishi kerak!")
+        .notEmpty().withMessage("Parol bo'sh bo'lmasligi kerak!")
+        .isLength({ min: 6 }).withMessage("Parol 6 ta belgidan kam bo'lmasligi kerak!")
+        .isLength({ max: 20 }).withMessage("Parol 20 ta belgidan ko'p bo'lmasligi kerak!")
+];
+
+module.exports = validateRegister;

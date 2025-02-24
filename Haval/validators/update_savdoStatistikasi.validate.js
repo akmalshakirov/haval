@@ -4,7 +4,9 @@ const allowedFormats = ["jpg", "jpeg", "png", "gif"];
 const minSize = 100 * 1024; // 100 KB
 const maxSize = 4 * 1024 * 1024; // 4 MB
 
-const validateSavdoStatistikasi = [
+const validateSavdoStatistikasiUpdate = [
+    param("id").isMongoId().withMessage("Yaroqsiz ID format!"),
+
     body("title")
         .isString().withMessage("Sarlavha string bo'lishi kerak!")
         .notEmpty().withMessage("Sarlavha bo'sh bo'lmasligi kerak!")
@@ -43,4 +45,4 @@ const validateSavdoStatistikasi = [
         })
 ];
 
-module.exports = validateSavdoStatistikasi;
+module.exports = validateSavdoStatistikasiUpdate;

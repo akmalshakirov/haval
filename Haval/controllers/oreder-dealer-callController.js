@@ -1,6 +1,5 @@
 const Oreder_dealer_call = require('../models/Order-dealer-call');
 const mongoose = require("mongoose");
-const { oreder_dealer_callSchema } = require("../validators/Order-dealer-call.validate");
 
 const getAllDealerCalls = async (req, res) => {
   try {
@@ -23,15 +22,15 @@ const addDealerCall = async (req, res) => {
       return res.status(400).json({ error: "Email noto'g'ri formatda." });
     }
     
-    const { value, error } = oreder_dealer_callSchema.validate(req.body);
+    const { diler, toliqIsm, phone, email, savolTuri, izoh } = require(req.body);
 
     const newDealerCall = await Oreder_dealer_call.create({
-      diler: value.diler,
-      toliqIsm: value.toliqIsm,
-      phone: value.phone,
-      email: value.email,
-      savolTuri: value.savolTuri,
-      izoh: value.izoh
+      diler,
+      toliqIsm,
+      phone,
+      email,
+      savolTuri,
+      izoh
     });
 
     return res.status(200).json({
@@ -51,15 +50,15 @@ const updateDealerCall = async (req, res) => {
       return res.status(400).json({ error: "Noto'g'ri car ID." });
     }
     
-    const { value, error } = oreder_dealer_callSchema.validate(req.body);
+    const { diler, toliqIsm, phone, email, savolTuri, izoh } = require(req.body);
 
     const updateData = {
-        diler: value.diler,
-      toliqIsm: value.toliqIsm,
-      phone: value.phone,
-      email: value.email,
-      savolTuri: value.savolTuri,
-      izoh: value.izoh
+      diler,
+      toliqIsm,
+      phone,
+      email,
+      savolTuri,
+      izoh
     };
 
     const updatedDealerCall = await Oreder_dealer_call.findByIdAndUpdate(id, updateData, { new: true } )

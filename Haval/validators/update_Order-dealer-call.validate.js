@@ -1,6 +1,7 @@
 const { body, param } = require("express-validator");
 
-const validateOreder_Dealer_Call = [
+const validateOreder_Dealer_CallUpdate = [
+    param("id").isMongoId().withMessage("Yaroqsiz ID format!"),
   
     body("diler")
         .isString().withMessage("Diler string bo'lishi kerak!")
@@ -29,4 +30,4 @@ const validateOreder_Dealer_Call = [
 
 ]
 
-module.exports = validateOreder_Dealer_Call;
+module.exports = validateOreder_Dealer_CallUpdate;

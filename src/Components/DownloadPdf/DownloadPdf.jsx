@@ -23,7 +23,6 @@ export default function DownloadPdf() {
         engine: "",
         transmission: "",
         payment: "",
-        // prepayment: "",
         price: "",
     });
 
@@ -76,7 +75,11 @@ export default function DownloadPdf() {
     const downloadPDF = async (filename) => {
         try {
             const response = await fetch(
-                `http://localhost:3000/download-pdf/${filename}`
+                `http://localhost:3000/download-pdf/${filename}`,
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                }
             );
             if (!response.ok) throw new Error("PDF yuklab olishda xatolik!");
 
@@ -84,7 +87,9 @@ export default function DownloadPdf() {
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
             link.download = filename;
+            document.body.appendChild(link);
             link.click();
+            document.body.removeChild(link);
         } catch (error) {
             console.error(error);
         }
