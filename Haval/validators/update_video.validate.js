@@ -1,4 +1,4 @@
-const { body } = require("express-validator");
+const { body, param } = require("express-validator");
 
 const validateVideoUpdate = [
     param("id").isMongoId().withMessage("Yaroqsiz ID format!"),

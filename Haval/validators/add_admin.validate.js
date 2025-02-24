@@ -1,6 +1,6 @@
-const { body } = require("express-validator");
+const { body, param } = require("express-validator");
 
-const adminValidationRules = [
+exports.adminValidationRules = [
     body("adminName")
         .isString().withMessage("Admin nomi string bo'lishi kerak!")
         .notEmpty().withMessage("Admin nomi bo'sh bo'lmasligi kerak!")
@@ -19,4 +19,4 @@ const adminValidationRules = [
         .isLength({ max: 20 }).withMessage("Parol 20 ta belgidan ko'p bo'lmasligi kerak!")
 ];
 
-module.exports = adminValidationRules;
+// module.exports = adminValidationRules;
