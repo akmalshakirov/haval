@@ -1,8 +1,8 @@
 const { body, param } = require("express-validator");
 
 const allowedFormats = ["jpg", "jpeg", "png", "gif"];
-const minSize = 100 * 1024; // 100 KB
-const maxSize = 4 * 1024 * 1024; // 4 MB
+const minSize = 100 * 1024; 
+const maxSize = 4 * 1024 * 1024; 
 
 const validateCarUpdate = [
     param("id").isMongoId().withMessage("Yaroqsiz ID format!"),

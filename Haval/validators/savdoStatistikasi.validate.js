@@ -1,4 +1,4 @@
-const { body } = require("express-validator");
+const { body, param } = require("express-validator");
 
 const allowedFormats = ["jpg", "jpeg", "png", "gif"];
 const minSize = 100 * 1024; // 100 KB
