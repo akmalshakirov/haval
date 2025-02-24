@@ -23,27 +23,26 @@ const getAllNews = async (req, res) => {
 };
 
 const addNews = async (req, res) => {
+    // try {
+    //         console.log("Kelgan ma'lumot:", req.body); // Req.body ni tekshiramiz
 
-    try {
-//         console.log("Kelgan ma'lumot:", req.body); // Req.body ni tekshiramiz
+    //         const { value, error } = newsSchema.validate(req.body);
+    //         if (error) {
+    //             console.log("Validatsiya xatosi:", error.details[0].message);
+    //             return res.status(400).json({ error: error.details[0].message });
+    //         }
 
-//         const { value, error } = newsSchema.validate(req.body);
-//         if (error) {
-//             console.log("Validatsiya xatosi:", error.details[0].message);
-//             return res.status(400).json({ error: error.details[0].message });
-//         }
+    //         console.log("Validatsiyadan o‘tdi, saqlash boshlandi...");
 
-//         console.log("Validatsiyadan o‘tdi, saqlash boshlandi...");
+    //         const news = await News.create({
+    //             title: value.title,
+    //             description: value.description,
+    //             image: value.image,
+    //             createdAt: new Date(),
+    //             updatedAt: new Date(),
+    //         });
 
-//         const news = await News.create({
-//             title: value.title,
-//             description: value.description,
-//             image: value.image,
-//             createdAt: new Date(),
-//             updatedAt: new Date(),
-//         });
-
-//         console.log("Bazaga muvaffaqiyatli saqlandi:", news);
+    //         console.log("Bazaga muvaffaqiyatli saqlandi:", news);
 
     const { title, description, image } = req.body;
 
@@ -62,15 +61,15 @@ const addNews = async (req, res) => {
 
     try {
         const { value, error } = newsSchema.validate(req.body);
+        console.log(req.body);
 
         const news = await News.create({
-            title,
-            description,
+            title: value.title,
+            description: value.description,
             image,
             createdAt: formatDate(new Date()),
             updatedAt: formatDate(new Date()),
         });
-
 
         res.status(200).json({
             message: "Yangilik muvaffaqiyatli qo'shildi",
@@ -84,7 +83,6 @@ const addNews = async (req, res) => {
         });
     }
 };
-
 
 const updateNews = async (req, res) => {
     const { id } = req.params;

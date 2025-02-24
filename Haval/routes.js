@@ -65,8 +65,12 @@ const {
     deleteUser,
     getUserById,
 } = require("./controllers/userController");
-const { create_an_download_pdf } = require("./controllers/pdfkit")
-const { getOrders, makePayment, createOrder } = require("./shartnoma/controllers/orderController");
+const { create_and_download_pdf } = require("./controllers/pdfkit");
+const {
+    getOrders,
+    makePayment,
+    createOrder,
+} = require("./shartnoma/controllers/orderController");
 const router = require("express").Router();
 
 router
@@ -229,11 +233,7 @@ router
     .get("/test-driver", jwtAccessMiddleware, getTestDrivers)
     .post("/add-test-driver", jwtAccessMiddleware, addTestDriver)
 
-    .post(
-        "/login",
-        jwtAccessMiddleware,
-        login
-    )
+    .post("/login", jwtAccessMiddleware, login)
     .get(
         "/users",
         jwtAccessMiddleware,
@@ -275,12 +275,11 @@ router
     .post(
         "/download-pdf/:filename",
         jwtAccessMiddleware,
-        create_an_download_pdf
+        create_and_download_pdf
     )
 
     .post("/createOrder", jwtAccessMiddleware, createOrder)
     .get("/orders", jwtAccessMiddleware, getOrders)
-    .post("/orders/pay", jwtAccessMiddleware, makePayment)
-
+    .post("/orders/pay", jwtAccessMiddleware, makePayment);
 
 module.exports = router;
