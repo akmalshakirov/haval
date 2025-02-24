@@ -29,26 +29,13 @@ const AdminLogin = () => {
         try {
             const response = await axios.post(
                 "https://haval-uz.onrender.com/login",
-                {
-                    email: email,
-                    password: inputPasswordValue,
-                },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
+                { email, password: inputPasswordValue },
+                { headers: { "Content-Type": "application/json" } }
             );
-            // if (response.status == 400) {
-            //     message.error("Token yaroqli emas");
-            //     navigate("/");
-            //     localStorage.removeItem("authToken");
-            // }
-            if (response.data) {
-                navigate("/admin");
+            if (response.status === 200 && response.data?.token) {
+                localStorage.setItem("authToken", response.data.token);
                 message.success("Admin panelga muvaffaqiyatli kirildi!");
-                const token = response.data.token;
-                localStorage.setItem("authToken", token);
+                navigate("/admin");
             } else {
                 message.error("Username yoki password noto'g'ri!");
             }
