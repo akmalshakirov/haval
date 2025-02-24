@@ -11,23 +11,10 @@ const OrderSchema = new mongoose.Schema({
     engine: { type: String },
     transmission: { type: String },
     payment: { type: String },
-    prepayment: { type: String },
-  totalPrice: { type: Number, min: 0 },
-  // paidAmount: { 
-  //   type: Number, 
-  //   default: 0, 
-  //   min: 0,
-  //   validate: {
-  //     validator: function(value) {
-  //       return value <= this.totalPrice;
-  //     },age: "Paid amount cannot exceed total price."
-    // }
-  // },
   status: { type: String, enum: ["Pending", "Paid", "Cancelled"], default: "Pending" },
   createdAt: { type: Date, default: Date.now, immutable: true }
 });
 
 OrderSchema.index({ userId: 1, createdAt: -1 });
 
-module.ex
-      messports = mongoose.model("Order", OrderSchema);
+module.exports = mongoose.model("Order", OrderSchema);

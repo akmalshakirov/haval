@@ -4,7 +4,6 @@ const { GridFSBucket } = require("mongodb");
 const multer = require("multer");
 const { GridFsStorage } = require("multer-gridfs-storage");
 const { db, getGFS } = require("../config/db");
-const router = require("express").Router();
 const PDF = require("../models/Order");
 
 let gfs;
@@ -22,9 +21,9 @@ const storage = new GridFsStorage({
 });
 const upload = multer({ storage });
 
-const create_and_download_pdf = async (req, res) => {
+const generate_pdf = async (req, res) => {
   try {
-    const { fullname, phone, model, color, engine, transmission, payment, prepayment } = req.body;
+    const { fullname, phone, model, color, engine, transmission, payment } = req.body;
 
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage([600, 700]);
@@ -40,7 +39,6 @@ const create_and_download_pdf = async (req, res) => {
       { label: "Dvigatel hajmi:", value: engine, y: 480 },
       { label: "Uzatmalar qutisi:", value: transmission, y: 450 },
       { label: "To‘lov turi:", value: payment, y: 420 },
-      { label: "Oldindan to‘lov (so‘m):", value: prepayment, y: 390 },
     ];
 
     fields.forEach(({ label, value, y }) => {
@@ -53,7 +51,7 @@ const create_and_download_pdf = async (req, res) => {
 
     const pdfMeta = new PDF({
       filename,
-      metadata: { fullname, phone, model, color, engine, transmission, payment, prepayment }
+      metadata: { fullname, phone, model, color, engine, transmission, payment }
     });
     await pdfMeta.save();
 
@@ -61,11 +59,8 @@ const create_and_download_pdf = async (req, res) => {
     const uploadStream = bucket.openUploadStream(filename);
     uploadStream.end(pdfBytes);
 
-    uploadStream.on("finish", async function () {
-      res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
-      res.setHeader("Content-Type", "application/pdf");
-      const readStream = bucket.openDownloadStreamByName(filename);
-      readStream.pipe(res);
+    uploadStream.on("finish", () => {
+      res.json({ filename });
     });
 
     uploadStream.on("error", (err) => {
@@ -77,6 +72,22 @@ const create_and_download_pdf = async (req, res) => {
     console.error(error);
     res.status(500).json({ error: "Xatolik yuz berdi" });
   }
-}
+};
 
-module.exports = { create_and_download_pdf };
+const download_pdf = async (req, res) => {
+  try {
+    const { filename } = req.params;
+    const bucket = new GridFSBucket(mongoose.connection.db, { bucketName: "pdfs" });
+
+    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+    res.setHeader("Content-Type", "application/pdf");
+
+    const readStream = bucket.openDownloadStreamByName(filename);
+    readStream.pipe(res);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "PDF yuklab olishda xatolik" });
+  }
+};
+
+module.exports = { generate_pdf, download_pdf };
