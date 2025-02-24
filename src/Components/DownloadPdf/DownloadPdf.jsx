@@ -55,12 +55,12 @@ export default function DownloadPdf() {
     const generatePDF = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch("http://localhost:3000/generate-pdf", {
+            const response = await fetch("http://localhost:3000/download-pdf", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
             });
-    
+
             const data = await response.json();
             if (response.ok) {
                 downloadPDF(data.filename);
@@ -74,12 +74,15 @@ export default function DownloadPdf() {
 
     const downloadPDF = async (filename) => {
         try {
-            const response = await fetch(`http://localhost:3000/download-pdf/${filename}`,{
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-            });
+            const response = await fetch(
+                `http://localhost:3000/download-pdf/${filename}`,
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                }
+            );
             if (!response.ok) throw new Error("PDF yuklab olishda xatolik!");
-    
+
             const blob = await response.blob();
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
@@ -138,6 +141,7 @@ export default function DownloadPdf() {
                             id='rangi'
                             onChange={handleChange}
                             required>
+                            <option value='' selected></option>
                             <option value='oq'>Oq</option>
                             <option value='qora'>Qora</option>
                             <option value='kulrang'>Kulrang</option>
@@ -150,6 +154,7 @@ export default function DownloadPdf() {
                             id='dvigatel-hajmi'
                             onChange={handleChange}
                             required>
+                            <option value='' selected></option>
                             <option value='1.5 Turbo'>1.5 Turbo</option>
                             <option value='2.0 Turbo'>2.0 Turbo</option>
                         </select>
@@ -163,6 +168,7 @@ export default function DownloadPdf() {
                             id='uzatmalar-qutisi'
                             onChange={handleChange}
                             required>
+                            <option value='' selected></option>
                             <option value='Avtomat'>Avtomat</option>
                             <option value='Mexanik'>Mexanik</option>
                         </select>
@@ -174,7 +180,7 @@ export default function DownloadPdf() {
                             id='tolov-turi'
                             onChange={handleChange}
                             required>
-                            <option value=""> </option>
+                            <option value='' selected></option>
                             <option value='Naqd'>Naqd</option>
                         </select>
                     </div>
