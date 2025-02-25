@@ -10,6 +10,9 @@ body {
     height: 100vh;
     user-select: none;
 }
+.minus-top {
+    top: 29% !important;
+}
 .swiper-slide1 img {
     width: 100%;
     pointer-events: none;
