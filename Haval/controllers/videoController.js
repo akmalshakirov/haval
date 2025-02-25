@@ -20,6 +20,11 @@ exports.addVideo = async (req, res) => {
   try {
     const { title, video } = require(req.body);
 
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
     const newVideo = await Video.create({
       title,
       video,
@@ -40,6 +45,11 @@ exports.updateVideo = async (req, res) => {
     params: { id },
 } = req;
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
     const existingVideo = await Video.findById(id);
     if (!existingVideo) {
         return res.status(404).json({ message: "Video topilmadi." });

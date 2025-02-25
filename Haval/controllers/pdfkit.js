@@ -21,7 +21,7 @@ const storage = new GridFsStorage({
 });
 const upload = multer({ storage });
 
-const generate_pdf = async (req, res) => {
+exports.generate_pdf = async (req, res) => {
   try {
     const { fullname, phone, model, color, engine, transmission, payment } = req.body;
 
@@ -74,7 +74,7 @@ const generate_pdf = async (req, res) => {
   }
 };
 
-const download_pdf = async (req, res) => {
+exports.download_pdf = async (req, res) => {
   try {
     const { filename } = req.params;
     const bucket = new GridFSBucket(mongoose.connection.db, { bucketName: "pdfs" });
@@ -89,5 +89,3 @@ const download_pdf = async (req, res) => {
     res.status(500).json({ error: "PDF yuklab olishda xatolik" });
   }
 };
-
-module.exports = { generate_pdf, download_pdf };
