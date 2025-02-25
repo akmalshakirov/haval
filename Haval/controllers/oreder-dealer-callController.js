@@ -16,10 +16,11 @@ const getAllDealerCalls = async (req, res) => {
 
 const addDealerCall = async (req, res) => {
   const { diler, toliqIsm, phone, email, savolTuri, izoh } = req.body;
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
   try {
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({ error: "Email noto'g'ri formatda." });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
     }
     
     const { diler, toliqIsm, phone, email, savolTuri, izoh } = require(req.body);
@@ -46,6 +47,11 @@ const updateDealerCall = async (req, res) => {
   const { id } = req.params;
 
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
  if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ error: "Noto'g'ri car ID." });
     }

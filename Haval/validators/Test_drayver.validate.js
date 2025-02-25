@@ -1,23 +1,44 @@
-const { body, param } = require("express-validator");
+const { checkSchema } = require("express-validator");
 
-const validateTest_drayver = [
-  
-    body("toliqIsm")
-        .isString().withMessage("To'liq ism string bo'lishi kerak!")
-        .notEmpty().withMessage("To'liq ism bo'sh bo'lmasligi kerak!"),
-        
-    body("model")
-        .isString().withMessage("Model string bo'lishi kerak!")
-        .notEmpty().withMessage("Model bo'sh bo'lmasligi kerak!"),
-
-    body("phone")
-        .isString().withMessage("Telefon string bo'lishi kerak!")
-        .notEmpty().withMessage("Telefon bo'sh bo'lmasligi kerak!"),
-
-    body("izoh")
-        .isString().withMessage("Izoh string bo'lishi kerak!")
-        .notEmpty().withMessage("Izoh bo'sh bo'lmasligi kerak!"),
-
-]
-
-module.exports = validateTest_drayver;
+exports.validateTest_drayver = checkSchema({
+  toliqIsm: {
+    in: ["body"],
+    isString: {
+      errorMessage: "To'liq ism string bo‘lishi kerak!"
+    },
+    notEmpty: {
+      errorMessage: "To'liq ism bo‘sh bo‘lmasligi kerak!"
+    }
+  },
+  model: {
+    in: ["body"],
+    isString: {
+      errorMessage: "Model string bo‘lishi kerak!"
+    },
+    notEmpty: {
+      errorMessage: "Model bo‘sh bo‘lmasligi kerak!"
+    }
+  },
+  phone: {
+    in: ["body"],
+    isString: {
+      errorMessage: "Telefon string bo‘lishi kerak!"
+    },
+    notEmpty: {
+      errorMessage: "Telefon bo‘sh bo‘lmasligi kerak!"
+    },
+    matches: {
+      options: [/^\+?\d{9,15}$/],
+      errorMessage: "Telefon raqam noto‘g‘ri formatda! (Masalan: +998901234567)"
+    }
+  },
+  izoh: {
+    in: ["body"],
+    isString: {
+      errorMessage: "Izoh string bo‘lishi kerak!"
+    },
+    notEmpty: {
+      errorMessage: "Izoh bo‘sh bo‘lmasligi kerak!"
+    }
+  }
+});

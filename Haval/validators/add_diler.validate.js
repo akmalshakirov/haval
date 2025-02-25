@@ -1,32 +1,44 @@
-const { body, param } = require("express-validator");
+const { checkSchema } = require("express-validator");
 
-const validateDiler = [
-    body("title")
-        .isString().withMessage("Sarlavha string bo'lishi kerak!")
-        .notEmpty().withMessage("Sarlavha bo'sh bo'lmasligi kerak!")
-        .isLength({ min: 10 }).withMessage("Admin nomida 10 ta belgidan kam bo'lmasligi kerak!")
-        .isLength({ max: 150 }).withMessage("Admin nomi 150 ta belgidan ko'p bo'lmasligi kerak!"),
-
-    body("manzil")
-        .isString().withMessage("Manzil string bo'lishi kerak!")
-        .notEmpty().withMessage("Manzil bo'sh bo'lmasligi kerak!"),
-
-    body("workHoursDays")
-        .isString().withMessage("Ish kunlari string bo'lishi kerak!")
-        .notEmpty().withMessage("Ish kunlari bo'sh bo'lmasligi kerak!"),
-
-    body("workHoursStart")
-        .isString().withMessage("Ish boshlanishi string bo'lishi kerak!")
-        .notEmpty().withMessage("Ish boshlanishi bo'sh bo'lmasligi kerak!"),
-
-    body("workHoursEnd")
-        .isString().withMessage("Ish tugashi string bo'lishi kerak!")
-        .notEmpty().withMessage("Ish tugashi bo'sh bo'lmasligi kerak!"),
-        
-    body("phone")
-        .isString().withMessage("Telefon string bo'lishi kerak!")
-        .notEmpty().withMessage("Telefon bo'sh bo'lmasligi kerak!"),
-]
-
-
-module.exports = validateDiler;
+exports.validateDiler = checkSchema({
+  title: {
+    in: ["body"],
+    isString: { errorMessage: "Sarlavha string bo'lishi kerak!" },
+    notEmpty: { errorMessage: "Sarlavha bo'sh bo'lmasligi kerak!" },
+    isLength: [
+      {
+        options: { min: 10 },
+        errorMessage: "Sarlavha 10 ta belgidan kam bo'lmasligi kerak!"
+      },
+      {
+        options: { max: 150 },
+        errorMessage: "Sarlavha 150 ta belgidan ko'p bo'lmasligi kerak!"
+      }
+    ]
+  },
+  manzil: {
+    in: ["body"],
+    isString: { errorMessage: "Manzil string bo'lishi kerak!" },
+    notEmpty: { errorMessage: "Manzil bo'sh bo'lmasligi kerak!" }
+  },
+  workHoursDays: {
+    in: ["body"],
+    isString: { errorMessage: "Ish kunlari string bo'lishi kerak!" },
+    notEmpty: { errorMessage: "Ish kunlari bo'sh bo'lmasligi kerak!" }
+  },
+  workHoursStart: {
+    in: ["body"],
+    isString: { errorMessage: "Ish boshlanishi string bo'lishi kerak!" },
+    notEmpty: { errorMessage: "Ish boshlanishi bo'sh bo'lmasligi kerak!" }
+  },
+  workHoursEnd: {
+    in: ["body"],
+    isString: { errorMessage: "Ish tugashi string bo'lishi kerak!" },
+    notEmpty: { errorMessage: "Ish tugashi bo'sh bo'lmasligi kerak!" }
+  },
+  phone: {
+    in: ["body"],
+    isString: { errorMessage: "Telefon string bo'lishi kerak!" },
+    notEmpty: { errorMessage: "Telefon bo'sh bo'lmasligi kerak!" }
+  }
+});

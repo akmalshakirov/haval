@@ -7,6 +7,11 @@ const loginSchema = require("../validators/login.validate");
 
 exports.register = async (req, res) => {
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        
         const { name, email, password, role } = req.body;
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -62,6 +67,10 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     try {
+    const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
       const { email, password } = req.body;
       const user = await User.findOne({ email });
       if (!user) return res.status(404).json({ message: 'Foydalanuvchi topilmadi' });
@@ -91,6 +100,11 @@ exports.login = async (req, res) => {
 
 exports.loginAdmin = async (req, res) => {
     console.log(req.body);
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
 
     const { email, password } = req.body;
 
