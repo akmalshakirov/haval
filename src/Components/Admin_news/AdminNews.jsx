@@ -63,7 +63,7 @@ function AdminNews() {
                 return;
             }
 
-            const values = await form.validateFields();
+            // const values = await form.validateFields();
             const formData = new FormData();
             formData.append("title", values.title);
             formData.append("description", values.description);
@@ -76,11 +76,11 @@ function AdminNews() {
                 formData,
                 {
                     headers: {
-                        "Content-Type": "multipart/form-data",
                         Authorization: `Bearer ${token}`,
                     },
                 }
             );
+            console.log(formData.title);
 
             if (response.status === 200) {
                 setAddNewsModal(false);
@@ -204,8 +204,13 @@ function AdminNews() {
                 title="Yanglik qo'shish"
                 open={addNewsModal}
                 onCancel={() => setAddNewsModal(false)}
-                onOk={handleAddNews}>
-                <Form form={form} layout='vertical'>
+                okText='Yangilik qoshish'
+                onOk={handleAddNews}
+                cancelText='Bekor qilish'>
+                <Form
+                    form={form}
+                    // onFinish={handleAddNews}
+                    layout='vertical'>
                     <Form.Item
                         label='Yanglikning sarlavhasi'
                         name='title'

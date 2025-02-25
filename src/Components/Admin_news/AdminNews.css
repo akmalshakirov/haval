@@ -1,12 +1,12 @@
 .admin-news {
     display: flex;
     flex-direction: column;
-    /*width: max-content;*/
     gap: 20px;
 }
 .admin-news-cards {
     display: flex;
-    gap: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
 }
 #admin-news-button-primary {
     width: max-content;

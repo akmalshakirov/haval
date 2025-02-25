@@ -1,6 +1,6 @@
 const validateCar = require("./validators/add_car.validate.js");
 const validateCarUpdate = require("./validators/update_car.validate.js");
-const adminValidationRules  = require("./validators/add_admin.validate.js");
+const adminValidationRules = require("./validators/add_admin.validate.js");
 const adminValidationRulesUpdate = require("./validators/update_admin.validate.js");
 const validateNews = require("./validators/add_news.validate.js");
 const validateNewsUpdate = require("./validators/update_news.validate.js");
@@ -18,7 +18,7 @@ const validateVideoUpdate = require("./validators/update_video.validate.js");
 const pdfValidationRules = require("./validators/pfkit.js");
 const multer = require("multer");
 const upload = multer();
-const { checkSchema } = require("express-validator"); 
+const { checkSchema } = require("express-validator");
 const {
     getAllAdmin,
     createAdmin,
@@ -84,14 +84,11 @@ const {
     deleteUser,
     getUserById,
 } = require("./controllers/userController");
-const { 
-    generate_pdf, 
-    download_pdf 
-} = require("./controllers/pdfkit")
-const { 
-    getOrders, 
-    makePayment, 
-    createOrder 
+const { create_and_download_pdf } = require("./controllers/pdfkit");
+const {
+    getOrders,
+    makePayment,
+    createOrder,
 } = require("./shartnoma/controllers/orderController");
 const router = require("express").Router();
 
@@ -115,15 +112,10 @@ router
         checkSchema(adminValidationRules),
         createAdmin
     )
+    .post("/loginAdmin", loginLimiter, checkSchema(validateLogin), loginAdmin)
     .post(
-        "/loginAdmin", 
-        loginLimiter,
-        checkSchema(validateLogin), 
-        loginAdmin
-    )
-    .post(
-        "/register", 
-        jwtAccessMiddleware, 
+        "/register",
+        jwtAccessMiddleware,
         checkSchema(validateRegister),
         register
     )
@@ -141,11 +133,7 @@ router
         deleteAdmin
     )
 
-    .get(
-        "/cars", 
-        jwtAccessMiddleware, 
-        getCars
-    )
+    .get("/cars", jwtAccessMiddleware, getCars)
     .post(
         "/add-car",
         jwtAccessMiddleware,
@@ -169,11 +157,7 @@ router
         deleteCar
     )
 
-    .get(
-        "/categories", 
-        jwtAccessMiddleware, 
-        getAllCategories
-    )
+    .get("/categories", jwtAccessMiddleware, getAllCategories)
     .get(
         "/categories/:id",
         jwtAccessMiddleware,
@@ -199,11 +183,7 @@ router
         deleteCategory
     )
 
-    .get(
-        "/dilers", 
-        jwtAccessMiddleware, 
-        getDiler
-    )
+    .get("/dilers", jwtAccessMiddleware, getDiler)
     .post(
         "/add-diler",
         jwtAccessMiddleware,
@@ -225,11 +205,7 @@ router
         deleteDiler
     )
 
-    .get(
-        "/news", 
-        jwtAccessMiddleware, 
-        getAllNews
-    )
+    .get("/news", jwtAccessMiddleware, getAllNews)
     .post(
         "/add-news",
         jwtAccessMiddleware,
@@ -251,13 +227,9 @@ router
         deleteNews
     )
 
-    .get(
-        "/dealerCall", 
-        jwtAccessMiddleware, 
-        getAllDealerCalls
-    )
+    .get("/dealerCall", jwtAccessMiddleware, getAllDealerCalls)
     .post(
-        "/add-dealerCall", 
+        "/add-dealerCall",
         checkSchema(validateOreder_Dealer_Call),
         addDealerCall
     )
@@ -275,11 +247,7 @@ router
         deleteDealerCall
     )
 
-    .get(
-        "/savdo-statistikasi", 
-        jwtAccessMiddleware, 
-        getAllSavdoStatistikasi
-    )
+    .get("/savdo-statistikasi", jwtAccessMiddleware, getAllSavdoStatistikasi)
     .post(
         "/add-savdo-statistikasi",
         jwtAccessMiddleware,
@@ -301,14 +269,10 @@ router
         deleteSavdoStatistikasi
     )
 
-    .get(
-        "/test-driver", 
-        jwtAccessMiddleware, 
-        getTestDrivers
-    )
+    .get("/test-driver", jwtAccessMiddleware, getTestDrivers)
     .post(
-        "/add-test-driver", 
-        jwtAccessMiddleware, 
+        "/add-test-driver",
+        jwtAccessMiddleware,
         checkSchema(validateTest_drayver),
         addTestDriver
     )
@@ -320,6 +284,7 @@ router
         checkSchema(validateLogin),
         login
     )
+    .post("/login", jwtAccessMiddleware, login)
     .get(
         "/users",
         jwtAccessMiddleware,
@@ -360,25 +325,19 @@ router
         roleAccessMiddleware(["admin"]),
         deleteVideo
     )
-    .post(
-        "/generate-pdf",
-        generate_pdf
-    )
-    .post(
-        "/download-pdf/:filename",
-        download_pdf
-    )
+    .post("/generate-pdf", generate_pdf)
+    .post("/download-pdf/:filename", download_pdf)
 
     .post(
-        "/createOrder", 
-        jwtAccessMiddleware, 
+        "/createOrder",
+        jwtAccessMiddleware,
         checkSchema(pdfValidationRules),
         createOrder
     )
-    .get(
-        "/orders", 
-        jwtAccessMiddleware, 
-        getOrders
-    )
+    .get("/orders", jwtAccessMiddleware, getOrders)
+
+    .post("/createOrder", jwtAccessMiddleware, createOrder)
+    .get("/orders", jwtAccessMiddleware, getOrders)
+    .post("/orders/pay", jwtAccessMiddleware, makePayment);
 
 module.exports = router;
