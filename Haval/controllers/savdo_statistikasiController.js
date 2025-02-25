@@ -71,10 +71,11 @@ const updateSavdoStatistikasi = async (req, res) => {
   try {
     const { title, description } = require(req.body)
 
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
         const existingCar = await Car.findById(id);
         if (!existingCar) {
             return res.status(404).json({ message: "Mashina topilmadi." });

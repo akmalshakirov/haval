@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Admin = require("../models/Admin");
+const { validationResult } = require("express-validator");
 
 exports.getAllAdmin = async (req, res) => {
     try {
@@ -39,6 +40,11 @@ exports.getAdminById = async (req, res) => {
 
 exports.createAdmin = async (req, res) => {
     try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
         if (req.user.role !== "superadmin") {
             return res.status(403).json({ error: "Faqat superadmin yaratishi mumkin!" });
         }
@@ -60,6 +66,11 @@ exports.updateAdmin = async (req, res) => {
         const { id } = req.params;
         const admin = await Admin.findById(id);
 
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        
         if (!admin) {
             return res.status(404).json({ error: "Admin topilmadi." });
         }

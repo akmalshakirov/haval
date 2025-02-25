@@ -21,6 +21,12 @@ const getDiler = async (req, res) => {
 const addDiler = async (req, res) => {
    const { title, manzil, workHoursDays, workHoursStart, workHoursEnd, phone } = require(req.body);
   try {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
     const newDiler = await Diler.create({
       title,
       manzil,
@@ -40,6 +46,12 @@ const addDiler = async (req, res) => {
 const updateDiler = async (req, res) => {
   const { id } = req.params;
   try {
+    
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
     if (!mongoose.Types.ObjectId.isValid(id)) {
           return res.status(400).json({ error: "Noto'g'ri ID." });
         }

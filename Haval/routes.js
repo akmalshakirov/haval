@@ -1,21 +1,21 @@
-const validateCar = require("./validators/add_car.validate.js");
-const validateCarUpdate = require("./validators/update_car.validate.js");
-const adminValidationRules = require("./validators/add_admin.validate.js");
-const adminValidationRulesUpdate = require("./validators/update_admin.validate.js");
-const validateNews = require("./validators/add_news.validate.js");
-const validateNewsUpdate = require("./validators/update_news.validate.js");
-const validateDiler = require("./validators/add_diler.validate.js");
-const validateDilerUpdate = require("./validators/update_diler.validate.js");
-const validateLogin = require("./validators/login.validate.js");
-const validateRegister = require("./validators/register.validate.js");
-const validateOreder_Dealer_Call = require("./validators/Order-dealer-call.validate.js");
-const validateOreder_Dealer_CallUpdate = require("./validators/update_Order-dealer-call.validate.js");
-const validateSavdoStatistikasi = require("./validators/savdoStatistikasi.validate.js");
-const validateSavdoStatistikasiUpdate = require("./validators/update_savdoStatistikasi.validate.js");
-const validateTest_drayver = require("./validators/Test_drayver.validate.js");
-const validateVideo = require("./validators/add_video.validate.js");
-const validateVideoUpdate = require("./validators/update_video.validate.js");
-const pdfValidationRules = require("./validators/pfkit.js");
+const { adminValidationRules } = require("./validators/add_admin.validate.js");
+const { validateCar } = require("./validators/add_car.validate.js");
+const { validateDiler } = require("./validators/add_diler.validate.js");
+const { validateNews } = require("./validators/add_news.validate.js");
+const { validateVideo } = require("./validators/add_video.validate.js");
+const { validateLogin } = require("./validators/login.validate.js");
+const { validateOrder_Dealer_Call } = require("./validators/Order-dealer-call.validate.js");
+const { pdfValidationRules } = require("./validators/pfkit.js");
+const { validateRegister } = require("./validators/register.validate.js");
+const { validateSavdoStatistikasi } = require("./validators/savdoStatistikasi.validate.js");
+const { validateTest_drayver } = require("./validators/Test_drayver.validate.js");
+const { adminValidationRulesUpdate } = require("./validators/update_admin.validate.js");
+const { validateCarUpdate } = require("./validators/update_car.validate.js");
+const { validateDilerUpdate } = require("./validators/update_diler.validate.js");
+const { validateNewsUpdate } = require("./validators/update_news.validate.js");
+const { validateOrder_Dealer_CallUpdate } = require("./validators/update_Order-dealer-call.validate.js");
+const { validateSavdoStatistikasiUpdate } = require("./validators/update_savdoStatistikasi.validate.js");
+const { validateVideoUpdate } = require("./validators/update_video.validate.js");
 const multer = require("multer");
 const upload = multer();
 const { checkSchema } = require("express-validator");
@@ -84,7 +84,7 @@ const {
     deleteUser,
     getUserById,
 } = require("./controllers/userController");
-const { create_and_download_pdf } = require("./controllers/pdfkit");
+const { generate_pdf, download_pdf } = require("./controllers/pdfkit");
 const {
     getOrders,
     makePayment,
@@ -109,21 +109,21 @@ router
         "/add-admin",
         jwtAccessMiddleware,
         roleAccessMiddleware(["admin"]),
-        checkSchema(adminValidationRules),
+        [...adminValidationRules],
         createAdmin
     )
-    .post("/loginAdmin", loginLimiter, checkSchema(validateLogin), loginAdmin)
+    .post("/loginAdmin", loginLimiter, [...validateLogin], loginAdmin)
     .post(
         "/register",
         jwtAccessMiddleware,
-        checkSchema(validateRegister),
+        [...validateRegister],
         register
     )
     .put(
         "/admins/:id",
         jwtAccessMiddleware,
         roleAccessMiddleware(["admin"]),
-        checkSchema(adminValidationRulesUpdate),
+        [...adminValidationRulesUpdate],
         updateAdmin
     )
     .delete(
@@ -139,7 +139,7 @@ router
         jwtAccessMiddleware,
         roleAccessMiddleware(["admin"]),
         upload.single("image"),
-        checkSchema(validateCar),
+        [...validateCar],
         addCar
     )
     .put(
@@ -147,7 +147,7 @@ router
         jwtAccessMiddleware,
         roleAccessMiddleware(["admin"]),
         upload.single("image"),
-        checkSchema(validateCarUpdate),
+        [...validateCarUpdate],
         updateCar
     )
     .delete(
@@ -188,14 +188,14 @@ router
         "/add-diler",
         jwtAccessMiddleware,
         roleAccessMiddleware(["admin"]),
-        checkSchema(validateDiler),
+        [...validateDiler],
         addDiler
     )
     .put(
         "/dilers/:id",
         jwtAccessMiddleware,
         roleAccessMiddleware(["admin"]),
-        checkSchema(validateDilerUpdate),
+        [...validateDilerUpdate],
         updateDiler
     )
     .delete(
@@ -210,14 +210,14 @@ router
         "/add-news",
         jwtAccessMiddleware,
         roleAccessMiddleware(["admin"]),
-        checkSchema(validateNews),
+        [...validateNews],
         addNews
     )
     .put(
         "/news/:id",
         jwtAccessMiddleware,
         roleAccessMiddleware(["admin"]),
-        checkSchema(validateNewsUpdate),
+        [...validateNewsUpdate],
         updateNews
     )
     .delete(
@@ -230,14 +230,14 @@ router
     .get("/dealerCall", jwtAccessMiddleware, getAllDealerCalls)
     .post(
         "/add-dealerCall",
-        checkSchema(validateOreder_Dealer_Call),
+        [...validateOrder_Dealer_Call],
         addDealerCall
     )
     .put(
         "/dealerCall/:id",
         jwtAccessMiddleware,
         roleAccessMiddleware(["admin"]),
-        checkSchema(validateOreder_Dealer_CallUpdate),
+        [...validateOrder_Dealer_CallUpdate],
         updateDealerCall
     )
     .delete(
@@ -252,14 +252,14 @@ router
         "/add-savdo-statistikasi",
         jwtAccessMiddleware,
         roleAccessMiddleware(["admin"]),
-        checkSchema(validateSavdoStatistikasi),
+        [...validateSavdoStatistikasi],
         addSavdoStatistikasi
     )
     .put(
         "/savdo-statistikasi/:id",
         jwtAccessMiddleware,
         roleAccessMiddleware(["admin"]),
-        checkSchema(validateSavdoStatistikasiUpdate),
+        [...validateSavdoStatistikasiUpdate],
         updateSavdoStatistikasi
     )
     .delete(
@@ -273,7 +273,7 @@ router
     .post(
         "/add-test-driver",
         jwtAccessMiddleware,
-        checkSchema(validateTest_drayver),
+        [...validateTest_drayver],
         addTestDriver
     )
 
@@ -281,10 +281,9 @@ router
         "/login",
         jwtAccessMiddleware,
         loginLimiter,
-        checkSchema(validateLogin),
+        [...validateLogin],
         login
     )
-    .post("/login", jwtAccessMiddleware, login)
     .get(
         "/users",
         jwtAccessMiddleware,
@@ -309,14 +308,14 @@ router
         "/add-video",
         jwtAccessMiddleware,
         roleAccessMiddleware(["admin"]),
-        checkSchema(validateVideo),
+        [...validateVideo],
         addVideo
     )
     .put(
         "/videos/:id",
         jwtAccessMiddleware,
         roleAccessMiddleware(["admin"]),
-        checkSchema(validateVideoUpdate),
+        [...validateVideoUpdate],
         updateVideo
     )
     .delete(
@@ -331,12 +330,9 @@ router
     .post(
         "/createOrder",
         jwtAccessMiddleware,
-        checkSchema(pdfValidationRules),
+        [...pdfValidationRules],
         createOrder
     )
-    .get("/orders", jwtAccessMiddleware, getOrders)
-
-    .post("/createOrder", jwtAccessMiddleware, createOrder)
     .get("/orders", jwtAccessMiddleware, getOrders)
     .post("/orders/pay", jwtAccessMiddleware, makePayment);
 
