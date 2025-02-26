@@ -96,7 +96,7 @@ router
     .get(
         "/admins",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin","admin"]),
         getAllAdmin
     )
     .get(
@@ -108,11 +108,11 @@ router
     .post(
         "/add-admin",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin"]),
         [...adminValidationRules],
         createAdmin
     )
-    .post("/loginAdmin", loginLimiter, [...validateLogin], loginAdmin)
+    .post("/login-Admin", loginLimiter, [...validateLogin], loginAdmin)
     .post(
         "/register",
         jwtAccessMiddleware,
@@ -122,14 +122,14 @@ router
     .put(
         "/admins/:id",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin"]),
         [...adminValidationRulesUpdate],
         updateAdmin
     )
     .delete(
         "/admins/:id",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin"]),
         deleteAdmin
     )
 
