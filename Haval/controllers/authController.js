@@ -3,7 +3,7 @@ const Admin = require("../models/Admin");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const loginSchema = require("../validators/login.validate");
+const { validationResult } = require("express-validator");
 
 exports.register = async (req, res) => {
     try {

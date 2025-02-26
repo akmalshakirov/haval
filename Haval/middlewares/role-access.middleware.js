@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const { model } = require("mongoose");
 dotenv.config();
 
-const roleAccessMiddleware = function (roles) {
+const roleAccessMiddleware = function ([roles]) {
   return async function (req, res, next) {
     try {
       
@@ -21,7 +21,9 @@ const roleAccessMiddleware = function (roles) {
       
               const { role } = jwt.verify(token, process.env.JWT_SECRET_KEY);
       
-              if(roles != role) {
+              console.log("ROLE:",role);
+              
+              if(!roles.includes(role)) {
                 return res.status(403).send({
                   error: "Sizga ruxsat yo'q!"
                 })
