@@ -1,6 +1,7 @@
 import React from "react";
 import "./Models.css";
 import HeaderNavBar from "../../Components/Header/HeaderNavBar";
+import havalH9 from "../../Images/haval-h9.jpg";
 import havalDargo from "../../Images/haval-dargo.jpg";
 import havalJolion from "../../Images/haval-jolion.jpg";
 import havalH6 from "../../Images/haval-h6.jpg";
@@ -11,39 +12,52 @@ function Models() {
     const carModels = [
         {
             id: 1,
-            name: "Haval DARGO",
-            image: havalDargo,
-            price: "419 000 000 so'mdan",
-            specs: "2.0T | 190 ot kuchi | 4x4"
+            name: "Haval H9",
+            image: havalH9,
+            price: "Xali aniq emas",
+            specs: "Xali aniq emas",
+            link: "/models",
         },
         {
             id: 2,
-            name: "Haval Jolion",
-            image: havalJolion,
-            price: "339 000 000 so'mdan",
-            specs: "1.5T | 143 ot kuchi | 2x4"
+            name: "Haval DARGO",
+            image: havalDargo,
+            price: "419 000 000 so'mdan",
+            specs: "2.0T | 190 ot kuchi | 4x4",
+            link: "/models/haval-dargo",
         },
         {
             id: 3,
-            name: "Haval H6",
-            image: havalH6,
-            price: "389 000 000 so'mdan",
-            specs: "2.0T | 150 ot kuchi | 2x4"
+            name: "Haval Jolion",
+            image: havalJolion,
+            price: "339 000 000 so'mdan",
+            specs: "1.5T | 143 ot kuchi | 2x4",
+            link: "/models/haval-jolion",
         },
         {
             id: 4,
-            name: "Haval M6",
-            image: havalM6,
-            price: "309 000 000 so'mdan",
-            specs: "1.5T | 150 ot kuchi | 2x4"
+            name: "Haval H6",
+            image: havalH6,
+            price: "389 000 000 so'mdan",
+            specs: "2.0T | 150 ot kuchi | 2x4",
+            link: "/models/haval-h6",
         },
         {
             id: 5,
+            name: "Haval M6",
+            image: havalM6,
+            price: "309 000 000 so'mdan",
+            specs: "1.5T | 150 ot kuchi | 2x4",
+            link: "/models/haval-m6",
+        },
+        {
+            id: 6,
             name: "GWM Wingle 7",
             image: gwmWingle7,
             price: "409 000 000 so'mdan",
-            specs: "2.0D | 143 ot kuchi | 4x4"
-        }
+            specs: "2.0D | 143 ot kuchi | 4x4",
+            link: "/models/GWMwignle7",
+        },
     ];
 
     return (
@@ -54,7 +68,7 @@ function Models() {
             <div className='models-container'>
                 <ul className='to-home'>
                     <li>
-                        <a href='/' >Bosh sahifa</a>
+                        <a href='/'>Bosh sahifa</a>
                     </li>
                     <li>
                         <span> {">"} </span>
@@ -80,7 +94,11 @@ function Models() {
                                 <h3>{model.name}</h3>
                                 <p className='model-price'>{model.price}</p>
                                 <p className='model-specs'>{model.specs}</p>
-                                <button className='model-details-btn'>Batafsil</button>
+                                <a
+                                    className='model-details-btn'
+                                    href={model.link}>
+                                    Batafsil
+                                </a>
                             </div>
                         </div>
                     ))}

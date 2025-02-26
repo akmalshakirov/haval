@@ -17,6 +17,7 @@ function HeaderNavBar() {
     const [isAsideOpen, setAsideOpen] = useState(false);
     const [isAsideListHovered, setAsideListHovered] = useState(false);
     const [isAboutGwmOpen, setAboutGwmOpen] = useState(false);
+    const [isSelection, setIsSelection] = useState(false);
 
     const changeLanguage = (lang) => {
         i18n.changeLanguage(lang);
@@ -72,7 +73,7 @@ function HeaderNavBar() {
                         <li>
                             <button
                                 className='header-nav-btn owner-btn'
-                                onClick={() => setOpenModels(true)}>
+                                onClick={() => setOpenModels(!isOpenModels)}>
                                 {t("models")}
                             </button>
                             {isOpenModels && (
@@ -143,14 +144,35 @@ function HeaderNavBar() {
                             )}
                         </li>
                         <li>
-                            <a href='#'>{t("selection")}</a>
+                            <button
+                                className='selection'
+                                onClick={() => setIsSelection(!isSelection)}>
+                                {t("selection")}
+                            </button>
+                            {isSelection && (
+                                <div
+                                    className='owners-modal-overlay selection-modal'
+                                    onClick={() =>
+                                        setIsSelection(!isSelection)
+                                    }>
+                                    <div
+                                        className={`selection-modal ${
+                                            isSelection ? "active" : ""
+                                        }`}
+                                        onClick={(e) => e.stopPropagation()}>
+                                        <div>
+                                            <h3>ifuhoufhuf</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </li>
                         <li>
                             <a href='/dealers'>{t("dealers")}</a>
                         </li>
                         <li>
                             <button
-                                onClick={() => setOwnOpen(true)}
+                                onClick={() => setOwnOpen(!isOwnOpen)}
                                 className='owner-btn'>
                                 {t("owners")}
                             </button>
@@ -176,7 +198,9 @@ function HeaderNavBar() {
                         <li>
                             <button
                                 className='about-gwm owner-btn'
-                                onClick={() => setAboutGwmOpen(true)}>
+                                onClick={() =>
+                                    setAboutGwmOpen(!isAboutGwmOpen)
+                                }>
                                 {t("company")}
                             </button>
                             {isAboutGwmOpen && (
@@ -212,7 +236,7 @@ function HeaderNavBar() {
                             )}
                         </li>
                         <li>
-                            <a href='#'>{t("statistics")}</a>
+                            <a href='/'>{t("statistics")}</a>
                         </li>
                     </ul>
                 </div>
