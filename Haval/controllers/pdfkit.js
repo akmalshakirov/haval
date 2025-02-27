@@ -73,19 +73,33 @@ exports.generate_pdf = async (req, res) => {
     res.status(500).json({ error: "Xatolik yuz berdi" });
   }
 };
-
 exports.download_pdf = async (req, res) => {
   try {
     const { filename } = req.params;
+    if (!filename) {
+      return res.status(400).json({ error: "Fayl nomi kiritilmagan" });
+    }
+
     const bucket = new GridFSBucket(mongoose.connection.db, { bucketName: "pdfs" });
+
+    const files = await bucket.find({ filename }).toArray();
+    if (files.length === 0) {
+      return res.status(404).json({ error: "Bunday fayl topilmadi" });
+    }
 
     res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
     res.setHeader("Content-Type", "application/pdf");
 
     const readStream = bucket.openDownloadStreamByName(filename);
+    
+    readStream.on("error", (err) => {
+      console.error("Fayl oqimida xatolik:", err);
+      res.status(500).json({ error: "PDF yuklab olishda xatolik yuz berdi" });
+    });
+
     readStream.pipe(res);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "PDF yuklab olishda xatolik" });
+    console.error("Server xatosi:", error);
+    res.status(500).json({ error: "Ichki server xatosi" });
   }
 };

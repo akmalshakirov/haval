@@ -1,7 +1,7 @@
 const { checkSchema } = require("express-validator");
 
 exports.validateRegister = checkSchema({
-    userName: {
+    username: {
         in: ["body"],
         isString: { errorMessage: "Ism string bo'lishi kerak!" },
         notEmpty: { errorMessage: "Ism bo'sh bo'lmasligi kerak!" },
