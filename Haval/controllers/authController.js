@@ -23,6 +23,7 @@ exports.register = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        
         const user = await User.create({
             username,
             email,
@@ -30,26 +31,15 @@ exports.register = async (req, res) => {
             role: role || "user",
         });
 
-        if (!username || !email || !password) {
-            return res
-                .status(400)
-                .json({ message: "Barcha maydonlarni to‘ldiring." });
-        }
+            if (!username || !email || !password) {
+                return res
+                    .status(400)
+                    .json({ message: "Barcha maydonlarni to‘ldiring." });
+            }
 
         if (!process.env.JWT_SECRET_KEY) {
             throw new Error("JWT_SECRET muhit o'zgaruvchisi mavjud emas!");
         }
-
-        const token = jwt.sign(
-            {
-                id: user._id,
-                email: user.email,
-                role: user.role,
-            },
-            process.env.JWT_SECRET_KEY,
-            { expiresIn: "1h" }
-        );
-        console.log(token)
         res.status(200).json({
             message: "Foydalanuvchi muvaffaqiyatli ro‘yxatdan o‘tdi.",
             user,
