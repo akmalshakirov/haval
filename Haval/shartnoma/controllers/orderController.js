@@ -1,20 +1,25 @@
+const { validationResult } = require("express-validator");
 const Order = require("../../models/Order");
 const generatePDF = require("../utils/pdfGenerator");
-const { pdfSchema } = require("../../validators/pfkit");
 
 exports.createOrder = async (req, res) => {
   try {
-     const { value, error } = pdfSchema.validate(req.body);
+    const { fullname, phone, model, color, engine, transmission, payment, prepayment } = require(req.body);
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
 
     const newOrder = await Order.create({
-      fullname: value.fullname,
-      phone: value.phone,
-      model: value.model,
-      color: value.color,
-      engine: value.engine,
-      transmission: value.transmission,
-      payment: value.payment,
-      prepayment: value.prepayment
+      fullname,
+      phone,
+      model,
+      color,
+      engine,
+      transmission,
+      payment,
+      prepayment
     });
  
     return res.status(200).send({
@@ -28,8 +33,24 @@ exports.createOrder = async (req, res) => {
 };
 
 exports.getOrders = async (req, res) => {
-  const orders = await Order.find({ userId: req.user.userId });
-  res.json(orders);
+  try {
+    let query = {};
+
+    if (req.user.role !== "admin") {
+      query.userId = req.user.id; 
+    }
+
+    const pendingOrders = await Order.find({ ...query, status: "Pending" });
+    const cancelledOrders = await Order.find({ ...query, status: "Cancelled" });
+
+    res.json({
+      pending: pendingOrders,
+      cancelled: cancelledOrders,
+    });
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    res.status(500).json({ error: "Server xatosi" });
+  }
 };
 
 exports.makePayment = async (req, res) => {
