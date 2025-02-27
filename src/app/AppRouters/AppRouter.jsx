@@ -19,6 +19,8 @@ import MainVideos from "../../Components/MainVideos/MainVideos.jsx";
 import AuthRouter from "../AuthRouters/AuthRouter.jsx";
 import TestDrive from "../../Pages/Test-drive/TestDrive.jsx";
 import BDealer from "../../Pages/Become-dealer/BDealer.jsx";
+import Login from "../../Pages/Login/Login.jsx";
+import Registration from "../../Pages/Register/Register.jsx";
 
 const AppRouter = () => {
     return (
@@ -57,6 +59,8 @@ const AppRouter = () => {
                 path='/about-gwm/haval-v-uzbekistane/how-become-dealer'
                 element={<BDealer />}
             />
+            <Route path='/login' element={<Login />} />
+            <Route path='/registration' element={<Registration />} />
             <Route path='*' element={<AuthRouter />} /> {/*<- NOT FOUND PAGE */}
         </Routes>
     );

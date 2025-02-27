@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { UserOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import Logo from "../../Images/logo.png";
 import havalLogo from "../../Images/haval.svg";
@@ -238,6 +239,9 @@ function HeaderNavBar() {
                         <li>
                             <a href='/'>{t("statistics")}</a>
                         </li>
+                        <a href='/login'>
+                            <UserOutlined className='user-icon' />
+                        </a>
                     </ul>
                 </div>
                 <div className='header__item'>

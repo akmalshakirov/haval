@@ -24,6 +24,7 @@ import {
     IdcardOutlined,
     LogoutOutlined,
     NotificationOutlined,
+    OrderedListOutlined,
     StockOutlined,
     UnorderedListOutlined,
     UserOutlined,
@@ -35,6 +36,7 @@ import axios from "axios";
 import "./Admin.css";
 import AdminNews from "../Admin_news/AdminNews";
 import AdminUsers from "../Admin_users/AdminUsers";
+import AdminAgreement from "../Admin_agreement/AdminAgreement";
 
 const { Header, Sider, Content, Footer } = Layout;
 
@@ -509,6 +511,11 @@ const AdminPanel = () => {
                             key: "6",
                             icon: <UserOutlined />,
                             label: "Foydalanuvchilar",
+                        },
+                        {
+                            key: "7",
+                            icon: <OrderedListOutlined />,
+                            label: "Shartnomalar",
                         },
                     ]}
                 />
@@ -992,6 +999,11 @@ message:
                         {selectedKey === "6" && (
                             <>
                                 <AdminUsers />
+                            </>
+                        )}
+                        {selectedKey === "7" && (
+                            <>
+                                <AdminAgreement />
                             </>
                         )}
                     </div>
