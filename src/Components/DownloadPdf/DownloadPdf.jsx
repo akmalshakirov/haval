@@ -57,7 +57,7 @@ export default function DownloadPdf() {
         e.preventDefault();
         try {
             const response = await axios.post(
-                "http://localhost:3000/download-pdf",
+                "http://localhost:3000/generate-pdf",
                 {
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(formData),

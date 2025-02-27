@@ -18,6 +18,10 @@
 .header-section.header-active .selection {
     color: #000 !important;
 }
+.header-section.header-active .header__inner .user-icon {
+    color: #000;
+    border-color: #000;
+}
 .header-section.header-active .header-nav__links li::after {
     background-color: #000;
 }
@@ -199,6 +203,22 @@
 .about-gwm-active h3 {
     color: #909090;
     font-size: 16px;
+}
+.user-icon {
+    border: 1px solid #fff;
+    border-radius: 50%;
+    padding: 5px;
+    color: #fff;
+    transition: 0.4s;
+    will-change: transform;
+    cursor: pointer;
+}
+.user-icon:hover {
+    transform: scale(1.0999);
+    background-color: #00000067;
+}
+.user-icon:active {
+    transform: scale(0.9);
 }
 .owners-modal.active a {
     color: #000;
