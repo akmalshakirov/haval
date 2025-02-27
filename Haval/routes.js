@@ -324,7 +324,7 @@ router
         roleAccessMiddleware(["admin"]),
         deleteVideo
     )
-    .post("/generate-pdf", generate_pdf)
+    .post("/download-pdf", generate_pdf)
     .post("/download-pdf/:filename", download_pdf)
 
     .post(
