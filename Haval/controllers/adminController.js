@@ -37,10 +37,6 @@ exports.createAdmin = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
 
-        // if (req.user.role !== "superadmin") {
-        //     return res.status(403).json({ error: "Faqat superadmin yaratishi mumkin!" });
-        // }
-
         const { email, adminName, password, status } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -67,10 +63,6 @@ exports.updateAdmin = async (req, res) => {
             return res.status(404).json({ error: "Admin topilmadi." });
         }
 
-        // if (req.user.role !== "superadmin" && admin._id.toString() !== req.user.id) {
-        //     return res.status(403).json({ error: "Siz faqat o‘zingizni yangilay olasiz!" });
-        // }
-
         const { email, adminName, password } = req.body;
         const updateData = { adminName, email };
 
@@ -89,9 +81,6 @@ exports.updateAdmin = async (req, res) => {
 
 exports.deleteAdmin = async (req, res) => {
     try {
-        // if (req.user.role !== "superadmin") {
-        //     return res.status(403).json({ error: "Faqat superadmin o‘chira oladi!" });
-        // }
 
         const { id } = req.params;
         const admin = await Admin.findById(id);
