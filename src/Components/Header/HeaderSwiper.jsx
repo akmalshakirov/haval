@@ -3,6 +3,7 @@ import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/css/parallax";
 import "swiper/swiper-bundle.css";
+import havalH9 from "../../Images/haval-h9.jpg";
 import havalDargo from "../../Images/haval-dargo.jpg";
 import havalJolion from "../../Images/haval-jolion.jpg";
 import havalM6 from "../../Images/haval-m6.jpg";
@@ -30,6 +31,25 @@ const SwiperComponent = () => {
             speed={2277}
             modules={[Parallax /* Autoplay */]}>
             {/* Slide 1 */}
+            <SwiperSlide className='swiper-slide1 intro-slide'>
+                <img src={havalH9} alt='haval-dargo' data-swiper-parallax='1' />
+                <div className='swiper-slide-content first-swiper-slide minus-top'>
+                    <h2 className='slide-title' data-swiper-parallax='-500'>
+                        YANGI HAVAL H9
+                    </h2>
+                    <p
+                        className='slide-description'
+                        data-swiper-parallax='-500'>
+                        O'ZBEKISTON YOLLARIDA ALLAQACHON
+                    </p>
+                    <a
+                        href='/models/haval-h9'
+                        className='slide-btn'
+                        data-swiper-parallax='-400'>
+                        Batafsil
+                    </a>
+                </div>
+            </SwiperSlide>
             <SwiperSlide className='swiper-slide1 intro-slide'>
                 <img
                     src={havalDargo}

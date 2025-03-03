@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./DownloadPdf.css";
+import axios from "axios";
 
 export default function DownloadPdf() {
     const CarModelsArr = [
@@ -55,11 +56,13 @@ export default function DownloadPdf() {
     const generatePDF = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch("http://localhost:3000/download-pdf", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
-            });
+            const response = await axios.post(
+                "http://localhost:3000/generate-pdf",
+                {
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData),
+                }
+            );
 
             const data = await response.json();
             if (response.ok) {
@@ -74,10 +77,9 @@ export default function DownloadPdf() {
 
     const downloadPDF = async (filename) => {
         try {
-            const response = await fetch(
+            const response = await axios.post(
                 `http://localhost:3000/download-pdf/${filename}`,
                 {
-                    method: "POST",
                     headers: { "Content-Type": "application/json" },
                 }
             );

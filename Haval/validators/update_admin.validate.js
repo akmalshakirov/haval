@@ -41,9 +41,6 @@ exports.adminValidationRulesUpdate = checkSchema({
         isString: {
             errorMessage: "Parol string bo‘lishi kerak!"
         },
-        notEmpty: {
-            errorMessage: "Parol bo‘sh bo‘lmasligi kerak!"
-        },
         isLength: {
             options: { min: 6 },
             errorMessage: "Parol 6 ta belgidan kam bo‘lmasligi kerak!"

@@ -5,9 +5,6 @@ const { validationResult } = require("express-validator");
 
 exports.getAllAdmin = async (req, res) => {
     try {
-        if (req.user.role !== "superadmin") {
-            return res.status(403).json({ error: "Faqat superadmin ko‘rishi mumkin!" });
-        }
 
         const admins = await Admin.find();
         return res.status(200).json({ message: "Adminlar", admins });
@@ -25,12 +22,7 @@ exports.getAdminById = async (req, res) => {
         if (!admin) {
             return res.status(404).json({ error: "Admin topilmadi!" });
         }
-
-        if (req.user.role === "superadmin" || (admin._id.toString() === req.user.id && admin.status === 0)) {
-            return res.status(200).json(admin);
-        }
-
-        return res.status(403).json({ error: "Sizga ruxsat yo‘q!" });
+        return res.status(200).json(admin);
 
     } catch (error) {
         console.error("Adminni olishda xatolik:", error);
@@ -44,10 +36,6 @@ exports.createAdmin = async (req, res) => {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-
-        if (req.user.role !== "superadmin") {
-            return res.status(403).json({ error: "Faqat superadmin yaratishi mumkin!" });
-        }
 
         const { email, adminName, password, status } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -75,10 +63,6 @@ exports.updateAdmin = async (req, res) => {
             return res.status(404).json({ error: "Admin topilmadi." });
         }
 
-        if (req.user.role !== "superadmin" && admin._id.toString() !== req.user.id) {
-            return res.status(403).json({ error: "Siz faqat o‘zingizni yangilay olasiz!" });
-        }
-
         const { email, adminName, password } = req.body;
         const updateData = { adminName, email };
 
@@ -97,9 +81,6 @@ exports.updateAdmin = async (req, res) => {
 
 exports.deleteAdmin = async (req, res) => {
     try {
-        if (req.user.role !== "superadmin") {
-            return res.status(403).json({ error: "Faqat superadmin o‘chira oladi!" });
-        }
 
         const { id } = req.params;
         const admin = await Admin.findById(id);

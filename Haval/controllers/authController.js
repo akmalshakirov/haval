@@ -3,7 +3,7 @@ const Admin = require("../models/Admin");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const loginSchema = require("../validators/login.validate");
+const { validationResult } = require("express-validator");
 
 exports.register = async (req, res) => {
     try {
@@ -13,12 +13,7 @@ exports.register = async (req, res) => {
         }
         
         const { name, email, password, role } = req.body;
-
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            return res.status(400).json({ error: "Noto'g'ri email formati" });
-        }
-
+ 
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(409).json({
@@ -28,6 +23,7 @@ exports.register = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        
         const user = await User.create({
             name,
             email,
@@ -35,26 +31,15 @@ exports.register = async (req, res) => {
             role: role || "user",
         });
 
-        if (!name || !email || !password) {
-            return res
-                .status(400)
-                .json({ message: "Barcha maydonlarni to‘ldiring." });
-        }
+            if (!name || !email || !password) {
+                return res
+                    .status(400)
+                    .json({ message: "Barcha maydonlarni to‘ldiring." });
+            }
 
         if (!process.env.JWT_SECRET_KEY) {
             throw new Error("JWT_SECRET muhit o'zgaruvchisi mavjud emas!");
         }
-
-        const token = jwt.sign(
-            {
-                id: user._id,
-                email: user.email,
-                role: user.role,
-            },
-            process.env.JWT_SECRET_KEY,
-            { expiresIn: "1h" }
-        );
-        console.log(token)
         res.status(200).json({
             message: "Foydalanuvchi muvaffaqiyatli ro‘yxatdan o‘tdi.",
             user,

@@ -96,40 +96,40 @@ router
     .get(
         "/admins",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin","admin"]),
         getAllAdmin
     )
     .get(
         "/admins/:id",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin","admin"]),
         getAdminById
     )
     .post(
         "/add-admin",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin"]),
         [...adminValidationRules],
         createAdmin
     )
-    .post("/loginAdmin", loginLimiter, [...validateLogin], loginAdmin)
+    .post("/login-Admin", loginLimiter, [...validateLogin], loginAdmin)
     .post(
         "/register",
-        jwtAccessMiddleware,
+        // jwtAccessMiddleware,
         [...validateRegister],
         register
     )
     .put(
         "/admins/:id",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin"]),
         [...adminValidationRulesUpdate],
         updateAdmin
     )
     .delete(
         "/admins/:id",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin"]),
         deleteAdmin
     )
 
@@ -137,7 +137,7 @@ router
     .post(
         "/add-car",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin","admin"]),
         upload.single("image"),
         [...validateCar],
         addCar
@@ -145,7 +145,7 @@ router
     .put(
         "/cars/:id",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin","admin"]),
         upload.single("image"),
         [...validateCarUpdate],
         updateCar
@@ -153,7 +153,7 @@ router
     .delete(
         "/cars/:id",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin","admin"]),
         deleteCar
     )
 
@@ -161,7 +161,7 @@ router
     .get(
         "/categories/:id",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin","admin"]),
         getCategoryById
     )
     .post(
@@ -173,13 +173,13 @@ router
     .put(
         "/categories/:id",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin","admin"]),
         updateCategory
     )
     .delete(
         "/categories/:id",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin","admin"]),
         deleteCategory
     )
 
@@ -187,21 +187,21 @@ router
     .post(
         "/add-diler",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin","admin"]),
         [...validateDiler],
         addDiler
     )
     .put(
         "/dilers/:id",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin","admin"]),
         [...validateDilerUpdate],
         updateDiler
     )
     .delete(
         "/dilers/:id",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin","admin"]),
         deleteDiler
     )
 
@@ -209,21 +209,21 @@ router
     .post(
         "/add-news",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin","admin"]),
         [...validateNews],
         addNews
     )
     .put(
         "/news/:id",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin","admin"]),
         [...validateNewsUpdate],
         updateNews
     )
     .delete(
         "/news/:id",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin","admin"]),
         deleteNews
     )
 
@@ -236,14 +236,14 @@ router
     .put(
         "/dealerCall/:id",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin","admin"]),
         [...validateOrder_Dealer_CallUpdate],
         updateDealerCall
     )
     .delete(
         "/dealerCall/:id",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin","admin"]),
         deleteDealerCall
     )
 
@@ -251,21 +251,21 @@ router
     .post(
         "/add-savdo-statistikasi",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin","admin"]),
         [...validateSavdoStatistikasi],
         addSavdoStatistikasi
     )
     .put(
         "/savdo-statistikasi/:id",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin","admin"]),
         [...validateSavdoStatistikasiUpdate],
         updateSavdoStatistikasi
     )
     .delete(
         "/savdo-statistikasi/:id",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin","admin"]),
         deleteSavdoStatistikasi
     )
 
@@ -278,7 +278,7 @@ router
     )
 
     .post(
-        "/login",
+        "/loginUser",
         jwtAccessMiddleware,
         loginLimiter,
         [...validateLogin],
@@ -287,19 +287,19 @@ router
     .get(
         "/users",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin","admin"]),
         getAllUsers
     )
     .get(
         "/users/:id",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin","admin"]),
         getUserById
     )
     .delete(
         "/users/:id",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin","admin"]),
         deleteUser
     )
 
@@ -307,21 +307,21 @@ router
     .post(
         "/add-video",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin","admin"]),
         [...validateVideo],
         addVideo
     )
     .put(
         "/videos/:id",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin","admin"]),
         [...validateVideoUpdate],
         updateVideo
     )
     .delete(
         "/videos/:id",
         jwtAccessMiddleware,
-        roleAccessMiddleware(["admin"]),
+        roleAccessMiddleware(["superadmin","admin"]),
         deleteVideo
     )
     .post("/generate-pdf", generate_pdf)

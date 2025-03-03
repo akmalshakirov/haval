@@ -1,0 +1,66 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url("../../Images/admin-login_cover.jpg");
+    background-size: cover;
+    background-position: top;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.login-form > div {
+    margin-bottom: 20px;
+}
+
+.login-card {
+    max-width: 400px;
+    width: 100%;
+    padding: 3px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.login-title {
+    text-align: center;
+}
+
+.login-text {
+    display: block;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #b5b5b4;
+}
+
+.login-name-input,
+.login-password-input {
+    padding: 7px 15px;
+}
+
+.login-button {
+    width: 100%;
+}
+.login-name-icon {
+    color: #1f2937;
+    border: 1px solid #1f2937;
+    border-radius: 50%;
+    padding: 1px;
+    margin-right: 10px;
+}
+
+.login-name-icon:user-invalid {
+    border-color: red;
+}
+
+.login-password-icon {
+    margin-right: 12px;
+    font-size: 16px;
+}
+
+@media screen and (max-width: 480px) {
+    .login-card {
+        max-width: 90%;
+        margin: 0 10px;
+    }
+}
