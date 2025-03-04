@@ -12,7 +12,7 @@ exports.register = async (req, res) => {
             return res.status(400).json({ errors: errors.array() });
         }
         
-        const { username, email, password, role } = req.body;
+        const { name, email, password, role } = req.body;
  
         const existingUser = await User.findOne({ email });
         if (existingUser) {
@@ -25,13 +25,13 @@ exports.register = async (req, res) => {
 
         
         const user = await User.create({
-            username,
+            name,
             email,
             password: hashedPassword,
             role: role || "user",
         });
 
-            if (!username || !email || !password) {
+            if (!name || !email || !password) {
                 return res
                     .status(400)
                     .json({ message: "Barcha maydonlarni to‘ldiring." });
