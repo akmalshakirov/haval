@@ -35,7 +35,7 @@ const Login = () => {
                 { headers: { "Content-Type": "application/json" } }
             );
             if (response.status === 200 && response.data?.token) {
-                localStorage.setItem("authToken", response.data.token);
+                localStorage.setItem("token", response.data.token);
                 message.success("Shaxsiz kabinetga muvaffaqiyatli kirildi!");
                 navigate("/user");
             } else {

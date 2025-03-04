@@ -1,0 +1,38 @@
+.user-page-layout {
+    min-height: 100vh;
+}
+.user-page-layout * {
+    color: #fff;
+}
+.user-page-sider {
+    background-color: #30363b;
+    border-right: 1px solid #ccc;
+}
+.user-page-menu {
+    background-color: #30363b;
+    margin: 10px;
+}
+.user-page_content {
+    padding: 16px;
+    background-color: #30363b;
+}
+.user-page_content > div {
+    padding: 15px;
+    border: 1px solid #dad4d4;
+    border-radius: 7px;
+    min-height: calc(10vh);
+}
+.user-page_content_agreements {
+    margin: 7vh 0 2vh 0;
+}
+
+/* const navigate = useNavigate();
+    useEffect(() => {
+        document.title = "Haval | Shaxsiy kabinet";
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+            localStorage.removeItem("authToken");
+            navigate("/login");
+            message.info("Oldin login qiling!");
+        }
+    }); */

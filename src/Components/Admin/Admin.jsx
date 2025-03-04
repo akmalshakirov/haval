@@ -97,7 +97,7 @@ const AdminPanel = () => {
             );
         } catch (error) {
             const response = error.response;
-            if (response.message === "Invalid token!") {
+            if (response?.message === "Invalid token!") {
                 localStorage.removeItem("authToken");
                 navigate("/");
             }
@@ -241,11 +241,14 @@ const AdminPanel = () => {
                     },
                 }
             );
+            // if (response.data.message === "Invalid token!") {
+            //     navigate("/");
+            // }
             setAdmins([response.data.admins]);
             console.log("Kelgan ma'lumotlar (admin):", response.data.admins);
         } catch (error) {
             const response = error.response;
-            if (response.status === 401) {
+            if (response?.status === 401) {
                 message.info("Token vaqti tugagan!");
             } else {
                 message.error(
