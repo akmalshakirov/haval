@@ -1,25 +1,29 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
+    Avatar,
+    Button,
+    Dropdown,
+    Form,
+    Image,
+    Input,
     Layout,
     Menu,
-    Table,
-    Button,
-    Form,
-    Input,
-    Modal,
-    Avatar,
-    Dropdown,
     message,
+    Modal,
+    Table,
+    Upload,
 } from "antd";
 import { FileTextOutlined } from "@ant-design/icons";
 import GWM_wingle_7 from "../../Images/gwm-wingle-7.jpg";
 import UserImage from "../../Images/userimage.png";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const { Header, Content, Sider } = Layout;
 
 const UserPage = () => {
     const navigate = useNavigate();
+    const [user, setUser] = useState([]);
     useEffect(() => {
         document.title = "Haval | Shaxsiy kabinet";
         const token = localStorage.getItem("token");
@@ -36,6 +40,8 @@ const UserPage = () => {
             title: "Avtomobil shartnomasi 1",
             startDate: "2023-03-01",
             endDate: "2023-03-08",
+            status: "Kutilmoqda",
+            className: "pending",
         },
         {
             id: 2,
@@ -43,12 +49,22 @@ const UserPage = () => {
             title: "Avtomobil shartnomasi 2",
             startDate: "2023-03-05",
             endDate: "2023-03-12",
+            status: "Aktiv",
+            className: "active",
+        },
+        {
+            id: 3,
+            image: GWM_wingle_7,
+            title: "Avtomobil shartnomasi 3",
+            startDate: "2023-03-05",
+            endDate: "2023-03-12",
+            status: "Bekor qilingan",
+            className: "canceled",
         },
     ]);
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [form] = Form.useForm();
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     const handleCancel = () => {
         setIsModalVisible(false);
@@ -71,7 +87,7 @@ const UserPage = () => {
             title: "Rasm",
             dataIndex: "image",
             key: "image",
-            render: (image) => <Avatar shape='square' size={50} src={image} />,
+            render: (image) => <Image width={100} src={image} />,
             width: 70,
         },
         {
@@ -117,11 +133,38 @@ const UserPage = () => {
 
     const handleProfileMenuClick = (info) => {
         if (info.key === "edit") {
-            setIsEditModalOpen(!isEditModalOpen);
+            // setIsEditModalOpen(!isEditModalOpen);
+            navigate("/user/edit-profile");
         } else if (info.key === "logout") {
-            alert("Tizimdan chiqish funktsiyasi chaqirildi!");
+            localStorage.removeItem("token");
+            message.success("Tizimdan chiqildi");
+            navigate("/");
         }
     };
+
+    // const fetchUser = async () => {
+    //     try {
+    //         const token = localStorage.getItem("token");
+    //         if (!token) {
+    //             message.error("Token topilmadi, qayta tizimga kiring!");
+    //             return;
+    //         }
+
+    //         const response = await axios.get("http://localhost:3000/users", {
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //                 Authorization: `Bearer ${token}`,
+    //             },
+    //         });
+    //         setUser([response.data]);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // };
+
+    // useEffect(() => {
+    //     fetchUser();
+    // }, []);
 
     return (
         <Layout style={{ minHeight: "100vh" }}>
@@ -166,24 +209,19 @@ const UserPage = () => {
                         style={{ marginBottom: 16 }}>
                         Shartnoma qo'shish
                     </Button>
-                    <Table
-                        dataSource={contracts.map((contract) => ({
-                            ...contract,
-                            key: contract.id,
-                        }))}
-                        columns={columns}
-                    />
+                    <Table dataSource={contracts} columns={columns} />
                 </Content>
             </Layout>
             {/* MODALS */}
-            <Modal
+            {/* <Modal
                 title='Profilni tahrirlash'
                 open={isEditModalOpen}
                 onCancel={() => setIsEditModalOpen(!isEditModalOpen)}
-                onOk={() => (
-                    setIsEditModalOpen(!isEditModalOpen),
-                    message.success("Profil muvvafaqiyatli tahrirlandi")
-                )}></Modal>
+                onOk={() => setIsEditModalOpen(!isEditModalOpen)}>
+                <Input />
+            </Modal> */}
+
+            {/*Shartnoma qoshish */}
             <Modal
                 title="Yangi shartnoma qo'shish"
                 open={isModalVisible}
@@ -199,10 +237,13 @@ const UserPage = () => {
                         rules={[
                             {
                                 required: true,
-                                message: "Iltimos, shartnoma nomini kiriting!",
+                                message: "shartnoma nomini kiriting!",
                             },
                         ]}>
                         <Input placeholder='Shartnoma nomi' />
+                    </Form.Item>
+                    <Form.Item>
+                        <Upload />
                     </Form.Item>
                     <Form.Item>
                         <Button type='primary' htmlType='submit'>

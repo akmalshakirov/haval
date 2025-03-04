@@ -21,7 +21,7 @@ const AdminLogin = () => {
     };
 
     useEffect(() => {
-        document.title = "Haval Admin Login";
+        document.title = "Haval | Admin Login";
     }, []);
 
     const handleSubmit = async () => {

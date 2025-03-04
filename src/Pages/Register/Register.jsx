@@ -27,7 +27,7 @@ const Registration = () => {
     };
 
     useEffect(() => {
-        document.title = "Haval Register";
+        document.title = "Haval | Register";
     }, []);
 
     const handleSubmit = async () => {

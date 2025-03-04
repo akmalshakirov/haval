@@ -53,7 +53,7 @@ const AdminVideos = () => {
         try {
             const token = localStorage.getItem("authToken");
             if (!token) {
-                message.error("Token topilmadi, iltimos qayta tizimga kiring!");
+                message.error("Token topilmadi, qayta tizimga kiring!");
                 return;
             }
 

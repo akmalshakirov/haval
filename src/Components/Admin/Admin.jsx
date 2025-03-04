@@ -77,7 +77,7 @@ const AdminPanel = () => {
         try {
             const token = localStorage.getItem("authToken");
             if (!token) {
-                message.error("Token topilmadi, iltimos qayta tizimga kiring!");
+                message.error("Token topilmadi, qayta tizimga kiring!");
                 return;
             }
 
@@ -227,7 +227,7 @@ const AdminPanel = () => {
         try {
             const token = localStorage.getItem("authToken");
             if (!token) {
-                message.error("Token topilmadi, iltimos qayta tizimga kiring!");
+                message.error("Token topilmadi, qayta tizimga kiring!");
                 return;
             }
 
@@ -267,7 +267,7 @@ const AdminPanel = () => {
             fetchCars();
             fetchAdmins();
         }
-        document.title = "Haval Admin Panel";
+        document.title = "Haval | Admin Panel";
     }, []);
 
     const handleAddAdmin = async (values) => {
@@ -605,7 +605,7 @@ const AdminPanel = () => {
                                                 {
                                                     required: true,
                                                     message:
-                                                        "Iltimos, Admin nomini kiriting!",
+                                                        "Admin nomini kiriting!",
                                                 },
                                             ]}>
                                             <Input />
@@ -617,12 +617,12 @@ const AdminPanel = () => {
                                                 {
                                                     required: true,
                                                     message:
-                                                        "Iltimos, emailni kiriting!",
+                                                        "emailni kiriting!",
                                                 },
                                                 {
                                                     type: "email",
                                                     message:
-                                                        "Iltimos, to'g'ri email formatini kiriting! (misol: example@gmail.com)",
+                                                        "to'g'ri email formatini kiriting! (misol: example@gmail.com)",
                                                 },
                                             ]}>
                                             <Input />
@@ -634,7 +634,7 @@ const AdminPanel = () => {
                                                 {
                                                     required: true,
                                                     message:
-                                                        "Iltimos, parolni kiriting!",
+                                                        "parolni kiriting!",
                                                 },
                                                 {
                                                     min: 6,
@@ -671,7 +671,7 @@ const AdminPanel = () => {
                                                 {
                                                     required: true,
                                                     message:
-                                                        "Iltimos, Admin nomini kiriting!",
+                                                        "Admin nomini kiriting!",
                                                 },
                                             ]}>
                                             <Input />
@@ -683,12 +683,12 @@ const AdminPanel = () => {
                                                 {
                                                     required: true,
                                                     message:
-                                                        "Iltimos, emailni kiriting!",
+                                                        "emailni kiriting!",
                                                 },
                                                 {
                                                     type: "email",
                                                     message:
-                                                        "Iltimos, to'g'ri email formatini kiriting! (misol: example@mail.com)",
+                                                        "to'g'ri email formatini kiriting! (misol: example@mail.com)",
                                                 },
                                             ]}>
                                             <Input />
@@ -714,7 +714,7 @@ rules={[
 {
 required: true,
 message:
-"Iltimos, parolni kiriting!",
+"parolni kiriting!",
 },
 {
 min: 6,
@@ -727,7 +727,7 @@ message:
                                                             {
                                                                 required: true,
                                                                 message:
-                                                                    "Iltimos, parolni kiriting!",
+                                                                    "parolni kiriting!",
                                                             },
                                                             {
                                                                 min: 6,
@@ -912,7 +912,7 @@ message:
                                                 {
                                                     required: true,
                                                     message:
-                                                        "Iltimos, avtomobil modelini kiriting!",
+                                                        "avtomobil modelini kiriting!",
                                                 },
                                             ]}>
                                             <Input />
@@ -923,8 +923,7 @@ message:
                                             rules={[
                                                 {
                                                     required: true,
-                                                    message:
-                                                        "Iltimos, yilni kiriting!",
+                                                    message: "yilni kiriting!",
                                                 },
                                             ]}>
                                             <Input />
@@ -935,8 +934,7 @@ message:
                                             rules={[
                                                 {
                                                     required: true,
-                                                    message:
-                                                        "Iltimos, narxni kiriting!",
+                                                    message: "narxni kiriting!",
                                                 },
                                             ]}>
                                             <Input />
@@ -1048,8 +1046,7 @@ message:
                         rules={[
                             {
                                 required: true,
-                                message:
-                                    "Iltimos, avtomobil modelini kiriting!",
+                                message: "avtomobil modelini kiriting!",
                             },
                         ]}>
                         <Input />
@@ -1060,7 +1057,7 @@ message:
                         rules={[
                             {
                                 required: true,
-                                message: "Iltimos, yilni kiriting!",
+                                message: "yilni kiriting!",
                             },
                         ]}>
                         <InputNumber min={2020} className='full-w-input' />
@@ -1071,7 +1068,7 @@ message:
                         rules={[
                             {
                                 required: true,
-                                message: "Iltimos, narxni kiriting!",
+                                message: "narxni kiriting!",
                             },
                         ]}>
                         <InputNumber min={19000} className='full-w-input' />

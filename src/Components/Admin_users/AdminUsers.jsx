@@ -10,7 +10,7 @@ function AdminUsers() {
         try {
             const token = localStorage.getItem("token");
             if (!token) {
-                message.error("Token topilmadi, iltimos qayta tizimga kiring!");
+                message.error("Token topilmadi, qayta tizimga kiring!");
                 return;
             }
 

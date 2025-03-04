@@ -20,6 +20,7 @@ function HeaderNavBar() {
     const [isAboutGwmOpen, setAboutGwmOpen] = useState(false);
     const [isSelection, setIsSelection] = useState(false);
 
+    const token = localStorage.getItem("token");
     const changeLanguage = (lang) => {
         i18n.changeLanguage(lang);
     };
@@ -239,9 +240,19 @@ function HeaderNavBar() {
                         <li>
                             <a href='/'>{t("statistics")}</a>
                         </li>
-                        <a href='/login'>
-                            <UserOutlined className='user-icon' />
-                        </a>
+                        {/* <a href='/login'> */}
+                        {token ? (
+                            <a href='/user'>
+                                <UserOutlined className='user-icon' />
+                            </a>
+                        ) : (
+                            <li>
+                                <a href='/login' style={{ marginTop: "4px" }}>
+                                    Kirish
+                                </a>
+                            </li>
+                        )}
+                        {/* </a> */}
                     </ul>
                 </div>
                 <div className='header__item'>
