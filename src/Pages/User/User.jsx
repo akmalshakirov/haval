@@ -17,7 +17,6 @@ import { FileTextOutlined } from "@ant-design/icons";
 import GWM_wingle_7 from "../../Images/gwm-wingle-7.jpg";
 import UserImage from "../../Images/userimage.png";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 const { Header, Content, Sider } = Layout;
 
