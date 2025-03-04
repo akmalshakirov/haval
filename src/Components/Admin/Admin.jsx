@@ -232,7 +232,8 @@ const AdminPanel = () => {
             }
 
             const response = await axios.get(
-                "https://haval-uz.onrender.com/admins",
+                // "https://haval-uz.onrender.com/admins",
+                "http://localhost:3000/admins",
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -275,7 +276,8 @@ const AdminPanel = () => {
                 password: values.password,
             };
             const response = await axios.post(
-                `https://haval-uz.onrender.com/add-admin`,
+                // `https://haval-uz.onrender.com/add-admin`,
+                `http://localhost:3000/add-admin`,
                 addAdmin,
                 {
                     headers: {
@@ -309,7 +311,8 @@ const AdminPanel = () => {
             };
 
             const response = await axios.put(
-                `https://haval-uz.onrender.com/admins/${editingAdmin._id}`, // `http://localhost:3000/admins/${editingAdmin._id}`,
+                // `https://haval-uz.onrender.com/admins/${editingAdmin._id}`,
+                `http://localhost:3000/admins/${editingAdmin._id}`,
                 updateData,
                 {
                     headers: {
@@ -343,7 +346,8 @@ const AdminPanel = () => {
         try {
             const token = localStorage.getItem("authToken");
             const response = await axios.delete(
-                `https://haval-uz.onrender.com/admins/${adminId}`,
+                // `https://haval-uz.onrender.com/admins/${adminId}`,
+                `http://localhost:3000/admins/${adminId}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -441,6 +445,11 @@ const AdminPanel = () => {
             key: "email",
         },
         {
+            title: "Status",
+            dataIndex: "role",
+            key: "role",
+        },
+        {
             title: "Action",
             key: "action",
             render: (_, record) => (
@@ -533,7 +542,7 @@ const AdminPanel = () => {
                 <Tooltip title='Chiqish' className='tooltip-logout'>
                     <Popconfirm
                         title='Chiqish'
-                        description='Haqiqatan ham chiqishni istasizmi?'
+                        description='Haqiqatan ham chiqishni istaysizmi?'
                         onConfirm={handleLogout}
                         okText='Ha'
                         cancelText='Yoq'>
