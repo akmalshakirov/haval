@@ -15,7 +15,7 @@ const Registration = () => {
     const [email, setEmail] = useState("");
     const [inputPasswordValue, setInputPasswordValue] = useState("");
     const [onClick, setOnClick] = useState(false);
-    const [username, setUsername] = useState("");
+    const [name, setName] = useState("");
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -27,11 +27,11 @@ const Registration = () => {
     };
 
     useEffect(() => {
-        document.title = "Haval Register";
+        document.title = "Haval | Register";
     }, []);
 
     const handleSubmit = async () => {
-        if (username === "" && email === "" && inputPasswordValue === "") {
+        if (name === "" && email === "" && inputPasswordValue === "") {
             return message.error("Заполните все поля");
         }
         setOnClick(true);
@@ -39,7 +39,7 @@ const Registration = () => {
             const response = await axios.post(
                 // "https://haval-uz.onrender.com/register",
                 "http://localhost:3000/register",
-                { username, email, password: inputPasswordValue },
+                { name, email, password: inputPasswordValue },
                 { headers: { "Content-Type": "application/json" } }
             );
             if (response.status === 200 && response.data?.token) {
@@ -81,8 +81,8 @@ const Registration = () => {
                         ]}>
                         <Input
                             type='text'
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                             prefix={
                                 <ScheduleOutlined className='register-username-icon' />
                             }

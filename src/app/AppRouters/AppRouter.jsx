@@ -21,6 +21,8 @@ import TestDrive from "../../Pages/Test-drive/TestDrive.jsx";
 import BDealer from "../../Pages/Become-dealer/BDealer.jsx";
 import Login from "../../Pages/Login/Login.jsx";
 import Registration from "../../Pages/Register/Register.jsx";
+import User from "../../Pages/User/User.jsx";
+import UserEditProfile from "../../Pages/User/UserEditProfile.jsx";
 
 const AppRouter = () => {
     return (
@@ -61,6 +63,8 @@ const AppRouter = () => {
             />
             <Route path='/login' element={<Login />} />
             <Route path='/registration' element={<Registration />} />
+            <Route path='/user' element={<User />} />
+            <Route path='/user/edit-profile' element={<UserEditProfile />} />
             <Route path='*' element={<AuthRouter />} /> {/*<- NOT FOUND PAGE */}
         </Routes>
     );

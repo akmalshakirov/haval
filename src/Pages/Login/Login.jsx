@@ -22,7 +22,7 @@ const Login = () => {
     };
 
     useEffect(() => {
-        document.title = "Haval Login";
+        document.title = "Haval | Login";
     }, []);
 
     const handleSubmit = async () => {
@@ -35,9 +35,8 @@ const Login = () => {
                 { headers: { "Content-Type": "application/json" } }
             );
             if (response.status === 200 && response.data?.token) {
-                localStorage.setItem("authToken", response.data.token);
-                message.success("Shaxsiz kabinetga muvaffaqiyatli kirildi!");
-                navigate("/user");
+                localStorage.setItem("token", response.data.token);
+                navigate("/");
             } else {
                 message.error("Username yoki password noto'g'ri!");
             }

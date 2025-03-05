@@ -21,14 +21,15 @@ const AdminLogin = () => {
     };
 
     useEffect(() => {
-        document.title = "Haval Admin Login";
+        document.title = "Haval | Admin Login";
     }, []);
 
     const handleSubmit = async () => {
         setOnClick(true);
         try {
             const response = await axios.post(
-                "https://haval-uz.onrender.com/login",
+                // "https://haval-uz.onrender.com/login",
+                "http://localhost:3000/login-Admin",
                 { email, password: inputPasswordValue },
                 { headers: { "Content-Type": "application/json" } }
             );

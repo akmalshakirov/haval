@@ -53,22 +53,62 @@ export default function DownloadPdf() {
         }
     };
 
+    // const generatePDF = async (e) => {
+    //     e.preventDefault();
+    //     try {
+    //         const response = await axios.post(
+    //             "http://localhost:3000/generate-pdf",
+    //             formData,
+    //             {
+    //                 headers: { "Content-Type": "application/json" },
+    //             }
+    //         );
+
+    //         const data = await response.json();
+    //         if (response.ok) {
+    //             downloadPDF(data.filename);
+    //         } else {
+    //             console.log("Xatolik yuz berdi: " + data.error);
+    //         }
+    //     } catch (error) {
+    //         console.error("Serverga ulanishda xatolik:", error);
+    //     }
+    // };
+
+    // const downloadPDF = async (filename) => {
+    //     try {
+    //         const response = await axios.get(
+    //             `http://localhost:3000/download-pdf/${filename}`,
+    //             {
+    //                 responseType: "blob",
+    //             }
+    //         );
+    //         if (!response.ok) throw new Error("PDF yuklab olishda xatolik!");
+
+    //         const blob = new Blob([response.data], { type: "application/pdf" });
+    //         const link = document.createElement("a");
+    //         link.href = URL.createObjectURL(blob);
+    //         link.download = filename;
+    //         document.body.appendChild(link);
+    //         link.click();
+    //         document.body.removeChild(link);
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // };
     const generatePDF = async (e) => {
         e.preventDefault();
         try {
             const response = await axios.post(
                 "http://localhost:3000/generate-pdf",
-                {
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(formData),
-                }
+                formData,
+                { headers: { "Content-Type": "application/json" } }
             );
 
-            const data = await response.json();
-            if (response.ok) {
-                downloadPDF(data.filename);
+            if (response.status === 200) {
+                downloadPDF(response.data.filename);
             } else {
-                console.log("Xatolik yuz berdi: " + data.error);
+                console.error("Xatolik yuz berdi:", response.data.error);
             }
         } catch (error) {
             console.error("Serverga ulanishda xatolik:", error);
@@ -79,13 +119,10 @@ export default function DownloadPdf() {
         try {
             const response = await axios.post(
                 `http://localhost:3000/download-pdf/${filename}`,
-                {
-                    headers: { "Content-Type": "application/json" },
-                }
+                { responseType: "application/pdf" }
             );
-            if (!response.ok) throw new Error("PDF yuklab olishda xatolik!");
 
-            const blob = await response.blob();
+            const blob = new Blob([response.data], { type: "application/pdf" });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
             link.download = filename;
@@ -93,7 +130,7 @@ export default function DownloadPdf() {
             link.click();
             document.body.removeChild(link);
         } catch (error) {
-            console.error(error);
+            console.error("PDF yuklab olishda xatolik:", error);
         }
     };
 

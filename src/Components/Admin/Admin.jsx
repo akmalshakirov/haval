@@ -77,7 +77,7 @@ const AdminPanel = () => {
         try {
             const token = localStorage.getItem("authToken");
             if (!token) {
-                message.error("Token topilmadi, iltimos qayta tizimga kiring!");
+                message.error("Token topilmadi, qayta tizimga kiring!");
                 return;
             }
 
@@ -97,7 +97,7 @@ const AdminPanel = () => {
             );
         } catch (error) {
             const response = error.response;
-            if (response.message === "Invalid token!") {
+            if (response?.message === "Invalid token!") {
                 localStorage.removeItem("authToken");
                 navigate("/");
             }
@@ -227,12 +227,13 @@ const AdminPanel = () => {
         try {
             const token = localStorage.getItem("authToken");
             if (!token) {
-                message.error("Token topilmadi, iltimos qayta tizimga kiring!");
+                message.error("Token topilmadi, qayta tizimga kiring!");
                 return;
             }
 
             const response = await axios.get(
-                "https://haval-uz.onrender.com/admins",
+                // "https://haval-uz.onrender.com/admins",
+                "http://localhost:3000/admins",
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -240,11 +241,14 @@ const AdminPanel = () => {
                     },
                 }
             );
+            // if (response.data.message === "Invalid token!") {
+            //     navigate("/");
+            // }
             setAdmins([response.data.admins]);
             console.log("Kelgan ma'lumotlar (admin):", response.data.admins);
         } catch (error) {
             const response = error.response;
-            if (response.status === 401) {
+            if (response?.status === 401) {
                 message.info("Token vaqti tugagan!");
             } else {
                 message.error(
@@ -263,7 +267,7 @@ const AdminPanel = () => {
             fetchCars();
             fetchAdmins();
         }
-        document.title = "Haval Admin Panel";
+        document.title = "Haval | Admin Panel";
     }, []);
 
     const handleAddAdmin = async (values) => {
@@ -275,7 +279,8 @@ const AdminPanel = () => {
                 password: values.password,
             };
             const response = await axios.post(
-                `https://haval-uz.onrender.com/add-admin`,
+                // `https://haval-uz.onrender.com/add-admin`,
+                `http://localhost:3000/add-admin`,
                 addAdmin,
                 {
                     headers: {
@@ -309,7 +314,8 @@ const AdminPanel = () => {
             };
 
             const response = await axios.put(
-                `https://haval-uz.onrender.com/admins/${editingAdmin._id}`, // `http://localhost:3000/admins/${editingAdmin._id}`,
+                // `https://haval-uz.onrender.com/admins/${editingAdmin._id}`,
+                `http://localhost:3000/admins/${editingAdmin._id}`,
                 updateData,
                 {
                     headers: {
@@ -343,7 +349,8 @@ const AdminPanel = () => {
         try {
             const token = localStorage.getItem("authToken");
             const response = await axios.delete(
-                `https://haval-uz.onrender.com/admins/${adminId}`,
+                // `https://haval-uz.onrender.com/admins/${adminId}`,
+                `http://localhost:3000/admins/${adminId}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -441,6 +448,11 @@ const AdminPanel = () => {
             key: "email",
         },
         {
+            title: "Status",
+            dataIndex: "role",
+            key: "role",
+        },
+        {
             title: "Action",
             key: "action",
             render: (_, record) => (
@@ -533,7 +545,7 @@ const AdminPanel = () => {
                 <Tooltip title='Chiqish' className='tooltip-logout'>
                     <Popconfirm
                         title='Chiqish'
-                        description='Haqiqatan ham chiqishni istasizmi?'
+                        description='Haqiqatan ham chiqishni istaysizmi?'
                         onConfirm={handleLogout}
                         okText='Ha'
                         cancelText='Yoq'>
@@ -593,7 +605,7 @@ const AdminPanel = () => {
                                                 {
                                                     required: true,
                                                     message:
-                                                        "Iltimos, Admin nomini kiriting!",
+                                                        "Admin nomini kiriting!",
                                                 },
                                             ]}>
                                             <Input />
@@ -605,12 +617,12 @@ const AdminPanel = () => {
                                                 {
                                                     required: true,
                                                     message:
-                                                        "Iltimos, emailni kiriting!",
+                                                        "emailni kiriting!",
                                                 },
                                                 {
                                                     type: "email",
                                                     message:
-                                                        "Iltimos, to'g'ri email formatini kiriting! (misol: example@gmail.com)",
+                                                        "to'g'ri email formatini kiriting! (misol: example@gmail.com)",
                                                 },
                                             ]}>
                                             <Input />
@@ -622,7 +634,7 @@ const AdminPanel = () => {
                                                 {
                                                     required: true,
                                                     message:
-                                                        "Iltimos, parolni kiriting!",
+                                                        "parolni kiriting!",
                                                 },
                                                 {
                                                     min: 6,
@@ -659,7 +671,7 @@ const AdminPanel = () => {
                                                 {
                                                     required: true,
                                                     message:
-                                                        "Iltimos, Admin nomini kiriting!",
+                                                        "Admin nomini kiriting!",
                                                 },
                                             ]}>
                                             <Input />
@@ -671,12 +683,12 @@ const AdminPanel = () => {
                                                 {
                                                     required: true,
                                                     message:
-                                                        "Iltimos, emailni kiriting!",
+                                                        "emailni kiriting!",
                                                 },
                                                 {
                                                     type: "email",
                                                     message:
-                                                        "Iltimos, to'g'ri email formatini kiriting! (misol: example@mail.com)",
+                                                        "to'g'ri email formatini kiriting! (misol: example@mail.com)",
                                                 },
                                             ]}>
                                             <Input />
@@ -702,7 +714,7 @@ rules={[
 {
 required: true,
 message:
-"Iltimos, parolni kiriting!",
+"parolni kiriting!",
 },
 {
 min: 6,
@@ -715,7 +727,7 @@ message:
                                                             {
                                                                 required: true,
                                                                 message:
-                                                                    "Iltimos, parolni kiriting!",
+                                                                    "parolni kiriting!",
                                                             },
                                                             {
                                                                 min: 6,
@@ -900,7 +912,7 @@ message:
                                                 {
                                                     required: true,
                                                     message:
-                                                        "Iltimos, avtomobil modelini kiriting!",
+                                                        "avtomobil modelini kiriting!",
                                                 },
                                             ]}>
                                             <Input />
@@ -911,8 +923,7 @@ message:
                                             rules={[
                                                 {
                                                     required: true,
-                                                    message:
-                                                        "Iltimos, yilni kiriting!",
+                                                    message: "yilni kiriting!",
                                                 },
                                             ]}>
                                             <Input />
@@ -923,8 +934,7 @@ message:
                                             rules={[
                                                 {
                                                     required: true,
-                                                    message:
-                                                        "Iltimos, narxni kiriting!",
+                                                    message: "narxni kiriting!",
                                                 },
                                             ]}>
                                             <Input />
@@ -1036,8 +1046,7 @@ message:
                         rules={[
                             {
                                 required: true,
-                                message:
-                                    "Iltimos, avtomobil modelini kiriting!",
+                                message: "avtomobil modelini kiriting!",
                             },
                         ]}>
                         <Input />
@@ -1048,7 +1057,7 @@ message:
                         rules={[
                             {
                                 required: true,
-                                message: "Iltimos, yilni kiriting!",
+                                message: "yilni kiriting!",
                             },
                         ]}>
                         <InputNumber min={2020} className='full-w-input' />
@@ -1059,7 +1068,7 @@ message:
                         rules={[
                             {
                                 required: true,
-                                message: "Iltimos, narxni kiriting!",
+                                message: "narxni kiriting!",
                             },
                         ]}>
                         <InputNumber min={19000} className='full-w-input' />

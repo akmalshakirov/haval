@@ -16,7 +16,7 @@ function AdminNews() {
         try {
             const token = localStorage.getItem("authToken");
             if (!token) {
-                message.error("Token topilmadi, iltimos qayta tizimga kiring!");
+                message.error("Token topilmadi, qayta tizimga kiring!");
                 return;
             }
 
@@ -217,7 +217,7 @@ function AdminNews() {
                         rules={[
                             {
                                 required: true,
-                                message: "Iltimos, sarlavhani kiriting!",
+                                message: "sarlavhani kiriting!",
                             },
                         ]}>
                         <Input placeholder='Masalan: Haval brendi mashhurlashmoqda' />
@@ -229,7 +229,7 @@ function AdminNews() {
                         rules={[
                             {
                                 required: true,
-                                message: "Iltimos, matnni kiriting!",
+                                message: "matnni kiriting!",
                             },
                         ]}>
                         <Input />
