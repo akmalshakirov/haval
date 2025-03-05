@@ -18,10 +18,14 @@ exports.generate_pdf = async (req, res) => {
     if (!fullname || !phone || !model || !color || !engine || !transmission || !payment) {
       return res.status(400).json({ error: "Ma'lumotlar to‘liq kelmagan!" });
     }
-
+    
     const lastPdf = await PDF.findOne().sort({ number: -1 });
-    const newNumber = lastPdf ? lastPdf.number + 1 : 1;
-
+    let lastNumber = lastPdf ? lastPdf.number : 0;
+    if (typeof lastNumber !== "number") {
+      lastNumber = parseInt(lastNumber, 10);
+    }
+    const newNumber = Number.isNaN(lastNumber) ? 1 : lastNumber + 1;
+    
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage([600, 700]);
     const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
@@ -113,7 +117,7 @@ exports.download_pdf = async (req, res) => {
     const { data } = await supabase
       .storage
       .from(process.env.SUPABASE_BUCKET_NAME)
-      .getPublicUrl(filename);
+      .getPublicUrl(`pdfs/${filename}`);
 
     if (!data) {
       return res.status(404).json({ error: "Bunday fayl topilmadi" });
