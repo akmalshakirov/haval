@@ -1,29 +1,26 @@
+const fs = require("fs");
+const path = require("path");
 const { PDFDocument, StandardFonts } = require("pdf-lib");
-const mongoose = require("mongoose");
-const { GridFSBucket } = require("mongodb");
-const multer = require("multer");
-const { GridFsStorage } = require("multer-gridfs-storage");
-const { db, getGFS } = require("../config/db");
+const { supabase } = require("../config/supabaseClient");
 const PDF = require("../models/Order");
-
-let gfs;
-db().then(() => {
-  gfs = getGFS();
-  console.log("GridFS tayyor!");
-}).catch(err => console.error("Ulanishda xatolik:", err));
-
-const storage = new GridFsStorage({
-  url: process.env.MONGODB_URL,
-  file: (req, file) => ({
-    filename: file.originalname,
-    bucketName: "pdfs",
-  }),
-});
-const upload = multer({ storage });
 
 exports.generate_pdf = async (req, res) => {
   try {
-    const { fullname, phone, model, color, engine, transmission, payment } = req.body;
+    let requestBody;
+    if (typeof req.body.body === "string") {
+      requestBody = JSON.parse(req.body.body);
+    } else {
+      requestBody = req.body;
+    }
+
+    const { fullname, phone, model, color, engine, transmission, payment } = requestBody;
+
+    if (!fullname || !phone || !model || !color || !engine || !transmission || !payment) {
+      return res.status(400).json({ error: "Ma'lumotlar to‘liq kelmagan!" });
+    }
+
+    const lastPdf = await PDF.findOne().sort({ number: -1 });
+    const newNumber = lastPdf ? lastPdf.number + 1 : 1;
 
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage([600, 700]);
@@ -32,6 +29,7 @@ exports.generate_pdf = async (req, res) => {
     page.drawText("HAVAL AVTOMOBILINI SOTIB OLISH", { x: 50, y: 650, size: 18, font });
 
     const fields = [
+      { label: "Tartib raqami:", value: `#${newNumber}`, y: 630 },
       { label: "Ism, Familiya:", value: fullname, y: 600 },
       { label: "Telefon raqami:", value: phone, y: 570 },
       { label: "Tanlangan model:", value: model, y: 540 },
@@ -43,36 +41,68 @@ exports.generate_pdf = async (req, res) => {
 
     fields.forEach(({ label, value, y }) => {
       page.drawText(label, { x: 50, y, size: 12, font });
-      page.drawText(value || "_________", { x: 250, y, size: 12, font });
+      page.drawText(value ? String(value) : "_________", { x: 250, y, size: 12, font });
     });
 
     const pdfBytes = await pdfDoc.save();
-    const filename = `Haval_Form_${Date.now()}.pdf`;
 
-    const pdfMeta = new PDF({
+    const folderPath = path.join(__dirname, "../pdfs");
+    if (!fs.existsSync(folderPath)) {
+      fs.mkdirSync(folderPath, { recursive: true });
+    }
+
+    const filename = `${Date.now()}.pdf`;
+    const filePath = path.join(folderPath, filename);
+    fs.writeFileSync(filePath, pdfBytes);
+
+    const { data, error } = await supabase.storage
+      .from(process.env.SUPABASE_BUCKET_NAME)
+      .upload(`pdfs/${filename}`, fs.createReadStream(filePath), {
+        cacheControl: "3600",
+        upsert: false,
+        contentType: "application/pdf",
+        duplex: "half"
+      });
+
+    if (error) throw error;
+
+    const { data: urlData } = await supabase
+      .storage
+      .from(process.env.SUPABASE_BUCKET_NAME)
+      .getPublicUrl(`pdfs/${filename}`);
+
+    if (!urlData.publicUrl) {
+      return res.status(500).json({ error: "Supabase URL yaratishda xatolik!" });
+    }
+
+    await PDF.create({
+      number: newNumber, 
       filename,
-      metadata: { fullname, phone, model, color, engine, transmission, payment }
-    });
-    await pdfMeta.save();
-
-    const bucket = new GridFSBucket(mongoose.connection.db, { bucketName: "pdfs" });
-    const uploadStream = bucket.openUploadStream(filename);
-    uploadStream.end(pdfBytes);
-
-    uploadStream.on("finish", () => {
-      res.json({ filename });
+      url: urlData.publicUrl,
+      metadata: { fullname, phone, model, color, engine, transmission, payment },
     });
 
-    uploadStream.on("error", (err) => {
-      console.error(err);
-      res.status(500).json({ error: "PDF saqlashda xatolik" });
-    });
+    console.log(`PDF MongoDB'ga saqlandi: ${filename} (Tartib raqami: #${newNumber})`);
 
+    setTimeout(() => {
+      if (fs.existsSync(filePath)) {
+        fs.unlink(filePath, (err) => {
+          if (err) {
+            console.error(`Faylni o‘chirishda xatolik: ${err.message}`);
+          } else {
+            console.log(`Fayl o‘chirildi: ${filePath}`);
+          }
+        });
+      }
+    }, 15000);
+
+    res.json({ number: newNumber, filename, url: urlData.publicUrl });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Xatolik yuz berdi" });
+    res.status(500).json({ error: "PDF yaratish yoki yuklashda xatolik yuz berdi" });
   }
 };
+
 exports.download_pdf = async (req, res) => {
   try {
     const { filename } = req.params;
@@ -80,26 +110,19 @@ exports.download_pdf = async (req, res) => {
       return res.status(400).json({ error: "Fayl nomi kiritilmagan" });
     }
 
-    const bucket = new GridFSBucket(mongoose.connection.db, { bucketName: "pdfs" });
+    const { data } = await supabase
+      .storage
+      .from(process.env.SUPABASE_BUCKET_NAME)
+      .getPublicUrl(filename);
 
-    const files = await bucket.find({ filename }).toArray();
-    if (files.length === 0) {
+    if (!data) {
       return res.status(404).json({ error: "Bunday fayl topilmadi" });
     }
 
-    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
-    res.setHeader("Content-Type", "application/pdf");
+    res.json({ url: data.publicUrl });
 
-    const readStream = bucket.openDownloadStreamByName(filename);
-    
-    readStream.on("error", (err) => {
-      console.error("Fayl oqimida xatolik:", err);
-      res.status(500).json({ error: "PDF yuklab olishda xatolik yuz berdi" });
-    });
-
-    readStream.pipe(res);
   } catch (error) {
     console.error("Server xatosi:", error);
-    res.status(500).json({ error: "Ichki server xatosi" });
+    res.status(500).json({ error: "PDF yuklab olishda xatolik yuz berdi" });
   }
 };
