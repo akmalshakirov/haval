@@ -34,18 +34,18 @@ exports.createOrder = async (req, res) => {
 
 exports.getOrders = async (req, res) => {
   try {
-    let query = {};
+    // let query = {};
 
-    if (req.user.role !== "admin") {
-      query.userId = req.user.id; 
-    }
+    // if (req.user.role !== "admin") {
+    //   query.userId = req.user.id; 
+    // }
 
-    const pendingOrders = await Order.find({ ...query, status: "Pending" });
-    const cancelledOrders = await Order.find({ ...query, status: "Cancelled" });
+    const pendingOrders = await Order.find();
+    // const cancelledOrders = await Order.find({ ...query, status: "Cancelled" });
 
     res.json({
       pending: pendingOrders,
-      cancelled: cancelledOrders,
+      // cancelled: cancelledOrders,
     });
   } catch (error) {
     console.error("Error fetching orders:", error);
