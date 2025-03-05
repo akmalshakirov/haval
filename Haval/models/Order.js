@@ -11,6 +11,7 @@ const OrderSchema = new mongoose.Schema({
     engine: { type: String },
     transmission: { type: String },
     payment: { type: String },
+    url: String,
   status: { type: String, enum: ["Pending", "Paid", "Cancelled"], default: "Pending" },
   createdAt: { type: Date, default: Date.now, immutable: true }
 });
