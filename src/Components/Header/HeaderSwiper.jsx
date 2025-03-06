@@ -18,6 +18,7 @@ import "./Header.css";
 import "./HeaderSwiper.css";
 
 import { Autoplay, Parallax } from "swiper/modules";
+import { Link } from "react-router-dom";
 
 const SwiperComponent = () => {
     return (
@@ -42,12 +43,12 @@ const SwiperComponent = () => {
                         data-swiper-parallax='-500'>
                         O'ZBEKISTON YOLLARIDA ALLAQACHON
                     </p>
-                    <a
-                        href='/models/haval-h9'
+                    <Link
+                        to='/models/haval-h9'
                         className='slide-btn'
                         data-swiper-parallax='-400'>
                         Batafsil
-                    </a>
+                    </Link>
                 </div>
             </SwiperSlide>
             <SwiperSlide className='swiper-slide1 intro-slide'>
@@ -65,12 +66,12 @@ const SwiperComponent = () => {
                         data-swiper-parallax='-500'>
                         TRASSADA MUKAMMAL, YO'LSIZLIKDA ISHONCHLI.
                     </p>
-                    <a
-                        href='/models/haval-dargo'
+                    <Link
+                        to='/models/haval-dargo'
                         className='slide-btn'
                         data-swiper-parallax='-400'>
                         Batafsil
-                    </a>
+                    </Link>
                 </div>
                 <div className='slide-service' data-swiper-parallax='-400'>
                     <div className='slide-service-year'>
@@ -103,12 +104,12 @@ const SwiperComponent = () => {
                         data-swiper-parallax='-500'>
                         SO'NGI URFDAGI SHAHAR KROSSOVERI
                     </p>
-                    <a
-                        href='/models/haval-jolion'
+                    <Link
+                        to='/models/haval-jolion'
                         className='slide-btn'
                         data-swiper-parallax='-400'>
                         Batafsil
-                    </a>
+                    </Link>
                 </div>
                 <div className='slide-service' data-swiper-parallax='-400'>
                     <div className='slide-service-year'>
@@ -137,12 +138,12 @@ const SwiperComponent = () => {
                         data-swiper-parallax='-500'>
                         XARID UCHUN ENG QULAY MAVJUD KROSSOVERLARDAN BIRI
                     </p>
-                    <a
-                        href='/models/haval-m6'
+                    <Link
+                        to='/models/haval-m6'
                         className='slide-btn'
                         data-swiper-parallax='-400'>
                         Batafsil
-                    </a>
+                    </Link>
                 </div>
                 <div className='slide-service' data-swiper-parallax='-400'>
                     <div className='slide-service-year'>
@@ -171,12 +172,12 @@ const SwiperComponent = () => {
                         data-swiper-parallax='-500'>
                         IDEAL OILAVIY AVTOMOBIL
                     </p>
-                    <a
-                        href='/models/haval-h6'
+                    <Link
+                        to='/models/haval-h6'
                         className='slide-btn'
                         data-swiper-parallax='-400'>
                         Batafsil
-                    </a>
+                    </Link>
                 </div>
                 <div className='slide-service' data-swiper-parallax='-400'>
                     <div className='slide-service-year'>
@@ -209,12 +210,12 @@ const SwiperComponent = () => {
                         data-swiper-parallax='-500'>
                         KO‘PROQ JOY - KO‘PROQ IMKONIYATLAR
                     </p>
-                    <a
-                        href='/models/gwm-wingle-7'
+                    <Link
+                        to='/models/gwm-wingle-7'
                         className='slide-btn'
                         data-swiper-parallax='-400'>
                         Batafsil
-                    </a>
+                    </Link>
                 </div>
                 <div className='slide-service' data-swiper-parallax='-400'>
                     <div className='slide-service-year'>

@@ -12,6 +12,7 @@ import "swiper/css/navigation";
 import "./MainModels.css";
 
 import { Pagination } from "swiper/modules";
+import { Link } from "react-router-dom";
 
 function MainModels() {
     const pagination = {
@@ -49,12 +50,9 @@ function MainModels() {
                 <SwiperSlide>
                     <div className='custom-card first-card'>
                         <div className='card-image'>
-                            <a href='models/gwm-wingle-7'>
-                                <img
-                                    src={HavalGwmWingle7}
-                                    alt='haval h6'
-                                />
-                            </a>
+                            <Link to='models/gwm-wingle-7'>
+                                <img src={HavalGwmWingle7} alt='haval h6' />
+                            </Link>
                         </div>
                         <div className='card-content'>
                             <div className='card-content-top'>
@@ -62,11 +60,11 @@ function MainModels() {
                             </div>
                             <div className='card-content-center'>
                                 <h3>
-                                    <a
-                                        href='/models/gwm-wingle-7'
+                                    <Link
+                                        to='/models/gwm-wingle-7'
                                         className='card-content-link'>
                                         GWM WINGLE 7
-                                    </a>
+                                    </Link>
                                 </h3>
                                 <p className='card-content-description'>
                                     KO‘PROQ JOY - KO‘PROQ IMKONIYATLAR
@@ -79,29 +77,29 @@ function MainModels() {
                                     <p>Narxi: </p>
                                     <p>359 900 000 so'm</p>
                                     <button>
-                                        <a
-                                            href='/'
+                                        <Link
+                                            to='/'
                                             className='card-content-bottom-link'>
                                             Batafsilroq
-                                        </a>
+                                        </Link>
                                     </button>
-                                    <a
-                                        href='/models/gwm-wingle-7'
+                                    <Link
+                                        to='/models/gwm-wingle-7'
                                         className='card-content-bottom-configurator'>
                                         Konfigurator
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </SwiperSlide>
                 {/* 2 */}
-                <SwiperSlide >
+                <SwiperSlide>
                     <div className='custom-card second-card'>
                         <div className='card-image'>
-                            <a href='models/gwm-wingle-7'>
+                            <Link to='models/gwm-wingle-7'>
                                 <img src={HavalDargo} alt='haval h6' />
-                            </a>
+                            </Link>
                         </div>
                         <div className='card-content'>
                             <div className='card-content-top'>
@@ -109,11 +107,11 @@ function MainModels() {
                             </div>
                             <div className='card-content-center'>
                                 <h3>
-                                    <a
-                                        href='/models/haval-dargo'
+                                    <Link
+                                        to='/models/haval-dargo'
                                         className='card-content-link'>
                                         HAVAL DARGO
-                                    </a>
+                                    </Link>
                                 </h3>
                                 <p className='card-content-description'>
                                     TRASSADA MUKAMMAL, YO'LSIZLIKDA ISHONCHLI.
@@ -126,29 +124,29 @@ function MainModels() {
                                     <p>Narxi: </p>
                                     <p>399 900 000 so'mdan</p>
                                     <button>
-                                        <a
-                                            href='/'
+                                        <Link
+                                            to='/'
                                             className='card-content-bottom-link'>
                                             Batafsilroq
-                                        </a>
+                                        </Link>
                                     </button>
-                                    <a
-                                        href='/models/gwm-wingle-7'
+                                    <Link
+                                        to='/models/gwm-wingle-7'
                                         className='card-content-bottom-configurator'>
                                         Konfigurator
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </SwiperSlide>
                 {/* 3 */}
-                <SwiperSlide >
+                <SwiperSlide>
                     <div className='custom-card third-card'>
                         <div className='card-image'>
-                            <a href='models/gwm-wingle-7'>
+                            <Link to='models/gwm-wingle-7'>
                                 <img src={HavalJolion} alt='haval h6' />
-                            </a>
+                            </Link>
                         </div>
                         <div className='card-content'>
                             <div className='card-content-top'>
@@ -156,11 +154,11 @@ function MainModels() {
                             </div>
                             <div className='card-content-center'>
                                 <h3>
-                                    <a
-                                        href='/models/gwm-wingle-7'
+                                    <Link
+                                        to='/models/gwm-wingle-7'
                                         className='card-content-link'>
                                         HAVAL JOLION
-                                    </a>
+                                    </Link>
                                 </h3>
                                 <p className='card-content-description'>
                                     ZAMONAVIY SHAHAR KROSSOVERI
@@ -173,29 +171,29 @@ function MainModels() {
                                     <p>Narxi: </p>
                                     <p>269 900 000 so'm</p>
                                     <button>
-                                        <a
-                                            href='/'
+                                        <Link
+                                            to='/'
                                             className='card-content-bottom-link'>
                                             Batafsilroq
-                                        </a>
+                                        </Link>
                                     </button>
-                                    <a
-                                        href='/models/gwm-wingle-7'
+                                    <Link
+                                        to='/models/gwm-wingle-7'
                                         className='card-content-bottom-configurator'>
                                         Konfigurator
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </SwiperSlide>
                 {/* 4 */}
-                <SwiperSlide >
+                <SwiperSlide>
                     <div className='custom-card fourth-card'>
                         <div className='card-image'>
-                            <a href='models/gwm-wingle-7'>
+                            <Link to='models/gwm-wingle-7'>
                                 <img src={HavalM6} alt='haval h6' />
-                            </a>
+                            </Link>
                         </div>
                         <div className='card-content'>
                             <div className='card-content-top'>
@@ -203,11 +201,11 @@ function MainModels() {
                             </div>
                             <div className='card-content-center'>
                                 <h3>
-                                    <a
-                                        href='/models/gwm-wingle-7'
+                                    <Link
+                                        to='/models/gwm-wingle-7'
                                         className='card-content-link'>
                                         HAVAL M6
-                                    </a>
+                                    </Link>
                                 </h3>
                                 <p className='card-content-description'>
                                     XARID UCHUN ENG QULAY MAVJUD KROSSOVERLARDAN
@@ -221,29 +219,29 @@ function MainModels() {
                                     <p>Narxi: </p>
                                     <p>242 900 000 so'm</p>
                                     <button>
-                                        <a
-                                            href='/'
+                                        <Link
+                                            to='/'
                                             className='card-content-bottom-link'>
                                             Batafsilroq
-                                        </a>
+                                        </Link>
                                     </button>
-                                    <a
-                                        href='/models/gwm-wingle-7'
+                                    <Link
+                                        to='/models/gwm-wingle-7'
                                         className='card-content-bottom-configurator'>
                                         Konfigurator
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </SwiperSlide>
                 {/* 5 */}
-                <SwiperSlide >
+                <SwiperSlide>
                     <div className='custom-card fiveth-card'>
                         <div className='card-image'>
-                            <a href='models/gwm-wingle-7'>
+                            <Link to='models/gwm-wingle-7'>
                                 <img src={HavalM6} alt='haval h6' />
-                            </a>
+                            </Link>
                         </div>
                         <div className='card-content'>
                             <div className='card-content-top'>
@@ -251,11 +249,11 @@ function MainModels() {
                             </div>
                             <div className='card-content-center'>
                                 <h3>
-                                    <a
-                                        href='/models/gwm-wingle-7'
+                                    <Link
+                                        to='/models/gwm-wingle-7'
                                         className='card-content-link'>
                                         HAVAL H6
-                                    </a>
+                                    </Link>
                                 </h3>
                                 <p className='card-content-description'>
                                     O'ZBEKISTON YO'LLARIDA ALLAQACHON
@@ -270,17 +268,17 @@ function MainModels() {
                                     </p>
                                     <p>342 900 000 so'm</p>
                                     <button>
-                                        <a
-                                            href='/'
+                                        <Link
+                                            to='/'
                                             className='card-content-bottom-link'>
                                             Batafsilroq
-                                        </a>
+                                        </Link>
                                     </button>
-                                    <a
-                                        href='/models/gwm-wingle-7'
+                                    <Link
+                                        to='/models/gwm-wingle-7'
                                         className='card-content-bottom-configurator'>
                                         Konfigurator
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </div>

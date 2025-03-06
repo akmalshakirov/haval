@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import DownloadPdf from "../../Components/DownloadPdf/DownloadPdf";
 import HeaderNavBar from "../../Components/Header/HeaderNavBar";
 import "./BDealer.css";
@@ -17,11 +18,11 @@ function BDealer() {
             <div className='b-dealer-container'>
                 <ul className='b-dealer-ul'>
                     <li>
-                        <a href='/'>Bosh sahifa</a>
+                        <Link to='/'>Bosh sahifa</Link>
                     </li>
                     <span>{">"}</span>
                     <li>
-                        <a href='/'>Great Wall Motor haqida</a>
+                        <Link to='/'>Great Wall Motor haqida</Link>
                     </li>
                     <span>{">"}</span>
                     <li>
@@ -41,7 +42,7 @@ function BDealer() {
                     <li className='b-dealer-info'>
                         To’ldirilgan anketa elektron pochta orqali quyidagi
                         manziliga yuborilishi lozim:{" "}
-                        <a href='/'>development@roodell.uz</a>
+                        <Link to='/'>development@roodell.uz</Link>
                     </li>
                 </ul>
             </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Form, Input, Button, Checkbox, Typography, Card, message } from "antd";
 import "./Login.css";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
@@ -104,11 +104,11 @@ const Login = () => {
                         <p style={{ fontSize: "14px" }}>
                             У вас ещё нет аккаунта?
                         </p>
-                        <a
-                            href='/registration'
+                        <Link
+                            to='/registration'
                             style={{ textDecoration: "underline" }}>
                             Регистратция
-                        </a>
+                        </Link>
                     </div>
 
                     <Form.Item>
