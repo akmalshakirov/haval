@@ -69,3 +69,14 @@ body {
     background-color: #000;
     transition: 0.4s;
 }
+
+.hovered-bg {
+    color: inherit;
+    background-color: transparent;
+    transition: 0.4s;
+}
+
+.hovered-bg:hover {
+    color: #fff;
+    background-color: #1775f9be;
+}
