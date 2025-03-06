@@ -13,24 +13,37 @@ exports.generate_pdf = async (req, res) => {
       requestBody = req.body;
     }
 
-    const { fullname, phone, model, color, engine, transmission, payment } = requestBody;
+    const { fullname, phone, model, color, engine, transmission, payment } =
+      requestBody;
 
-    if (!fullname || !phone || !model || !color || !engine || !transmission || !payment) {
+    if (
+      !fullname ||
+      !phone ||
+      !model ||
+      !color ||
+      !engine ||
+      !transmission ||
+      !payment
+    ) {
       return res.status(400).json({ error: "Ma'lumotlar to‘liq kelmagan!" });
     }
-    
     const lastPdf = await PDF.findOne().sort({ number: -1 });
-    let lastNumber = lastPdf ? lastPdf.number : 0;
-    if (typeof lastNumber !== "number") {
-      lastNumber = parseInt(lastNumber, 10);
-    }
-    const newNumber = Number.isNaN(lastNumber) ? 1 : lastNumber + 1;
-    
+    let lastNumber = lastPdf?.number ?? 0;
+    lastNumber1 = Number.isInteger(Number(lastNumber)) ? Number(lastNumber) : 0;
+    const newNumber = lastNumber1 + 1;
+
+    console.log("New Number:", newNumber);
+
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage([600, 700]);
     const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
-    page.drawText("HAVAL AVTOMOBILINI SOTIB OLISH", { x: 50, y: 650, size: 18, font });
+    page.drawText("HAVAL AVTOMOBILINI SOTIB OLISH", {
+      x: 50,
+      y: 650,
+      size: 18,
+      font,
+    });
 
     const fields = [
       { label: "Tartib raqami:", value: `#${newNumber}`, y: 630 },
@@ -45,7 +58,12 @@ exports.generate_pdf = async (req, res) => {
 
     fields.forEach(({ label, value, y }) => {
       page.drawText(label, { x: 50, y, size: 12, font });
-      page.drawText(value ? String(value) : "_________", { x: 250, y, size: 12, font });
+      page.drawText(value ? String(value) : "_________", {
+        x: 250,
+        y,
+        size: 12,
+        font,
+      });
     });
 
     const pdfBytes = await pdfDoc.save();
@@ -65,28 +83,39 @@ exports.generate_pdf = async (req, res) => {
         cacheControl: "3600",
         upsert: false,
         contentType: "application/pdf",
-        duplex: "half"
+        duplex: "half",
       });
 
     if (error) throw error;
 
-    const { data: urlData } = await supabase
-      .storage
+    const { data: urlData } = await supabase.storage
       .from(process.env.SUPABASE_BUCKET_NAME)
       .getPublicUrl(`pdfs/${filename}`);
 
     if (!urlData.publicUrl) {
-      return res.status(500).json({ error: "Supabase URL yaratishda xatolik!" });
+      return res
+        .status(500)
+        .json({ error: "Supabase URL yaratishda xatolik!" });
     }
 
     await PDF.create({
-      number: newNumber, 
+      number: newNumber,
       filename,
       url: urlData.publicUrl,
-      metadata: { fullname, phone, model, color, engine, transmission, payment },
+      metadata: {
+        fullname,
+        phone,
+        model,
+        color,
+        engine,
+        transmission,
+        payment,
+      },
     });
 
-    console.log(`PDF MongoDB'ga saqlandi: ${filename} (Tartib raqami: #${newNumber})`);
+    console.log(
+      `PDF MongoDB'ga saqlandi: ${filename} (Tartib raqami: #${newNumber})`
+    );
 
     setTimeout(() => {
       if (fs.existsSync(filePath)) {
@@ -103,7 +132,9 @@ exports.generate_pdf = async (req, res) => {
     res.json({ number: newNumber, filename, url: urlData.publicUrl });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "PDF yaratish yoki yuklashda xatolik yuz berdi" });
+    res
+      .status(500)
+      .json({ error: "PDF yaratish yoki yuklashda xatolik yuz berdi" });
   }
 };
 
@@ -114,8 +145,7 @@ exports.download_pdf = async (req, res) => {
       return res.status(400).json({ error: "Fayl nomi kiritilmagan" });
     }
 
-    const { data } = await supabase
-      .storage
+    const { data } = await supabase.storage
       .from(process.env.SUPABASE_BUCKET_NAME)
       .getPublicUrl(`pdfs/${filename}`);
 
@@ -124,7 +154,6 @@ exports.download_pdf = async (req, res) => {
     }
 
     res.json({ url: data.publicUrl });
-
   } catch (error) {
     console.error("Server xatosi:", error);
     res.status(500).json({ error: "PDF yuklab olishda xatolik yuz berdi" });
