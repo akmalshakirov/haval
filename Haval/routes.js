@@ -333,7 +333,7 @@ router
         [...pdfValidationRules],
         createOrder
     )
-    .get("/orders", jwtAccessMiddleware, getOrders)
+    .get("/orders",/*  jwtAccessMiddleware, */ getOrders)
     .post("/orders/pay", jwtAccessMiddleware, makePayment);
 
 module.exports = router;
