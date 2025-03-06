@@ -160,11 +160,10 @@ function AdminNews() {
                                     }
                                     style={{ maxWidth: 240 }}>
                                     <p>{item.title}</p>
-                                    <a
+                                    <button
                                         onClick={() => handleDetailModal(item)}
                                         style={{
                                             display: "block",
-                                            width: "30%",
                                             cursor: "pointer",
                                             padding: "5px",
                                             marginTop: "10px",
@@ -172,7 +171,7 @@ function AdminNews() {
                                             border: "1px solid #ddd",
                                         }}>
                                         Batafsil
-                                    </a>
+                                    </button>
                                 </Card>
                             </div>
                         ))}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Form, Input, Button, Checkbox, Typography, Card, message } from "antd";
 import "./Register.css";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
     UserOutlined,
     LockOutlined,
@@ -133,11 +133,11 @@ const Registration = () => {
                         <p style={{ fontSize: "14px" }}>
                             У вас уже есть аккаунта?
                         </p>
-                        <a
-                            href='/login'
+                        <Link
+                            to='/login'
                             style={{ textDecoration: "underline" }}>
                             Войти
-                        </a>
+                        </Link>
                     </div>
 
                     <Form.Item>

@@ -16,7 +16,7 @@ import {
 import { FileTextOutlined } from "@ant-design/icons";
 import GWM_wingle_7 from "../../Images/gwm-wingle-7.jpg";
 import UserImage from "../../Images/userimage.png";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const { Header, Content, Sider } = Layout;
 
@@ -184,6 +184,26 @@ const UserPage = () => {
                         justifyContent: "space-between",
                         alignItems: "center",
                     }}>
+                    <div>
+                        <ul style={{ display: "flex", gap: 10 }}>
+                            <li>
+                                <Link
+                                    className='hovered'
+                                    to='/'
+                                    style={{
+                                        color: "#00000090",
+                                    }}>
+                                    Bosh sahifa
+                                </Link>
+                            </li>
+                            <span>{">"}</span>
+                            <li>
+                                <Link to='/user' className='hovered'>
+                                    Shaxsiy kabinet
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
                     <div></div>
                     <Dropdown
                         menu={{
