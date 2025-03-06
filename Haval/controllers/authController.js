@@ -31,15 +31,6 @@ exports.register = async (req, res) => {
             role: role || "user",
         });
 
-            if (!name || !email || !password) {
-                return res
-                    .status(400)
-                    .json({ message: "Barcha maydonlarni to‘ldiring." });
-            }
-
-        if (!process.env.JWT_SECRET_KEY) {
-            throw new Error("JWT_SECRET muhit o'zgaruvchisi mavjud emas!");
-        }
         res.status(200).json({
             message: "Foydalanuvchi muvaffaqiyatli ro‘yxatdan o‘tdi.",
             user,
@@ -74,7 +65,8 @@ exports.login = async (req, res) => {
         { expiresIn: '1d' });
 
     return res.status(200).send({
-            token,
+        token,
+        userId: user._id
     });
     } catch (error) {
     console.log(error);
