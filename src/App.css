@@ -47,3 +47,25 @@ body {
     margin: 0 auto;
     padding: 0 20px;
 } */
+
+.hovered {
+    position: relative;
+}
+.hovered:hover {
+    color: inherit;
+}
+.hovered:hover::after {
+    bottom: -5px;
+    opacity: 1;
+}
+.hovered::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    opacity: 0;
+    bottom: 0;
+    left: 0;
+    background-color: #000;
+    transition: 0.4s;
+}

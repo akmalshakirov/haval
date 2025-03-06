@@ -7,6 +7,7 @@ import havalJolion from "../../Images/haval-jolion.jpg";
 import havalH6 from "../../Images/haval-h6.jpg";
 import havalM6 from "../../Images/haval-m6.jpg";
 import gwmWingle7 from "../../Images/gwm-wingle-7.jpg";
+import { Link } from "react-router-dom";
 
 function Models() {
     const carModels = [
@@ -68,13 +69,13 @@ function Models() {
             <div className='models-container'>
                 <ul className='to-home'>
                     <li>
-                        <a href='/'>Bosh sahifa</a>
+                        <Link to='/'>Bosh sahifa</Link>
                     </li>
                     <li>
                         <span> {">"} </span>
                     </li>
                     <li>
-                        <a href='/models'>Modellar</a>
+                        <Link to='/models'>Modellar</Link>
                     </li>
                 </ul>
                 <h1 className='models-title'>HAVAL modellar qatori</h1>
@@ -94,11 +95,11 @@ function Models() {
                                 <h3>{model.name}</h3>
                                 <p className='model-price'>{model.price}</p>
                                 <p className='model-specs'>{model.specs}</p>
-                                <a
+                                <Link
                                     className='model-details-btn'
-                                    href={model.link}>
+                                    to={model.link}>
                                     Batafsil
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     ))}

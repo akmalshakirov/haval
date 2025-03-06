@@ -9,6 +9,7 @@ import GWMwingle7 from "../../Images/m-gwm-wingle-7.png";
 import HavalJolion from "../../Images/m-haval-jolion.png";
 import headerAsideBtnCar from "../../Images/header-aside-btn-car.png";
 import headerAsideBtnPhone from "../../Images/aa.png";
+import { Link } from "react-router-dom";
 
 function HeaderNavBar() {
     const { t, i18n } = useTranslation();
@@ -60,9 +61,9 @@ function HeaderNavBar() {
     return (
         <div className={`${headerClass} header-section`}>
             <div className='header__inner'>
-                <a href='/' className='header__logo'>
+                <Link to='/' className='header__logo'>
                     <img src={Logo} alt={t("company")} />
-                </a>
+                </Link>
                 {/* <div className='header__burger'>
                     <button className='burger-btn'>
                         <span></span>
@@ -92,31 +93,31 @@ function HeaderNavBar() {
                                             <div className='models-modal-cards'>
                                                 {/* 1 */}
                                                 <div className='models-modal-card'>
-                                                    <a href='/models/gwm-wingle-7'>
+                                                    <Link to='/models/gwm-wingle-7'>
                                                         <img
                                                             src={GWMwingle7}
                                                             alt='haval-dargo'
                                                         />
-                                                    </a>
+                                                    </Link>
                                                     <div>
-                                                        <a href='/models/gwm-wingle-7'>
+                                                        <Link to='/models/gwm-wingle-7'>
                                                             GWM WINGLE 7
-                                                        </a>
+                                                        </Link>
                                                         <p>359 900 000 so'm</p>
                                                     </div>
                                                 </div>
                                                 {/* 2 */}
                                                 <div className='models-modal-card'>
-                                                    <a href='/models/haval-dargo'>
+                                                    <Link to='/models/haval-dargo'>
                                                         <img
                                                             src={HavalDargo}
                                                             alt='haval-dargo'
                                                         />
-                                                    </a>
+                                                    </Link>
                                                     <div>
-                                                        <a href='/models/haval-dargo'>
+                                                        <Link to='/models/haval-dargo'>
                                                             HAVAL DARGO
-                                                        </a>
+                                                        </Link>
                                                         <p>
                                                             399 900 000 so'mdan
                                                         </p>
@@ -124,16 +125,16 @@ function HeaderNavBar() {
                                                 </div>
                                                 {/* 3 */}
                                                 <div className='models-modal-card'>
-                                                    <a href='/models/haval-jolion'>
+                                                    <Link to='/models/haval-jolion'>
                                                         <img
                                                             src={HavalJolion}
                                                             alt='haval-dargo'
                                                         />
-                                                    </a>
+                                                    </Link>
                                                     <div>
-                                                        <a href='/models/haval-jolion'>
+                                                        <Link to='/models/haval-jolion'>
                                                             HAVAL JOLION
-                                                        </a>
+                                                        </Link>
                                                         <p>
                                                             399 900 000 so'mdan
                                                         </p>
@@ -170,7 +171,7 @@ function HeaderNavBar() {
                             )}
                         </li>
                         <li>
-                            <a href='/dealers'>{t("dealers")}</a>
+                            <Link to='/dealers'>{t("dealers")}</Link>
                         </li>
                         <li>
                             <button
@@ -189,9 +190,9 @@ function HeaderNavBar() {
                                         onClick={(e) => e.stopPropagation()}>
                                         <div>
                                             <h3>Servis</h3>
-                                            <a href='/owners/service/guarantee'>
+                                            <Link to='/owners/service/guarantee'>
                                                 Avtomobilga kafolat
-                                            </a>
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>
@@ -216,10 +217,10 @@ function HeaderNavBar() {
                                             <h3>HAVAL O'zbekistonda</h3>
                                             <ul>
                                                 <li>Biz haqimizda</li>
-                                                <a href='/about-gwm/haval-v-uzbekistane/how-become-dealer'>
+                                                <Link to='/about-gwm/haval-v-uzbekistane/how-become-dealer'>
                                                     Qanday qilib diler bo'lish
                                                     mumkin
-                                                </a>
+                                                </Link>
                                                 <li>
                                                     Diler qo'ng'irog'iga
                                                     buyurtma berish
@@ -238,27 +239,26 @@ function HeaderNavBar() {
                             )}
                         </li>
                         <li>
-                            <a href='/'>{t("statistics")}</a>
+                            <Link to='/'>{t("statistics")}</Link>
                         </li>
-                        {/* <a href='/login'> */}
                         {token ? (
-                            <a href='/user'>
+                            <Link to='/user'>
                                 <UserOutlined className='user-icon' />
-                            </a>
+                            </Link>
                         ) : (
                             <li>
-                                <a href='/login' style={{ marginTop: "4px" }}>
+                                <Link to='/login' style={{ marginTop: "4px" }}>
                                     Kirish
-                                </a>
+                                </Link>
                             </li>
                         )}
                         {/* </a> */}
                     </ul>
                 </div>
                 <div className='header__item'>
-                    <a href='tel:+998712878888'>
+                    <Link to='tel:+998712878888'>
                         <i className='fa-solid fa-phone'></i>
-                    </a>
+                    </Link>
                     <div className='header__lang'>
                         <ul>
                             <li>
@@ -274,21 +274,21 @@ function HeaderNavBar() {
                                 </button>
                                 <ul className='ru'>
                                     <li>
-                                        <a
-                                            href='#ru'
+                                        <Link
+                                            to='#ru'
                                             onClick={() =>
                                                 changeLanguage("ru")
                                             }>
                                             {currentLang === "ru" ? "Uz" : "Ru"}
-                                        </a>
+                                        </Link>
                                     </li>
                                 </ul>
                             </li>
                         </ul>
                     </div>
-                    <a href='/'>
+                    <Link to='/'>
                         <img src={havalLogo} />
-                    </a>
+                    </Link>
                 </div>
             </div>
 
@@ -300,7 +300,7 @@ function HeaderNavBar() {
                     onMouseEnter={() => setAsideListHovered(true)}
                     onMouseLeave={() => setAsideListHovered(false)}>
                     <li className='aside__item'>
-                        <a href='/' className='aside__link'>
+                        <Link to='/' className='aside__link'>
                             <span className='aside__link-text'>
                                 Modellar qatori
                             </span>
@@ -310,10 +310,10 @@ function HeaderNavBar() {
                                     alt='aside-btn-icon'
                                 />
                             </button>
-                        </a>
+                        </Link>
                     </li>
                     <li className='aside__item'>
-                        <a href='/' className='aside__link'>
+                        <Link to='/' className='aside__link'>
                             <span className='aside__link-text'>Telefon</span>
                             <button
                                 className='aside__btn'
@@ -324,7 +324,7 @@ function HeaderNavBar() {
                                     alt='aside-btn-icon'
                                 />
                             </button>
-                        </a>
+                        </Link>
                     </li>
                 </ul>
                 <div

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Form, Input, Layout, message } from "antd";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const { Header, Content } = Layout;
@@ -47,7 +47,36 @@ const UserEditProfile = () => {
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "center",
-                    }}></Header>
+                    }}>
+                    <div>
+                        <ul style={{ display: "flex", gap: 10 }}>
+                            <li>
+                                <Link
+                                    className='hovered'
+                                    to='/'
+                                    style={{
+                                        color: "#00000090",
+                                    }}>
+                                    Bosh sahifa
+                                </Link>
+                            </li>
+                            <span>{">"}</span>
+                            <li>
+                                <Link to='/user' className='hovered'>
+                                    Shaxsiy kabinet
+                                </Link>
+                            </li>
+                            <span>{">"}</span>
+                            <li>
+                                <Link
+                                    to='/user/edit-profile'
+                                    className='hovered'>
+                                    Profilni tahrirlash
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+                </Header>
                 <Content style={{ margin: "16px" }}>
                     <div></div>
                     <Form>

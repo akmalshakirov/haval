@@ -8,6 +8,7 @@ import "./AdminVideos.css";
 // import AdminVideoImg2 from "../../Images/admin-video-img2.jpg";
 // import AdminVideoImg3 from "../../Images/admin-video-img3.jpg";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 // const initialCardsData = [
 //     {
@@ -236,9 +237,9 @@ const AdminVideos = () => {
                                             <b>{item.createdAt}</b>
                                         </p>
                                     </div>
-                                    <a href={item.video} target='_blank'>
+                                    <Link to={item.video} target='_blank'>
                                         Batafsil
-                                    </a>
+                                    </Link>
                                 </Card>
                             </>
                         );
