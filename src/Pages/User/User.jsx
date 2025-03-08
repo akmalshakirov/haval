@@ -1,5 +1,14 @@
 import { useEffect, useState } from "react";
-import { Avatar, Dropdown, Layout, Menu, message } from "antd";
+import {
+    Avatar,
+    Dropdown,
+    Form,
+    Input,
+    Layout,
+    Menu,
+    message,
+    Modal,
+} from "antd";
 import {
     FileTextOutlined,
     ReloadOutlined,
@@ -15,6 +24,9 @@ const UserPage = () => {
     const navigate = useNavigate();
     const [loader, setLoader] = useState(false);
     const [contracts, setContracts] = useState([]);
+    const [userEditModal, setUserEditModal] = useState(false);
+    const userID = localStorage.getItem("userID");
+    // const
 
     useEffect(() => {
         document.title = "Haval | Shaxsiy kabinet";
@@ -30,6 +42,7 @@ const UserPage = () => {
         setLoader(true);
         try {
             const token = localStorage.getItem("token");
+            const userID = localStorage.getItem("userID");
             if (!token) {
                 localStorage.removeItem("token");
                 navigate("/login");
@@ -55,6 +68,28 @@ const UserPage = () => {
         }
     };
 
+    const userEditFunc = async () => {
+        try {
+            const token = localStorage.getItem("token");
+
+            const response = await axios.put(
+                `http://localhost:3000/profil/${userID}`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            if (response.status === 200) {
+                setUserEditModal(!userEditModal);
+                message.success("Profil muvaffaqiyatli tahrirlandi");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     useEffect(() => {
         fetchContracts();
     }, []);
@@ -70,6 +105,25 @@ const UserPage = () => {
         padding: "10px",
         alignItems: "center",
     });
+
+    const downloadPdf = async (fileUrl) => {
+        try {
+            const response = await axios.get(fileUrl, {
+                responseType: "blob",
+            });
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = fileUrl.split("/").pop();
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <Layout style={{ minHeight: "100vh" }}>
@@ -122,7 +176,7 @@ const UserPage = () => {
                             ],
                             onClick: (info) => {
                                 if (info.key === "edit") {
-                                    navigate("/user/edit-profile");
+                                    setUserEditModal(!userEditModal);
                                 } else if (info.key === "logout") {
                                     localStorage.removeItem("token");
                                     message.success("Tizimdan chiqildi");
@@ -217,10 +271,11 @@ const UserPage = () => {
                                         {contract.status}
                                     </div>
                                     <div style={cellStyle()}>
-                                        <a
+                                        <button
+                                            onClick={() =>
+                                                downloadPdf(contract?.url)
+                                            }
                                             className='hovered-bg'
-                                            download={contract.filename}
-                                            href={contract.filename}
                                             style={{
                                                 display: "inline-block",
                                                 flex: "0 0 110px",
@@ -230,12 +285,27 @@ const UserPage = () => {
                                                 fontSize: "13px",
                                             }}>
                                             Yuklab olish <DownloadOutlined />
-                                        </a>
+                                        </button>
                                     </div>
                                 </div>
                             ))}
                         </div>
                     )}
+                    <Modal
+                        open={userEditModal}
+                        onCancel={() => setUserEditModal(!userEditModal)}
+                        onOk={userEditFunc}>
+                        <Form onFinish={userEditFunc}>
+                            <h3>{userID}</h3>
+                            <Form.Item label='Ism' name='name'>
+                                <Input />
+                            </Form.Item>
+
+                            <Form.Item label='Email' name='email'>
+                                <Input />
+                            </Form.Item>
+                        </Form>
+                    </Modal>
                 </Content>
             </Layout>
         </Layout>

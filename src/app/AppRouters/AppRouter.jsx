@@ -64,7 +64,6 @@ const AppRouter = () => {
             <Route path='/login' element={<Login />} />
             <Route path='/registration' element={<Registration />} />
             <Route path='/user' element={<User />} />
-            <Route path='/user/edit-profile' element={<UserEditProfile />} />
             <Route path='*' element={<AuthRouter />} /> {/*<- NOT FOUND PAGE */}
         </Routes>
     );

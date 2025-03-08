@@ -10,6 +10,7 @@ import HavalJolion from "../../Images/m-haval-jolion.png";
 import headerAsideBtnCar from "../../Images/header-aside-btn-car.png";
 import headerAsideBtnPhone from "../../Images/aa.png";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 function HeaderNavBar() {
     const { t, i18n } = useTranslation();
@@ -20,7 +21,25 @@ function HeaderNavBar() {
     const [isAsideListHovered, setAsideListHovered] = useState(false);
     const [isAboutGwmOpen, setAboutGwmOpen] = useState(false);
     const [isSelection, setIsSelection] = useState(false);
+    const userID = localStorage.getItem("userID");
 
+    const toUserPage = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            const response = await axios.get(
+                `http://localhost:3000/profil/${userID}`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            response.request;
+        } catch (error) {
+            console.log(error);
+        }
+    };
     const token = localStorage.getItem("token");
     const changeLanguage = (lang) => {
         i18n.changeLanguage(lang);
@@ -242,7 +261,7 @@ function HeaderNavBar() {
                             <Link to='/'>{t("statistics")}</Link>
                         </li>
                         {token ? (
-                            <Link to='/user'>
+                            <Link to='/user' onClick={toUserPage}>
                                 <UserOutlined className='user-icon' />
                             </Link>
                         ) : (
