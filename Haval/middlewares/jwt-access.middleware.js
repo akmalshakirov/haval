@@ -17,7 +17,7 @@ exports.jwtAccessMiddleware = function (req, res, next) {
         }
 
         const user = jwt.verify(token, process.env.JWT_SECRET_KEY);
-
+        req.user = user;
         next();
     } catch (error) {
         console.log(error);
