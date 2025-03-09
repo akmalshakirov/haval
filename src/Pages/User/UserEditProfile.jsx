@@ -7,8 +7,8 @@ const { Header, Content } = Layout;
 
 const UserEditProfile = () => {
     const navigate = useNavigate();
-    const [name, password] = useState();
-    const [userInfo, setUserInfo] = useState([]);
+    // const [name, password] = useState();
+    // const [userInfo, setUserInfo] = useState([]);
     useEffect(() => {
         document.title = "Haval | Profilni tahrirlash";
         const token = localStorage.getItem("token");
@@ -18,24 +18,6 @@ const UserEditProfile = () => {
             message.info("Oldin login qiling!");
         }
     });
-
-    const fetchUserInfo = async () => {
-        try {
-            const response = await axios.get(
-                `http:localhost:3000/users/`,
-                { name },
-                { headers: { "Content-Type": "application/json" } }
-            );
-            if (response.status === 200 && response.data) {
-                message.success("Profil muvaffaqiyatli o'zgartirildi");
-                setUserInfo([response.data]);
-            } else {
-                message.error("");
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
 
     return (
         <Layout style={{ minHeight: "100vh" }}>

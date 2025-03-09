@@ -36,6 +36,7 @@ const Login = () => {
             );
             if (response.status === 200 && response.data?.token) {
                 localStorage.setItem("token", response.data.token);
+                localStorage.setItem("userID", response.data.userId);
                 navigate("/");
             } else {
                 message.error("Username yoki password noto'g'ri!");
