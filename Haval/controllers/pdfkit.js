@@ -13,7 +13,7 @@ exports.generate_pdf = async (req, res) => {
       requestBody = req.body;
     }
 
-    const { fullname, phone, model, color, engine, transmission, payment } =
+    const { fullname, phone, model, color, engine, transmission, payment, userId} =
       requestBody;
 
     if (
@@ -99,6 +99,7 @@ exports.generate_pdf = async (req, res) => {
     }
 
     await PDF.create({
+      userId,
       number: newNumber,
       filename,
       url: urlData.publicUrl,
@@ -129,7 +130,7 @@ exports.generate_pdf = async (req, res) => {
       }
     }, 15000);
 
-    res.json({ number: newNumber, filename, url: urlData.publicUrl });
+    res.json({ number: newNumber, userId, filename, url: urlData.publicUrl });
   } catch (error) {
     console.error(error);
     res
