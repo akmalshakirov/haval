@@ -346,7 +346,7 @@ router
     [...pdfValidationRules],
     createOrder
   )
-  .get("/orders", /*  jwtAccessMiddleware, */ getOrders)
+  .get("/orders", /* jwtAccessMiddleware, */ getOrders)
   .post("/orders/pay", jwtAccessMiddleware, makePayment)
 
   .get("/profil", jwtAccessMiddleware, Profil)

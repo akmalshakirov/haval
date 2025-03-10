@@ -32,10 +32,10 @@ exports.createOrder = async (req, res) => {
   }
 };
 
-exports.getOrders = async (req, res) => {P/X
+exports.getOrders = async (req, res) => {
   try {
     const userId = req.body;
-    const orders = await Order.find(userId);
+    const orders = await Order.find();
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
     res.status(200).json({
       orders
