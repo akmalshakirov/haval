@@ -34,9 +34,9 @@ exports.createOrder = async (req, res) => {
 
 exports.getOrders = async (req, res) => {
   try {
-    const userId = req.params.id;
-    const orders = await Order.findById(userId)
-
+    const userId = req.body;
+    const orders = await Order.find(userId)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
     res.status(200).json({
       orders
     });
