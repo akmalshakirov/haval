@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const { supabase } = require("../config/supabaseClient");
 require("dotenv").config();
 const storageUrl = process.env.SUPABASE_URL;
+const { validationResult } = require("express-validator");
 
 const getAllNews = async (req, res) => {
     try {

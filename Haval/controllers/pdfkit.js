@@ -107,20 +107,18 @@ exports.generate_pdf = async (req, res) => {
         .json({ error: "Supabase URL yaratishda xatolik!" });
     }
 
-    const newPdf = PDF.create({
+    const newPdf = await PDF.create({
       userId,
       number: newNumber,
       filename,
       url: urlData.publicUrl,
-      metadata: {
-        fullname,
-        phone,
-        model,
-        color,
-        engine,
-        transmission,
-        payment,
-      },
+      fullname,
+      phone,
+      model,
+      color,
+      engine,
+      transmission,
+      payment,
     });
 
     await User.findByIdAndUpdate(userId, { orders: newPdf.id }, { new: true });
@@ -141,13 +139,10 @@ exports.generate_pdf = async (req, res) => {
       }
     }, 15000);
 
-    return res.json({
-      number: newNumber,
-      userId,
-      filename,
-      fullname,
-      url: urlData.publicUrl,
-    });s
+    return res.status(200).json({
+      newPdf
+    });
+
   } catch (error) {
     console.error(error);
     res
