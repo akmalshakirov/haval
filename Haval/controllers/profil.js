@@ -6,7 +6,7 @@ const User = require('../models/User');
 exports.Profil = async (req, res) => {
     try {
         const { id } = req.params;  
-      const user = await User.findById(id);
+      const user = await User.findById(id).populate("orders")
   
       if (!user) {
         return res.status(404).send({ error: "User topilmadi!" });  
