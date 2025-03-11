@@ -349,7 +349,7 @@ router
   .get("/orders", /* jwtAccessMiddleware, */ getOrders)
   .post("/orders/pay", jwtAccessMiddleware, makePayment)
 
-  .get("/profil", jwtAccessMiddleware, Profil)
+  .get("/profil/:id", jwtAccessMiddleware, Profil)
   .put(
     "/profil/:id",
     jwtAccessMiddleware,

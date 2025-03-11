@@ -3,6 +3,7 @@ const path = require("path");
 const { PDFDocument, StandardFonts } = require("pdf-lib");
 const { supabase } = require("../config/supabaseClient");
 const PDF = require("../models/Order");
+const User = require("../models/User");
 
 exports.generate_pdf = async (req, res) => {
   try {
@@ -13,8 +14,16 @@ exports.generate_pdf = async (req, res) => {
       requestBody = req.body;
     }
 
-    const { fullname, phone, model, color, engine, transmission, payment, userId} =
-      requestBody;
+    const {
+      fullname,
+      phone,
+      model,
+      color,
+      engine,
+      transmission,
+      payment,
+      userId,
+    } = requestBody;
 
     if (
       !fullname ||
@@ -98,7 +107,7 @@ exports.generate_pdf = async (req, res) => {
         .json({ error: "Supabase URL yaratishda xatolik!" });
     }
 
-    await PDF.create({
+    const newPdf = PDF.create({
       userId,
       number: newNumber,
       filename,
@@ -113,6 +122,8 @@ exports.generate_pdf = async (req, res) => {
         payment,
       },
     });
+
+    await User.findByIdAndUpdate(userId, { orders: newPdf.id }, { new: true });
 
     console.log(
       `PDF MongoDB'ga saqlandi: ${filename} (Tartib raqami: #${newNumber})`
@@ -130,7 +141,13 @@ exports.generate_pdf = async (req, res) => {
       }
     }, 15000);
 
-    res.json({ number: newNumber, userId, filename, url: urlData.publicUrl });
+    return res.json({
+      number: newNumber,
+      userId,
+      filename,
+      fullname,
+      url: urlData.publicUrl,
+    });s
   } catch (error) {
     console.error(error);
     res
