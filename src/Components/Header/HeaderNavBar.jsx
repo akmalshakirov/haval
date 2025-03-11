@@ -21,25 +21,6 @@ function HeaderNavBar() {
     const [isAsideListHovered, setAsideListHovered] = useState(false);
     const [isAboutGwmOpen, setAboutGwmOpen] = useState(false);
     const [isSelection, setIsSelection] = useState(false);
-    const userID = localStorage.getItem("userID");
-
-    const toUserPage = async () => {
-        try {
-            const token = localStorage.getItem("token");
-            const response = await axios.get(
-                `http://localhost:3000/profil/${userID}`,
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-            response.request;
-        } catch (error) {
-            console.log(error);
-        }
-    };
     const token = localStorage.getItem("token");
     const changeLanguage = (lang) => {
         i18n.changeLanguage(lang);
@@ -261,7 +242,7 @@ function HeaderNavBar() {
                             <Link to='/'>{t("statistics")}</Link>
                         </li>
                         {token ? (
-                            <Link to='/user' onClick={toUserPage}>
+                            <Link to='/user'>
                                 <UserOutlined className='user-icon' />
                             </Link>
                         ) : (
@@ -271,7 +252,6 @@ function HeaderNavBar() {
                                 </Link>
                             </li>
                         )}
-                        {/* </a> */}
                     </ul>
                 </div>
                 <div className='header__item'>
