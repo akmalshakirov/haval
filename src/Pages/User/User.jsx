@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
     Avatar,
+    Button,
     Dropdown,
     Form,
     Input,
@@ -23,10 +24,10 @@ const { Header, Content, Sider } = Layout;
 const UserPage = () => {
     const navigate = useNavigate();
     const [loader, setLoader] = useState(false);
-    const [contracts, setContracts] = useState([]);
+    const [contracts, setUserContracts] = useState([]);
     const [userEditModal, setUserEditModal] = useState(false);
     const userID = localStorage.getItem("userID");
-    // const
+    const [loadPDF, setLoadPDF] = useState(false);
 
     useEffect(() => {
         document.title = "Haval | Shaxsiy kabinet";
@@ -38,31 +39,26 @@ const UserPage = () => {
         }
     }, [navigate]);
 
-    const fetchContracts = async () => {
+    const fetchUserContracts = async () => {
         setLoader(true);
         try {
             const token = localStorage.getItem("token");
-            const userID = localStorage.getItem("userID");
-            if (!token) {
-                localStorage.removeItem("token");
-                navigate("/login");
-                message.info("Oldin login qiling!");
-                return;
-            }
+            const response = await axios.get(
+                `http://localhost:3000/profil/${userID}`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
 
-            const response = await axios.get("http://localhost:3000/orders", {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            const userData = response?.data;
+            const orders = userData?.orders ? [userData.orders] : [];
 
-            // if (response.status === 200) {
-            setContracts(response.data.pending);
-            console.log(response.data.pending);
-            // }
+            setUserContracts(orders);
         } catch (error) {
-            console.log(error);
+            console.log("Xato:", error);
         } finally {
             setLoader(false);
         }
@@ -91,7 +87,7 @@ const UserPage = () => {
     };
 
     useEffect(() => {
-        fetchContracts();
+        fetchUserContracts();
     }, []);
 
     const headerStyle = {
@@ -107,6 +103,7 @@ const UserPage = () => {
     });
 
     const downloadPdf = async (fileUrl) => {
+        setLoadPDF(true);
         try {
             const response = await axios.get(fileUrl, {
                 responseType: "blob",
@@ -122,6 +119,8 @@ const UserPage = () => {
             window.URL.revokeObjectURL(url);
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoadPDF(false);
         }
     };
 
@@ -206,7 +205,7 @@ const UserPage = () => {
                             padding: "10px",
                         }}
                         to='/about-gwm/haval-v-uzbekistane/how-become-dealer'>
-                        Shartnoma qoshish
+                        Shartnoma qo'shish
                     </Link>
                     <div
                         style={{
@@ -220,7 +219,7 @@ const UserPage = () => {
                                 padding: "10px",
                             }}
                             spin={loader}
-                            onClick={fetchContracts}
+                            onClick={fetchUserContracts}
                         />
                     </div>
 
@@ -253,42 +252,65 @@ const UserPage = () => {
                                 </div>
                             </div>
 
-                            {contracts.map((contract, index) => (
-                                <div
-                                    key={contract._id}
+                            {contracts?.length > 0 ? (
+                                contracts.map(
+                                    (contract, index) =>
+                                        contract &&
+                                        contract._id && (
+                                            <div
+                                                key={contract._id}
+                                                style={{
+                                                    display: "flex",
+                                                    backgroundColor: "#fafafa",
+                                                    borderBottom:
+                                                        "1px solid #ddd",
+                                                    marginTop: "10px",
+                                                }}>
+                                                <div style={cellStyle(250)}>
+                                                    {contract.fullname
+                                                        ? contract.fullname
+                                                        : contract.filename}
+                                                </div>
+                                                <div style={cellStyle(360)}>
+                                                    {contract.filename}
+                                                </div>
+                                                <div style={cellStyle()}>
+                                                    {contract.status}
+                                                </div>
+                                                <div style={cellStyle()}>
+                                                    <Button
+                                                        loading={loadPDF}
+                                                        onClick={() =>
+                                                            downloadPdf(
+                                                                contract.url
+                                                            )
+                                                        }
+                                                        className='hovered-bg'
+                                                        style={{
+                                                            display:
+                                                                "inline-block",
+                                                            flex: "0 0 110px",
+                                                            padding: "7px 10px",
+                                                            border: "1px solid #000",
+                                                            borderRadius: "7px",
+                                                            fontSize: "13px",
+                                                        }}>
+                                                        Yuklab olish{" "}
+                                                        <DownloadOutlined />
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        )
+                                )
+                            ) : (
+                                <h1
                                     style={{
-                                        display: "flex",
-                                        backgroundColor: "#fafafa",
-                                        borderBottom: "1px solid #ddd",
+                                        textAlign: "center",
+                                        marginTop: "70px",
                                     }}>
-                                    <div style={cellStyle(250)}>
-                                        {index + 1}
-                                    </div>
-                                    <div style={cellStyle(360)}>
-                                        {contract.filename}
-                                    </div>
-                                    <div style={cellStyle()}>
-                                        {contract.status}
-                                    </div>
-                                    <div style={cellStyle()}>
-                                        <button
-                                            onClick={() =>
-                                                downloadPdf(contract?.url)
-                                            }
-                                            className='hovered-bg'
-                                            style={{
-                                                display: "inline-block",
-                                                flex: "0 0 110px",
-                                                padding: "7px 10px",
-                                                border: "1px solid #000",
-                                                borderRadius: "7px",
-                                                fontSize: "13px",
-                                            }}>
-                                            Yuklab olish <DownloadOutlined />
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
+                                    Ma'lumotlar yo'q
+                                </h1>
+                            )}
                         </div>
                     )}
                     <Modal
