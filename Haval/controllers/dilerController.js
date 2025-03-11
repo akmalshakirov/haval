@@ -1,5 +1,6 @@
 const Diler = require('../models/Diler');
 const mongoose = require("mongoose");
+const { validationResult } = require("express-validator");
 
 const getDiler = async (req, res) => {
   try {

@@ -1,5 +1,6 @@
 const Video = require('../models/Video');
 const mongoose = require("mongoose")
+const { validationResult } = require("express-validator");
 
 exports.getVideos = async (req, res) => {
   try {
