@@ -3,6 +3,7 @@ import "./DownloadPdf.css";
 import axios from "axios";
 
 export default function DownloadPdf() {
+    const userID = localStorage.getItem("userID");
     const CarModelsArr = [
         { id: 1, model: "HAVAL Dargo", value: "Dargo", price: "399 900 000" },
         { id: 2, model: "HAVAL Jolion", value: "Jolion", price: "279 900 000" },
@@ -17,6 +18,7 @@ export default function DownloadPdf() {
     ];
 
     const [formData, setFormData] = useState({
+        userId: userID,
         fullname: "",
         phone: "",
         model: "",
