@@ -14,6 +14,7 @@ import {
     FileTextOutlined,
     ReloadOutlined,
     DownloadOutlined,
+    FileUnknownOutlined,
 } from "@ant-design/icons";
 import UserImage from "../../Images/userimage.png";
 import { Link, useNavigate } from "react-router-dom";
@@ -53,10 +54,10 @@ const UserPage = () => {
                 }
             );
 
-            const userData = response?.data;
-            const orders = userData?.orders ? [userData.orders] : [];
+            // const userData = response?.data;
+            // const orders = userData?.orders ? [userData.orders] : [];
 
-            setUserContracts(orders);
+            setUserContracts(response.data.orders);
         } catch (error) {
             console.log("Xato:", error);
         } finally {
@@ -239,7 +240,7 @@ const UserPage = () => {
                         <div>
                             <div style={headerStyle}>
                                 <div style={cellStyle(250)}>
-                                    <strong>Shartnomani raqami</strong>
+                                    <strong>To'liq ism, familiya</strong>
                                 </div>
                                 <div style={cellStyle(360)}>
                                     <strong>Shartnomani nomi</strong>
@@ -254,7 +255,7 @@ const UserPage = () => {
 
                             {contracts?.length > 0 ? (
                                 contracts.map(
-                                    (contract, index) =>
+                                    (contract) =>
                                         contract &&
                                         contract._id && (
                                             <div
@@ -267,9 +268,7 @@ const UserPage = () => {
                                                     marginTop: "10px",
                                                 }}>
                                                 <div style={cellStyle(250)}>
-                                                    {contract.fullname
-                                                        ? contract.fullname
-                                                        : contract.filename}
+                                                    {contract.fullname}
                                                 </div>
                                                 <div style={cellStyle(360)}>
                                                     {contract.filename}
@@ -308,7 +307,7 @@ const UserPage = () => {
                                         textAlign: "center",
                                         marginTop: "70px",
                                     }}>
-                                    Ma'lumotlar yo'q
+                                    Shartnomalar yoq <FileUnknownOutlined />
                                 </h1>
                             )}
                         </div>
