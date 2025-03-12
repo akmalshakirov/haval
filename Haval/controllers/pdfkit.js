@@ -121,7 +121,13 @@ exports.generate_pdf = async (req, res) => {
       payment,
     });
 
-    await User.findByIdAndUpdate(userId, { orders: newPdf.id }, { new: true });
+    await User.findByIdAndUpdate(
+      userId,
+      { $push: { orders: newPdf.id } },
+      {
+        new: true,
+      }
+    );
 
     console.log(
       `PDF MongoDB'ga saqlandi: ${filename} (Tartib raqami: #${newNumber})`
@@ -139,15 +145,14 @@ exports.generate_pdf = async (req, res) => {
       }
     }, 15000);
 
-    return res.status(200).json({
-      newPdf
+    return res.status(201).json({
+      Pdf: newPdf,
     });
-
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({ error: "PDF yaratish yoki yuklashda xatolik yuz berdi" });
+    res.status(500).json({
+      error: "PDF yaratish yoki yuklashda xatolik yuz berdi",
+    });
   }
 };
 

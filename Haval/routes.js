@@ -106,6 +106,7 @@ const {
   getOrders,
   makePayment,
   createOrder,
+  deleteOrder
 } = require("./shartnoma/controllers/orderController");
 const { Profil, updatedProfil } = require("./controllers/profil.js");
 const router = require("express").Router();
@@ -348,6 +349,7 @@ router
   )
   .get("/orders", /* jwtAccessMiddleware, */ getOrders)
   .post("/orders/pay", jwtAccessMiddleware, makePayment)
+  .delete("/orders/:id", /* jwtAccessMiddleware, */ deleteOrder)
 
   .get("/profil/:id", jwtAccessMiddleware, Profil)
   .put(
