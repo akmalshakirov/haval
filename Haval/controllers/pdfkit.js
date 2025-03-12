@@ -14,32 +14,11 @@ exports.generate_pdf = async (req, res) => {
       requestBody = req.body;
     }
 
-    const {
-      fullname,
-      phone,
-      model,
-      color,
-      engine,
-      transmission,
-      payment,
-      userId,
-    } = requestBody;
+    const { fullname, phone, model, color, engine, transmission, payment, userId } = requestBody;
 
-    if (
-      !fullname ||
-      !phone ||
-      !model ||
-      !color ||
-      !engine ||
-      !transmission ||
-      !payment
-    ) {
-      return res.status(400).json({ error: "Ma'lumotlar to‘liq kelmagan!" });
-    }
     const lastPdf = await PDF.findOne().sort({ number: -1 });
     let lastNumber = lastPdf?.number ?? 0;
-    lastNumber1 = Number.isInteger(Number(lastNumber)) ? Number(lastNumber) : 0;
-    const newNumber = lastNumber1 + 1;
+    const newNumber = Number.isInteger(Number(lastNumber)) ? Number(lastNumber) + 1 : 1;
 
     console.log("New Number:", newNumber);
 
@@ -47,12 +26,7 @@ exports.generate_pdf = async (req, res) => {
     const page = pdfDoc.addPage([600, 700]);
     const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
-    page.drawText("HAVAL AVTOMOBILINI SOTIB OLISH", {
-      x: 50,
-      y: 650,
-      size: 18,
-      font,
-    });
+    page.drawText("HAVAL AVTOMOBILINI SOTIB OLISH", { x: 50, y: 650, size: 18, font });
 
     const fields = [
       { label: "Tartib raqami:", value: `#${newNumber}`, y: 630 },
@@ -67,12 +41,7 @@ exports.generate_pdf = async (req, res) => {
 
     fields.forEach(({ label, value, y }) => {
       page.drawText(label, { x: 50, y, size: 12, font });
-      page.drawText(value ? String(value) : "_________", {
-        x: 250,
-        y,
-        size: 12,
-        font,
-      });
+      page.drawText(value ? String(value) : "_________", { x: 250, y, size: 12, font });
     });
 
     const pdfBytes = await pdfDoc.save();
@@ -102,9 +71,7 @@ exports.generate_pdf = async (req, res) => {
       .getPublicUrl(`pdfs/${filename}`);
 
     if (!urlData.publicUrl) {
-      return res
-        .status(500)
-        .json({ error: "Supabase URL yaratishda xatolik!" });
+      return res.status(500).json({ error: "Supabase URL yaratishda xatolik!" });
     }
 
     const newPdf = await PDF.create({
@@ -121,17 +88,18 @@ exports.generate_pdf = async (req, res) => {
       payment,
     });
 
-    await User.findByIdAndUpdate(
-      userId,
-      { $push: { orders: newPdf.id } },
-      {
-        new: true,
-      }
+    await User.updateMany(
+      { orders: { $type: "objectId" } }, 
+      { $set: { orders: [] } } 
     );
 
-    console.log(
-      `PDF MongoDB'ga saqlandi: ${filename} (Tartib raqami: #${newNumber})`
+    await User.findByIdAndUpdate(
+      userId,
+      { $push: { orders: newPdf._id } }, 
+      { new: true }
     );
+
+    console.log(`PDF MongoDB'ga saqlandi: ${filename} (Tartib raqami: #${newNumber})`);
 
     setTimeout(() => {
       if (fs.existsSync(filePath)) {
@@ -145,14 +113,10 @@ exports.generate_pdf = async (req, res) => {
       }
     }, 15000);
 
-    return res.status(201).json({
-      Pdf: newPdf,
-    });
+    return res.status(201).json({ Pdf: newPdf });
   } catch (error) {
     console.error(error);
-    res.status(500).json({
-      error: "PDF yaratish yoki yuklashda xatolik yuz berdi",
-    });
+    res.status(500).json({ error: "PDF yaratish yoki yuklashda xatolik yuz berdi" });
   }
 };
 
