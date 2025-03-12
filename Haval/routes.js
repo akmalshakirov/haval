@@ -7,7 +7,6 @@ const { validateLogin } = require("./validators/login.validate.js");
 const {
   validateOrder_Dealer_Call,
 } = require("./validators/Order-dealer-call.validate.js");
-const { pdfValidationRules } = require("./validators/pfkit.js");
 const { validateRegister } = require("./validators/register.validate.js");
 const {
   validateSavdoStatistikasi,
@@ -33,6 +32,7 @@ const {
   validateVideoUpdate,
 } = require("./validators/update_video.validate.js");
 const { validateProfilUpdate } = require("./validators/profil.validate.js");
+const { pdfValidationRules } = require("./validators/pfkit.js");
 const multer = require("multer");
 const upload = multer();
 const { checkSchema } = require("express-validator");
@@ -338,7 +338,7 @@ router
     roleAccessMiddleware(["superadmin", "admin"]),
     deleteVideo
   )
-  .post("/generate-pdf", generate_pdf)
+  .post("/generate-pdf", [...pdfValidationRules], generate_pdf)
   .post("/download-pdf/:filename", download_pdf)
 
   .post(
