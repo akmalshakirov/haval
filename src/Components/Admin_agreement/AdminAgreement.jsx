@@ -8,19 +8,21 @@ import {
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+
 function AdminAgreement() {
     const navigate = useNavigate();
     const [loader, setLoader] = useState(false);
     const [loadPDF, setLoadPDF] = useState(false);
     const [allContracts, setAllContracts] = useState([]);
 
-    const fetchAllContacts = async () => {
+    const fetchAllContracts = async () => {
         try {
             setLoader(true);
             const token = localStorage.getItem("authToken");
             if (!token) {
                 navigate("/");
                 message.error("Bu sahifa faqat adminlar uchun!");
+                return;
             }
             const response = await axios.get("http://localhost:3000/orders", {
                 headers: {
@@ -28,8 +30,8 @@ function AdminAgreement() {
                     Authorization: `Bearer ${token}`,
                 },
             });
-
-            setAllContracts([response.data.orders]);
+            // Backend { orders: [...] } formatida javob qaytaradi
+            setAllContracts(response.data.orders);
         } catch (error) {
             console.log(error);
         } finally {
@@ -43,7 +45,6 @@ function AdminAgreement() {
             const response = await axios.get(fileUrl, {
                 responseType: "blob",
             });
-
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const a = document.createElement("a");
             a.href = url;
@@ -60,9 +61,10 @@ function AdminAgreement() {
     };
 
     useEffect(() => {
-        fetchAllContacts();
+        fetchAllContracts();
     }, []);
 
+    // Jadval ustunlari uchun uslubiy parametrlar
     const headerStyle = {
         display: "flex",
         backgroundColor: "#f5f5f5",
@@ -78,21 +80,6 @@ function AdminAgreement() {
 
     return (
         <div className='admin-agreement'>
-            <div
-                style={{
-                    display: "inline-block",
-                    marginLeft: "10px",
-                    border: "1px solid #000",
-                    borderRadius: "8px",
-                }}>
-                <ReloadOutlined
-                    style={{
-                        padding: "10px",
-                    }}
-                    spin={loader}
-                    onClick={fetchAllContacts}
-                />
-            </div>
             {loader ? (
                 <div
                     style={{
@@ -107,9 +94,22 @@ function AdminAgreement() {
                 </div>
             ) : (
                 <div>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                        <h2>Barcha shartnomalar</h2>
+                        <div>
+                            <ReloadOutlined
+                                style={{ padding: "10px" }}
+                                spin={loader}
+                                onClick={fetchAllContracts}
+                            />
+                        </div>
+                    </div>
                     <div style={headerStyle}>
                         <div style={cellStyle()}>
                             <strong>To'liq ism, familiya</strong>
+                        </div>
+                        <div style={cellStyle()}>
+                            <strong>Email</strong>
                         </div>
                         <div style={cellStyle()}>
                             <strong>Shartnomani nomi</strong>
@@ -122,19 +122,20 @@ function AdminAgreement() {
                         </div>
                     </div>
 
-                    {allContracts?.length > 0 ? (
+                    {allContracts && allContracts.length > 0 ? (
                         allContracts.map((contract) => (
                             <div
                                 key={contract._id}
                                 style={{
                                     display: "flex",
-                                    backgroundColor: "#fafafa",
+                                    // backgroundColor: "#fafafa",
                                     borderBottom: "1px solid #ddd",
                                     marginTop: "10px",
                                 }}>
                                 <div style={cellStyle()}>
                                     {contract.fullname}
                                 </div>
+                                <div style={cellStyle()}>{contract.email}</div>
                                 <div style={cellStyle()}>
                                     {contract.filename}
                                 </div>
@@ -160,12 +161,8 @@ function AdminAgreement() {
                             </div>
                         ))
                     ) : (
-                        <h1
-                            style={{
-                                textAlign: "center",
-                                marginTop: "70px",
-                            }}>
-                            Shartnomalar yoq <FileUnknownOutlined />
+                        <h1 style={{ textAlign: "center", marginTop: "70px" }}>
+                            Shartnomalar yo'q <FileUnknownOutlined />
                         </h1>
                     )}
                 </div>

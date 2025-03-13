@@ -1,49 +1,59 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-    Avatar,
-    Button,
-    Dropdown,
-    Form,
-    Input,
     Layout,
     Menu,
-    message,
+    Avatar,
+    Dropdown,
+    Card,
+    Row,
+    Col,
     Modal,
+    Form,
+    Input,
+    message,
+    List,
+    Button,
+    Spin,
 } from "antd";
 import {
-    FileTextOutlined,
-    ReloadOutlined,
-    DownloadOutlined,
-    FileUnknownOutlined,
+    DashboardOutlined,
+    LogoutOutlined,
+    EditOutlined,
+    SearchOutlined,
 } from "@ant-design/icons";
-import UserImage from "../../Images/userimage.png";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import UserImage from "../../Images/userimage.png";
 
-const { Header, Content, Sider } = Layout;
+const { Header, Sider, Content } = Layout;
 
-const UserPage = () => {
+const ShaxsiyKabinet = () => {
     const navigate = useNavigate();
-    const [loader, setLoader] = useState(false);
-    const [contracts, setUserContracts] = useState([]);
-    const [userEditModal, setUserEditModal] = useState(false);
+    const [collapsed, setCollapsed] = useState(false);
+    const [selectedMenuKey, setSelectedMenuKey] = useState("dashboard");
+    const [contracts, setContracts] = useState([]);
+    const [loadingContracts, setLoadingContracts] = useState(false);
+    const [profileModalVisible, setProfileModalVisible] = useState(false);
+    // const [downloadLoading, setDownloadLoading] = useState(false);
+    const [user, setUser] = useState({ name: "", email: "" });
+    const [form] = Form.useForm();
     const userID = localStorage.getItem("userID");
-    const [loadPDF, setLoadPDF] = useState(false);
+    const token = localStorage.getItem("token");
 
     useEffect(() => {
         document.title = "Haval | Shaxsiy kabinet";
-        const token = localStorage.getItem("token");
         if (!token) {
             localStorage.removeItem("token");
             navigate("/login");
-            message.info("Oldin login qiling!");
+            message.info("Iltimos, avval login qiling!");
+        } else {
+            fetchUserData();
         }
     }, [navigate]);
 
-    const fetchUserContracts = async () => {
-        setLoader(true);
+    const fetchUserData = async () => {
+        setLoadingContracts(true);
         try {
-            const token = localStorage.getItem("token");
             const response = await axios.get(
                 `http://localhost:3000/profil/${userID}`,
                 {
@@ -53,24 +63,21 @@ const UserPage = () => {
                     },
                 }
             );
-
-            // const userData = response?.data;
-            // const orders = userData?.orders ? [userData.orders] : [];
-
-            setUserContracts(response.data.orders);
+            setUser({ name: response.data.name, email: response.data.email });
+            setContracts(response.data.orders);
         } catch (error) {
-            console.log("Xato:", error);
+            console.error("Ma'lumotlarni yuklashda xato:", error);
+            message.error("Ma'lumotlarni yuklashda xato yuz berdi");
         } finally {
-            setLoader(false);
+            setLoadingContracts(false);
         }
     };
 
-    const userEditFunc = async () => {
+    const handleProfileUpdate = async (values) => {
         try {
-            const token = localStorage.getItem("token");
-
             const response = await axios.put(
                 `http://localhost:3000/profil/${userID}`,
+                values,
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -79,66 +86,175 @@ const UserPage = () => {
                 }
             );
             if (response.status === 200) {
-                setUserEditModal(!userEditModal);
-                message.success("Profil muvaffaqiyatli tahrirlandi");
+                message.success("Profil muvaffaqiyatli yangilandi");
+                setProfileModalVisible(false);
+                fetchUserData();
             }
         } catch (error) {
-            console.log(error);
+            console.error("Profilni tahrirlashda xato:", error);
+            message.error("Profilni yangilashda xatolik yuz berdi");
         }
     };
 
-    useEffect(() => {
-        fetchUserContracts();
-    }, []);
+    // const downloadPdf = async (fileUrl) => {
+    //     setDownloadLoading(true);
+    //     try {
+    //         const response = await axios.get(fileUrl, {
+    //             responseType: "blob",
+    //         });
+    //         const url = window.URL.createObjectURL(new Blob([response.data]));
+    //         const a = document.createElement("a");
+    //         a.href = url;
+    //         a.download = fileUrl.split("/").pop();
+    //         document.body.appendChild(a);
+    //         a.click();
+    //         document.body.removeChild(a);
+    //         window.URL.revokeObjectURL(url);
+    //     } catch (error) {
+    //         console.error("PDF yuklab olishda xato:", error);
+    //         message.error("PDF yuklab olishda xatolik yuz berdi");
+    //     } finally {
+    //         setDownloadLoading(false);
+    //     }
+    // };
 
-    const headerStyle = {
-        display: "flex",
-        backgroundColor: "#f5f5f5",
-        borderBottom: "1px solid #ddd",
+    const menuItems = [
+        {
+            key: "dashboard",
+            icon: <DashboardOutlined />,
+            label: "Shartnomalarim",
+        },
+    ];
+
+    const dropdownMenu = {
+        items: [
+            {
+                key: "edit",
+                icon: <EditOutlined />,
+                label: "Profilni tahrirlash",
+            },
+            { key: "logout", icon: <LogoutOutlined />, label: "Chiqish" },
+        ],
+        onClick: ({ key }) => {
+            if (key === "edit") {
+                setProfileModalVisible(true);
+            } else if (key === "logout") {
+                localStorage.removeItem("token");
+                message.success("Tizimdan chiqildi");
+                navigate("/login");
+            }
+        },
     };
-    const cellStyle = (width) => ({
-        flex: width ? `0 0 ${width}px` : 1,
-        display: "flex",
-        padding: "10px",
-        alignItems: "center",
-    });
 
-    const downloadPdf = async (fileUrl) => {
-        setLoadPDF(true);
-        try {
-            const response = await axios.get(fileUrl, {
-                responseType: "blob",
-            });
+    const totalContracts = contracts.length;
+    const activeContracts = contracts.filter(
+        (c) => c.status === "Active"
+    ).length;
+    const pendingContracts = contracts.filter(
+        (c) => c.status === "Pending"
+    ).length;
+    const recentActivities = contracts.slice(0, 5);
 
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = fileUrl.split("/").pop();
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoadPDF(false);
+    const renderDashboard = () => (
+        <div>
+            <div style={{ marginBottom: "20px" }}>
+                <Link
+                    to='/'
+                    className='hovered'
+                    style={{ color: "#1890ff", marginRight: "5px" }}>
+                    Bosh sahifa
+                </Link>
+                {">"}
+                <Link
+                    className='hovered-selected-border'
+                    to='/user'
+                    style={{ color: "#1890ff", marginLeft: "5px" }}>
+                    Shaxsiy kabinet
+                </Link>
+            </div>
+            <Row gutter={[16, 16]} style={{ marginTop: "20px" }}>
+                <Col xs={24} sm={8}>
+                    <Card>
+                        <h3>Umumiy shartnomalar</h3>
+                        <p style={{ fontSize: "24px" }}>{totalContracts}</p>
+                    </Card>
+                </Col>
+                <Col xs={24} sm={8}>
+                    <Card>
+                        <h3>Aktiv shartnomalar</h3>
+                        <p style={{ fontSize: "24px", color: "#52c41a" }}>
+                            {activeContracts}
+                        </p>
+                    </Card>
+                </Col>
+                <Col xs={24} sm={8}>
+                    <Card>
+                        <h3>Kutilayotgan shartnomalar</h3>
+                        <p style={{ fontSize: "24px", color: "#faad14" }}>
+                            {pendingContracts}
+                        </p>
+                    </Card>
+                </Col>
+            </Row>
+            <div style={{ marginTop: "30px" }}>
+                <h2>Mening shartnomalarim</h2>
+                {loadingContracts ? (
+                    <Spin size='large' />
+                ) : recentActivities && recentActivities.length > 0 ? (
+                    <List
+                        itemLayout='horizontal'
+                        dataSource={recentActivities}
+                        renderItem={(activity) => (
+                            <List.Item>
+                                <List.Item.Meta
+                                    title={`Shartnoma: ${activity.filename}`}
+                                    description={`Status: ${activity.status}`}
+                                />
+                            </List.Item>
+                        )}
+                    />
+                ) : (
+                    <p>Hozirlikcha shartnomalar yoq</p>
+                )}
+            </div>
+        </div>
+    );
+
+    const renderContent = () => {
+        switch (selectedMenuKey) {
+            case "dashboard":
+                return renderDashboard();
+            default:
+                return renderDashboard();
         }
     };
 
     return (
         <Layout style={{ minHeight: "100vh" }}>
-            <Sider collapsible>
+            <Sider collapsible collapsed={collapsed} onCollapse={setCollapsed}>
+                <div style={{ padding: "20px", textAlign: "center" }}>
+                    <Avatar size={collapsed ? 40 : 80} src={UserImage} />
+                    {!collapsed && (
+                        <div style={{ color: "#fff", marginTop: "10px" }}>
+                            <p>
+                                <strong>Ism:</strong>{" "}
+                                {loadingContracts ? "Misol" : user.name}
+                            </p>
+                            <p>
+                                <strong>Email:</strong>{" "}
+                                {loadingContracts
+                                    ? "misol@gmail.com"
+                                    : user.email}
+                            </p>
+                        </div>
+                    )}
+                </div>
                 <Menu
                     theme='dark'
-                    defaultSelectedKeys={["1"]}
                     mode='inline'
-                    items={[
-                        {
-                            key: "1",
-                            icon: <FileTextOutlined />,
-                            label: "Shartnomalarim",
-                        },
-                    ]}
+                    selectedKeys={[selectedMenuKey]}
+                    onClick={(e) => setSelectedMenuKey(e.key)}
+                    items={menuItems}
                 />
             </Sider>
             <Layout>
@@ -150,187 +266,69 @@ const UserPage = () => {
                         justifyContent: "space-between",
                         alignItems: "center",
                     }}>
-                    <div>
-                        <ul style={{ display: "flex", gap: 10 }}>
-                            <li>
-                                <Link
-                                    className='hovered'
-                                    to='/'
-                                    style={{ color: "#00000090" }}>
-                                    Bosh sahifa
-                                </Link>
-                            </li>
-                            <span>{">"}</span>
-                            <li>
-                                <Link to='/user' className='hovered'>
-                                    Shaxsiy kabinet
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
-                    <Dropdown
-                        menu={{
-                            items: [
-                                { key: "edit", label: "Profilni tahrirlash" },
-                                { key: "logout", label: "Tizimdan chiqish" },
-                            ],
-                            onClick: (info) => {
-                                if (info.key === "edit") {
-                                    setUserEditModal(!userEditModal);
-                                } else if (info.key === "logout") {
-                                    localStorage.removeItem("token");
-                                    message.success("Tizimdan chiqildi");
-                                    navigate("/");
-                                }
-                            },
-                        }}
-                        trigger={["click"]}>
-                        <Avatar
-                            style={{
-                                cursor: "pointer",
-                                border: "1px solid #212121",
-                                backgroundColor: "transparent",
-                            }}
-                            src={UserImage}
-                        />
-                    </Dropdown>
-                </Header>
-                <Content style={{ margin: "16px" }}>
-                    <Link
-                        className='hovered-bg'
-                        style={{
-                            display: "inline-block",
-                            marginBottom: "20px",
-                            border: "1px solid #000",
-                            borderRadius: "7px",
-                            padding: "10px",
-                        }}
-                        to='/about-gwm/haval-v-uzbekistane/how-become-dealer'>
-                        Shartnoma qo'shish
-                    </Link>
                     <div
                         style={{
-                            display: "inline-block",
-                            marginLeft: "10px",
-                            border: "1px solid #000",
-                            borderRadius: "8px",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "10px",
                         }}>
-                        <ReloadOutlined
-                            style={{
-                                padding: "10px",
-                            }}
-                            spin={loader}
-                            onClick={fetchUserContracts}
+                        <Input
+                            placeholder='Izlash...'
+                            prefix={<SearchOutlined />}
+                            style={{ width: "300px" }}
                         />
                     </div>
-
-                    {loader ? (
-                        <div
-                            style={{
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                gap: "20px",
-                                marginTop: "50px",
-                            }}>
-                            <h1>Yuklanmoqda</h1>
-                            <ReloadOutlined spin size='large' />
-                        </div>
-                    ) : (
-                        <div>
-                            <div style={headerStyle}>
-                                <div style={cellStyle(250)}>
-                                    <strong>To'liq ism, familiya</strong>
-                                </div>
-                                <div style={cellStyle(360)}>
-                                    <strong>Shartnomani nomi</strong>
-                                </div>
-                                <div style={cellStyle()}>
-                                    <strong>Shartnomani statusi</strong>
-                                </div>
-                                <div style={cellStyle()}>
-                                    <strong>PDFni yuklab olish</strong>
-                                </div>
-                            </div>
-
-                            {contracts?.length > 0 ? (
-                                contracts.map(
-                                    (contract) =>
-                                        contract &&
-                                        contract._id && (
-                                            <div
-                                                key={contract._id}
-                                                style={{
-                                                    display: "flex",
-                                                    backgroundColor: "#fafafa",
-                                                    borderBottom:
-                                                        "1px solid #ddd",
-                                                    marginTop: "10px",
-                                                }}>
-                                                <div style={cellStyle(250)}>
-                                                    {contract.fullname}
-                                                </div>
-                                                <div style={cellStyle(360)}>
-                                                    {contract.filename}
-                                                </div>
-                                                <div style={cellStyle()}>
-                                                    {contract.status}
-                                                </div>
-                                                <div style={cellStyle()}>
-                                                    <Button
-                                                        loading={loadPDF}
-                                                        onClick={() =>
-                                                            downloadPdf(
-                                                                contract.url
-                                                            )
-                                                        }
-                                                        className='hovered-bg'
-                                                        style={{
-                                                            display:
-                                                                "inline-block",
-                                                            flex: "0 0 110px",
-                                                            padding: "7px 10px",
-                                                            border: "1px solid #000",
-                                                            borderRadius: "7px",
-                                                            fontSize: "13px",
-                                                        }}>
-                                                        Yuklab olish{" "}
-                                                        <DownloadOutlined />
-                                                    </Button>
-                                                </div>
-                                            </div>
-                                        )
-                                )
-                            ) : (
-                                <h1
-                                    style={{
-                                        textAlign: "center",
-                                        marginTop: "70px",
-                                    }}>
-                                    Shartnomalar yoq <FileUnknownOutlined />
-                                </h1>
-                            )}
-                        </div>
-                    )}
-                    <Modal
-                        open={userEditModal}
-                        onCancel={() => setUserEditModal(!userEditModal)}
-                        onOk={userEditFunc}>
-                        <Form onFinish={userEditFunc}>
-                            <h3>{userID}</h3>
-                            <Form.Item label='Ism' name='name'>
-                                <Input />
-                            </Form.Item>
-
-                            <Form.Item label='Email' name='email'>
-                                <Input />
-                            </Form.Item>
-                        </Form>
-                    </Modal>
-                </Content>
+                    <Dropdown menu={dropdownMenu} trigger={["click"]}>
+                        <Avatar style={{ cursor: "pointer" }} src={UserImage} />
+                    </Dropdown>
+                </Header>
+                <Content style={{ margin: "20px" }}>{renderContent()}</Content>
             </Layout>
+
+            <Modal
+                title='Profilni tahrirlash'
+                open={profileModalVisible}
+                onCancel={() => setProfileModalVisible(false)}
+                footer={null}>
+                <Form
+                    form={form}
+                    layout='vertical'
+                    onFinish={handleProfileUpdate}>
+                    <Form.Item
+                        label="To'liq ism"
+                        name='name'
+                        rules={[
+                            {
+                                required: true,
+                                message: "Iltimos, ismingizni kiriting",
+                            },
+                        ]}>
+                        <Input placeholder='Ismingiz' />
+                    </Form.Item>
+                    <Form.Item
+                        label='Email'
+                        name='email'
+                        rules={[
+                            {
+                                required: true,
+                                type: "email",
+                                message: "Iltimos, to'g'ri email kiriting",
+                            },
+                        ]}>
+                        <Input placeholder='Email manzilingiz' />
+                    </Form.Item>
+                    <Form.Item label='Parol (ixtiyoriy)' name='password'>
+                        <Input.Password placeholder='Parolingiz' />
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type='primary' htmlType='submit' block>
+                            Profilni yangilash
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Modal>
         </Layout>
     );
 };
 
-export default UserPage;
+export default ShaxsiyKabinet;

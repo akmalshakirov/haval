@@ -30,7 +30,7 @@ import {
     UserOutlined,
     VideoCameraOutlined,
 } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AdminVideos from "../Admin_videos/AdminVideos";
 import axios from "axios";
 import "./Admin.css";
@@ -554,7 +554,24 @@ const AdminPanel = () => {
                 </Tooltip>
             </div>
             <Layout>
-                <Header style={{ background: "#fff", padding: 0 }} />
+                <Header style={{ background: "#fff", padding: 0 }}>
+                    <div style={{ marginLeft: "20px" }}>
+                        <Link
+                            className='hovered'
+                            to='/'
+                            style={{ color: "#1890ff", marginRight: "5px" }}>
+                            Bosh sahifa
+                        </Link>
+                        {">"}
+                        <Link
+                            className='hovered-selected-border'
+                            to='/admin'
+                            style={{ color: "#1890ff", marginLeft: "5px" }}>
+                            Admin panel
+                        </Link>
+                    </div>
+                </Header>
+
                 <Content style={{ margin: "16px" }}>
                     <div
                         style={{
