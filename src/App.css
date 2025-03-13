@@ -80,3 +80,28 @@ body {
     color: #fff;
     background-color: #1775f9be;
 }
+
+.hovered-selected-border {
+    position: relative;
+}
+
+.hovered-selected-border:hover {
+    transition: 0.4s;
+}
+
+.hovered-selected-border::after {
+    content: "";
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    transform: translate(-50%);
+    height: 10%;
+    width: 10%;
+    border-radius: 50%;
+    transition: 0.4s;
+    background-color: #000;
+}
+
+.hovered-selected-border:hover::after {
+    width: 100%;
+}

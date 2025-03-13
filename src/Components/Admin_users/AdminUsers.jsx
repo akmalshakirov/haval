@@ -16,11 +16,11 @@ function AdminUsers() {
 
             const resposne = await axios.get("http://localhost:3000/users", {
                 headers: {
-                    "Content-Type": "applicatoin/json",
+                    "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
                 },
             });
-            setUsers([resposne.data]);
+            setUsers(resposne.data);
             console.log("Kelgan ma'lumotlar (users)", resposne.data);
         } catch (error) {
             console.log(error);
@@ -47,19 +47,21 @@ function AdminUsers() {
                     <Spin size='large' />
                 </div>
             ) : ( */}
-            <h1 style={{ marginBottom: "20px" }}>Users:</h1>
+            <h1 style={{ marginBottom: "20px" }}>Users</h1>
+            <div style={{ display: "flex" }}>
+                <div style={{ flex: "0 0 200px" }}>
+                    <strong>Name:</strong>
+                </div>
+                <div>
+                    <strong>Email:</strong>
+                </div>
+            </div>
             {users.map((user) => (
-                <div style={{ display: "flex", gap: " 20px" }}>
-                    {/* <p>Name: {user[1].name}</p>
-                    <p>Email: {user[1].email}</p> */}
-                    <div>
-                        <p>Name:</p>
-                        <br />
+                <div style={{ display: "flex" }}>
+                    <div style={{ flex: "0 0 200px" }}>
                         <span>{user.name}</span>
                     </div>
                     <div>
-                        <p>Email:</p>
-                        <br />
                         <span>{user.email}</span>
                     </div>
                 </div>
