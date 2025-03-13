@@ -5,7 +5,6 @@ const { validationResult } = require("express-validator");
 
 exports.getAllAdmin = async (req, res) => {
     try {
-
         const admins = await Admin.find();
         return res.status(200).json({ message: "Adminlar", admins });
     } catch (error) {
@@ -14,7 +13,7 @@ exports.getAllAdmin = async (req, res) => {
     }
 };
 
-exports.getAdminById = async (req, res) => {
+exports.getAdmin = async (req, res) => {
     try {
         const { id } = req.params;
         const admin = await Admin.findById(id);

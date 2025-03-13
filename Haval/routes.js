@@ -41,7 +41,7 @@ const {
   createAdmin,
   updateAdmin,
   deleteAdmin,
-  getAdminById,
+  getAdmin
 } = require("./controllers/adminController");
 const {
   getCars,
@@ -115,14 +115,14 @@ router
   .get(
     "/admins",
     jwtAccessMiddleware,
-    roleAccessMiddleware(["superadmin", "admin"]),
+    roleAccessMiddleware(["superadmin"]),
     getAllAdmin
   )
   .get(
     "/admins/:id",
     jwtAccessMiddleware,
     roleAccessMiddleware(["superadmin", "admin"]),
-    getAdminById
+    getAdmin
   )
   .post(
     "/add-admin",
@@ -338,7 +338,7 @@ router
     roleAccessMiddleware(["superadmin", "admin"]),
     deleteVideo
   )
-  .post("/generate-pdf", [...pdfValidationRules], generate_pdf)
+  .post("/generate-pdf", /* jwtAccessMiddleware,*/ [...pdfValidationRules], generate_pdf)
   .post("/download-pdf/:filename", download_pdf)
 
   .post(
