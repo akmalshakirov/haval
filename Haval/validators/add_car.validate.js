@@ -1,7 +1,7 @@
 const { checkSchema } = require("express-validator");
 
 const allowedFormats = ["jpg", "jpeg", "png", "gif"];
-const minSize = 100 * 1024; 
+const minSize = 10 * 1024; 
 const maxSize = 4 * 1024 * 1024;
 
 exports.validateCar = checkSchema({
@@ -35,7 +35,7 @@ exports.validateCar = checkSchema({
                 }
 
                 if (file.size < minSize) {
-                    throw new Error("Rasm hajmi kamida 100 KB bo‘lishi kerak!");
+                    throw new Error("Rasm hajmi kamida 10 KB bo‘lishi kerak!");
                 }
 
                 if (file.size > maxSize) {

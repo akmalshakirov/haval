@@ -1,7 +1,7 @@
 const { checkSchema } = require("express-validator");
 
 const allowedFormats = ["jpg", "jpeg", "png", "gif"];
-const minSize = 100 * 1024; 
+const minSize = 10 * 1024; 
 const maxSize = 4 * 1024 * 1024;
 
 exports.validateCarUpdate = checkSchema({
@@ -42,7 +42,7 @@ exports.validateCarUpdate = checkSchema({
   image: {
     custom: {
       options: (_, { req }) => {
-        if (!req.file) return true; // Rasm yuklanmasa, tekshirish o'tkazilmaydi.
+        if (!req.file) return true;
 
         const { originalname, size } = req.file;
         const fileExtension = originalname.split(".").pop().toLowerCase();
@@ -52,7 +52,7 @@ exports.validateCarUpdate = checkSchema({
         }
 
         if (size < minSize) {
-          throw new Error("Rasm hajmi kamida 100 KB bo‘lishi kerak!");
+          throw new Error("Rasm hajmi kamida 10 KB bo‘lishi kerak!");
         }
 
         if (size > maxSize) {

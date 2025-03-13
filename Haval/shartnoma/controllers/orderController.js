@@ -46,6 +46,32 @@ exports.getOrders = async (req, res) => {
   }
 };
 
+exports.deleteOrder = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Yaroqsiz ID" });
+  }
+
+  try {
+      const deletedOrder = await Order.findById(id);
+
+      if (!deletedOrder) {
+      } else {
+          res.status(404).json({ message: "Order topilmadi" });
+      }
+
+      await Order.findByIdAndDelete(id);
+
+      return res
+          .status(200)
+          .json({ message: "Order muvaffaqiyatli o'chirildi" });
+  } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: "Order o'chirishda xatolik yuz berdi" });
+  }
+};
+
 exports.makePayment = async (req, res) => {
   const { orderId, amount } = req.body;
   if (amount <= 0) return res.status(400).json({ message: "Invalid payment amount" });

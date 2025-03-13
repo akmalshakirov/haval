@@ -160,6 +160,7 @@ exports.generate_pdf = async (req, res) => {
             error: "PDF yaratish yoki yuklashda xatolik yuz berdi",
         });
     }
+
 };
 
 exports.download_pdf = async (req, res) => {

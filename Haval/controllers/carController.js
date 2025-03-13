@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const { supabase } = require("../config/supabaseClient");
 require("dotenv").config();
 const storageUrl = process.env.SUPABASE_URL;
+const { validationResult } = require("express-validator");
 
 const getCars = async (req, res) => {
     try {
@@ -25,7 +26,7 @@ const getCars = async (req, res) => {
 
 const addCar = async (req, res) => {
     try {
-        const { model, year, price } = require(req.body)
+        const { model, year, price } = req.body
         
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
