@@ -27,7 +27,7 @@ import UserImage from "../../Images/userimage.png";
 
 const { Header, Sider, Content } = Layout;
 
-const ShaxsiyKabinet = () => {
+const UserPage = () => {
     const navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(false);
     const [selectedMenuKey, setSelectedMenuKey] = useState("dashboard");
@@ -199,7 +199,15 @@ const ShaxsiyKabinet = () => {
             <div style={{ marginTop: "30px" }}>
                 <h2>Mening shartnomalarim</h2>
                 {loadingContracts ? (
-                    <Spin size='large' />
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}>
+                        <h1>Yuklanmoqda...</h1>
+                        <Spin size='large' />
+                    </div>
                 ) : recentActivities && recentActivities.length > 0 ? (
                     <List
                         itemLayout='horizontal'
@@ -207,7 +215,7 @@ const ShaxsiyKabinet = () => {
                         renderItem={(activity) => (
                             <List.Item>
                                 <List.Item.Meta
-                                    title={`Shartnoma: ${activity.filename}`}
+                                    title={`Ism, familiya: ${activity.fullname}`}
                                     description={`Status: ${activity.status}`}
                                 />
                             </List.Item>
@@ -331,4 +339,4 @@ const ShaxsiyKabinet = () => {
     );
 };
 
-export default ShaxsiyKabinet;
+export default UserPage;
