@@ -23,14 +23,14 @@ exports.updatedProfil = async (req, res) => {
     try {
         const { id } = req.params;
         const user = await User.findById(id);
+        
+        if (!user) {
+            return res.status(404).json({ error: "User topilmadi." });
+        }
 
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
-        }
-        
-        if (!user) {
-            return res.status(404).json({ error: "User topilmadi." });
         }
 
         const { email, name, password } = req.body;
