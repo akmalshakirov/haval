@@ -19,18 +19,6 @@ import { Link } from "react-router-dom";
 const { Sider, Header, Content } = Layout;
 
 function UserPage() {
-    const cardStyle = {
-        backgroundColor: "#1138a3",
-        borderRadius: "10px",
-        padding: "10px",
-        color: "#fff",
-    };
-
-    const cardHeaderStyle = {
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-    };
     return (
         <div className='user-page-wrapper'>
             <Layout className='user-page-layout'>

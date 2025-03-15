@@ -4,17 +4,23 @@ const Admin = require("../models/Admin");
 const { validationResult } = require("express-validator");
 
 exports.getAllAdmin = async (req, res) => {
-    try {
-
-        const admins = await Admin.find();
-        return res.status(200).json({ message: "Adminlar", admins });
-    } catch (error) {
-        console.error("Adminlarni olishda xatolik:", error);
-        return res.status(500).json({ error: "Server xatosi yuz berdi." });
-    }
-};
-
-exports.getAdminById = async (req, res) => {
+        try {
+            let admins;
+    
+            if (req.user.role === "superadmin") {
+                admins = await Admin.find();
+            } else {
+                admins = await Admin.find({ _id: req.user.id });
+            }
+    
+            return res.status(200).json({ message: "Adminlar", admins });
+        } catch (error) {
+            console.error("Adminlarni olishda xatolik:", error);
+            return res.status(500).json({ error: "Server xatosi yuz berdi." });
+        }
+    };
+    
+exports.getAdmin = async (req, res) => {
     try {
         const { id } = req.params;
         const admin = await Admin.findById(id);
@@ -39,6 +45,10 @@ exports.createAdmin = async (req, res) => {
 
         const { email, adminName, password, status } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
+        
+        if (req.user.role !== "superadmin") {
+            return res.status(403).json({ error: "Sizga ruxsat yo‘q!" });
+        }
 
         await Admin.create({ adminName, email, password: hashedPassword, status });
 
@@ -54,13 +64,17 @@ exports.updateAdmin = async (req, res) => {
         const { id } = req.params;
         const admin = await Admin.findById(id);
 
+        if (!admin) {
+            return res.status(404).json({ error: "Admin topilmadi." });
+        }
+
+        if (req.user.role !== "superadmin" && req.user.id !== id) {
+            return res.status(403).json({ error: "Sizga ruxsat yo‘q!" });
+        }
+
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
-        }
-        
-        if (!admin) {
-            return res.status(404).json({ error: "Admin topilmadi." });
         }
 
         const { email, adminName, password } = req.body;
@@ -81,12 +95,15 @@ exports.updateAdmin = async (req, res) => {
 
 exports.deleteAdmin = async (req, res) => {
     try {
-
         const { id } = req.params;
         const admin = await Admin.findById(id);
 
         if (!admin) {
             return res.status(404).json({ error: "Admin topilmadi!" });
+        }
+
+        if (req.user.role !== "superadmin") {
+            return res.status(403).json({ error: "Sizga ruxsat yo‘q!" });
         }
 
         await Admin.findByIdAndDelete(id);
