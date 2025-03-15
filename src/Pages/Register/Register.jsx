@@ -42,13 +42,13 @@ const Registration = () => {
                 { name, email, password: inputPasswordValue },
                 { headers: { "Content-Type": "application/json" } }
             );
-            if (response.status === 200 && response.data?.token) {
-                localStorage.setItem("authToken", response.data.token);
-                message.success("Shaxsiz kabinetga muvaffaqiyatli kirildi!");
-                navigate("/user");
-            } else {
-                message.error("Username yoki password noto'g'ri!");
-            }
+            // if (response.status === 200 && response.data?.token) {
+            localStorage.setItem("authToken", response.data.token);
+            message.success("Shaxsiz kabinetga muvaffaqiyatli kirildi!");
+            navigate("/");
+            // } else {
+            // message.error("Username yoki password noto'g'ri!");
+            // }
         } catch (error) {
             message.error("Username yoki password noto'g'ri!");
         } finally {

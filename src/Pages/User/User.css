@@ -1,38 +1,112 @@
-.user-page-layout {
+.user-page-wrapper {
     min-height: 100vh;
 }
-.user-page-layout * {
-    color: #fff;
-}
-.user-page-sider {
-    background-color: #30363b;
-    border-right: 1px solid #ccc;
-}
-.user-page-menu {
-    background-color: #30363b;
-    margin: 10px;
-}
-.user-page_content {
-    padding: 16px;
-    background-color: #30363b;
-}
-.user-page_content > div {
-    padding: 15px;
-    border: 1px solid #dad4d4;
-    border-radius: 7px;
-    min-height: calc(10vh);
-}
-.user-page_content_agreements {
-    margin: 7vh 0 2vh 0;
+
+main,
+header {
+    background-color: #081028 !important;
 }
 
-/* const navigate = useNavigate();
-    useEffect(() => {
-        document.title = "Haval | Shaxsiy kabinet";
-        const token = localStorage.getItem("authToken");
-        if (!token) {
-            localStorage.removeItem("authToken");
-            navigate("/login");
-            message.info("Oldin login qiling!");
-        }
-    }); */
+.user-page-wrapper > * {
+    color: #fff;
+}
+
+.user-page-layout {
+    background-color: rgb(8, 16, 40);
+    box-shadow: rgba(1, 5, 17, 0.3) 0px 8px 28px 0px;
+}
+
+.user-page-sider {
+    padding: 20px;
+    background-color: red;
+    min-width: 20vw !important;
+}
+
+.user-page-sidebar-menu {
+    margin-top: 30px;
+}
+
+.user-page-sidebar-menu div {
+    padding: 7px 10px;
+    border: 1px solid transparent;
+    transition: 222ms;
+    margin-bottom: 10px;
+    cursor: pointer;
+    background-color: #1323553d;
+    border-radius: 7px;
+}
+.user-page-sidebar-menu div:hover {
+    background-color: #0a1330;
+    border-color: #343b4f;
+}
+
+.user-page-sidebar-menu div:last-child {
+    margin-bottom: 0;
+    border-color: rgba(255, 166, 0, 0.151);
+    color: rgba(255, 166, 0, 0.637);
+}
+
+.user-page-sidebar-content input::placeholder {
+    color: #ccc;
+}
+
+.user-page-sidebar-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* MAIN CONTENT STATUSES */
+
+.user-page-content-wrapper {
+    padding: 20px;
+}
+
+.user-page-content-cards {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.user-page-content-card {
+    min-width: 260px;
+    min-height: 80px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    color: #fff;
+}
+
+.user-page-content-card:not(:first-child, :last-child, :nth-child(3)) {
+    background-color: #e79d2e2d !important;
+    border-color: #ff9900;
+    color: #ff9900;
+}
+
+.user-page-content-card:not(:first-child, :last-child, :nth-child(2)) {
+    background-color: #3c2440c2 !important;
+    border-color: #e23434;
+    color: #ff0000c5;
+}
+.user-page-content-card:not(:first-child, :nth-child(2), :nth-child(3)) {
+    background-color: #09363b !important;
+    border-color: rgba(0, 128, 0, 0.774);
+    color: rgb(5, 177, 5);
+}
+
+.user-page-content-card-icon svg {
+    background-color: transparent !important;
+}
+
+.user-page-content-card span:first-child {
+    font-size: 25px;
+    margin-right: 5px;
+    background-color: transparent !important;
+}
+
+.user-page-content-card span:last-child {
+    margin-left: 7px;
+}
