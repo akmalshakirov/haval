@@ -1,334 +1,287 @@
-import React, { useEffect, useState } from "react";
+import "./User.css";
+import { Avatar, Card, Col, Input, Layout, Row } from "antd";
 import {
-    Layout,
-    Menu,
-    Avatar,
-    Dropdown,
-    Card,
-    Row,
-    Col,
-    Modal,
-    Form,
-    Input,
-    message,
-    List,
-    Button,
-    Spin,
-} from "antd";
-import {
+    CheckCircleOutlined,
     DashboardOutlined,
-    LogoutOutlined,
+    DollarOutlined,
     EditOutlined,
+    ExclamationCircleOutlined,
+    FieldTimeOutlined,
+    HeartOutlined,
+    LogoutOutlined,
+    PieChartOutlined,
     SearchOutlined,
+    ShoppingCartOutlined,
+    ShoppingOutlined,
+    UserOutlined,
 } from "@ant-design/icons";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import UserImage from "../../Images/userimage.png";
+import { Link } from "react-router-dom";
+const { Sider, Header, Content } = Layout;
 
-const { Header, Sider, Content } = Layout;
-
-const ShaxsiyKabinet = () => {
-    const navigate = useNavigate();
-    const [collapsed, setCollapsed] = useState(false);
-    const [selectedMenuKey, setSelectedMenuKey] = useState("dashboard");
-    const [contracts, setContracts] = useState([]);
-    const [loadingContracts, setLoadingContracts] = useState(false);
-    const [profileModalVisible, setProfileModalVisible] = useState(false);
-    // const [downloadLoading, setDownloadLoading] = useState(false);
-    const [user, setUser] = useState({ name: "", email: "" });
-    const [form] = Form.useForm();
-    const userID = localStorage.getItem("userID");
-    const token = localStorage.getItem("token");
-
-    useEffect(() => {
-        document.title = "Haval | Shaxsiy kabinet";
-        if (!token) {
-            localStorage.removeItem("token");
-            navigate("/login");
-            message.info("Iltimos, avval login qiling!");
-        } else {
-            fetchUserData();
-        }
-    }, [navigate]);
-
-    const fetchUserData = async () => {
-        setLoadingContracts(true);
-        try {
-            const response = await axios.get(
-                `http://localhost:3000/profil/${userID}`,
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-            setUser({ name: response.data.name, email: response.data.email });
-            setContracts(response.data.orders);
-        } catch (error) {
-            console.error("Ma'lumotlarni yuklashda xato:", error);
-            message.error("Ma'lumotlarni yuklashda xato yuz berdi");
-        } finally {
-            setLoadingContracts(false);
-        }
-    };
-
-    const handleProfileUpdate = async (values) => {
-        try {
-            const response = await axios.put(
-                `http://localhost:3000/profil-edit/${userID}`,
-                values,
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-            if (response.status === 200) {
-                message.success("Profil muvaffaqiyatli yangilandi");
-                setProfileModalVisible(false);
-                fetchUserData();
-            }
-        } catch (error) {
-            console.error("Profilni tahrirlashda xato:", error);
-            message.error("Profilni yangilashda xatolik yuz berdi");
-        }
-    };
-
-    // const downloadPdf = async (fileUrl) => {
-    //     setDownloadLoading(true);
-    //     try {
-    //         const response = await axios.get(fileUrl, {
-    //             responseType: "blob",
-    //         });
-    //         const url = window.URL.createObjectURL(new Blob([response.data]));
-    //         const a = document.createElement("a");
-    //         a.href = url;
-    //         a.download = fileUrl.split("/").pop();
-    //         document.body.appendChild(a);
-    //         a.click();
-    //         document.body.removeChild(a);
-    //         window.URL.revokeObjectURL(url);
-    //     } catch (error) {
-    //         console.error("PDF yuklab olishda xato:", error);
-    //         message.error("PDF yuklab olishda xatolik yuz berdi");
-    //     } finally {
-    //         setDownloadLoading(false);
-    //     }
-    // };
-
-    const menuItems = [
-        {
-            key: "dashboard",
-            icon: <DashboardOutlined />,
-            label: "Shartnomalarim",
-        },
-    ];
-
-    const dropdownMenu = {
-        items: [
-            {
-                key: "edit",
-                icon: <EditOutlined />,
-                label: "Profilni tahrirlash",
-            },
-            { key: "logout", icon: <LogoutOutlined />, label: "Chiqish" },
-        ],
-        onClick: ({ key }) => {
-            if (key === "edit") {
-                setProfileModalVisible(true);
-            } else if (key === "logout") {
-                localStorage.removeItem("token");
-                message.success("Tizimdan chiqildi");
-                navigate("/login");
-            }
-        },
-    };
-
-    const totalContracts = contracts.length;
-    const activeContracts = contracts.filter(
-        (c) => c.status === "Active"
-    ).length;
-    const pendingContracts = contracts.filter(
-        (c) => c.status === "Pending"
-    ).length;
-    const recentActivities = contracts.slice(0, 5);
-
-    const renderDashboard = () => (
-        <div>
-            <div style={{ marginBottom: "20px" }}>
-                <Link
-                    to='/'
-                    className='hovered'
-                    style={{ color: "#1890ff", marginRight: "5px" }}>
-                    Bosh sahifa
-                </Link>
-                {">"}
-                <Link
-                    className='hovered-selected-border'
-                    to='/user'
-                    style={{ color: "#1890ff", marginLeft: "5px" }}>
-                    Shaxsiy kabinet
-                </Link>
-            </div>
-            <Row gutter={[16, 16]} style={{ marginTop: "20px" }}>
-                <Col xs={24} sm={8}>
-                    <Card>
-                        <h3>Umumiy shartnomalar</h3>
-                        <p style={{ fontSize: "24px" }}>{totalContracts}</p>
-                    </Card>
-                </Col>
-                <Col xs={24} sm={8}>
-                    <Card>
-                        <h3>Aktiv shartnomalar</h3>
-                        <p style={{ fontSize: "24px", color: "#52c41a" }}>
-                            {activeContracts}
-                        </p>
-                    </Card>
-                </Col>
-                <Col xs={24} sm={8}>
-                    <Card>
-                        <h3>Kutilayotgan shartnomalar</h3>
-                        <p style={{ fontSize: "24px", color: "#faad14" }}>
-                            {pendingContracts}
-                        </p>
-                    </Card>
-                </Col>
-            </Row>
-            <div style={{ marginTop: "30px" }}>
-                <h2>Mening shartnomalarim</h2>
-                {loadingContracts ? (
-                    <Spin size='large' />
-                ) : recentActivities && recentActivities.length > 0 ? (
-                    <List
-                        itemLayout='horizontal'
-                        dataSource={recentActivities}
-                        renderItem={(activity) => (
-                            <List.Item>
-                                <List.Item.Meta
-                                    title={`Shartnoma: ${activity.filename}`}
-                                    description={`Status: ${activity.status}`}
+function UserPage() {
+    return (
+        <div className='user-page-wrapper'>
+            <Layout className='user-page-layout'>
+                <Sider
+                    style={{
+                        minHeight: "100vh",
+                        backgroundColor: "#081027",
+                        borderRight: "1px solid #0B1739",
+                    }}
+                    className='user-page-sider'>
+                    <div className='user-page-sidebar-content'>
+                        <div style={{ marginBottom: "10px" }}>
+                            <div
+                                className='user-page-sidebar-info'
+                                style={{ marginBottom: "10px" }}>
+                                <Avatar
+                                    size={64}
+                                    src={
+                                        <UserOutlined
+                                            style={{ fontSize: "54px" }}
+                                        />
+                                    }
                                 />
-                            </List.Item>
-                        )}
-                    />
-                ) : (
-                    <p>Hozirlikcha shartnomalar yoq</p>
-                )}
-            </div>
+                                <h3>Ism: User</h3>
+                                <p>Email: user@gmail.com</p>
+                            </div>
+                            <Input
+                                type='search'
+                                placeholder='Izlash...'
+                                prefix={<SearchOutlined />}
+                                style={{
+                                    borderColor: "#343B4F",
+                                    backgroundColor: "#0a1739",
+                                    color: "#fff",
+                                }}
+                            />
+                        </div>
+                        <div className='user-page-sidebar-menu'>
+                            <div>
+                                <DashboardOutlined
+                                    style={{ marginRight: "7px" }}
+                                />
+                                Shartnomalarim
+                            </div>
+                            <div>
+                                <EditOutlined style={{ marginRight: "7px" }} />
+                                Profilim
+                            </div>
+                            <div>
+                                <LogoutOutlined
+                                    style={{ marginRight: "7px" }}
+                                />
+                                Chiqish
+                            </div>
+                        </div>
+                    </div>
+                </Sider>
+
+                <Layout>
+                    <Header>
+                        <div style={{ marginLeft: "20px", color: "#fff" }}>
+                            <Link to='/' style={{ marginRight: "5px" }}>
+                                Bosh sahifa
+                            </Link>
+                            {">"}
+                            <Link
+                                to='/user'
+                                style={{
+                                    marginLeft: "5px",
+                                }}>
+                                Shaxsiy kabinet
+                            </Link>
+                        </div>
+                    </Header>
+                    <Content>
+                        <h2 style={{ color: "#fff", marginLeft: "30px" }}>
+                            Mening shartnomalarim:
+                        </h2>
+                        {/* <Row gutter={16} style={{ padding: "20px" }}>
+                            <Col span={6}>
+                                <Card
+                                    className='user-page-card'
+                                    variant='borderless'
+                                    style={{
+                                        backgroundColor: "#fff",
+                                    }}>
+                                    <h2 style={{ display: "inline-block" }}>
+                                        <span
+                                            style={{
+                                                marginRight: "5px",
+                                            }}>
+                                            <PieChartOutlined />
+                                        </span>
+                                        Jami:{" "}
+                                        <span
+                                            style={{
+                                                fontWeight: "500",
+                                            }}>
+                                            20
+                                        </span>
+                                    </h2>
+                                </Card>
+                            </Col>
+                            <div>
+                                <div
+                                    className='user-page-card user-page-first-card-wrapper'
+                                    style={{
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        minWidth: "249px",
+                                        minHeight: "81px",
+                                        height: "100%",
+                                        border: "1px solid #fff",
+                                        borderRadius: "8px",
+                                    }}>
+                                    <h2
+                                        className='user-page-first-card'
+                                        style={{
+                                            display: "inline-block",
+                                            width: "100%",
+                                            height: "100%",
+                                        }}>
+                                        <span
+                                            style={{
+                                                marginRight: "5px",
+                                            }}>
+                                            <FieldTimeOutlined />
+                                        </span>
+                                        Kutilayotgan:{" "}
+                                        <span
+                                            style={{
+                                                fontWeight: "500",
+                                            }}>
+                                            4
+                                        </span>
+                                    </h2>
+                                </div>
+                            </div>
+                            <Col span={6}>
+                                <Card
+                                    className='user-page-card'
+                                    variant='borderless'
+                                    style={{
+                                        backgroundColor: "#fff",
+                                    }}>
+                                    <h2
+                                        className='user-page-second-card'
+                                        style={{ display: "inline-block" }}>
+                                        <span>
+                                            <ExclamationCircleOutlined
+                                                style={{
+                                                    marginRight: "5px",
+                                                }}
+                                            />
+                                        </span>
+                                        Bekor qilingan:{" "}
+                                        <span
+                                            style={{
+                                                fontWeight: "500",
+                                            }}>
+                                            3
+                                        </span>
+                                    </h2>
+                                </Card>
+                            </Col>
+                            <Col span={6}>
+                                <Card
+                                    className='user-page-card'
+                                    variant='borderless'
+                                    style={{
+                                        backgroundColor: "#fff",
+                                    }}>
+                                    <h2
+                                        className='user-page-third-card'
+                                        style={{ display: "inline-block" }}>
+                                        <span>
+                                            <CheckCircleOutlined
+                                                style={{
+                                                    marginRight: "5px",
+                                                }}
+                                            />
+                                        </span>
+                                        To'langan:{" "}
+                                        <span
+                                            style={{
+                                                fontWeight: "500",
+                                            }}>
+                                            8
+                                        </span>
+                                    </h2>
+                                </Card>
+                            </Col>
+                        </Row> */}
+                        <div className='user-page-content-wrapper'>
+                            <div className='user-page-content-cards'>
+                                <div className='user-page-content-card'>
+                                    <span className='user-page-content-card-icon'>
+                                        <PieChartOutlined />
+                                    </span>
+                                    <div
+                                        style={{
+                                            backgroundColor:
+                                                "transparent !important",
+                                            display: "flex",
+                                            gap: "5px",
+                                        }}>
+                                        <h2>Jami:</h2>
+                                        <h2>94</h2>
+                                    </div>
+                                </div>
+                                <div className='user-page-content-card'>
+                                    <span className='user-page-content-card-icon'>
+                                        <FieldTimeOutlined />
+                                    </span>
+                                    <div
+                                        style={{
+                                            backgroundColor:
+                                                "transparent !important",
+                                            display: "flex",
+                                            gap: "5px",
+                                        }}>
+                                        <h2>Kutilayotgan:</h2>
+                                        <h2>23</h2>
+                                    </div>
+                                </div>
+                                <div className='user-page-content-card'>
+                                    <span className='user-page-content-card-icon'>
+                                        <ExclamationCircleOutlined />
+                                    </span>
+                                    <div
+                                        style={{
+                                            backgroundColor:
+                                                "transparent !important",
+                                            display: "flex",
+                                            gap: "5px",
+                                        }}>
+                                        <h2>Bekor qilingan:</h2>
+                                        <h2>787</h2>
+                                    </div>
+                                </div>
+                                <div className='user-page-content-card'>
+                                    <span className='user-page-content-card-icon'>
+                                        <CheckCircleOutlined />
+                                    </span>
+                                    <div
+                                        style={{
+                                            backgroundColor:
+                                                "transparent !important",
+                                            display: "flex",
+                                            gap: "5px",
+                                        }}>
+                                        <h2>To'langan:</h2>
+                                        <h2>234567</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </Content>
+                </Layout>
+            </Layout>
         </div>
     );
+}
 
-    const renderContent = () => {
-        switch (selectedMenuKey) {
-            case "dashboard":
-                return renderDashboard();
-            default:
-                return renderDashboard();
-        }
-    };
-
-    return (
-        <Layout style={{ minHeight: "100vh" }}>
-            <Sider collapsible collapsed={collapsed} onCollapse={setCollapsed}>
-                <div style={{ padding: "20px", textAlign: "center" }}>
-                    <Avatar size={collapsed ? 40 : 80} src={UserImage} />
-                    {!collapsed && (
-                        <div style={{ color: "#fff", marginTop: "10px" }}>
-                            <p>
-                                <strong>Ism:</strong>{" "}
-                                {loadingContracts ? "Misol" : user.name}
-                            </p>
-                            <p>
-                                <strong>Email:</strong>{" "}
-                                {loadingContracts
-                                    ? "misol@gmail.com"
-                                    : user.email}
-                            </p>
-                        </div>
-                    )}
-                </div>
-                <Menu
-                    theme='dark'
-                    mode='inline'
-                    selectedKeys={[selectedMenuKey]}
-                    onClick={(e) => setSelectedMenuKey(e.key)}
-                    items={menuItems}
-                />
-            </Sider>
-            <Layout>
-                <Header
-                    style={{
-                        background: "#fff",
-                        padding: "0 20px",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                    }}>
-                    <div
-                        style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "10px",
-                        }}>
-                        <Input
-                            placeholder='Izlash...'
-                            prefix={<SearchOutlined />}
-                            style={{ width: "300px" }}
-                        />
-                    </div>
-                    <Dropdown menu={dropdownMenu} trigger={["click"]}>
-                        <Avatar style={{ cursor: "pointer" }} src={UserImage} />
-                    </Dropdown>
-                </Header>
-                <Content style={{ margin: "20px" }}>{renderContent()}</Content>
-            </Layout>
-
-            <Modal
-                title='Profilni tahrirlash'
-                open={profileModalVisible}
-                onCancel={() => setProfileModalVisible(false)}
-                footer={null}>
-                <Form
-                    form={form}
-                    layout='vertical'
-                    onFinish={handleProfileUpdate}>
-                    <Form.Item
-                        label="To'liq ism"
-                        name='name'
-                        rules={[
-                            {
-                                required: true,
-                                message: "Iltimos, ismingizni kiriting",
-                            },
-                        ]}>
-                        <Input placeholder='Ismingiz' />
-                    </Form.Item>
-                    <Form.Item
-                        label='Email'
-                        name='email'
-                        rules={[
-                            {
-                                required: true,
-                                type: "email",
-                                message: "Iltimos, to'g'ri email kiriting",
-                            },
-                        ]}>
-                        <Input placeholder='Email manzilingiz' />
-                    </Form.Item>
-                    <Form.Item label='Parol (ixtiyoriy)' name='password'>
-                        <Input.Password placeholder='Parolingiz' />
-                    </Form.Item>
-                    <Form.Item>
-                        <Button type='primary' htmlType='submit' block>
-                            Profilni yangilash
-                        </Button>
-                    </Form.Item>
-                </Form>
-            </Modal>
-        </Layout>
-    );
-};
-
-export default ShaxsiyKabinet;
+export default UserPage;

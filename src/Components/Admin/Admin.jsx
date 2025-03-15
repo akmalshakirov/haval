@@ -438,7 +438,7 @@ const AdminPanel = () => {
 
     const columnsAdmins = [
         {
-            title: "Admin Name",
+            title: "Admin nomi",
             dataIndex: "adminName",
             key: "adminName",
         },
@@ -453,7 +453,7 @@ const AdminPanel = () => {
             key: "role",
         },
         {
-            title: "Action",
+            title: "Harakat",
             key: "action",
             render: (_, record) => (
                 <div>

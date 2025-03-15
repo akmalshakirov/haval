@@ -1,10 +1,11 @@
 import axios from "axios";
 import "./AdminAgreement.css";
-import { Button, message } from "antd";
+import { Button, Dropdown, message } from "antd";
 import {
     ReloadOutlined,
     FileUnknownOutlined,
     DownloadOutlined,
+    DownCircleFilled,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -117,9 +118,7 @@ function AdminAgreement() {
                         <div style={cellStyle()}>
                             <strong>Shartnomani statusi</strong>
                         </div>
-                        <div style={cellStyle()}>
-                            <strong>PDFni yuklab olish</strong>
-                        </div>
+                        <div style={cellStyle()}></div>
                     </div>
 
                     {allContracts && allContracts.length > 0 ? (
@@ -141,7 +140,7 @@ function AdminAgreement() {
                                 </div>
                                 <div style={cellStyle()}>{contract.status}</div>
                                 <div style={cellStyle()}>
-                                    <Button
+                                    {/* <Button
                                         loading={loadPDF}
                                         onClick={() =>
                                             downloadPdf(contract.url)
@@ -156,7 +155,10 @@ function AdminAgreement() {
                                             fontSize: "13px",
                                         }}>
                                         Yuklab olish <DownloadOutlined />
-                                    </Button>
+                                    </Button> */}
+                                    <Dropdown>
+                                        <DownCircleFilled />
+                                    </Dropdown>
                                 </div>
                             </div>
                         ))

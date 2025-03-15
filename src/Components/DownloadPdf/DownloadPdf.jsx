@@ -183,9 +183,9 @@ export default function DownloadPdf() {
                             onChange={handleChange}
                             required>
                             <option value='' selected></option>
-                            <option value='oq'>Oq</option>
-                            <option value='qora'>Qora</option>
-                            <option value='kulrang'>Kulrang</option>
+                            <option value='Oq'>Oq</option>
+                            <option value='Qora'>Qora</option>
+                            <option value='Kulrang'>Kulrang</option>
                         </select>
                     </div>
                     <div>

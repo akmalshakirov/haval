@@ -96,12 +96,22 @@ body {
     left: 50%;
     transform: translate(-50%);
     height: 10%;
-    width: 10%;
-    border-radius: 50%;
+    width: 20%;
+    border-radius: 10px;
     transition: 0.4s;
-    background-color: #000;
+    background-color: #504b4b;
 }
 
 .hovered-selected-border:hover::after {
     width: 100%;
+}
+
+.hovered-danger {
+    border: 1px solid red;
+    border-radius: 7px;
+    transition: 0.4s;
+}
+
+.hovered-danger:hover {
+    color: red;
 }
