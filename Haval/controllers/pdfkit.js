@@ -27,8 +27,8 @@ exports.generate_pdf = async (req, res) => {
 
     const lastPdf = await PDF.findOne().sort({ number: -1 });
     let lastNumber = lastPdf?.number ?? 0;
-    lastNumber1 = Number.isInteger(Number(lastNumber)) ? Number(lastNumber) : 0;
-    const newNumber = lastNumber1 + 1;
+    lastNumber = Number.isInteger(Number(lastNumber)) ? Number(lastNumber) : 0;
+    const newNumber = lastNumber + 1;
 
     console.log("New Number:", newNumber);
 
