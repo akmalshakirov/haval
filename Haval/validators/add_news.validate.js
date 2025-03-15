@@ -35,8 +35,8 @@ exports.validateNews = checkSchema({
       errorMessage: "Matn 50 ta belgidan kam bo‘lmasligi kerak!"
     },
     isLength: {
-      options: { max: 250 },
-      errorMessage: "Matn 250 ta belgidan ko‘p bo‘lmasligi kerak!"
+      options: { max: 550 },
+      errorMessage: "Matn 550 ta belgidan ko‘p bo‘lmasligi kerak!"
     }
   },
   image: {

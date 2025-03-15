@@ -76,7 +76,7 @@ const ShaxsiyKabinet = () => {
     const handleProfileUpdate = async (values) => {
         try {
             const response = await axios.put(
-                `http://localhost:3000/profil/${userID}`,
+                `http://localhost:3000/profil-edit/${userID}`,
                 values,
                 {
                     headers: {

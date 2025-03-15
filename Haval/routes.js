@@ -354,7 +354,7 @@ router
 
   .get("/profil/:id", jwtAccessMiddleware, Profil)
   .put(
-    "/profil/:id",
+    "/profil-edit/:id",
     jwtAccessMiddleware,
     [...validateProfilUpdate],
     updatedProfil

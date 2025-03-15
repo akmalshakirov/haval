@@ -10,18 +10,18 @@ exports.validateProfilUpdate = checkSchema({
     name: {
         in: ["body"],
         isString: {
-            errorMessage: "Admin nomi string bo‘lishi kerak!"
+            errorMessage: "Nomi string bo‘lishi kerak!"
         },
         notEmpty: {
-            errorMessage: "Admin nomi bo‘sh bo‘lmasligi kerak!"
+            errorMessage: "Nomi bo‘sh bo‘lmasligi kerak!"
         },
         isLength: {
             options: { min: 2 },
-            errorMessage: "Admin nomida 2 ta belgidan kam bo‘lmasligi kerak!"
+            errorMessage: "Nomida 2 ta belgidan kam bo‘lmasligi kerak!"
         },
         isLength: {
             options: { max: 50 },
-            errorMessage: "Admin nomi 50 ta belgidan ko‘p bo‘lmasligi kerak!"
+            errorMessage: "Nomi 50 ta belgidan ko‘p bo‘lmasligi kerak!"
         }
     },
     email: {
