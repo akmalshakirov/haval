@@ -41,7 +41,7 @@ const {
   createAdmin,
   updateAdmin,
   deleteAdmin,
-  getAdminById,
+  getAdmin
 } = require("./controllers/adminController");
 const {
   getCars,
@@ -109,24 +109,25 @@ const {
   deleteOrder
 } = require("./shartnoma/controllers/orderController");
 const { Profil, updatedProfil } = require("./controllers/profil.js");
+const { adminAccessMiddleware } = require("./middlewares/admin-access.middleware.js");
 const router = require("express").Router();
 
 router
   .get(
     "/admins",
-    jwtAccessMiddleware,
-    roleAccessMiddleware(["superadmin", "admin"]),
+    adminAccessMiddleware,
+    roleAccessMiddleware(["superadmin"]),
     getAllAdmin
   )
   .get(
     "/admins/:id",
-    jwtAccessMiddleware,
+    adminAccessMiddleware,
     roleAccessMiddleware(["superadmin", "admin"]),
-    getAdminById
+    getAdmin
   )
   .post(
     "/add-admin",
-    jwtAccessMiddleware,
+    adminAccessMiddleware,
     roleAccessMiddleware(["superadmin"]),
     [...adminValidationRules],
     createAdmin
@@ -134,14 +135,14 @@ router
   .post("/login-Admin", loginLimiter, [...validateLogin], loginAdmin)
   .put(
     "/admins/:id",
-    jwtAccessMiddleware,
+    adminAccessMiddleware,
     roleAccessMiddleware(["superadmin"]),
     [...adminValidationRulesUpdate],
     updateAdmin
   )
   .delete(
     "/admins/:id",
-    jwtAccessMiddleware,
+    adminAccessMiddleware,
     roleAccessMiddleware(["superadmin"]),
     deleteAdmin
   )
@@ -338,7 +339,7 @@ router
     roleAccessMiddleware(["superadmin", "admin"]),
     deleteVideo
   )
-  .post("/generate-pdf", [...pdfValidationRules], generate_pdf)
+  .post("/generate-pdf", /* jwtAccessMiddleware,*/ [...pdfValidationRules], generate_pdf)
   .post("/download-pdf/:filename", download_pdf)
 
   .post(
@@ -353,7 +354,7 @@ router
 
   .get("/profil/:id", jwtAccessMiddleware, Profil)
   .put(
-    "/profil/:id",
+    "/profil-edit/:id",
     jwtAccessMiddleware,
     [...validateProfilUpdate],
     updatedProfil
