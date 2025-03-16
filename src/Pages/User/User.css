@@ -70,8 +70,8 @@ header {
 }
 
 .user-page-content-card {
-    min-width: 260px;
-    min-height: 80px;
+    min-width: 13.54167vw;
+    min-height: 4.16667vw;
     border: 1px solid #ccc;
     border-radius: 7px;
     display: flex;
@@ -85,7 +85,6 @@ header {
     border-color: #ff9900;
     color: #ff9900;
 }
-
 .user-page-content-card:not(:first-child, :last-child, :nth-child(2)) {
     background-color: #3c2440c2 !important;
     border-color: #e23434;
@@ -96,17 +95,20 @@ header {
     border-color: rgba(0, 128, 0, 0.774);
     color: rgb(5, 177, 5);
 }
-
 .user-page-content-card-icon svg {
     background-color: transparent !important;
 }
 
+.user-page-content-card > div > h2 {
+    font-size: 1.09375vw;
+}
+
 .user-page-content-card span:first-child {
-    font-size: 25px;
-    margin-right: 5px;
+    font-size: 1.30208vw;
+    margin-right: 0.26042vw;
     background-color: transparent !important;
 }
 
 .user-page-content-card span:last-child {
-    margin-left: 7px;
+    margin-left: 0.36458vw;
 }
