@@ -38,11 +38,9 @@ const upload = multer();
 const { checkSchema } = require("express-validator");
 const {
   getAllAdmin,
-  createAdmin,
   updateAdmin,
-  deleteAdmin,
-  getAdmin
 } = require("./controllers/adminController");
+const { createAdmin, updateSuperAdmin, deleteAdmin } = require("./controllers/superAdminController.js")
 const {
   getCars,
   addCar,
@@ -119,12 +117,6 @@ router
     roleAccessMiddleware(["superadmin"]),
     getAllAdmin
   )
-  .get(
-    "/admins/:id",
-    adminAccessMiddleware,
-    roleAccessMiddleware(["superadmin", "admin"]),
-    getAdmin
-  )
   .post(
     "/add-admin",
     adminAccessMiddleware,
@@ -146,6 +138,8 @@ router
     roleAccessMiddleware(["superadmin"]),
     deleteAdmin
   )
+
+  .post("/login-SuperAdmin", loginLimiter, [...validateLogin], loginAdmin)
 
   .get("/cars", jwtAccessMiddleware, getCars)
   .post(
