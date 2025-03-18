@@ -343,8 +343,13 @@ router
     createOrder
   )
   .get("/orders", /* jwtAccessMiddleware, */ getOrders)
-  .post("/orders/pay", jwtAccessMiddleware, makePayment)
-  .delete("/orders/:id", /* jwtAccessMiddleware, */ deleteOrder)
+  .post(
+    "/orders-pay/:id",
+    jwtAccessMiddleware,
+    roleAccessMiddleware(["superadmin", "admin"]),
+    makePayment
+  )
+  .delete("/orders/:id", jwtAccessMiddleware, deleteOrder)
 
   .get("/profil/:id", jwtAccessMiddleware, Profil)
   .put(
