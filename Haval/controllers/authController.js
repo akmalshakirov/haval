@@ -117,3 +117,48 @@ exports.loginAdmin = async (req, res) => {
         return res.status(500).json({ error: "Server xatosi yuz berdi." });
     }
 };
+
+exports.loginSuperAdmin = async (req, res) => {
+    console.log(req.body);
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { email, password } = req.body;
+
+    try {
+        const admin = await Admin.findOne({ email: email });
+
+        if (!admin) {
+            return res.status(404).json({ error: "Admin not found" });
+        }
+
+        if (!req.user || req.user.role !== "superadmin") {
+            return res.status(403).json({ error: "Sizga ruxsat yo‘q!" });
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, admin.password);
+        if (!isPasswordValid) {
+            return res.status(401).json({ error: "Invalid credentials" });
+        }
+
+        const token = jwt.sign(
+            {
+                id: admin._id,
+                email: admin.email,
+                adminName: admin.adminName,
+                role: admin.role,
+            },
+            process.env.JWT_SECRET_KEY,
+            { expiresIn: "1d" }
+        );
+
+        return res.status(200).json({ token });
+
+    } catch (error) {
+        console.error("Error during login:", error);
+        return res.status(500).json({ error: "Server xatosi yuz berdi." });
+    }
+};
