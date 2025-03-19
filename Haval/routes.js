@@ -47,7 +47,7 @@ const {
   updateCar,
   deleteCar,
 } = require("./controllers/carController");
-const { register, login, loginAdmin } = require("./controllers/authController");
+const { register, login, loginAdmin, loginSuperAdmin } = require("./controllers/authController");
 const {
   getDiler,
   addDiler,
@@ -125,6 +125,7 @@ router
     createAdmin
   )
   .post("/login-Admin", loginLimiter, [...validateLogin], loginAdmin)
+  .post("/login-SuperAdmin", loginLimiter, [...validateLogin], /* roleAccessMiddleware(["superadmin"]), */ loginSuperAdmin)
   .put(
     "/admins/:id",
     adminAccessMiddleware,
@@ -138,8 +139,6 @@ router
     roleAccessMiddleware(["superadmin"]),
     deleteAdmin
   )
-
-  .post("/login-SuperAdmin", loginLimiter, [...validateLogin], loginAdmin)
 
   .get("/cars", jwtAccessMiddleware, getCars)
   .post(
