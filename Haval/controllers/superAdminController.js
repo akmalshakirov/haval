@@ -85,21 +85,21 @@ exports.deleteAdmin = async (req, res) => {
 exports.getAdminLastLogin = async (req, res) => {
     try {
         const { id } = req.params;
-        const admin = await Admin.findById(id);
+        const admin = await Admin.findByqId(id);
 
         if (!admin) {
             return res.status(404).json({ error: "Admin topilmadi!" });
         }
 
-        if (req.user.role === "superadmin") {
-            return res.status(200).json({
-                adminName: admin.adminName,
-                lastLogin: admin.lastLogin,
-                status: admin.status
-            });
+        if (!req.user || req.user.role !== "superadmin") {
+            return res.status(403).json({ error: "Sizga ruxsat yo‘q!" });
         }
-
-        return res.status(403).json({ error: "Sizga ruxsat yo‘q!" });
+ 
+        return res.status(200).json({
+            adminName: admin.adminName,
+            lastLogin: admin.lastLogin,
+            status: admin.status
+        });
 
     } catch (error) {
         console.error("Oxirgi kirish vaqtini olishda xatolik:", error);

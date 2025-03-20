@@ -40,7 +40,7 @@ const {
   getAllAdmin,
   updateAdmin,
 } = require("./controllers/adminController");
-const { createAdmin, updateSuperAdmin, deleteAdmin } = require("./controllers/superAdminController.js")
+const { createAdmin, updateSuperAdmin, deleteAdmin, getAdminLastLogin } = require("./controllers/superAdminController.js")
 const {
   getCars,
   addCar,
@@ -125,7 +125,14 @@ router
     createAdmin
   )
   .post("/login-Admin", loginLimiter, [...validateLogin], loginAdmin)
-  .post("/login-SuperAdmin", loginLimiter, [...validateLogin], /* roleAccessMiddleware(["superadmin"]), */ loginSuperAdmin)
+  .post("/login-SuperAdmin", loginLimiter, [...validateLogin], loginSuperAdmin)
+
+  .get(
+    "/lastlogin/:id",
+    adminAccessMiddleware,
+    roleAccessMiddleware(["superadmin"]),
+    getAdminLastLogin
+  )
   .put(
     "/admins/:id",
     adminAccessMiddleware,
