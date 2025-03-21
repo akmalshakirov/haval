@@ -2,8 +2,8 @@
     min-height: 100vh;
 }
 
-main,
-header {
+.user-page-main,
+.user-page-header {
     background-color: #081028 !important;
 }
 
@@ -34,6 +34,8 @@ header {
     cursor: pointer;
     background-color: #1323553d;
     border-radius: 7px;
+    position: relative;
+    overflow: hidden;
 }
 .user-page-sidebar-menu div:hover {
     background-color: #0a1330;
@@ -66,11 +68,11 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 20px;
 }
 
 .user-page-content-card {
-    min-width: 13.54167vw;
+    min-width: 15.54167vw;
     min-height: 4.16667vw;
     border: 1px solid #ccc;
     border-radius: 7px;
@@ -88,7 +90,7 @@ header {
 .user-page-content-card:not(:first-child, :last-child, :nth-child(2)) {
     background-color: #3c2440c2 !important;
     border-color: #e23434;
-    color: #ff0000c5;
+    color: #ff0000;
 }
 .user-page-content-card:not(:first-child, :nth-child(2), :nth-child(3)) {
     background-color: #09363b !important;
@@ -111,4 +113,205 @@ header {
 
 .user-page-content-card span:last-child {
     margin-left: 0.36458vw;
+}
+
+.agreements {
+    display: flex;
+    flex-direction: column;
+    margin: 0 30px;
+    color: #fff;
+}
+
+.agreement-cards {
+    display: flex;
+    flex-direction: column;
+    margin: 50px 0;
+}
+
+.agreement-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    transition: border 222ms;
+    padding: 10px 20px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.agreement-card:hover {
+    border-color: gray;
+    background-color: #8080801c;
+}
+
+.agreement-card div:not(:last-child) {
+    flex: 1;
+}
+
+.agreement-card:not(:last-child) {
+    margin-bottom: 20px;
+}
+
+.agreement-card-action {
+    position: relative;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    padding: 4px 5px;
+    transition: all 333ms;
+    cursor: pointer;
+}
+
+.agreement-card-action:hover {
+    background-color: #000;
+}
+
+.agreement-card-action:hover .agreement-card-action-menu {
+    opacity: 1;
+    pointer-events: all;
+    visibility: visible;
+}
+
+.agreement-card-action-menu {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    position: absolute;
+    z-index: 2;
+    top: 3px;
+    right: 27px;
+    border-radius: 10px;
+    background-color: inherit;
+    border: 1px solid #ccc00000;
+    box-sizing: border-box;
+}
+
+.agreement-card:last-child .agreement-card-action-menu {
+    top: -85px;
+}
+
+.agreement-card-action-menu div {
+    cursor: pointer;
+    padding: 10px;
+    transition: 222ms;
+}
+.agreement-card-action-menu div:first-child {
+    border-radius: 10px 10px 0 0;
+}
+
+.agreement-card-action-menu div:last-child {
+    border-radius: 0 0 10px 10px;
+}
+
+.agreement-card-action-menu div:hover {
+    background-color: #2e52bdbe;
+}
+
+.agreement-card-status {
+    border-radius: 5px;
+    padding: 7px;
+    width: max-content;
+}
+.agreement-card-status.paid,
+.agreement-card-status.Paid {
+    border: 1px solid green;
+    background-color: #19e0191c;
+}
+.agreement-card-status.pending,
+.agreement-card-status.Pending {
+    border: 1px solid orange;
+    background-color: #30292a;
+}
+.agreement-card-status.canceled,
+.agreement-card-status.Canceled {
+    border: 1px solid red;
+    background-color: #2f1f3a;
+}
+
+.custom-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    backdrop-filter: blur(30px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: 444ms;
+    visibility: hidden;
+}
+.custom-modal-overlay.visible {
+    opacity: 1;
+    pointer-events: all;
+    visibility: visible;
+}
+.custom-modal-overlay.visible .custom-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+    pointer-events: all;
+    animation: fromTop 777ms ease, boxShadow linear 1s infinite alternate;
+    background-color: #80808020;
+    color: #fff !important;
+    font-size: 17px;
+    color: #000;
+    padding: 30px 40px;
+    border-radius: 10px;
+}
+
+@keyframes fromTop {
+    0% {
+        top: 0;
+    }
+    75% {
+        top: 50%;
+    }
+    100% {
+        top: 50%;
+    }
+}
+
+.custom-modal {
+    position: relative;
+}
+
+.custom-modal-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: 1px solid #ff000050;
+    transition: 0.3s;
+    padding: 3px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.custom-modal-close-btn:hover {
+    border-color: red;
+    background-color: #ff000070;
+}
+
+.custom-modal-overlay.closed {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+}
+.custom-modal-overlay.closed .custom-modal {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    animation: toBottom 777ms ease;
+}
+
+@keyframes toBottom {
+    to {
+        top: 220%;
+    }
 }

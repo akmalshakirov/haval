@@ -453,7 +453,7 @@ const AdminPanel = () => {
             key: "role",
         },
         {
-            title: "Harakat",
+            title: "",
             key: "action",
             render: (_, record) => (
                 <div>
@@ -554,8 +554,12 @@ const AdminPanel = () => {
                 </Tooltip>
             </div>
             <Layout>
-                <Header style={{ background: "#fff", padding: 0 }}>
-                    <div style={{ marginLeft: "20px" }}>
+                <Header style={{ padding: 0 }}>
+                    <div
+                        style={{
+                            paddingLeft: "20px",
+                            backgroundColor: "#fff",
+                        }}>
                         <Link
                             className='hovered'
                             to='/'
@@ -572,7 +576,7 @@ const AdminPanel = () => {
                     </div>
                 </Header>
 
-                <Content style={{ margin: "16px" }}>
+                <Content style={{ margin: "16px", backgroundColor: "white" }}>
                     <div
                         style={{
                             padding: 24,
@@ -637,7 +641,7 @@ const AdminPanel = () => {
                                                         "emailni kiriting!",
                                                 },
                                                 {
-                                                    type: "email",
+                                                    // type: "email",
                                                     message:
                                                         "to'g'ri email formatini kiriting! (misol: example@gmail.com)",
                                                 },
@@ -725,20 +729,6 @@ const AdminPanel = () => {
                                             </p>
                                             {changePass && (
                                                 <>
-                                                    {/* <Form.Item
-name='changePass'
-rules={[
-{
-required: true,
-message:
-"parolni kiriting!",
-},
-{
-min: 6,
-message:
-"Parol kamida 6 ta belgi bo'lishi kerak!",
-},
-]}> */}
                                                     <Input.Password
                                                         rules={[
                                                             {
@@ -759,7 +749,6 @@ message:
                                                             handleChangePassInput
                                                         }
                                                         className='admin-change-password-input'></Input.Password>
-                                                    {/* </Form.Item> */}
                                                 </>
                                             )}
                                         </div>

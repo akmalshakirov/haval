@@ -4,8 +4,9 @@ import { Button, Dropdown, message } from "antd";
 import {
     ReloadOutlined,
     FileUnknownOutlined,
-    DownloadOutlined,
     DownCircleFilled,
+    DeleteOutlined,
+    EditFilled,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -31,7 +32,6 @@ function AdminAgreement() {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            // Backend { orders: [...] } formatida javob qaytaradi
             setAllContracts(response.data.orders);
         } catch (error) {
             console.log(error);
@@ -65,7 +65,6 @@ function AdminAgreement() {
         fetchAllContracts();
     }, []);
 
-    // Jadval ustunlari uchun uslubiy parametrlar
     const headerStyle = {
         display: "flex",
         backgroundColor: "#f5f5f5",
@@ -127,7 +126,6 @@ function AdminAgreement() {
                                 key={contract._id}
                                 style={{
                                     display: "flex",
-                                    // backgroundColor: "#fafafa",
                                     borderBottom: "1px solid #ddd",
                                     marginTop: "10px",
                                 }}>
@@ -140,25 +138,11 @@ function AdminAgreement() {
                                 </div>
                                 <div style={cellStyle()}>{contract.status}</div>
                                 <div style={cellStyle()}>
-                                    {/* <Button
-                                        loading={loadPDF}
-                                        onClick={() =>
-                                            downloadPdf(contract.url)
-                                        }
-                                        className='hovered-bg'
-                                        style={{
-                                            display: "inline-block",
-                                            flex: "0 0 110px",
-                                            padding: "7px 10px",
-                                            border: "1px solid #000",
-                                            borderRadius: "7px",
-                                            fontSize: "13px",
-                                        }}>
-                                        Yuklab olish <DownloadOutlined />
-                                    </Button> */}
-                                    <Dropdown>
-                                        <DownCircleFilled />
-                                    </Dropdown>
+                                    <div>
+                                        <Button style={{ marginRight: "10px" }}>
+                                            To'lash
+                                        </Button>
+                                    </div>
                                 </div>
                             </div>
                         ))
