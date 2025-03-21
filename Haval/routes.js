@@ -38,18 +38,16 @@ const upload = multer();
 const { checkSchema } = require("express-validator");
 const {
   getAllAdmin,
-  createAdmin,
   updateAdmin,
-  deleteAdmin,
-  getAdmin
 } = require("./controllers/adminController");
+const { createAdmin, updateSuperAdmin, deleteAdmin } = require("./controllers/superAdminController.js")
 const {
   getCars,
   addCar,
   updateCar,
   deleteCar,
 } = require("./controllers/carController");
-const { register, login, loginAdmin } = require("./controllers/authController");
+const { register, login, loginAdmin, loginSuperAdmin } = require("./controllers/authController");
 const {
   getDiler,
   addDiler,
@@ -119,12 +117,6 @@ router
     roleAccessMiddleware(["superadmin"]),
     getAllAdmin
   )
-  .get(
-    "/admins/:id",
-    adminAccessMiddleware,
-    roleAccessMiddleware(["superadmin", "admin"]),
-    getAdmin
-  )
   .post(
     "/add-admin",
     adminAccessMiddleware,
@@ -133,6 +125,7 @@ router
     createAdmin
   )
   .post("/login-Admin", loginLimiter, [...validateLogin], loginAdmin)
+  .post("/login-SuperAdmin", loginLimiter, [...validateLogin], /* roleAccessMiddleware(["superadmin"]), */ loginSuperAdmin)
   .put(
     "/admins/:id",
     adminAccessMiddleware,
@@ -349,8 +342,13 @@ router
     createOrder
   )
   .get("/orders", /* jwtAccessMiddleware, */ getOrders)
-  .post("/orders/pay", jwtAccessMiddleware, makePayment)
-  .delete("/orders/:id", /* jwtAccessMiddleware, */ deleteOrder)
+  .post(
+    "/orders-pay/:id",
+    jwtAccessMiddleware,
+    roleAccessMiddleware(["superadmin", "admin"]),
+    makePayment
+  )
+  .delete("/orders/:id", jwtAccessMiddleware, deleteOrder)
 
   .get("/profil/:id", jwtAccessMiddleware, Profil)
   .put(
