@@ -31,12 +31,12 @@ exports.validateNews = checkSchema({
       errorMessage: "Matn bo‘sh bo‘lmasligi kerak!"
     },
     isLength: {
-      options: { min: 50 },
-      errorMessage: "Matn 50 ta belgidan kam bo‘lmasligi kerak!"
+      options: { min: 20 },
+      errorMessage: "Matn 20 ta belgidan kam bo‘lmasligi kerak!"
     },
     isLength: {
-      options: { max: 550 },
-      errorMessage: "Matn 550 ta belgidan ko‘p bo‘lmasligi kerak!"
+      options: { max: 100000 },
+      errorMessage: "Matn 100000 ta belgidan ko‘p bo‘lmasligi kerak!"
     }
   },
   image: {

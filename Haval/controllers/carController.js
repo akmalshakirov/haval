@@ -71,6 +71,7 @@ const addCar = async (req, res) => {
         res.status(200).json({
             message: "Mashina muvaffaqiyatli qo'shildi",
             data: result,
+            files: req.files
         });
     } catch (err) {
         console.error(err);
