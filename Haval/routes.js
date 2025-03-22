@@ -156,7 +156,7 @@ router
     "/add-car",
     jwtAccessMiddleware,
     roleAccessMiddleware(["superadmin", "admin"]),
-    upload.array("image", 5),
+    upload.single("image", 5),
     [...validateCar],
     addCar
   )
@@ -164,7 +164,7 @@ router
     "/cars/:id",
     jwtAccessMiddleware,
     roleAccessMiddleware(["superadmin", "admin"]),
-    upload.array("image", 5),
+    upload.single("image", 5),
     [...validateCarUpdate],
     updateCar
   )

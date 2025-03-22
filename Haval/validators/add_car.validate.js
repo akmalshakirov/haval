@@ -21,10 +21,10 @@ exports.validateCar = checkSchema({
         notEmpty: { errorMessage: "Narxi bo'sh bo'lmasligi kerak!" }
     },
     image: {
-        
+        in: ["body"],
         custom: {
             options: (value, { req }) => {
-                if (!req.files || req.files.length === 0) {
+                if (!req.file || req.file.length === 0) {
                     throw new Error("Rasm talab qilinadi!");
                 }
 
