@@ -34,9 +34,8 @@ const {
 const { validateProfilUpdate } = require("./validators/profil.validate.js");
 const { pdfValidationRules } = require("./validators/pfkit.js");
 const multer = require("multer");
-const maxSize = 4 * 1024 * 1024;
 const upload = multer({
-  limits: { fileSize: maxSize},
+  limits: { fileSize: 4 * 1024 * 1024},
   storage: multer.memoryStorage()
 });
 const { checkSchema } = require("express-validator");
@@ -112,6 +111,7 @@ const {
 } = require("./shartnoma/controllers/orderController");
 const { Profil, updatedProfil } = require("./controllers/profil.js");
 const { adminAccessMiddleware } = require("./middlewares/admin-access.middleware.js");
+const { message } = require("antd");
 const router = require("express").Router();
 
 router
@@ -157,6 +157,10 @@ router
     jwtAccessMiddleware,
     roleAccessMiddleware(["superadmin", "admin"]),
     upload.array("images", 5),
+    // (req, res) => {
+    //   console.log(req.files);
+    //   res.json({ message: "Fayllar yuklandi", files: req.files });
+    // },
     [...validateCar],
     addCar
   )
