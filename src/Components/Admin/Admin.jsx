@@ -122,7 +122,7 @@ const AdminPanel = () => {
             formData.append("model", values.model);
             formData.append("year", values.year);
             formData.append("price", values.price);
-            formData.append("image", fileList[0]);
+            formData.append("images", fileList[0]);
 
             const response = await axios.post(
                 `http://localhost:3000/add-car`,

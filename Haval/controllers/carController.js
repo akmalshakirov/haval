@@ -23,6 +23,7 @@ const getCars = async (req, res) => {
         res.status(500).json({ error: "Bazaga ulanishda xatolik yuz berdi" });
     }
 };
+
 const addCar = async (req, res) => {
     try {
       const { model, year, price } = req.body;
@@ -32,6 +33,7 @@ const addCar = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
       }
   
+      console.log(req.files);
       if (!req.files || req.files.length === 0) {
         return res.status(404).json({ message: "Fayllar topilmadi" });
       }
@@ -41,11 +43,12 @@ const addCar = async (req, res) => {
   
       for (const file of req.files) {
         const { buffer, originalname, mimetype } = file;
+        const fileBuffer = Buffer.from(buffer)
         const fileName = `cars/${Date.now()}_${originalname}`;
   
         const { data: uploadData, error: uploadError } = await supabase.storage
           .from(bucketName)
-          .upload(fileName, buffer, {
+          .upload(fileName, fileBuffer, {
             cacheControl: "3600",
             upsert: false,
             contentType: mimetype,
@@ -67,7 +70,7 @@ const addCar = async (req, res) => {
         model,
         year,
         price,
-        images: imageUrls,
+        images: imageUrls
       });
   
       res.status(200).json({
