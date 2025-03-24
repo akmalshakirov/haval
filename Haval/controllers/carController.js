@@ -23,62 +23,62 @@ const getCars = async (req, res) => {
         res.status(500).json({ error: "Bazaga ulanishda xatolik yuz berdi" });
     }
 };
-
 const addCar = async (req, res) => {
     try {
-        const { model, year, price } = req.body
-        
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-
-        if (!req.file) {
-            return res.status(404).json({ message: "Fayl topilmadi" });
-        }
-
-        const bucketName = "Haval";
-        const { buffer, originalname } = req.file;
+      const { model, year, price } = req.body;
+      
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+  
+      if (!req.files || req.files.length === 0) {
+        return res.status(404).json({ message: "Fayllar topilmadi" });
+      }
+  
+      const bucketName = "Haval";
+      const imageUrls = [];
+  
+      for (const file of req.files) {
+        const { buffer, originalname, mimetype } = file;
         const fileName = `cars/${Date.now()}_${originalname}`;
-
+  
         const { data: uploadData, error: uploadError } = await supabase.storage
-            .from(bucketName)
-            .upload(fileName, buffer, {
-                cacheControl: "3600",
-                upsert: false,
-                contentType: req.file.mimetype,
-            });
-
+          .from(bucketName)
+          .upload(fileName, buffer, {
+            cacheControl: "3600",
+            upsert: false,
+            contentType: mimetype,
+          });
+  
         if (uploadError) {
-            console.error("Tasvirni yuklashda xato:", uploadError.message);
-            return res.status(500).json({ error: "Tasvirni yuklashda xatolik yuz berdi." });
+          console.error("Tasvirni yuklashda xato:", uploadError.message);
+          return res.status(500).json({ error: "Tasvirni yuklashda xatolik yuz berdi." });
         }
-
-        
+  
         const { data: publicUrlData } = supabase.storage
-            .from(bucketName)
-            .getPublicUrl(fileName);
-
-        const imageUrl = publicUrlData.publicUrl;
-
-        const result = await Car.create({
-            model,
-            year,
-            price,
-            image: imageUrl,
-        });
-
-        res.status(200).json({
-            message: "Mashina muvaffaqiyatli qo'shildi",
-            data: result,
-            files: req.files
-        });
+          .from(bucketName)
+          .getPublicUrl(fileName);
+  
+        imageUrls.push(publicUrlData.publicUrl);
+      }
+  
+      const result = await Car.create({
+        model,
+        year,
+        price,
+        images: imageUrls,
+      });
+  
+      res.status(200).json({
+        message: "Mashina muvaffaqiyatli qo'shildi",
+        data: result,
+      });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Ichki server xatosi yuz berdi." });
+      console.error(err);
+      res.status(500).json({ error: "Ichki server xatosi yuz berdi." });
     }
-};
-
+  };
 
 const updateCar = async (req, res) => {
     const {
