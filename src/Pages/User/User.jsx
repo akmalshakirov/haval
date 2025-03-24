@@ -41,8 +41,8 @@ function UserPage() {
     const pendingAgreements = agreements.filter(
         (c) => c.status === "Pending"
     ).length;
-    const canceledAgreements = agreements.filter(
-        (c) => c.status === "Canceled"
+    const cancelledAgreements = agreements.filter(
+        (c) => c.status === "Cancelled"
     ).length;
 
     // USER'S DATA
@@ -87,7 +87,7 @@ function UserPage() {
             return "Pending (kutilmoqda)";
         } else if (status === "Paid") {
             return "Paid (to'langan)";
-        } else if (status === "Canceled") {
+        } else if (status === "Cancelled") {
             return "Canceled (bekor qilingan)";
         }
         return status;
@@ -268,7 +268,7 @@ function UserPage() {
                                                 gap: "5px",
                                             }}>
                                             <h2>Bekor qilingan:</h2>
-                                            <h2>{canceledAgreements}</h2>
+                                            <h2>{cancelledAgreements}</h2>
                                         </div>
                                     </div>
                                     <div className='user-page-content-card'>

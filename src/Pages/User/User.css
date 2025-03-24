@@ -224,8 +224,8 @@
     border: 1px solid orange;
     background-color: #30292a;
 }
-.agreement-card-status.canceled,
-.agreement-card-status.Canceled {
+.agreement-card-status.cancelled,
+.agreement-card-status.Cancelled {
     border: 1px solid red;
     background-color: #2f1f3a;
 }
