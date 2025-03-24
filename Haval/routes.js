@@ -94,7 +94,7 @@ const {
   addTestDriver,
 } = require("./controllers/test_drayverController");
 const { loginLimiter } = require("./middlewares/loginLimiter");
-const { jwtAccessMiddleware } = require("./middlewares/jwt-access.middleware");
+const { jwtAccessMiddleware } = require("./middlewares/jwt-access.middleware"); 
 const {
   roleAccessMiddleware,
 } = require("./middlewares/role-access.middleware");
@@ -156,7 +156,7 @@ router
     "/add-car",
     jwtAccessMiddleware,
     roleAccessMiddleware(["superadmin", "admin"]),
-    upload.single("image", 5),
+    upload.array("images", 5),
     [...validateCar],
     addCar
   )
