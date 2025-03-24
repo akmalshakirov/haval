@@ -1,5 +1,5 @@
 import "./User.css";
-import { Avatar, Input, Layout, message, Row, Spin } from "antd";
+import { Avatar, Input, Layout, message, Spin } from "antd";
 import {
     CheckCircleOutlined,
     CloseOutlined,
@@ -41,8 +41,8 @@ function UserPage() {
     const pendingAgreements = agreements.filter(
         (c) => c.status === "Pending"
     ).length;
-    const canceledAgreements = agreements.filter(
-        (c) => c.status === "Canceled"
+    const cancelledAgreements = agreements.filter(
+        (c) => c.status === "Cancelled"
     ).length;
 
     // USER'S DATA
@@ -87,7 +87,7 @@ function UserPage() {
             return "Pending (kutilmoqda)";
         } else if (status === "Paid") {
             return "Paid (to'langan)";
-        } else if (status === "Canceled") {
+        } else if (status === "Cancelled") {
             return "Canceled (bekor qilingan)";
         }
         return status;
@@ -146,14 +146,25 @@ function UserPage() {
                             <div
                                 className='user-page-sidebar-info'
                                 style={{ marginBottom: "10px" }}>
-                                <Avatar
+                                {/* <Avatar
+                                    style={{ backgroundColor: "transparent" }}
                                     size={64}
                                     icon={
                                         <UserOutlined
                                             style={{ fontSize: "54px" }}
                                         />
                                     }
-                                />
+                                /> */}
+                                <div
+                                    style={{
+                                        fontSize: "30px",
+                                        border: "1px solid #ccc",
+                                        borderRadius: "10px",
+                                        padding: "0 13px",
+                                        backgroundColor: "#444",
+                                    }}>
+                                    {userData.name.charAt(0) || "A"}
+                                </div>
                                 <h3>Ism: {loading ? "USER" : userData.name}</h3>
                                 <p>
                                     Email:{" "}
@@ -243,6 +254,21 @@ function UserPage() {
                                     </div>
                                     <div className='user-page-content-card'>
                                         <span className='user-page-content-card-icon'>
+                                            <CheckCircleOutlined />
+                                        </span>
+                                        <div
+                                            style={{
+                                                backgroundColor:
+                                                    "transparent !important",
+                                                display: "flex",
+                                                gap: "5px",
+                                            }}>
+                                            <h2>To'langan:</h2>
+                                            <h2>{activeAgreements}</h2>
+                                        </div>
+                                    </div>
+                                    <div className='user-page-content-card'>
+                                        <span className='user-page-content-card-icon'>
                                             <FieldTimeOutlined />
                                         </span>
                                         <div
@@ -268,22 +294,7 @@ function UserPage() {
                                                 gap: "5px",
                                             }}>
                                             <h2>Bekor qilingan:</h2>
-                                            <h2>{canceledAgreements}</h2>
-                                        </div>
-                                    </div>
-                                    <div className='user-page-content-card'>
-                                        <span className='user-page-content-card-icon'>
-                                            <CheckCircleOutlined />
-                                        </span>
-                                        <div
-                                            style={{
-                                                backgroundColor:
-                                                    "transparent !important",
-                                                display: "flex",
-                                                gap: "5px",
-                                            }}>
-                                            <h2>To'langan:</h2>
-                                            <h2>{activeAgreements}</h2>
+                                            <h2>{cancelledAgreements}</h2>
                                         </div>
                                     </div>
                                 </div>

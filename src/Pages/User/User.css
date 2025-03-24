@@ -82,20 +82,20 @@
     color: #fff;
 }
 
-.user-page-content-card:not(:first-child, :last-child, :nth-child(3)) {
+.user-page-content-card:not(:first-child, :last-child) {
+    background-color: #09363b !important;
+    border-color: rgba(0, 128, 0, 0.774);
+    color: rgb(5, 177, 5);
+}
+.user-page-content-card:not(:first-child, :last-child, :nth-child(2)) {
     background-color: #e79d2e2d !important;
     border-color: #ff9900;
     color: #ff9900;
 }
-.user-page-content-card:not(:first-child, :last-child, :nth-child(2)) {
+.user-page-content-card:not(:first-child, :nth-child(2), :nth-child(3)) {
     background-color: #3c2440c2 !important;
     border-color: #e23434;
     color: #ff0000;
-}
-.user-page-content-card:not(:first-child, :nth-child(2), :nth-child(3)) {
-    background-color: #09363b !important;
-    border-color: rgba(0, 128, 0, 0.774);
-    color: rgb(5, 177, 5);
 }
 .user-page-content-card-icon svg {
     background-color: transparent !important;
@@ -224,8 +224,8 @@
     border: 1px solid orange;
     background-color: #30292a;
 }
-.agreement-card-status.canceled,
-.agreement-card-status.Canceled {
+.agreement-card-status.cancelled,
+.agreement-card-status.Cancelled {
     border: 1px solid red;
     background-color: #2f1f3a;
 }
