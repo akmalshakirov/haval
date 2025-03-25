@@ -111,7 +111,6 @@ const {
 } = require("./shartnoma/controllers/orderController");
 const { Profil, updatedProfil } = require("./controllers/profil.js");
 const { adminAccessMiddleware } = require("./middlewares/admin-access.middleware.js");
-const { message } = require("antd");
 const { shartnomalarAdmin, shartnomalarUser, usersQidiruv } = require("./controllers/qidiruvController.js");
 const router = require("express").Router();
 
