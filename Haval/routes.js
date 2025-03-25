@@ -112,6 +112,7 @@ const {
 const { Profil, updatedProfil } = require("./controllers/profil.js");
 const { adminAccessMiddleware } = require("./middlewares/admin-access.middleware.js");
 const { message } = require("antd");
+const { shartnomalarAdmin, shartnomalarUser, usersQidiruv } = require("./controllers/qidiruvController.js");
 const router = require("express").Router();
 
 router
@@ -314,10 +315,10 @@ router
     getAllUsers
   )
   .get(
-    "/users/:id",
+    "/qidiruvUsers",
     jwtAccessMiddleware,
     roleAccessMiddleware(["superadmin", "admin"]),
-    getUserById
+    usersQidiruv
   )
   .delete(
     "/users/:id",
@@ -371,5 +372,21 @@ router
     jwtAccessMiddleware,
     [...validateProfilUpdate],
     updatedProfil
-  );
+  )
+
+  .get(
+    "/qidiruvOrders",
+    jwtAccessMiddleware,
+    roleAccessMiddleware(["superadmin", "admin"]),
+    shartnomalarAdmin
+  )
+
+  .get(
+    "/userorders",
+    jwtAccessMiddleware,
+    shartnomalarUser
+  )
+
+
+
 module.exports = router;
