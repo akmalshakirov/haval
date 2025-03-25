@@ -97,11 +97,12 @@ const AdminPanel = () => {
             );
         } catch (error) {
             const response = error.response;
-            if (response?.message === "Invalid token!") {
+            if (error.code === "ERR_NETWORK") {
+                return message.warning("Server o'chiq bo'lishi mumkin");
+            } else if (response?.message === "Invalid token!") {
                 localStorage.removeItem("authToken");
                 navigate("/");
-            }
-            if (response.status === 401) {
+            } else if (response.status === 401) {
                 message.info("Token vaqti tugagan!");
             } else {
                 message.error(
@@ -248,7 +249,9 @@ const AdminPanel = () => {
             console.log("Kelgan ma'lumotlar (admin):", response.data.admins);
         } catch (error) {
             const response = error.response;
-            if (response?.status === 401) {
+            if (error.code === "ERR_NETWORK") {
+                message.warning("Server o'chiq bo'lishi mumkin");
+            } else if (response?.status === 401) {
                 message.info("Token vaqti tugagan!");
             } else {
                 message.error(

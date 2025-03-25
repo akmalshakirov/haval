@@ -39,11 +39,13 @@ function HeaderNavBar() {
     }, [window.location.href]);
 
     useEffect(() => {
+        document.title =
+            "Bosh sahifa - HAVALning O'zbekistondagi rasmiy distribyutori";
         window.addEventListener("scroll", headerActive);
         return () => {
             window.removeEventListener("scroll", headerActive);
         };
-    });
+    }, []);
 
     const headerActive = () => {
         const header = document.querySelector(".header-section");

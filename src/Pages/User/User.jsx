@@ -16,6 +16,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Ripple from "../../Utils/Ripple";
+import UserEditProfile from "./UserEditProfile";
 
 const { Sider, Header, Content } = Layout;
 
@@ -23,7 +24,7 @@ function UserPage() {
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
     const userID = localStorage.getItem("userID");
-
+    const [selectedSidebarMenu, setSelectedSidebarMenu] = useState("1");
     const [isVisibleModal, setIsVisibleModal] = useState(false);
     const [selectedAgreement, setSelectedAgreement] = useState(null);
 
@@ -71,7 +72,9 @@ function UserPage() {
             }
         } catch (error) {
             const response = error.response;
-            if (response.status === 401) {
+            if (error.code === "ERR_NETWORK") {
+                return message.warning("Server o'chiq bo'lishi mumkin");
+            } else if (response.status === 401) {
                 message.info("Token vaqti tugagan!");
             } else {
                 console.log(error);
@@ -94,6 +97,7 @@ function UserPage() {
     };
 
     useEffect(() => {
+        document.title = "HAVAL | Shaxsiy kabinet";
         fetchUserData();
     }, []);
 
@@ -146,7 +150,7 @@ function UserPage() {
                             <div
                                 className='user-page-sidebar-info'
                                 style={{ marginBottom: "10px" }}>
-                                {/* <Avatar
+                                <Avatar
                                     style={{ backgroundColor: "transparent" }}
                                     size={64}
                                     icon={
@@ -154,8 +158,8 @@ function UserPage() {
                                             style={{ fontSize: "54px" }}
                                         />
                                     }
-                                /> */}
-                                <div
+                                />
+                                {/* <div
                                     style={{
                                         fontSize: "30px",
                                         border: "1px solid #ccc",
@@ -164,7 +168,7 @@ function UserPage() {
                                         backgroundColor: "#444",
                                     }}>
                                     {userData.name.charAt(0) || "A"}
-                                </div>
+                                </div> */}
                                 <h3>Ism: {loading ? "USER" : userData.name}</h3>
                                 <p>
                                     Email:{" "}
@@ -185,13 +189,17 @@ function UserPage() {
                             />
                         </div>
                         <div className='user-page-sidebar-menu'>
-                            <Ripple style={{ width: "100%" }}>
+                            <Ripple
+                                style={{ width: "100%" }}
+                                onClick={() => setSelectedSidebarMenu("1")}>
                                 <DashboardOutlined
                                     style={{ marginRight: "7px" }}
                                 />
                                 Shartnomalarim
                             </Ripple>
-                            <Ripple style={{ width: "100%" }}>
+                            <Ripple
+                                style={{ width: "100%" }}
+                                onClick={() => setSelectedSidebarMenu("2")}>
                                 <EditOutlined style={{ marginRight: "7px" }} />
                                 Profilim
                             </Ripple>
@@ -235,6 +243,7 @@ function UserPage() {
                             <h2 style={{ color: "#fff", marginLeft: "30px" }}>
                                 Mening shartnomalarim:
                             </h2>
+
                             <div className='user-page-content-wrapper'>
                                 <div className='user-page-content-cards'>
                                     <div className='user-page-content-card'>
@@ -327,7 +336,7 @@ function UserPage() {
                                                         {agreement.status}
                                                     </p>
                                                 </div>
-                                                <div
+                                                {/* <div
                                                     className='agreement-card-action'
                                                     onClick={(e) =>
                                                         e.stopPropagation()
@@ -352,7 +361,7 @@ function UserPage() {
                                                             Yuklash
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> */}
                                             </div>
                                         ))}
                                 </div>
@@ -445,6 +454,20 @@ function UserPage() {
                                                     </b>
                                                 </p>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div className='agreement-card-action324-menu'>
+                                        <div onClick={editFunc}>Tahrirlash</div>
+                                        <div onClick={deleteFunc}>
+                                            O'chirish
+                                        </div>
+                                        <div
+                                            onClick={() =>
+                                                downloadPDF(
+                                                    selectedAgreement?.url
+                                                )
+                                            }>
+                                            Yuklash
                                         </div>
                                     </div>
                                 </div>
