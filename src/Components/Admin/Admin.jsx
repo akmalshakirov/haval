@@ -82,7 +82,8 @@ const AdminPanel = () => {
             }
 
             const response = await axios.get(
-                "https://haval-uz.onrender.com/cars",
+                // "https://haval-uz.onrender.com/cars",
+                "http://localhost:3000/cars",
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -140,7 +141,7 @@ const AdminPanel = () => {
             setIsModalOpen(false);
             form.resetFields();
         } catch (error) {
-            console.error("Avtomobil qoshishda xatolik yuz berdi:", error);
+            console.error("Avtomobil qo'shishda xatolik yuz berdi:", error);
             message.error(
                 `Avtomobil qo'shishda xatolik yuz berdi: ${
                     error.response?.data?.message || error.message
@@ -205,10 +206,12 @@ const AdminPanel = () => {
                     },
                 }
             );
-            await fetchCars();
-            setDeleteModal(false);
-            form.resetFields();
-            message.success("Avtomobil muvaffaqiyatli o'chirildi!");
+            if (response.status === 200) {
+                setDeleteModal(false);
+                message.success("Avtomobil muvaffaqiyatli o'chirildi!");
+                form.resetFields();
+                await fetchCars();
+            }
         } catch (error) {
             console.error(
                 "Avtomobilni o'chirishda xatolik yuz berdi:",
@@ -298,9 +301,17 @@ const AdminPanel = () => {
             setIsModalOpen(false);
             form.resetFields();
         } catch (error) {
-            message.error(
-                `Admin qoshishda xatolik yuz berdi: ${error.response?.data?.message}`
-            );
+            if (
+                error.response &&
+                error.response.data &&
+                error.response.data.error
+            ) {
+                message.error(
+                    `Admin qo'shishda xatolik yuz berdi: ${error?.response?.data?.error}`
+                );
+            } else {
+                message.error("Admin qo'shishda xatolik yuz berdi:");
+            }
         } finally {
             setOnClickBtn(false);
         }
@@ -820,7 +831,7 @@ const AdminPanel = () => {
                                             gap: "20px",
                                         }}>
                                         {/* {cars.map((car) => ( */}
-                                        {cars[0].map((car) => (
+                                        {cars.map((car) => (
                                             <div
                                                 key={car.id}
                                                 style={{
