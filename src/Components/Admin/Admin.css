@@ -6,6 +6,13 @@
 .anticon .anticon-close .ant-modal-close-icon {
     display: none;
 }
+.admin-sidebar-top-logo img {
+    transition: 277ms;
+    filter: invert(30%);
+}
+.admin-sidebar-top-logo:hover img {
+    filter: invert(0%);
+}
 :where(.css-dev-only-do-not-override-1x0dypw).ant-modal-root .ant-modal-wrap {
     scrollbar-color: transparent transparent;
 }
