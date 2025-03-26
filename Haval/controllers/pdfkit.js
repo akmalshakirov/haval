@@ -166,25 +166,3 @@ exports.download_pdf = async (req, res) => {
       res.status(500).json({ error: "PDF yuklab olishda xatolik yuz berdi" });
   }
 };
-
-exports.download_pdf = async (req, res) => {
-    try {
-        const { filename } = req.params;
-        if (!filename) {
-            return res.status(400).json({ error: "Fayl nomi kiritilmagan" });
-        }
-
-        const { data } = await supabase.storage
-            .from(process.env.SUPABASE_BUCKET_NAME)
-            .getPublicUrl(`pdfs/${filename}`);
-
-        if (!data) {
-            return res.status(404).json({ error: "Bunday fayl topilmadi" });
-        }
-
-        res.json({ url: data.publicUrl });
-    } catch (error) {
-        console.error("Server xatosi:", error);
-        res.status(500).json({ error: "PDF yuklab olishda xatolik yuz berdi" });
-    }
-};
