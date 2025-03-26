@@ -23,10 +23,9 @@ exports.shartnomalarUser = async (req, res) => {
     const { id } = req.params;
     const { filename } = req.body;
 
-    // Userni topish
     const user = await User.findById(id).populate({
       path: "orders",
-      match: { filename: new RegExp(filename, "i") } // Faqat kerakli shartnomalarni olish
+      match: { filename: new RegExp(filename, "i") }
     });
 
     if (!user || !user.orders.length) {
@@ -44,13 +43,13 @@ exports.shartnomalarAdmin = async (req, res) => {
   try {
     const { filename } = req.body;
 
-    const shartnomalar = await Order.find({ filename: new RegExp(filename, "i") });
+    const orders = await Order.find({ filename: new RegExp(filename, "i")});
 
-    if (!shartnomalar.length) {
+    if (!orders.length) {
       return res.status(404).json({ message: "Shartnoma topilmadi" });
     }
 
-    return res.status(200).json({ message: "Shartnomalar", shartnomalar });
+    return res.status(200).json({ message: "Shartnomalar", orders });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: "Server xatosi yuz berdi." });

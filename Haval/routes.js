@@ -296,13 +296,11 @@ router
   )
   .post(
     "/register",
-    // jwtAccessMiddleware,
     [...validateRegister],
     register
   )
   .post(
     "/loginUser",
-    // jwtAccessMiddleware,
     loginLimiter,
     [...validateLogin],
     login
@@ -314,7 +312,7 @@ router
     getAllUsers
   )
   .get(
-    "/qidiruvUsers",
+    "/users/search",
     jwtAccessMiddleware,
     roleAccessMiddleware(["superadmin", "admin"]),
     usersQidiruv
@@ -374,14 +372,14 @@ router
   )
 
   .get(
-    "/qidiruvOrders",
+    "/orders/search",
     jwtAccessMiddleware,
     roleAccessMiddleware(["superadmin", "admin"]),
     shartnomalarAdmin
   )
 
   .get(
-    "/userorders",
+    "/users/:id/orders",
     jwtAccessMiddleware,
     shartnomalarUser
   )
