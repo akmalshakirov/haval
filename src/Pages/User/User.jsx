@@ -1,5 +1,5 @@
 import "./User.css";
-import { Avatar, Input, Layout, message, Spin } from "antd";
+import { Avatar, Button, Input, Layout, message, Spin } from "antd";
 import {
     CheckCircleOutlined,
     CloseOutlined,
@@ -27,6 +27,8 @@ function UserPage() {
     const [selectedSidebarMenu, setSelectedSidebarMenu] = useState("1");
     const [isVisibleModal, setIsVisibleModal] = useState(false);
     const [selectedAgreement, setSelectedAgreement] = useState(null);
+    const [downloadBtnLoading, setDownloadBtnLoading] = useState(false);
+    const [deletingBtnLoading, setDeletingBtnLoading] = useState(false);
 
     const [userData, setUserData] = useState({
         name: "",
@@ -101,14 +103,55 @@ function UserPage() {
         fetchUserData();
     }, []);
 
+    const deleteFunc = async () => {
+        setDeletingBtnLoading(true);
+        try {
+            if (!token) {
+                message.error("Token topilmadi, qayta tizimga kiring!");
+                return;
+            }
+            const response = await axios.delete(
+                `http://localhost:3000/orders/${selectedAgreement._id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            if (response.status === 200) {
+                await fetchUserData();
+                message.success("Shartnoma muvaffaqiyatli o'chirildi");
+                isVisibleModal(false);
+                selectedAgreement(null);
+            }
+        } catch (error) {
+            if (error.code === "ERR_CONNECTION_REFUSED") {
+                return message.warning(
+                    "Server o'chiq bo'lishi mumkin, keyinroq urinib ko'ring"
+                );
+            } else {
+                console.log(error);
+                message.error("Shartnomani o'chirishda xatolik yuz berdi");
+            }
+        } finally {
+            setDeletingBtnLoading(false);
+        }
+    };
     // EDIT FUNCTION
-    const editFunc = () => {
-        return alert("EDIT!");
-    };
+    // const editFunc = () => {
+    //     return alert("EDIT!");
+    // };
     // DELETE FUNCTION
-    const deleteFunc = () => {
-        return alert("DELETE!");
+
+    const shortText = (e) => {
+        if (e.length > 15) {
+            return e.slice(0, 15) + "...";
+        } else {
+            return e;
+        }
     };
+
     // LOG-OUT FUNCTION
     const handleLogOut = () => {
         localStorage.removeItem("token");
@@ -118,6 +161,7 @@ function UserPage() {
 
     // downloadPDF FUNCTION
     const downloadPDF = async (fileUrl) => {
+        setDownloadBtnLoading(true);
         try {
             const response = await axios.get(fileUrl, {
                 responseType: "blob",
@@ -132,6 +176,8 @@ function UserPage() {
             window.URL.revokeObjectURL(url);
         } catch (error) {
             console.log(error);
+        } finally {
+            setDownloadBtnLoading(false);
         }
     };
 
@@ -243,7 +289,6 @@ function UserPage() {
                             <h2 style={{ color: "#fff", marginLeft: "30px" }}>
                                 Mening shartnomalarim:
                             </h2>
-
                             <div className='user-page-content-wrapper'>
                                 <div className='user-page-content-cards'>
                                     <div className='user-page-content-card'>
@@ -307,6 +352,11 @@ function UserPage() {
                                         </div>
                                     </div>
                                 </div>
+                                <Link
+                                    to='/about-gwm/haval-v-uzbekistane/how-become-dealer'
+                                    className='add-agreement'>
+                                    Shartnoma qo'shish
+                                </Link>
                             </div>
 
                             <div className='agreements'>
@@ -324,7 +374,9 @@ function UserPage() {
                                                 }}>
                                                 <div>
                                                     <h1>
-                                                        {agreement.fullname}
+                                                        {shortText(
+                                                            agreement.fullname
+                                                        )}
                                                     </h1>
                                                 </div>
                                                 <div>
@@ -336,32 +388,6 @@ function UserPage() {
                                                         {agreement.status}
                                                     </p>
                                                 </div>
-                                                {/* <div
-                                                    className='agreement-card-action'
-                                                    onClick={(e) =>
-                                                        e.stopPropagation()
-                                                    }>
-                                                    •••
-                                                    <div className='agreement-card-action-menu'>
-                                                        <div onClick={editFunc}>
-                                                            Tahrirlash
-                                                        </div>
-                                                        <div
-                                                            onClick={
-                                                                deleteFunc
-                                                            }>
-                                                            O'chirish
-                                                        </div>
-                                                        <div
-                                                            onClick={() =>
-                                                                downloadPDF(
-                                                                    agreement.url
-                                                                )
-                                                            }>
-                                                            Yuklash
-                                                        </div>
-                                                    </div>
-                                                </div> */}
                                             </div>
                                         ))}
                                 </div>
@@ -387,22 +413,22 @@ function UserPage() {
                                             <CloseOutlined />
                                         </span>
                                         <h1 style={{ marginBottom: "20px" }}>
-                                            Shartnoma haqida ma'lumot
+                                            Shartnoma haqida to'liq ma'lumot
                                         </h1>
-                                        <div>
-                                            <p>
-                                                Shartnoma nomi:{" "}
-                                                <b>
-                                                    {
-                                                        selectedAgreement?.filename
-                                                    }
-                                                </b>
-                                            </p>
+                                        <div className='custom-modal-info'>
                                             <p>
                                                 Ism, familiya:{" "}
                                                 <b>
                                                     {
                                                         selectedAgreement?.fullname
+                                                    }
+                                                </b>
+                                            </p>
+                                            <p>
+                                                Shartnoma nomi:{" "}
+                                                <b>
+                                                    {
+                                                        selectedAgreement?.filename
                                                     }
                                                 </b>
                                             </p>
@@ -455,19 +481,30 @@ function UserPage() {
                                                 </p>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className='agreement-card-action324-menu'>
-                                        <div onClick={editFunc}>Tahrirlash</div>
-                                        <div onClick={deleteFunc}>
-                                            O'chirish
-                                        </div>
-                                        <div
-                                            onClick={() =>
-                                                downloadPDF(
-                                                    selectedAgreement?.url
-                                                )
-                                            }>
-                                            Yuklash
+                                        <div className='agreement-card-action-menu'>
+                                            <button
+                                                disabled={downloadBtnLoading}
+                                                onClick={() =>
+                                                    downloadPDF(
+                                                        selectedAgreement?.url
+                                                    )
+                                                }>
+                                                {downloadBtnLoading ? (
+                                                    <>
+                                                        Yuklanmoqda...
+                                                        <Spin />
+                                                    </>
+                                                ) : (
+                                                    "PDFni yuklash"
+                                                )}
+                                            </button>
+                                            <button
+                                                onClick={deleteFunc}
+                                                disabled={deletingBtnLoading}>
+                                                {deletingBtnLoading
+                                                    ? "O'chirilmoqda..."
+                                                    : "O'chirish"}
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

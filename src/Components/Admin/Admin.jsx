@@ -9,11 +9,9 @@ import {
     Menu,
     message,
     Modal,
-    Popconfirm,
     Spin,
     Switch,
     Table,
-    Tooltip,
 } from "antd";
 import {
     ArrowRightOutlined,
@@ -37,6 +35,7 @@ import "./Admin.css";
 import AdminNews from "../Admin_news/AdminNews";
 import AdminUsers from "../Admin_users/AdminUsers";
 import AdminAgreement from "../Admin_agreement/AdminAgreement";
+import Logo from "../../Images/haval.svg";
 
 const { Header, Sider, Content, Footer } = Layout;
 
@@ -496,7 +495,7 @@ const AdminPanel = () => {
     const handleLogout = () => {
         localStorage.removeItem("authToken");
         navigate("/");
-        message.info("BYE BYE🤫");
+        message.info("ADMIN PANELDAN CHIQILDI");
     };
 
     const handleClickBtn = () => {
@@ -506,7 +505,23 @@ const AdminPanel = () => {
     return (
         <Layout style={{ minHeight: "100vh" }} className='admin'>
             <Sider collapsible collapsedWidth={90}>
+                <div className='admin-sidebar-top-logo'>
+                    <Link
+                        to='/'
+                        className='admin-sidebar-top-logo-link'
+                        style={{
+                            display: "inline-block",
+                            width: "100%",
+                            padding: "25px 20px 20px 30px",
+                            borderBottom: "1px solid #ccc",
+                        }}>
+                        <img src={Logo} alt='logo' />
+                    </Link>
+                </div>
                 <Menu
+                    style={{
+                        marginTop: "15px",
+                    }}
                     theme='dark'
                     mode='inline'
                     defaultSelectedKeys={["1"]}
@@ -543,10 +558,20 @@ const AdminPanel = () => {
                             icon: <OrderedListOutlined />,
                             label: "Shartnomalar",
                         },
+                        {
+                            key: "8",
+                            icon: <LogoutOutlined />,
+                            label: "Chiqish",
+                            style: {
+                                borderColor: "#ffa60027",
+                                color: "#ffa600a2",
+                            },
+                            onClick: () => handleLogout(),
+                        },
                     ]}
                 />
             </Sider>
-            <div
+            {/* <div
                 style={{
                     display: "flex",
                     gap: "20px",
@@ -566,7 +591,7 @@ const AdminPanel = () => {
                         <LogoutOutlined />
                     </Popconfirm>
                 </Tooltip>
-            </div>
+            </div> */}
             <Layout>
                 <Header style={{ padding: 0 }}>
                     <div

@@ -37,11 +37,17 @@ const AdminLogin = () => {
                 localStorage.setItem("authToken", response.data.token);
                 message.success("Admin panelga muvaffaqiyatli kirildi!");
                 navigate("/admin");
+            } else if (response.status === 500) {
+                message.error(response.error);
             } else {
                 message.error("Username yoki password noto'g'ri!");
             }
         } catch (error) {
-            message.error("Username yoki password noto'g'ri!");
+            if (error.code === "ERR_NETWORK") {
+                message.warning("Server o'chiq bo'lishi mumkin");
+            } else {
+                message.error("Username yoki password noto'g'ri!");
+            }
         } finally {
             setOnClick(false);
         }

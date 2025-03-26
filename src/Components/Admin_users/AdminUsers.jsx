@@ -65,8 +65,8 @@ function AdminUsers() {
                     <strong>Harakat:</strong>
                 </div>
             </div>
-            {users.map((user) => (
-                <div style={{ display: "flex" }}>
+            {users.map((user, index) => (
+                <div key={user.id || index} style={{ display: "flex" }}>
                     <div style={{ flex: "0 0 200px" }}>
                         <span>{user.name}</span>
                     </div>
