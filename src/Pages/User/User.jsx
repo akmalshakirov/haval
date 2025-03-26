@@ -272,6 +272,7 @@ function UserPage() {
                         </div>
                     </Header>
 
+                    {/* loading */}
                     {loading ? (
                         <div
                             style={{
