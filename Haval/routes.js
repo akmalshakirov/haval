@@ -111,7 +111,7 @@ const {
 } = require("./shartnoma/controllers/orderController");
 const { Profil, updatedProfil } = require("./controllers/profil.js");
 const { adminAccessMiddleware } = require("./middlewares/admin-access.middleware.js");
-const { message } = require("antd");
+const { shartnomalarAdmin, shartnomalarUser, usersQidiruv } = require("./controllers/qidiruvController.js");
 const router = require("express").Router();
 
 router
@@ -296,13 +296,11 @@ router
   )
   .post(
     "/register",
-    // jwtAccessMiddleware,
     [...validateRegister],
     register
   )
   .post(
     "/loginUser",
-    // jwtAccessMiddleware,
     loginLimiter,
     [...validateLogin],
     login
@@ -314,10 +312,10 @@ router
     getAllUsers
   )
   .get(
-    "/users/:id",
+    "/users/search",
     jwtAccessMiddleware,
     roleAccessMiddleware(["superadmin", "admin"]),
-    getUserById
+    usersQidiruv
   )
   .delete(
     "/users/:id",
@@ -371,5 +369,21 @@ router
     jwtAccessMiddleware,
     [...validateProfilUpdate],
     updatedProfil
-  );
+  )
+
+  .get(
+    "/orders/search",
+    jwtAccessMiddleware,
+    roleAccessMiddleware(["superadmin", "admin"]),
+    shartnomalarAdmin
+  )
+
+  .get(
+    "/users/:id/orders",
+    jwtAccessMiddleware,
+    shartnomalarUser
+  )
+
+
+
 module.exports = router;
