@@ -89,9 +89,9 @@ exports.deleteOrder = async (req, res) => {
 exports.makePayment = async (req, res) => {
   const { id } = req.body;
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ message: "Invalid ID format" });
-  }
+  // if (!mongoose.Types.ObjectId.isValid(id)) {
+  //   return res.status(400).json({ message: "Invalid ID format" });
+  // }
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

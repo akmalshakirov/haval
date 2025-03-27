@@ -356,7 +356,7 @@ router
   )
   .get("/orders", /* jwtAccessMiddleware, */ getOrders)
   .post(
-    "/orders-pay/:id",
+    "/orders-pay/",
     jwtAccessMiddleware,
     roleAccessMiddleware(["superadmin", "admin"]),
     makePayment
