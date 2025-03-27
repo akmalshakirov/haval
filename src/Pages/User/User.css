@@ -61,7 +61,7 @@
 /* MAIN CONTENT STATUSES */
 
 .user-page-content-wrapper {
-    padding: 20px;
+    padding: 20px 20px 0 20px;
 }
 
 .user-page-content-cards {
@@ -125,7 +125,20 @@
 .agreement-cards {
     display: flex;
     flex-direction: column;
-    margin: 50px 0;
+    margin: 20px 0;
+}
+
+.add-agreement {
+    display: inline-block;
+    color: #fff;
+    margin: 30px 30px 7px 30px;
+    border: 1px solid #ddd;
+    padding: 7px;
+    border-radius: 5px;
+}
+
+.add-agreement:hover {
+    color: rgba(30, 144, 236, 0.856);
 }
 
 .agreement-card {
@@ -152,60 +165,44 @@
     margin-bottom: 20px;
 }
 
-.agreement-card-action {
-    position: relative;
-    border: 1px solid #ccc;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    padding: 4px 5px;
-    transition: all 333ms;
-    cursor: pointer;
-}
-
 .agreement-card-action:hover {
     background-color: #000;
 }
 
-.agreement-card-action:hover .agreement-card-action-menu {
-    opacity: 1;
-    pointer-events: all;
-    visibility: visible;
-}
-
 .agreement-card-action-menu {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    position: absolute;
-    z-index: 2;
-    top: 3px;
-    right: 27px;
+    display: flex;
     border-radius: 10px;
     background-color: inherit;
     border: 1px solid #ccc00000;
     box-sizing: border-box;
+    margin-top: 20px;
 }
 
-.agreement-card:last-child .agreement-card-action-menu {
-    top: -85px;
-}
-
-.agreement-card-action-menu div {
+.agreement-card-action-menu button {
     cursor: pointer;
     padding: 10px;
     transition: 222ms;
-}
-.agreement-card-action-menu div:first-child {
-    border-radius: 10px 10px 0 0;
+    width: 100%;
+    text-align: center;
+    border-radius: inherit;
+    background-color: rgba(255, 255, 255, 0.02);
+    color: #fff;
+    font-family: var(--font-roboto);
+    font-size: inherit;
 }
 
-.agreement-card-action-menu div:last-child {
-    border-radius: 0 0 10px 10px;
+.agreement-card-action-menu button:first-child:hover {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
-.agreement-card-action-menu div:hover {
+.agreement-card-action-menu button:last-child:hover {
+    background-color: rgba(240, 53, 53, 0.808);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.agreement-card-action-menu button:hover {
     background-color: #2e52bdbe;
 }
 
@@ -243,7 +240,10 @@
     opacity: 0;
     pointer-events: none;
     transition: 444ms;
-    visibility: hidden;
+    font-family: var(--font-roboto);
+}
+.custom-modal-overlay.visible body {
+    overflow-x: hidden;
 }
 .custom-modal-overlay.visible {
     opacity: 1;
@@ -257,11 +257,10 @@
     transform: translate(-50%, -50%);
     opacity: 1;
     pointer-events: all;
-    animation: fromTop 777ms ease, boxShadow linear 1s infinite alternate;
+    animation: fromTop 777ms ease;
     background-color: #80808020;
     color: #fff !important;
     font-size: 17px;
-    color: #000;
     padding: 30px 40px;
     border-radius: 10px;
 }
@@ -296,6 +295,10 @@
 .custom-modal-close-btn:hover {
     border-color: red;
     background-color: #ff000070;
+}
+
+.custom-modal-info *:not(:last-child) {
+    margin-bottom: 7px;
 }
 
 .custom-modal-overlay.closed {
