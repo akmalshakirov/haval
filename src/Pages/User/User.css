@@ -191,17 +191,6 @@
     font-size: inherit;
 }
 
-.agreement-card-action-menu button:first-child:hover {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-}
-
-.agreement-card-action-menu button:last-child:hover {
-    background-color: rgba(240, 53, 53, 0.808);
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-}
-
 .agreement-card-action-menu button:hover {
     background-color: #2e52bdbe;
 }
@@ -241,9 +230,6 @@
     pointer-events: none;
     transition: 444ms;
     font-family: var(--font-roboto);
-}
-.custom-modal-overlay.visible body {
-    overflow-x: hidden;
 }
 .custom-modal-overlay.visible {
     opacity: 1;

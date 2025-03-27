@@ -1,6 +1,7 @@
 import { message } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import "./AdminUsers.css";
 
 function AdminUsers() {
     const [users, setUsers] = useState([]);
@@ -66,7 +67,9 @@ function AdminUsers() {
                 </div>
             </div>
             {users.map((user, index) => (
-                <div key={user.id || index} style={{ display: "flex" }}>
+                <div
+                    key={user.id || index}
+                    style={{ display: "flex", margin: "7px 0" }}>
                     <div style={{ flex: "0 0 200px" }}>
                         <span>{user.name}</span>
                     </div>
@@ -76,7 +79,7 @@ function AdminUsers() {
                     <div style={{ flex: "0 0 200px" }}>
                         {user.orders.length}
                     </div>
-                    <span>O'chirish</span>
+                    <button className='users-card-button'>O'chirish</button>
                 </div>
             ))}
             {/* )} */}

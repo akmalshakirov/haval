@@ -1,5 +1,5 @@
 import "./User.css";
-import { Avatar, Button, Input, Layout, message, Spin } from "antd";
+import { Avatar, Input, Layout, message, Spin } from "antd";
 import {
     CheckCircleOutlined,
     CloseOutlined,
@@ -16,7 +16,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Ripple from "../../Utils/Ripple";
-import UserEditProfile from "./UserEditProfile";
 
 const { Sider, Header, Content } = Layout;
 
@@ -103,46 +102,19 @@ function UserPage() {
         fetchUserData();
     }, []);
 
-    const deleteFunc = async () => {
-        setDeletingBtnLoading(true);
-        try {
-            if (!token) {
-                message.error("Token topilmadi, qayta tizimga kiring!");
-                return;
-            }
-            const response = await axios.delete(
-                `http://localhost:3000/orders/${selectedAgreement._id}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-
-            if (response.status === 200) {
-                await fetchUserData();
-                message.success("Shartnoma muvaffaqiyatli o'chirildi");
-                isVisibleModal(false);
-                selectedAgreement(null);
-            }
-        } catch (error) {
-            if (error.code === "ERR_CONNECTION_REFUSED") {
-                return message.warning(
-                    "Server o'chiq bo'lishi mumkin, keyinroq urinib ko'ring"
-                );
-            } else {
-                console.log(error);
-                message.error("Shartnomani o'chirishda xatolik yuz berdi");
-            }
-        } finally {
-            setDeletingBtnLoading(false);
-        }
-    };
     // EDIT FUNCTION
-    // const editFunc = () => {
-    //     return alert("EDIT!");
+    // const editFunc = async () => {
+    // try {
+    //     const response = await axios.put(
+    //         `http://localhost:3000/orders/${selectedAgreement._id}`,
+    //         {
+
+    //         }
+    //     )
+    // } catch (error) {
+    //     console.log(error)
+    // }
     // };
-    // DELETE FUNCTION
 
     const shortText = (e) => {
         if (e.length > 15) {
@@ -176,6 +148,7 @@ function UserPage() {
             window.URL.revokeObjectURL(url);
         } catch (error) {
             console.log(error);
+            message.error(error);
         } finally {
             setDownloadBtnLoading(false);
         }
@@ -205,16 +178,6 @@ function UserPage() {
                                         />
                                     }
                                 />
-                                {/* <div
-                                    style={{
-                                        fontSize: "30px",
-                                        border: "1px solid #ccc",
-                                        borderRadius: "10px",
-                                        padding: "0 13px",
-                                        backgroundColor: "#444",
-                                    }}>
-                                    {userData.name.charAt(0) || "A"}
-                                </div> */}
                                 <h3>Ism: {loading ? "USER" : userData.name}</h3>
                                 <p>
                                     Email:{" "}
@@ -498,13 +461,16 @@ function UserPage() {
                                                     "PDFni yuklash"
                                                 )}
                                             </button>
-                                            <button
+                                            {/* <button
                                                 onClick={deleteFunc}
                                                 disabled={deletingBtnLoading}>
                                                 {deletingBtnLoading
                                                     ? "O'chirilmoqda..."
                                                     : "O'chirish"}
-                                            </button>
+                                            </button> */}
+                                            {/* <button onClick={editFunc}>
+                                                Tahrirlash
+                                            </button> */}
                                         </div>
                                     </div>
                                 </div>
