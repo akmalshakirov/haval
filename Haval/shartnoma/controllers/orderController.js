@@ -87,7 +87,7 @@ exports.deleteOrder = async (req, res) => {
 };
 
 exports.makePayment = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ message: "Invalid ID format" });
@@ -104,13 +104,12 @@ exports.makePayment = async (req, res) => {
       return res.status(404).json({ message: "Order not found!" });
     }
     
-    if (order.status === "Pending") {
-    order.status = "Paid";
-    await order.save();
+    if (order.status === "Paid") {
       return res.status(400).json({ message: "Order is already paid!" });
     }
 
-
+    order.status = "Paid";
+    await order.save();
     return res
       .status(200)
       .json({ message: "Status updated to Paid", result: order });
