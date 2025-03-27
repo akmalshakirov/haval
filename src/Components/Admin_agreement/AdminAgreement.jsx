@@ -79,9 +79,11 @@ function AdminAgreement() {
     const makePayment = async (id) => {
         setIsLoadingBtn(false);
         try {
+            const formData = new FormData();
+            formData.append("id", id);
             const response = await axios.post(
-                `http://localhost:3000/orders-pay/${id}`,
-                id,
+                `http://localhost:3000/orders-pay/`,
+                formData,
                 {
                     headers: {
                         "Content-Type": "application/json",
