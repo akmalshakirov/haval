@@ -1,7 +1,10 @@
-/* .admin-agreement {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-} */
+.contact-card {
+    border: 1px solid #dddddd79;
+    border-radius: 7px;
+    transition: 0.3s;
+}
+
+.contact-card:hover {
+    border-color: gray;
+    background-color: #dddddd;
+}

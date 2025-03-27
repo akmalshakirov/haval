@@ -1,0 +1,14 @@
+.users-card-button {
+    padding: 7px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    background-color: transparent;
+    transition: 0.3s;
+    font-family: var(--font-roboto);
+    font-size: 14px;
+}
+
+.users-card-button:hover {
+    background-color: rgb(233, 14, 14);
+    color: #f5f5f5;
+}
