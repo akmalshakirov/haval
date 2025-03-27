@@ -1,9 +1,11 @@
 import { useState } from "react";
 import "./DownloadPdf.css";
 import axios from "axios";
+import { message } from "antd";
 
 export default function DownloadPdf() {
     const userID = localStorage.getItem("userID");
+    const [loadingBtn, setLoadingBtn] = useState(false);
     const CarModelsArr = [
         { id: 1, model: "HAVAL Dargo", value: "Dargo", price: "399 900 000" },
         { id: 2, model: "HAVAL Jolion", value: "Jolion", price: "279 900 000" },
@@ -55,51 +57,9 @@ export default function DownloadPdf() {
         }
     };
 
-    // const generatePDF = async (e) => {
-    //     e.preventDefault();
-    //     try {
-    //         const response = await axios.post(
-    //             "http://localhost:3000/generate-pdf",
-    //             formData,
-    //             {
-    //                 headers: { "Content-Type": "application/json" },
-    //             }
-    //         );
-
-    //         const data = await response.json();
-    //         if (response.ok) {
-    //             downloadPDF(data.filename);
-    //         } else {
-    //             console.log("Xatolik yuz berdi: " + data.error);
-    //         }
-    //     } catch (error) {
-    //         console.error("Serverga ulanishda xatolik:", error);
-    //     }
-    // };
-
-    // const downloadPDF = async (filename) => {
-    //     try {
-    //         const response = await axios.get(
-    //             `http://localhost:3000/download-pdf/${filename}`,
-    //             {
-    //                 responseType: "blob",
-    //             }
-    //         );
-    //         if (!response.ok) throw new Error("PDF yuklab olishda xatolik!");
-
-    //         const blob = new Blob([response.data], { type: "application/pdf" });
-    //         const link = document.createElement("a");
-    //         link.href = URL.createObjectURL(blob);
-    //         link.download = filename;
-    //         document.body.appendChild(link);
-    //         link.click();
-    //         document.body.removeChild(link);
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // };
     const generatePDF = async (e) => {
         e.preventDefault();
+        setLoadingBtn(true);
         try {
             const response = await axios.post(
                 "http://localhost:3000/generate-pdf",
@@ -107,32 +67,17 @@ export default function DownloadPdf() {
                 { headers: { "Content-Type": "application/json" } }
             );
 
-            if (response.status === 200) {
-                downloadPDF(response.data.filename);
+            if (response.status === 201) {
+                message.success(
+                    "Shartnoma yaratildi, shartnomalarni shaxsiy kabinetingizda ko'rishingiz mumkin."
+                );
             } else {
                 console.error("Xatolik yuz berdi:", response.data.error);
             }
         } catch (error) {
             console.error("Serverga ulanishda xatolik:", error);
-        }
-    };
-
-    const downloadPDF = async (filename) => {
-        try {
-            const response = await axios.post(
-                `http://localhost:3000/download-pdf/${filename}`,
-                { responseType: "application/pdf" }
-            );
-
-            const blob = new Blob([response.data], { type: "application/pdf" });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = filename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        } catch (error) {
-            console.error("PDF yuklab olishda xatolik:", error);
+        } finally {
+            setLoadingBtn(false);
         }
     };
 
@@ -238,8 +183,11 @@ export default function DownloadPdf() {
                             placeholder='Oldin modelni tanglang'
                         />
                     </div>
-                    <button type='submit' className='submit-btn'>
-                        Yuborish
+                    <button
+                        type='submit'
+                        className='submit-btn'
+                        disabled={loadingBtn}>
+                        {loadingBtn ? "So'rov yuborildi..." : "Yuborish"}
                     </button>
                 </form>
             </div>
