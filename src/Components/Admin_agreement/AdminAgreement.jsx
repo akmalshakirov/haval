@@ -1,21 +1,17 @@
 import axios from "axios";
 import "./AdminAgreement.css";
-import { Button, Dropdown, message } from "antd";
-import {
-    ReloadOutlined,
-    FileUnknownOutlined,
-    DownCircleFilled,
-    DeleteOutlined,
-    EditFilled,
-} from "@ant-design/icons";
+import { Button, message } from "antd";
+import { ReloadOutlined, FileUnknownOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 function AdminAgreement() {
     const navigate = useNavigate();
     const [loader, setLoader] = useState(false);
-    const [loadPDF, setLoadPDF] = useState(false);
+    const token = localStorage.getItem("token");
+    // const [loadPDF, setLoadPDF] = useState(false);
     const [allContracts, setAllContracts] = useState([]);
+    const [isLoadingBtn, setIsLoadingBtn] = useState(false);
 
     const fetchAllContracts = async () => {
         try {
@@ -40,26 +36,26 @@ function AdminAgreement() {
         }
     };
 
-    const downloadPdf = async (fileUrl) => {
-        setLoadPDF(true);
-        try {
-            const response = await axios.get(fileUrl, {
-                responseType: "blob",
-            });
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = fileUrl.split("/").pop();
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoadPDF(false);
-        }
-    };
+    // const downloadPdf = async (fileUrl) => {
+    //     setLoadPDF(true);
+    //     try {
+    //         const response = await axios.get(fileUrl, {
+    //             responseType: "blob",
+    //         });
+    //         const url = window.URL.createObjectURL(new Blob([response.data]));
+    //         const a = document.createElement("a");
+    //         a.href = url;
+    //         a.download = fileUrl.split("/").pop();
+    //         document.body.appendChild(a);
+    //         a.click();
+    //         document.body.removeChild(a);
+    //         window.URL.revokeObjectURL(url);
+    //     } catch (error) {
+    //         console.log(error);
+    //     } finally {
+    //         setLoadPDF(false);
+    //     }
+    // };
 
     useEffect(() => {
         fetchAllContracts();
@@ -69,6 +65,8 @@ function AdminAgreement() {
         display: "flex",
         backgroundColor: "#f5f5f5",
         borderBottom: "1px solid #ddd",
+        borderRadius: "10px 10px 0 0",
+        padding: "7px",
     };
 
     const cellStyle = (width) => ({
@@ -77,6 +75,27 @@ function AdminAgreement() {
         padding: "10px",
         alignItems: "center",
     });
+
+    const makePayment = async (id) => {
+        setIsLoadingBtn(false);
+        try {
+            const response = await axios.post(
+                `http://localhost:3000/orders-pay/${id}`,
+                id,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+        } catch (error) {
+            message.error(error);
+            console.log(error);
+        } finally {
+            setIsLoadingBtn(false);
+        }
+    };
 
     return (
         <div className='admin-agreement'>
@@ -94,11 +113,19 @@ function AdminAgreement() {
                 </div>
             ) : (
                 <div>
-                    <div style={{ display: "flex", alignItems: "center" }}>
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            marginBottom: "20px",
+                        }}>
                         <h2>Barcha shartnomalar</h2>
                         <div>
                             <ReloadOutlined
-                                style={{ padding: "10px" }}
+                                style={{
+                                    padding: "10px",
+                                    margin: "5px 0 0 0",
+                                }}
                                 spin={loader}
                                 onClick={fetchAllContracts}
                             />
@@ -123,6 +150,7 @@ function AdminAgreement() {
                     {allContracts && allContracts.length > 0 ? (
                         allContracts.map((contract) => (
                             <div
+                                className='contact-card'
                                 key={contract._id}
                                 style={{
                                     display: "flex",
@@ -139,8 +167,19 @@ function AdminAgreement() {
                                 <div style={cellStyle()}>{contract.status}</div>
                                 <div style={cellStyle()}>
                                     <div>
-                                        <Button style={{ marginRight: "10px" }}>
-                                            To'lash
+                                        <Button
+                                            style={{ marginRight: "10px" }}
+                                            onClick={() => {
+                                                makePayment(contract._id);
+                                            }}>
+                                            {isLoadingBtn
+                                                ? "To'lanmoqda..."
+                                                : "To'lash"}
+                                        </Button>
+                                        <Button
+                                            danger
+                                            style={{ marginRight: "10px" }}>
+                                            O'chirish
                                         </Button>
                                     </div>
                                 </div>
