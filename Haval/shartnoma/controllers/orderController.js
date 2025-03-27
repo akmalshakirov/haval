@@ -89,15 +89,14 @@ exports.deleteOrder = async (req, res) => {
 exports.makePayment = async (req, res) => {
   const { id } = req.body;
 
-  // if (!mongoose.Types.ObjectId.isValid(id)) {
-  //   return res.status(400).json({ message: "Invalid ID format" });
-  // }
-
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
 
+  if (req.user.role !== "superadmin") {
+    return res.status(403).json({ error: "Sizga ruxsat yo‘q!" });
+  }
   try {
     const order = await Order.findById(id);
     if (!order) {
