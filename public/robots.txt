@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /user/
+Allow: /
+
+Sitemap: https://havaluz.vercel.app/sitemap.xml
+Host: havaluz.vercel.app

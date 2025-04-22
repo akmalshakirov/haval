@@ -1,7 +1,7 @@
 import { Button, Card, Form, Image, Input, message, Modal, Spin } from "antd";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import "./AdminNews.css";
-import axios from "axios";
 
 function AdminNews() {
     const [adminNewsList, setAdminNewsList] = useState([]);

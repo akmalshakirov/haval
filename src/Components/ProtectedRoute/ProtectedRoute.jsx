@@ -1,28 +1,30 @@
-import { Navigate } from "react-router-dom";
-import { notification } from "antd";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import AuthRouter from "../../app/AuthRouters/AuthRouter";
+import AdminPanel from "../Admin/Admin";
 
-const ProtectedRoute = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(true);
-    const authToken = localStorage.getItem("authToken");
+const ProtectedRoute = () => {
+    const [isAuthenticated, setIsAuthenticated] = useState(null);
+    const location = useLocation();
 
     useEffect(() => {
-        if (!authToken) {
-            notification.error({
-                message: "Xatolik!",
-                description: "Bu sahifa faqat adminlar uchun!",
-                placement: "bottomRight",
-                duration: 500,
-            });
+        const authToken = localStorage.getItem("authToken");
+        if (authToken) {
+            setIsAuthenticated(true);
+        } else {
             setIsAuthenticated(false);
         }
-    }, [authToken]);
+    }, [location]);
 
-    if (!isAuthenticated) {
-        return <Navigate to='/' />;
+    if (isAuthenticated === null) {
+        return;
     }
 
-    return children;
+    if (!isAuthenticated) {
+        return <AuthRouter />;
+    }
+
+    return <AdminPanel />;
 };
 
 export default ProtectedRoute;

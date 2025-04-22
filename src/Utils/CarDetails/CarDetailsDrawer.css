@@ -1,0 +1,48 @@
+.car-drawer-mask {
+    backdrop-filter: blur(10px);
+    background-color: red;
+}
+
+.ant-drawer-mask.car-drawer-mask {
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+        rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+        rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+.ant-drawer-content-wrapper.car-drawer-wrapper {
+    background-color: red;
+}
+
+.car-details-drawer-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border-top: 1px solid #e8e8e8;
+    padding: 10px 0;
+    background-color: #fff;
+    text-align: right;
+}
+
+.ant-drawer-body.car-drawer-body form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 15px;
+}
+
+.ant-drawer-body.car-drawer-body form input {
+    padding: 3px;
+    border: 0.6px solid #020101;
+    outline: none;
+    border-radius: 3px;
+    transition: 0.2s;
+    margin-left: 5px;
+}
+
+.ant-drawer-body.car-drawer-body form input:focus {
+    border-color: #2574ec;
+}

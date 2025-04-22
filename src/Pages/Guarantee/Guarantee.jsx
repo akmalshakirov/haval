@@ -1,4 +1,3 @@
-import React from "react";
 import HeaderNavBar from "../../Components/Header/HeaderNavBar";
 
 function Guarantee() {

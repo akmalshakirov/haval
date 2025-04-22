@@ -1,18 +1,3 @@
-import React, { useEffect, useState } from "react";
-import {
-    Button,
-    Form,
-    Image,
-    Input,
-    InputNumber,
-    Layout,
-    Menu,
-    message,
-    Modal,
-    Spin,
-    Switch,
-    Table,
-} from "antd";
 import {
     ArrowRightOutlined,
     CarOutlined,
@@ -28,14 +13,29 @@ import {
     UserOutlined,
     VideoCameraOutlined,
 } from "@ant-design/icons";
-import { Link, useNavigate } from "react-router-dom";
-import AdminVideos from "../Admin_videos/AdminVideos";
+import {
+    Button,
+    Form,
+    Image,
+    Input,
+    InputNumber,
+    Layout,
+    Menu,
+    message,
+    Modal,
+    Spin,
+    Switch,
+    Table,
+} from "antd";
 import axios from "axios";
-import "./Admin.css";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Logo from "../../Images/haval.svg";
+import AdminAgreement from "../Admin_agreement/AdminAgreement";
 import AdminNews from "../Admin_news/AdminNews";
 import AdminUsers from "../Admin_users/AdminUsers";
-import AdminAgreement from "../Admin_agreement/AdminAgreement";
-import Logo from "../../Images/haval.svg";
+import AdminVideos from "../Admin_videos/AdminVideos";
+import "./Admin.css";
 
 const { Header, Sider, Content, Footer } = Layout;
 
@@ -98,7 +98,7 @@ const AdminPanel = () => {
         } catch (error) {
             const response = error.response;
             if (error.code === "ERR_NETWORK") {
-                return message.warning("Server o'chiq bo'lishi mumkin");
+                return message.warning("Server ishlamayotgan bo'lishi mumkin");
             } else if (response?.message === "Invalid token!") {
                 localStorage.removeItem("authToken");
                 navigate("/");
@@ -177,7 +177,7 @@ const AdminPanel = () => {
                 setActionModal(false);
                 setEditingCar(null);
                 form.resetFields();
-                message.success("Avtomobil muvaffaqiyatli o'zgartirildi!");
+                message.success(response.data.message);
             }
         } catch (error) {
             const errorMessage =
@@ -252,7 +252,7 @@ const AdminPanel = () => {
         } catch (error) {
             const response = error.response;
             if (error.code === "ERR_NETWORK") {
-                message.warning("Server o'chiq bo'lishi mumkin");
+                message.warning("Server ishlamayotgan bo'lishi mumkin");
             } else if (response?.status === 401) {
                 message.info("Token vaqti tugagan!");
             } else {
@@ -294,11 +294,16 @@ const AdminPanel = () => {
                     },
                 }
             );
-            await fetchAdmins();
-            setAdmins([...admins, { key: `${admins.length + 1}`, ...values }]);
-            message.success("Admin muvaffaqiyatli qo'shildi!");
-            setIsModalOpen(false);
-            form.resetFields();
+            if (response.status === 200 || response.status === 201) {
+                await fetchAdmins();
+                setAdmins([
+                    ...admins,
+                    { key: `${admins.length + 1}`, ...values },
+                ]);
+                message.success("Admin muvaffaqiyatli qo'shildi!");
+                setIsModalOpen(false);
+                form.resetFields();
+            }
         } catch (error) {
             if (
                 error.response &&
@@ -461,7 +466,7 @@ const AdminPanel = () => {
             key: "email",
         },
         {
-            title: "Status",
+            title: "Role",
             dataIndex: "role",
             key: "role",
         },
@@ -504,7 +509,7 @@ const AdminPanel = () => {
 
     return (
         <Layout style={{ minHeight: "100vh" }} className='admin'>
-            <Sider collapsible collapsedWidth={90}>
+            <Sider>
                 <div className='admin-sidebar-top-logo'>
                     <Link
                         to='/'
@@ -558,18 +563,33 @@ const AdminPanel = () => {
                             icon: <OrderedListOutlined />,
                             label: "Shartnomalar",
                         },
-                        {
-                            key: "8",
-                            icon: <LogoutOutlined />,
-                            label: "Chiqish",
-                            style: {
-                                borderColor: "#ffa60027",
-                                color: "#ffa600a2",
-                            },
-                            onClick: () => handleLogout(),
-                        },
                     ]}
                 />
+                <div
+                    style={{
+                        position: "fixed",
+                        bottom: "30px",
+                        left: "5px",
+                        maxWidth: "190px",
+                        width: "100%",
+                    }}>
+                    <Menu
+                        theme='dark'
+                        mode='inline'
+                        selectedKeys={[]}
+                        onClick={handleLogout}
+                        items={[
+                            {
+                                key: "8",
+                                icon: <LogoutOutlined />,
+                                label: "Chiqish",
+                                style: {
+                                    border: "1px solid red",
+                                },
+                            },
+                        ]}
+                    />
+                </div>
             </Sider>
             {/* <div
                 style={{
@@ -644,7 +664,7 @@ const AdminPanel = () => {
                                     </div>
                                 ) : (
                                     <Table
-                                        key={admins[0]?.id}
+                                        key={admins?.id}
                                         columns={columnsAdmins}
                                         dataSource={admins[0]}
                                     />
@@ -842,7 +862,7 @@ const AdminPanel = () => {
                                         </div>
                                     ) : (
                                         <Table
-                                            key={cars[0]?.id}
+                                            key={cars?.id}
                                             columns={columnsCars}
                                             dataSource={cars[0]}
                                         />
@@ -856,7 +876,7 @@ const AdminPanel = () => {
                                             gap: "20px",
                                         }}>
                                         {/* {cars.map((car) => ( */}
-                                        {cars.map((car) => (
+                                        {cars[0].map((car) => (
                                             <div
                                                 key={car.id}
                                                 style={{

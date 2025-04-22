@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import { EditOutlined } from "@ant-design/icons";
-import { Card, Modal, Input, Button, message, Spin } from "antd";
+import { Card, message, Spin } from "antd";
 // const { Meta } = Card;
 import "./AdminVideos.css";
 
@@ -225,6 +225,7 @@ const AdminVideos = () => {
                                     style={{ maxWidth: 340 }}
                                     className='admin-cards-item'>
                                     <iframe
+                                        title='Admin cards iframe'
                                         src={item.video}
                                         frameborder='0'
                                         allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'

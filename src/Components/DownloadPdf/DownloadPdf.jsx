@@ -1,7 +1,7 @@
+import { message } from "antd";
+import axios from "axios";
 import { useState } from "react";
 import "./DownloadPdf.css";
-import axios from "axios";
-import { message } from "antd";
 
 export default function DownloadPdf() {
     const userID = localStorage.getItem("userID");
@@ -15,7 +15,7 @@ export default function DownloadPdf() {
             id: 5,
             model: "GWM WINGLE 7",
             value: "GWM WINGLE 7",
-            price: "399 900 000",
+            price: "359 900 000",
         },
     ];
 
@@ -112,7 +112,7 @@ export default function DownloadPdf() {
                             id='modelni-tanlash'
                             onChange={handleChange}
                             required>
-                            <option value='' selected></option>
+                            <option value='' selected disabled></option>
                             {CarModelsArr.map((car) => (
                                 <option key={car.id} value={car.value}>
                                     {car.model}
@@ -127,7 +127,7 @@ export default function DownloadPdf() {
                             id='rangi'
                             onChange={handleChange}
                             required>
-                            <option value='' selected></option>
+                            <option value='' selected disabled></option>
                             <option value='Oq'>Oq</option>
                             <option value='Qora'>Qora</option>
                             <option value='Kulrang'>Kulrang</option>
@@ -140,7 +140,7 @@ export default function DownloadPdf() {
                             id='dvigatel-hajmi'
                             onChange={handleChange}
                             required>
-                            <option value='' selected></option>
+                            <option value='' selected disabled></option>
                             <option value='1.5 Turbo'>1.5 Turbo</option>
                             <option value='2.0 Turbo'>2.0 Turbo</option>
                         </select>
@@ -154,7 +154,7 @@ export default function DownloadPdf() {
                             id='uzatmalar-qutisi'
                             onChange={handleChange}
                             required>
-                            <option value='' selected></option>
+                            <option value='' selected disabled></option>
                             <option value='Avtomat'>Avtomat</option>
                             <option value='Mexanik'>Mexanik</option>
                         </select>
@@ -166,7 +166,7 @@ export default function DownloadPdf() {
                             id='tolov-turi'
                             onChange={handleChange}
                             required>
-                            <option value='' selected></option>
+                            <option value='' selected disabled></option>
                             <option value='Naqd'>Naqd</option>
                         </select>
                     </div>

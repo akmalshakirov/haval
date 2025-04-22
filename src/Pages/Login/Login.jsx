@@ -8,41 +8,31 @@ import { UserOutlined, LockOutlined } from "@ant-design/icons";
 const { Title, Text } = Typography;
 
 const Login = () => {
-    const [email, setEmail] = useState("");
-    const [inputPasswordValue, setInputPasswordValue] = useState("");
     const [onClick, setOnClick] = useState(false);
     const navigate = useNavigate();
-
-    const handleChange = (e) => {
-        setEmail(e.target.value);
-    };
-
-    const handleShowPassword = (e) => {
-        setInputPasswordValue(e.target.value);
-    };
+    const [form] = Form.useForm();
 
     useEffect(() => {
         document.title = "Haval | Login";
     }, []);
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (values) => {
         setOnClick(true);
         try {
             const response = await axios.post(
-                // "https://haval-uz.onrender.com/loginUser",
                 "http://localhost:3000/loginUser",
-                { email, password: inputPasswordValue },
+                { email: values.email, password: values.password },
                 { headers: { "Content-Type": "application/json" } }
             );
             if (response.status === 200 && response.data?.token) {
                 localStorage.setItem("token", response.data.token);
                 localStorage.setItem("userID", response.data.userId);
                 navigate("/user");
-            } else {
-                message.error("Username yoki password noto'g'ri!");
             }
         } catch (error) {
-            message.error("Username yoki password noto'g'ri!");
+            message.error(
+                error?.response?.data?.message || "Xatolik yuz berdi"
+            );
         } finally {
             setOnClick(false);
         }
@@ -56,13 +46,15 @@ const Login = () => {
                 </Title>
                 <Text className='login-text'>Ваши учетные данные</Text>
                 <Form
+                    form={form}
                     className='login-form'
                     name='login'
                     layout='vertical'
-                    initialValues={{ remember: true }}>
+                    initialValues={{ remember: true }}
+                    onFinish={handleSubmit}>
                     <Form.Item
                         label='Пользователь'
-                        name='admin'
+                        name='email'
                         rules={[
                             { required: true, message: "Введите ваш логин!" },
                             {
@@ -71,8 +63,6 @@ const Login = () => {
                             },
                         ]}>
                         <Input
-                            value={email}
-                            onChange={handleChange}
                             type='email'
                             className='login-name-input'
                             prefix={
@@ -88,8 +78,6 @@ const Login = () => {
                             { required: true, message: "Введите ваш пароль!" },
                         ]}>
                         <Input.Password
-                            value={inputPasswordValue}
-                            onChange={handleShowPassword}
                             className='login-password-input'
                             prefix={
                                 <LockOutlined className='login-password-icon' />
@@ -117,8 +105,7 @@ const Login = () => {
                             type='primary'
                             htmlType='submit'
                             className='login-button'
-                            loading={onClick}
-                            onClick={handleSubmit}>
+                            loading={onClick}>
                             Вход
                         </Button>
                     </Form.Item>

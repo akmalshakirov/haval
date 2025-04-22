@@ -1,9 +1,10 @@
 .main-videos {
     padding: 100px;
     background-color: #c3c9cd;
-    max-width: 1820px;
+    max-width: 1920px;
     margin: 0 auto;
     padding-inline: 20px;
-    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
-        rgba(0, 0, 0, 0.22) 0px 15px 12px;
+}
+.main-videos-card {
+    margin-top: 30px;
 }

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { Form, Input, Button, Checkbox, Typography, Card, message } from "antd";
-import "./AdminLogin.css";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { Button, Card, Checkbox, Form, Input, message, Typography } from "antd";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import "./AdminLogin.css";
 
 const { Title, Text } = Typography;
 
@@ -37,16 +37,24 @@ const AdminLogin = () => {
                 localStorage.setItem("authToken", response.data.token);
                 message.success("Admin panelga muvaffaqiyatli kirildi!");
                 navigate("/admin");
-            } else if (response.status === 500) {
+            } else if (response.status === 500 || response.status === 400) {
                 message.error(response.error);
-            } else {
-                message.error("Username yoki password noto'g'ri!");
             }
         } catch (error) {
             if (error.code === "ERR_NETWORK") {
-                message.warning("Server o'chiq bo'lishi mumkin");
+                message.warning("Server ishlamayotgan bo'lishi mumkin");
+            } else if (
+                error.response &&
+                error.response.data &&
+                error.response.data.error
+            ) {
+                message.error(error.response.data.error);
+            } else if (error.status === 429) {
+                message.error(
+                    "Juda ko'p so'rov yubordingiz, keyinroq urinib ko'ring!"
+                );
             } else {
-                message.error("Username yoki password noto'g'ri!");
+                message.error(error.status);
             }
         } finally {
             setOnClick(false);
@@ -64,6 +72,7 @@ const AdminLogin = () => {
                     className='admin-login-form'
                     name='login'
                     layout='vertical'
+                    onFinish={handleSubmit}
                     initialValues={{ remember: true }}>
                     <Form.Item
                         label='Пользователь'
@@ -113,8 +122,7 @@ const AdminLogin = () => {
                             type='primary'
                             htmlType='submit'
                             className='admin-login-button'
-                            loading={onClick}
-                            onClick={handleSubmit}>
+                            loading={onClick}>
                             Вход в админ-панель
                         </Button>
                     </Form.Item>

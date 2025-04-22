@@ -1,9 +1,9 @@
-import axios from "axios";
-import "./AdminAgreement.css";
+import { FileUnknownOutlined, ReloadOutlined } from "@ant-design/icons";
 import { Button, message } from "antd";
-import { ReloadOutlined, FileUnknownOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./AdminAgreement.css";
 
 function AdminAgreement() {
     const navigate = useNavigate();
@@ -77,7 +77,7 @@ function AdminAgreement() {
     });
 
     const makePayment = async (id) => {
-        setIsLoadingBtn(false);
+        setIsLoadingBtn(true);
         try {
             const formData = new FormData();
             formData.append("id", id);
@@ -91,6 +91,14 @@ function AdminAgreement() {
                     },
                 }
             );
+            if (response.status === 200) {
+                message.success("Shartnomani statusi Paid ga o'zgardi");
+                await fetchAllContracts();
+            } else if (response.status === 400) {
+                message.warning(
+                    "Shartnomani statusi allaqachon Paid ga o'zgartirilgan"
+                );
+            }
         } catch (error) {
             message.error(error);
             console.log(error);
@@ -170,13 +178,14 @@ function AdminAgreement() {
                                 <div style={cellStyle()}>
                                     <div>
                                         <Button
-                                            style={{ marginRight: "10px" }}
+                                            style={{
+                                                marginRight: "10px",
+                                                fontSize: "14px",
+                                            }}
                                             onClick={() => {
-                                                makePayment(contract._id);
+                                                makePayment(contract?._id);
                                             }}>
-                                            {isLoadingBtn
-                                                ? "To'lanmoqda..."
-                                                : "To'lash"}
+                                            To'lash
                                         </Button>
                                         <Button
                                             danger
