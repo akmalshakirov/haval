@@ -1,9 +1,9 @@
-import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import HavalJolion from "../../Images/haval-jolion-large.jpg";
 import HavalDargo from "../../Images/haval-dargo-large.jpg";
 import HavalM6 from "../../Images/haval-m6-large.jpg";
 import HavalGwmWingle7 from "../../Images/gwm-wingle-7-large.jpg";
+import HavalH6 from "../../Images/haval-h6-large.jpg";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -208,8 +208,7 @@ function MainModels() {
                                     </Link>
                                 </h3>
                                 <p className='card-content-description'>
-                                    XARID UCHUN ENG QULAY MAVJUD KROSSOVERLARDAN
-                                    BIRI
+                                    MAVJUD KROSSOVERLARDAN BIRI
                                 </p>
                                 <ul className='card-content-li'>
                                     <li>6.9 L/100 km</li>
@@ -240,7 +239,7 @@ function MainModels() {
                     <div className='custom-card fiveth-card'>
                         <div className='card-image'>
                             <Link to='models/gwm-wingle-7'>
-                                <img src={HavalM6} alt='haval h6' />
+                                <img src={HavalH6} alt='haval h6' />
                             </Link>
                         </div>
                         <div className='card-content'>

@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { UserOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
-import Logo from "../../Images/logo.png";
-import havalLogo from "../../Images/haval.svg";
-import "./Header.css";
-import HavalDargo from "../../Images/m-haval-dargo.png";
-import GWMwingle7 from "../../Images/m-gwm-wingle-7.png";
-import HavalJolion from "../../Images/m-haval-jolion.png";
-import headerAsideBtnCar from "../../Images/header-aside-btn-car.png";
-import headerAsideBtnPhone from "../../Images/aa.png";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import headerAsideBtnPhone from "../../Images/aa.png";
+import havalLogo from "../../Images/haval.svg";
+import headerAsideBtnCar from "../../Images/header-aside-btn-car.png";
+import Logo from "../../Images/logo.png";
+import GWMwingle7 from "../../Images/m-gwm-wingle-7.png";
+import HavalDargo from "../../Images/m-haval-dargo.png";
+import HavalH6 from "../../Images/m-haval-h6.png";
+import HavalJolion from "../../Images/m-haval-jolion.png";
+import HavalM6 from "../../Images/m-haval-m6.png";
+import "./Header.css";
 
 function HeaderNavBar() {
     const { t, i18n } = useTranslation();
@@ -18,13 +18,13 @@ function HeaderNavBar() {
     const [isOwnOpen, setOwnOpen] = useState(false);
     const [isOpenModels, setOpenModels] = useState(false);
     const [isAsideOpen, setAsideOpen] = useState(false);
-    const [isAsideListHovered, setAsideListHovered] = useState(false);
     const [isAboutGwmOpen, setAboutGwmOpen] = useState(false);
     const [isSelection, setIsSelection] = useState(false);
     const token = localStorage.getItem("token");
     const changeLanguage = (lang) => {
         i18n.changeLanguage(lang);
     };
+    const [isNavbarOpen, setIsNavbarOpen] = useState(false);
 
     useEffect(() => {
         setCurrentLang(i18n.language);
@@ -52,27 +52,292 @@ function HeaderNavBar() {
         const headerItem = document.querySelector(".header__item");
         const scrollTop = window.scrollY;
         if (scrollTop >= 70) {
-            header.classList.add("header-active");
-            headerItem.classList.add("header-item-active");
+            header?.classList?.add("header-active");
+            headerItem?.classList?.add("header-item-active");
         } else {
-            header.classList.remove("header-active");
-            headerItem.classList.remove("header-item-active");
+            header?.classList?.remove("header-active");
+            headerItem?.classList?.remove("header-item-active");
         }
     };
+
+    useEffect(() => {
+        const body = document.querySelector("body");
+        if (isNavbarOpen) {
+            body.classList.add("no-scroll");
+        } else {
+            body.classList.remove("no-scroll");
+        }
+    }, [isNavbarOpen]);
 
     return (
         <div className={`${headerClass} header-section`}>
             <div className='header__inner'>
                 <Link to='/' className='header__logo'>
-                    <img src={Logo} alt={t("company")} />
+                    <img
+                        src={Logo}
+                        alt={t("company")}
+                        width={69.98}
+                        height={56.98}
+                    />
                 </Link>
-                {/* <div className='header__burger'>
-                    <button className='burger-btn'>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
-                </div> */}
+                <div
+                    className='header__burger'
+                    onClick={() => setIsNavbarOpen(!isNavbarOpen)}>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                {/* <HEADER RESPONSIVE> */}
+                <div
+                    className={`header__responsive ${
+                        isNavbarOpen ? "show" : ""
+                    }`}
+                    onClick={() => setIsNavbarOpen(false)}>
+                    <ul
+                        className='header-responsive__links'
+                        onClick={(e) => e.stopPropagation()}>
+                        <li>
+                            <button
+                                className='header-nav-btn owner-btn'
+                                onClick={() => setOpenModels(!isOpenModels)}>
+                                {t("models")}
+                                <span>{"→"}</span>
+                            </button>
+                            {isOpenModels && (
+                                <div
+                                    className='header__responsive-models'
+                                    onClick={() => setOpenModels(false)}>
+                                    <div
+                                        className={`header__responsive-modal ${
+                                            isOpenModels ? "active" : ""
+                                        }`}
+                                        onClick={(e) => e.stopPropagation()}>
+                                        <div
+                                            className='cancel'
+                                            onClick={() =>
+                                                setOpenModels(false)
+                                            }>
+                                            {"<"} <span>Orqaga</span>
+                                        </div>
+                                        <h3>Mavjud avtomobillar </h3>
+                                        <div className='header__models-modal-cards'>
+                                            {/* 1 */}
+                                            <div className='header__models-modal-card'>
+                                                <Link to='/models/gwm-wingle-7'>
+                                                    <img
+                                                        src={GWMwingle7}
+                                                        alt='haval-dargo'
+                                                    />
+                                                </Link>
+                                                <div>
+                                                    <Link to='/models/gwm-wingle-7'>
+                                                        GWM WINGLE 7
+                                                    </Link>
+                                                    <p>359 900 000 so'm</p>
+                                                </div>
+                                            </div>
+                                            {/* 2 */}
+                                            <div className='header__models-modal-card'>
+                                                <Link to='/models/haval-dargo'>
+                                                    <img
+                                                        src={HavalDargo}
+                                                        alt='haval-dargo'
+                                                    />
+                                                </Link>
+                                                <div>
+                                                    <Link to='/models/haval-dargo'>
+                                                        HAVAL DARGO
+                                                    </Link>
+                                                    <p>399 900 000 so'mdan</p>
+                                                </div>
+                                            </div>
+                                            {/* 3 */}
+                                            <div className='header__models-modal-card'>
+                                                <Link to='/models/haval-jolion'>
+                                                    <img
+                                                        src={HavalJolion}
+                                                        alt='haval-dargo'
+                                                    />
+                                                </Link>
+                                                <div>
+                                                    <Link to='/models/haval-jolion'>
+                                                        HAVAL JOLION
+                                                    </Link>
+                                                    <p>399 900 000 so'mdan</p>
+                                                </div>
+                                            </div>
+                                            {/* 4 */}
+                                            <div className='header__models-modal-card'>
+                                                <Link to='/models/haval-jolion'>
+                                                    <img
+                                                        src={HavalM6}
+                                                        alt='haval-dargo'
+                                                    />
+                                                </Link>
+                                                <div>
+                                                    <Link to='/models/haval-m6'>
+                                                        HAVAL M6
+                                                    </Link>
+                                                    <p>249 900 000 so'mdan</p>
+                                                </div>
+                                            </div>
+                                            {/* 5 */}
+                                            <div className='header__models-modal-card'>
+                                                <Link to='/models/haval-h6'>
+                                                    <img
+                                                        src={HavalH6}
+                                                        alt='haval-dargo'
+                                                    />
+                                                </Link>
+                                                <div>
+                                                    <Link to='/models/haval-jolion'>
+                                                        HAVAL H6
+                                                    </Link>
+                                                    <p>324 900 000 so'mdan</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </li>
+                        <li>
+                            <button
+                                className='selection'
+                                onClick={() => setIsSelection(!isSelection)}>
+                                {t("selection")}
+                                <span>{"→"}</span>
+                            </button>
+                            {isSelection && (
+                                <div
+                                    className='owners-modal-overlay selection-modal'
+                                    onClick={() =>
+                                        setIsSelection(!isSelection)
+                                    }>
+                                    <div
+                                        className={`selection-modal ${
+                                            isSelection ? "active" : ""
+                                        }`}
+                                        onClick={(e) => e.stopPropagation()}>
+                                        <div>
+                                            <p>Yangi avtomobil</p>
+                                            <ul>
+                                                <li>
+                                                    <Link to='/models'>
+                                                        Modellar qatori
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link to='/test-drive'>
+                                                        Test-drayvga yozilish
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link to='/'>
+                                                        Maxsus takliflar
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link to='/'>
+                                                        Configurator
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link to='/dealers'>
+                                                        Dilerlar
+                                                    </Link>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </li>
+                        <li>
+                            <Link to='/dealers'>{t("dealers")}</Link>
+                        </li>
+                        <li>
+                            <button
+                                onClick={() => setOwnOpen(!isOwnOpen)}
+                                className='owner-btn'>
+                                {t("owners")}
+                                <span>{"→"}</span>
+                            </button>
+                            {isOwnOpen && (
+                                <div
+                                    className='owners-modal-overlay'
+                                    onClick={() => setOwnOpen(false)}>
+                                    <div
+                                        className={`owners-modal ${
+                                            isOwnOpen ? "active" : ""
+                                        }`}
+                                        onClick={(e) => e.stopPropagation()}>
+                                        <div>
+                                            <h3>Servis</h3>
+                                            <Link to='/owners/service/guarantee'>
+                                                Avtomobilga kafolat
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </li>
+                        <li>
+                            <button
+                                className='about-gwm owner-btn'
+                                onClick={() =>
+                                    setAboutGwmOpen(!isAboutGwmOpen)
+                                }>
+                                {t("company")}
+                                <span>{"→"}</span>
+                            </button>
+                            {isAboutGwmOpen && (
+                                <div
+                                    className='about-gwm-modal owners-modal-overlay'
+                                    onClick={() => setAboutGwmOpen(false)}>
+                                    <div
+                                        onClick={(e) => e.stopPropagation()}
+                                        className='about-gwm-active'>
+                                        <div className='about-gwm-active-one'>
+                                            <h3>HAVAL O'zbekistonda</h3>
+                                            <ul>
+                                                <li>Biz haqimizda</li>
+                                                <Link to='/about-gwm/haval-v-uzbekistane/how-become-dealer'>
+                                                    Qanday qilib diler bo'lish
+                                                    mumkin
+                                                </Link>
+                                                <li>
+                                                    Diler qo'ng'irog'iga
+                                                    buyurtma berish
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div className='about-gwm-active-two'>
+                                            <h3>Media markazi</h3>
+                                            <ul>
+                                                <li>Video sharhlar</li>
+                                                <li>Yangiliklar</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </li>
+                        <li>
+                            <Link to='/'>{t("statistics")}</Link>
+                        </li>
+                        {token ? (
+                            <Link to='/user'>Shaxsiy kabinet</Link>
+                        ) : (
+                            <li>
+                                <Link to='/login' style={{ marginTop: "4px" }}>
+                                    Kirish
+                                </Link>
+                            </li>
+                        )}
+                    </ul>
+                </div>
+                {/*    <HEADER RESPONSIVE />  */}
                 <div className='header__nav'>
                     <ul className='header-nav__links'>
                         <li>
@@ -142,6 +407,40 @@ function HeaderNavBar() {
                                                         </p>
                                                     </div>
                                                 </div>
+                                                {/* 4 */}
+                                                <div className='models-modal-card'>
+                                                    <Link to='/models/haval-jolion'>
+                                                        <img
+                                                            src={HavalM6}
+                                                            alt='haval-dargo'
+                                                        />
+                                                    </Link>
+                                                    <div>
+                                                        <Link to='/models/haval-m6'>
+                                                            HAVAL M6
+                                                        </Link>
+                                                        <p>
+                                                            249 900 000 so'mdan
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                {/* 5 */}
+                                                <div className='models-modal-card'>
+                                                    <Link to='/models/haval-h6'>
+                                                        <img
+                                                            src={HavalH6}
+                                                            alt='haval-dargo'
+                                                        />
+                                                    </Link>
+                                                    <div>
+                                                        <Link to='/models/haval-jolion'>
+                                                            HAVAL H6
+                                                        </Link>
+                                                        <p>
+                                                            324 900 000 so'mdan
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -166,7 +465,34 @@ function HeaderNavBar() {
                                         }`}
                                         onClick={(e) => e.stopPropagation()}>
                                         <div>
-                                            <h3>ifuhoufhuf</h3>
+                                            <p>Yangi avtomobil</p>
+                                            <ul>
+                                                <li>
+                                                    <Link to='/models'>
+                                                        Modellar qatori
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link to='/test-drive'>
+                                                        Test-drayvga yozilish
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link to='/'>
+                                                        Maxsus takliflar
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link to='/'>
+                                                        Configurator
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link to='/dealers'>
+                                                        Dilerlar
+                                                    </Link>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>
@@ -244,8 +570,8 @@ function HeaderNavBar() {
                             <Link to='/'>{t("statistics")}</Link>
                         </li>
                         {token ? (
-                            <Link to='/user'>
-                                <UserOutlined className='user-icon' />
+                            <Link to='/user' className='login-link'>
+                                <i className='fa-light fa-user user-icon'></i>
                             </Link>
                         ) : (
                             <li>
@@ -288,38 +614,31 @@ function HeaderNavBar() {
                         </ul>
                     </div>
                     <Link to='/'>
-                        <img src={havalLogo} />
+                        <img
+                            src={havalLogo}
+                            alt='haval-logo'
+                            width={125}
+                            height={13}
+                        />
                     </Link>
                 </div>
             </div>
 
             <div className={`aside ${isAsideOpen ? "active" : ""}`}>
-                <ul
-                    className={`aside__list ${
-                        isAsideListHovered ? "hovered" : ""
-                    }`}
-                    onMouseEnter={() => setAsideListHovered(true)}
-                    onMouseLeave={() => setAsideListHovered(false)}>
-                    <li className='aside__item'>
-                        <Link to='/' className='aside__link'>
-                            <span className='aside__link-text'>
-                                Modellar qatori
-                            </span>
+                <ul className='aside__list'>
+                    <li className='aside__item' title="Bog'lanish">
+                        <a href='tel:+998712878888' className='aside__link'>
                             <button className='aside__btn'>
                                 <img
                                     src={headerAsideBtnPhone}
                                     alt='aside-btn-icon'
                                 />
                             </button>
-                        </Link>
+                        </a>
                     </li>
-                    <li className='aside__item'>
-                        <Link to='/' className='aside__link'>
-                            <span className='aside__link-text'>Telefon</span>
-                            <button
-                                className='aside__btn'
-                                onMouseEnter={() => setAsideListHovered(true)}
-                                onMouseLeave={() => setAsideListHovered(false)}>
+                    <li className='aside__item' title='Modellar qatori'>
+                        <Link to='/models' className='aside__link'>
+                            <button className='aside__btn'>
                                 <img
                                     src={headerAsideBtnCar}
                                     alt='aside-btn-icon'

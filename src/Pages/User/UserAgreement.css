@@ -1,0 +1,37 @@
+.user-main-cards {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    margin: 30px 0;
+}
+
+.user-main-card {
+    max-width: 100%;
+    width: 100%;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.user-main-card div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-main-card.paid {
+    border-color: #0fd820b6;
+}
+.user-main-card.pending {
+    border-color: #f90;
+}
+.user-main-card.canceled {
+    border-color: red;
+    background-color: #ff00004d;
+}
+
+.user-main-card div span {
+    padding: 10px;
+    font-size: 18px;
+}

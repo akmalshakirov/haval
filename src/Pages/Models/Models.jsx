@@ -1,4 +1,3 @@
-import React from "react";
 import "./Models.css";
 import HeaderNavBar from "../../Components/Header/HeaderNavBar";
 import havalH9 from "../../Images/haval-h9.jpg";
@@ -23,41 +22,36 @@ function Models() {
             id: 2,
             name: "Haval DARGO",
             image: havalDargo,
-            price: "419 000 000 so'mdan",
-            specs: "2.0T | 190 ot kuchi | 4x4",
+            price: "399 900 000 so'mdan",
             link: "/models/haval-dargo",
         },
         {
             id: 3,
             name: "Haval Jolion",
             image: havalJolion,
-            price: "339 000 000 so'mdan",
-            specs: "1.5T | 143 ot kuchi | 2x4",
+            price: "399 900 000  so'mdan",
             link: "/models/haval-jolion",
         },
         {
             id: 4,
             name: "Haval H6",
             image: havalH6,
-            price: "389 000 000 so'mdan",
-            specs: "2.0T | 150 ot kuchi | 2x4",
+            price: "324 900 000 so'mdan",
             link: "/models/haval-h6",
         },
         {
             id: 5,
             name: "Haval M6",
             image: havalM6,
-            price: "309 000 000 so'mdan",
-            specs: "1.5T | 150 ot kuchi | 2x4",
+            price: "249 900 000 so'mdan",
             link: "/models/haval-m6",
         },
         {
             id: 6,
             name: "GWM Wingle 7",
             image: gwmWingle7,
-            price: "409 000 000 so'mdan",
-            specs: "2.0D | 143 ot kuchi | 4x4",
-            link: "/models/GWMwignle7",
+            price: "359 900 000 so'mdan",
+            link: "/models/gwm-wingle-7",
         },
     ];
 
@@ -94,7 +88,6 @@ function Models() {
                             <div className='model-info'>
                                 <h3>{model.name}</h3>
                                 <p className='model-price'>{model.price}</p>
-                                <p className='model-specs'>{model.specs}</p>
                                 <Link
                                     className='model-details-btn'
                                     to={model.link}>

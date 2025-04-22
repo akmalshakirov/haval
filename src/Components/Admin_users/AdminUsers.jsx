@@ -1,4 +1,4 @@
-import { message } from "antd";
+import { message, Spin } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import "./AdminUsers.css";
@@ -35,7 +35,8 @@ function AdminUsers() {
     }, []);
     return (
         <div>
-            {/* {loading ? (
+            <h1 style={{ marginBottom: "20px" }}>Users</h1>
+            {loading ? (
                 <div
                     style={{
                         display: "flex",
@@ -47,42 +48,45 @@ function AdminUsers() {
                     <h1>Yuklanmoqda</h1>
                     <Spin size='large' />
                 </div>
-            ) : ( */}
-            <h1 style={{ marginBottom: "20px" }}>Users</h1>
-            <div style={{ display: "flex" }}>
-                <div style={{ flex: "0 0 200px" }}>
-                    <strong>Name:</strong>
-                </div>
-                <div style={{ flex: "0 0 200px" }}>
-                    <strong>Email:</strong>
-                </div>
-                <div
-                    style={{
-                        flex: "0 0 200px",
-                    }}>
-                    <strong>Shartnomalari:</strong>
-                </div>
-                <div>
-                    <strong>Harakat:</strong>
-                </div>
-            </div>
-            {users.map((user, index) => (
-                <div
-                    key={user.id || index}
-                    style={{ display: "flex", margin: "7px 0" }}>
-                    <div style={{ flex: "0 0 200px" }}>
-                        <span>{user.name}</span>
+            ) : (
+                <>
+                    <div style={{ display: "flex" }}>
+                        <div style={{ flex: "0 0 200px" }}>
+                            <strong>Name:</strong>
+                        </div>
+                        <div style={{ flex: "0 0 200px" }}>
+                            <strong>Email:</strong>
+                        </div>
+                        <div
+                            style={{
+                                flex: "0 0 200px",
+                            }}>
+                            <strong>Shartnomalari:</strong>
+                        </div>
+                        <div>
+                            <strong>Harakat:</strong>
+                        </div>
                     </div>
-                    <div style={{ flex: "0 0 200px" }}>
-                        <span>{user.email}</span>
-                    </div>
-                    <div style={{ flex: "0 0 200px" }}>
-                        {user.orders.length}
-                    </div>
-                    <button className='users-card-button'>O'chirish</button>
-                </div>
-            ))}
-            {/* )} */}
+                    {users.map((user, index) => (
+                        <div
+                            key={user.id || index}
+                            style={{ display: "flex", margin: "7px 0" }}>
+                            <div style={{ flex: "0 0 200px" }}>
+                                <span>{user.name}</span>
+                            </div>
+                            <div style={{ flex: "0 0 200px" }}>
+                                <span>{user.email}</span>
+                            </div>
+                            <div style={{ flex: "0 0 200px" }}>
+                                {user.orders.length}
+                            </div>
+                            <button className='users-card-button'>
+                                O'chirish
+                            </button>
+                        </div>
+                    ))}
+                </>
+            )}
         </div>
     );
 }

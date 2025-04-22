@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Form, Input, Button, Checkbox, Typography, Card, message } from "antd";
-import "./Register.css";
-import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
 import {
-    UserOutlined,
     LockOutlined,
     ScheduleOutlined,
+    UserOutlined,
 } from "@ant-design/icons";
+import { Button, Card, Checkbox, Form, Input, message, Typography } from "antd";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "./Register.css";
 
 const { Title, Text } = Typography;
 
@@ -42,15 +42,19 @@ const Registration = () => {
                 { name, email, password: inputPasswordValue },
                 { headers: { "Content-Type": "application/json" } }
             );
-            // if (response.status === 200 && response.data?.token) {
             localStorage.setItem("authToken", response.data.token);
-            message.success("Shaxsiz kabinetga muvaffaqiyatli kirildi!");
-            navigate("/");
-            // } else {
-            // message.error("Username yoki password noto'g'ri!");
-            // }
+            message.success("Siz muvaffaqiyatli ro'yxatdan o'tdingiz.");
+            navigate("/login");
         } catch (error) {
-            message.error("Username yoki password noto'g'ri!");
+            if (error.code === "ERR_NETWORK") {
+                message.warning("Server ishlamayotgan bo'lishi mumkin");
+            } else if (
+                error.response &&
+                error.response.data &&
+                error.response.data.error
+            ) {
+                message.error(error.response.data.error);
+            }
         } finally {
             setOnClick(false);
         }

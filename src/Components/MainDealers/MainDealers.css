@@ -1,15 +1,16 @@
 .main-dealers {
     background-color: #e3e6e8;
     margin: 0 auto;
-    padding: 100px 20px 80px 20px;
+    padding: 7.321vw 1.464vw 5.857vw 1.464vw;
     text-align: center;
-    max-width: 1820px;
+    max-width: 1920px;
+    overflow: hidden;
 }
 .main-dealers-content {
     display: flex;
-    max-width: 1820px;
+    max-width: 1920px;
     width: 100%;
-    max-height: calc(50vw - 200px);
+    max-height: 70vh;
     padding-top: 30px;
 }
 .main-dealers-list {
@@ -27,4 +28,11 @@
     border-radius: 7px;
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.main-dealers ul {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 20px 0;
 }

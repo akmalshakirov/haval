@@ -1,0 +1,16 @@
+:root {
+    --b: #000;
+    --w: #fff;
+    --font-mich: "Michroma";
+    --font-roboto: "Roboto";
+}
+body.no-scroll {
+    overflow: hidden;
+}
+@font-face {
+    font-family: var(--font-mich);
+    font-style: normal;
+    font-weight: normal;
+    src: url(https://fonts.googleapis.com/css2?family=Michroma&display=swap);
+    font-display: swap;
+}

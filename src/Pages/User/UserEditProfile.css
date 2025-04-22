@@ -1,0 +1,120 @@
+.user-edit-profile-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-edit-profile-content {
+    border-radius: 7px;
+    padding: 20px;
+}
+
+.user-edit-profile-form {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.edit-profile-form {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    padding: 15px 0;
+    flex-wrap: wrap;
+}
+
+.edit-profile-form > div {
+    display: flex;
+    flex-direction: column;
+}
+
+.edit-profile-form div input {
+    width: 100%;
+    padding: 7px 10px;
+    margin-top: 5px;
+    transition: 0.2s;
+}
+.edit-profile-form div input:hover {
+    background-color: #00000017;
+}
+.edit-profile-form button:first-child {
+    background-color: #0044ffe0;
+    color: #fff;
+    will-change: contents;
+    transition: all 0.3s;
+}
+.edit-profile-form button:first-child:hover {
+    background-color: #0026ff;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.cancel-btn {
+    font-family: "Segoe UI", sans-serif;
+    font-size: inherit;
+    background-color: transparent;
+    border-color: red !important;
+    transition: 0.3s;
+}
+
+.cancel-btn:hover {
+    background-color: rgba(255, 0, 0, 0.116);
+    color: red;
+}
+.edit-profile-form button {
+    width: max-content;
+}
+
+.edit-profile-form button {
+    font-family: inherit;
+    font-size: 14px;
+    padding: 8px 15px;
+}
+.edit-profile-form button,
+.edit-profile-form div input {
+    border: 1px solid #006effbe;
+    border-radius: 5px;
+    outline: none;
+    transition: 0.4s;
+}
+
+.user-profile-upload-img {
+    cursor: pointer;
+    margin-bottom: 3px;
+    margin-left: 10px;
+}
+
+.user-profile-upload-img span {
+    padding: 7px;
+    border-radius: 5px;
+    background-color: #1678ff;
+    color: #fff;
+    transition: 0.3s;
+}
+
+.user-profile-upload-img span:hover {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.user-profile-reset {
+    margin-left: 7px;
+    padding: 7px;
+    border-radius: 5px;
+    color: inherit;
+    cursor: pointer;
+    transition: 0.3s;
+    border: 1px solid #eee;
+}
+
+.user-profile-top {
+    display: flex;
+    gap: 5px;
+    align-items: flex-end;
+    margin-top: 10px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #a5a5a5;
+}
+
+.user-profile-submit {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}

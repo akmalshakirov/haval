@@ -1,486 +1,261 @@
-import "./User.css";
-import { Avatar, Input, Layout, message, Spin } from "antd";
+// try {
+//     if (!token) {
+//         message.error("Token topilmadi, qayta tizimga kiring!");
+//         return;
+//     }
+//     const response = await axios.get(
+//         `http://localhost:3000/profil/${userID}`,
+//         {
+//             headers: {
+//                 "Content-Type": "application/json",
+//                 Authorization: `Bearer ${token}`,
+//             },
+//         }
+//     );
+
+//     if (response?.data) {
+//         setUserData({
+//             name: response.data.name,
+//             email: response.data.email,
+//         });
+//         setAgreements(response.data.orders);
+//     }
+// } catch (error) {
+//     const response = error.response;
+//     if (error.code === "ERR_NETWORK") {
+//         return message.warning("Server ishlamayotgan bo'lishi mumkin");
+//     } else if (response.status === 401) {
+//         message.info("Token vaqti tugagan!");
+//     } else {
+//         console.log(error);
+//         message.error(`Xatolik yuz berdi: ${error.message}`);
+//     }
+// } finally {
+//     setLoading(false);
+// }import { Layout, Menu, message, Spin, Switch } from "antd";
 import {
-    CheckCircleOutlined,
-    CloseOutlined,
     DashboardOutlined,
-    EditOutlined,
-    ExclamationCircleOutlined,
-    FieldTimeOutlined,
     LogoutOutlined,
-    PieChartOutlined,
-    SearchOutlined,
+    MoonOutlined,
+    OrderedListOutlined,
+    SunOutlined,
     UserOutlined,
 } from "@ant-design/icons";
-import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Layout, Menu, message, Switch } from "antd";
+import { Content, Header } from "antd/es/layout/layout";
+import Sider from "antd/es/layout/Sider";
 import axios from "axios";
-import Ripple from "../../Utils/Ripple";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import Logo from "../../Images/haval.svg";
+import "./User.css";
+import UserAgreement from "./UserAgreement.jsx";
+import UserEditProfile from "./UserEditProfile.jsx";
+import UserMainMenu from "./UserMainMenu.jsx";
+import { UserService } from "./UserService";
 
-const { Sider, Header, Content } = Layout;
-
-function UserPage() {
+const UserPage = () => {
     const navigate = useNavigate();
-    const token = localStorage.getItem("token");
-    const userID = localStorage.getItem("userID");
-    const [selectedSidebarMenu, setSelectedSidebarMenu] = useState("1");
-    const [isVisibleModal, setIsVisibleModal] = useState(false);
-    const [selectedAgreement, setSelectedAgreement] = useState(null);
-    const [downloadBtnLoading, setDownloadBtnLoading] = useState(false);
-    const [deletingBtnLoading, setDeletingBtnLoading] = useState(false);
+    const [theme, setTheme] = useState("Oq");
+    const [selectedKey, setSelectedKey] = useState("1");
+    const [data, setData] = useState([]);
+    const location = useLocation();
 
-    const [userData, setUserData] = useState({
-        name: "",
-        email: "",
-    });
-    const [loading, setLoading] = useState(true);
-    const [agreements, setAgreements] = useState([]);
+    useEffect(() => {
+        if (!UserService.TOKEN) {
+            message.error("Token topilmadi, qayta tizimga kiring!");
+            navigate("/login");
+        }
+        document.title = "HAVAL | Shaxsiy kabinet";
+        fetchUserData();
+    }, [location]);
 
-    const totalAgreements = agreements.length;
-    const activeAgreements = agreements.filter(
-        (c) => c.status === "Paid"
-    ).length;
-    const pendingAgreements = agreements.filter(
-        (c) => c.status === "Pending"
-    ).length;
-    const cancelledAgreements = agreements.filter(
-        (c) => c.status === "Cancelled"
-    ).length;
-
-    // USER'S DATA
     const fetchUserData = async () => {
         try {
-            if (!token) {
-                message.error("Token topilmadi, qayta tizimga kiring!");
-                return;
-            }
             const response = await axios.get(
-                `http://localhost:3000/profil/${userID}`,
+                `http://localhost:3000/profil/${UserService.USER_ID}`,
                 {
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${UserService.TOKEN}`,
                     },
                 }
             );
 
             if (response?.data) {
-                setUserData({
-                    name: response.data.name,
-                    email: response.data.email,
-                });
-                setAgreements(response.data.orders);
+                const userInfo = [
+                    { name: response.data.name, email: response.data.email },
+                ];
+                localStorage.setItem("userData", JSON.stringify(userInfo));
+                setData(response.data.orders);
             }
         } catch (error) {
-            const response = error.response;
             if (error.code === "ERR_NETWORK") {
-                return message.warning("Server o'chiq bo'lishi mumkin");
-            } else if (response.status === 401) {
-                message.info("Token vaqti tugagan!");
+                return message.warning("Server ishlamayotgan bo'lishi mumkin");
+            } else if (
+                error.message === "Token has expired!" ||
+                error.status === 401
+            ) {
+                return message.warning("Token vaqti tugagan!");
             } else {
-                console.log(error);
-                message.error(`Xatolik yuz berdi: ${error.message}`);
+                message.error(error.message || "Ma'lumotlarni olishda xatolik");
             }
-        } finally {
-            setLoading(false);
         }
     };
 
-    const checkStatus = (status) => {
-        if (status === "Pending") {
-            return "Pending (kutilmoqda)";
-        } else if (status === "Paid") {
-            return "Paid (to'langan)";
-        } else if (status === "Cancelled") {
-            return "Canceled (bekor qilingan)";
-        }
-        return status;
-    };
-
-    useEffect(() => {
-        document.title = "HAVAL | Shaxsiy kabinet";
-        fetchUserData();
-    }, []);
-
-    // EDIT FUNCTION
-    // const editFunc = async () => {
-    // try {
-    //     const response = await axios.put(
-    //         `http://localhost:3000/orders/${selectedAgreement._id}`,
-    //         {
-
-    //         }
-    //     )
-    // } catch (error) {
-    //     console.log(error)
-    // }
-    // };
-
-    const shortText = (e) => {
-        if (e.length > 15) {
-            return e.slice(0, 15) + "...";
-        } else {
-            return e;
-        }
-    };
-
-    // LOG-OUT FUNCTION
     const handleLogOut = () => {
         localStorage.removeItem("token");
+        localStorage.removeItem("userID");
+        localStorage.removeItem("userData");
         message.success("Shaxsiy kabinetdan chiqildi");
         navigate("/");
     };
 
-    // downloadPDF FUNCTION
-    const downloadPDF = async (fileUrl) => {
-        setDownloadBtnLoading(true);
-        try {
-            const response = await axios.get(fileUrl, {
-                responseType: "blob",
-            });
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = fileUrl.split("/").pop();
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-        } catch (error) {
-            console.log(error);
-            message.error(error);
-        } finally {
-            setDownloadBtnLoading(false);
-        }
-    };
-
     return (
         <div className='user-page-wrapper'>
-            <Layout className='user-page-layout'>
+            <Layout style={{ minHeight: "100vh" }} className='user-page-layout'>
                 <Sider
                     style={{
-                        minHeight: "100vh",
-                        backgroundColor: "#081027",
-                        borderRight: "1px solid #0B1739",
-                    }}
-                    className='user-page-sider'>
-                    <div className='user-page-sidebar-content'>
-                        <div style={{ marginBottom: "10px" }}>
-                            <div
-                                className='user-page-sidebar-info'
-                                style={{ marginBottom: "10px" }}>
-                                <Avatar
-                                    style={{ backgroundColor: "transparent" }}
-                                    size={64}
-                                    icon={
-                                        <UserOutlined
-                                            style={{ fontSize: "54px" }}
-                                        />
-                                    }
-                                />
-                                <h3>Ism: {loading ? "USER" : userData.name}</h3>
-                                <p>
-                                    Email:{" "}
-                                    {loading
-                                        ? "USER@GMAIL.COM"
-                                        : userData.email}
-                                </p>
-                            </div>
-                            <Input
-                                type='search'
-                                placeholder='Izlash...'
-                                prefix={<SearchOutlined />}
-                                style={{
-                                    borderColor: "#343B4F",
-                                    backgroundColor: "#0a1739",
-                                    color: "#fff",
-                                }}
-                            />
-                        </div>
-                        <div className='user-page-sidebar-menu'>
-                            <Ripple
-                                style={{ width: "100%" }}
-                                onClick={() => setSelectedSidebarMenu("1")}>
-                                <DashboardOutlined
-                                    style={{ marginRight: "7px" }}
-                                />
-                                Shartnomalarim
-                            </Ripple>
-                            <Ripple
-                                style={{ width: "100%" }}
-                                onClick={() => setSelectedSidebarMenu("2")}>
-                                <EditOutlined style={{ marginRight: "7px" }} />
-                                Profilim
-                            </Ripple>
-                            <div onClick={handleLogOut}>
-                                <LogoutOutlined
-                                    style={{ marginRight: "7px" }}
-                                />
-                                Chiqish
-                            </div>
-                        </div>
+                        borderRight: "1px solid #565555",
+                    }}>
+                    <div className='user-sidebar-top-logo'>
+                        <Link
+                            to='/'
+                            style={{
+                                display: "inline-block",
+                                width: "100%",
+                                padding: "24px 20px 20px 30px",
+                                borderBottom: "1px solid #565555",
+                            }}>
+                            <img src={Logo} alt='logo' />
+                        </Link>
+                    </div>
+                    <Menu
+                        style={{
+                            marginTop: "15px",
+                        }}
+                        theme='dark'
+                        mode='inline'
+                        selectedKeys={[selectedKey]}
+                        onClick={(e) => setSelectedKey(e.key)}
+                        items={[
+                            {
+                                key: "1",
+                                icon: <DashboardOutlined />,
+                                label: "Asosiy menyu",
+                            },
+                            {
+                                key: "2",
+                                icon: <UserOutlined />,
+                                label: "Profilim",
+                            },
+                            {
+                                key: "3",
+                                icon: <OrderedListOutlined />,
+                                label: "Shartnomalarim",
+                            },
+                        ]}
+                    />
+                    <div>
+                        <Menu
+                            theme='dark'
+                            mode='inline'
+                            selectedKeys={[]}
+                            onClick={handleLogOut}
+                            items={[
+                                {
+                                    key: "4",
+                                    icon: <LogoutOutlined />,
+                                    label: "Chiqish",
+                                    style: {
+                                        border: "1px solid red",
+                                    },
+                                },
+                            ]}
+                        />
                     </div>
                 </Sider>
 
-                <Layout className='user-page-main'>
-                    <Header className='user-page-header'>
-                        <div style={{ marginLeft: "20px", color: "#fff" }}>
-                            <Link to='/' style={{ marginRight: "5px" }}>
+                <Layout
+                    style={{
+                        backgroundColor:
+                            theme === "To'q ko'k" ? "#00152a" : "#f7f7f7",
+                        transition: "444ms",
+                    }}>
+                    <Header
+                        style={{
+                            padding: 0,
+                            color: "#fff",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            backgroundColor:
+                                theme === "To'q ko'k"
+                                    ? "rgba(1,28,56,0.3)"
+                                    : "rgba(230,230,230,0.6)",
+                            transition: "inherit",
+                        }}>
+                        <div
+                            style={{
+                                padding: "0 10px",
+                                marginLeft: "20px",
+                                color: "#1890ff",
+                            }}>
+                            <Link
+                                to='/'
+                                style={{
+                                    marginRight: "5px",
+                                }}>
                                 Bosh sahifa
                             </Link>
                             {">"}
-                            <Link to='/user' style={{ marginLeft: "5px" }}>
+                            <Link
+                                to='/user'
+                                style={{
+                                    marginLeft: "5px",
+                                }}>
                                 Shaxsiy kabinet
                             </Link>
                         </div>
+                        <div style={{ marginRight: "30px" }}>
+                            <Switch
+                                checkedChildren={<MoonOutlined />}
+                                unCheckedChildren={<SunOutlined />}
+                                checked={theme === "To'q ko'k"}
+                                onChange={(checked) =>
+                                    setTheme(checked ? "To'q ko'k" : "Oq")
+                                }
+                                title="Mavzuni o'zgartirish"
+                            />
+                        </div>
                     </Header>
 
-                    {loading ? (
+                    <Content
+                        style={{
+                            margin: "16px",
+                        }}>
                         <div
                             style={{
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                gap: "20px",
-                                marginTop: "50px",
+                                padding: 24,
+                                color: theme === "To'q ko'k" ? "#fff" : "#000",
+                                minHeight: 360,
                             }}>
-                            <h1>Yuklanmoqda</h1>
-                            <Spin size='large' />
+                            {selectedKey === "1" && (
+                                <UserMainMenu data={data} theme={theme} />
+                            )}
+                            {selectedKey === "2" && (
+                                <UserEditProfile theme={theme} />
+                            )}
+                            {selectedKey === "3" && (
+                                <>
+                                    <UserAgreement data={data} theme={theme} />
+                                </>
+                            )}
                         </div>
-                    ) : (
-                        <Content>
-                            <h2 style={{ color: "#fff", marginLeft: "30px" }}>
-                                Mening shartnomalarim:
-                            </h2>
-                            <div className='user-page-content-wrapper'>
-                                <div className='user-page-content-cards'>
-                                    <div className='user-page-content-card'>
-                                        <span className='user-page-content-card-icon'>
-                                            <PieChartOutlined />
-                                        </span>
-                                        <div
-                                            style={{
-                                                backgroundColor:
-                                                    "transparent !important",
-                                                display: "flex",
-                                                gap: "5px",
-                                            }}>
-                                            <h2>Jami:</h2>
-                                            <h2>{totalAgreements}</h2>
-                                        </div>
-                                    </div>
-                                    <div className='user-page-content-card'>
-                                        <span className='user-page-content-card-icon'>
-                                            <CheckCircleOutlined />
-                                        </span>
-                                        <div
-                                            style={{
-                                                backgroundColor:
-                                                    "transparent !important",
-                                                display: "flex",
-                                                gap: "5px",
-                                            }}>
-                                            <h2>To'langan:</h2>
-                                            <h2>{activeAgreements}</h2>
-                                        </div>
-                                    </div>
-                                    <div className='user-page-content-card'>
-                                        <span className='user-page-content-card-icon'>
-                                            <FieldTimeOutlined />
-                                        </span>
-                                        <div
-                                            style={{
-                                                backgroundColor:
-                                                    "transparent !important",
-                                                display: "flex",
-                                                gap: "5px",
-                                            }}>
-                                            <h2>Kutilayotgan:</h2>
-                                            <h2>{pendingAgreements}</h2>
-                                        </div>
-                                    </div>
-                                    <div className='user-page-content-card'>
-                                        <span className='user-page-content-card-icon'>
-                                            <ExclamationCircleOutlined />
-                                        </span>
-                                        <div
-                                            style={{
-                                                backgroundColor:
-                                                    "transparent !important",
-                                                display: "flex",
-                                                gap: "5px",
-                                            }}>
-                                            <h2>Bekor qilingan:</h2>
-                                            <h2>{cancelledAgreements}</h2>
-                                        </div>
-                                    </div>
-                                </div>
-                                <Link
-                                    to='/about-gwm/haval-v-uzbekistane/how-become-dealer'
-                                    className='add-agreement'>
-                                    Shartnoma qo'shish
-                                </Link>
-                            </div>
-
-                            <div className='agreements'>
-                                <div className='agreement-cards'>
-                                    {agreements &&
-                                        agreements.map((agreement) => (
-                                            <div
-                                                className='agreement-card'
-                                                key={agreement._id}
-                                                onClick={() => {
-                                                    setSelectedAgreement(
-                                                        agreement
-                                                    );
-                                                    setIsVisibleModal(true);
-                                                }}>
-                                                <div>
-                                                    <h1>
-                                                        {shortText(
-                                                            agreement.fullname
-                                                        )}
-                                                    </h1>
-                                                </div>
-                                                <div>
-                                                    <p>{agreement.filename}</p>
-                                                </div>
-                                                <div>
-                                                    <p
-                                                        className={`agreement-card-status ${agreement.status}`}>
-                                                        {agreement.status}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        ))}
-                                </div>
-
-                                {/* selectedAgreement */}
-                                <div
-                                    className={`custom-modal-overlay ${
-                                        isVisibleModal ? "visible" : "closed"
-                                    }`}
-                                    onClick={() => {
-                                        setIsVisibleModal(false);
-                                        setSelectedAgreement(null);
-                                    }}>
-                                    <div
-                                        className='custom-modal'
-                                        onClick={(e) => e.stopPropagation()}>
-                                        <span
-                                            className='custom-modal-close-btn'
-                                            onClick={() => {
-                                                setIsVisibleModal(false);
-                                                setSelectedAgreement(null);
-                                            }}>
-                                            <CloseOutlined />
-                                        </span>
-                                        <h1 style={{ marginBottom: "20px" }}>
-                                            Shartnoma haqida to'liq ma'lumot
-                                        </h1>
-                                        <div className='custom-modal-info'>
-                                            <p>
-                                                Ism, familiya:{" "}
-                                                <b>
-                                                    {
-                                                        selectedAgreement?.fullname
-                                                    }
-                                                </b>
-                                            </p>
-                                            <p>
-                                                Shartnoma nomi:{" "}
-                                                <b>
-                                                    {
-                                                        selectedAgreement?.filename
-                                                    }
-                                                </b>
-                                            </p>
-                                            <p>
-                                                Telefon raqam:{" "}
-                                                <b>
-                                                    {selectedAgreement?.phone}
-                                                </b>
-                                            </p>
-                                            <div>
-                                                <p>
-                                                    Model:{" "}
-                                                    <b>
-                                                        {
-                                                            selectedAgreement?.model
-                                                        }
-                                                    </b>
-                                                </p>
-                                                <p>
-                                                    Avtomobil rangi:{" "}
-                                                    <b>
-                                                        {
-                                                            selectedAgreement?.color
-                                                        }
-                                                    </b>
-                                                </p>
-                                                <p>
-                                                    To'lov turi:{" "}
-                                                    <b>
-                                                        {
-                                                            selectedAgreement?.payment
-                                                        }
-                                                    </b>
-                                                </p>
-                                                <p>
-                                                    Avtomobil transmissiyasi:{" "}
-                                                    <b>
-                                                        {
-                                                            selectedAgreement?.transmission
-                                                        }
-                                                    </b>
-                                                </p>
-                                                <p>
-                                                    Status:{" "}
-                                                    <b>
-                                                        {checkStatus(
-                                                            selectedAgreement?.status
-                                                        )}
-                                                    </b>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div className='agreement-card-action-menu'>
-                                            <button
-                                                disabled={downloadBtnLoading}
-                                                onClick={() =>
-                                                    downloadPDF(
-                                                        selectedAgreement?.url
-                                                    )
-                                                }>
-                                                {downloadBtnLoading ? (
-                                                    <>
-                                                        Yuklanmoqda...
-                                                        <Spin />
-                                                    </>
-                                                ) : (
-                                                    "PDFni yuklash"
-                                                )}
-                                            </button>
-                                            {/* <button
-                                                onClick={deleteFunc}
-                                                disabled={deletingBtnLoading}>
-                                                {deletingBtnLoading
-                                                    ? "O'chirilmoqda..."
-                                                    : "O'chirish"}
-                                            </button> */}
-                                            {/* <button onClick={editFunc}>
-                                                Tahrirlash
-                                            </button> */}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </Content>
-                    )}
+                    </Content>
                 </Layout>
             </Layout>
         </div>
     );
-}
+};
 
 export default UserPage;

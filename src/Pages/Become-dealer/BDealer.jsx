@@ -41,7 +41,7 @@ function BDealer() {
                 <ul>
                     <li className='b-dealer-info'>
                         To’ldirilgan anketa elektron pochta orqali quyidagi
-                        manziliga yuborilishi lozim:{" "}
+                        manziliga yuborilishi lozim:{"  "}
                         <Link to='/'>development@roodell.uz</Link>
                     </li>
                 </ul>
