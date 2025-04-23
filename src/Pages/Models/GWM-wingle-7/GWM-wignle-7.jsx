@@ -11,6 +11,7 @@ import GWM_WINGLE_7_PNG from "../../../Images/m-gwm-wingle-7.png";
 import CarDetailsDrawer from "../../../Utils/CarDetails/CarDetailsDrawer";
 import { UserService } from "../../User/UserService";
 import "./GWM-wingle-7.css";
+import { ToastContainer } from "react-toastify";
 
 function GWMwignle7() {
     const [carImg, setCarImg] = useState(GWM_WINGLE_7_PNG);
@@ -46,6 +47,7 @@ function GWMwignle7() {
         <div className='gwm-wingle-7-page'>
             <>
                 <HeaderNavBar />
+                <ToastContainer />
             </>
             <div className='add-agreement-wrapper'>
                 <div>
