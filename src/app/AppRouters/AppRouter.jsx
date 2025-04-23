@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
-import PreLoader from "../../Components/PreLoader/PreLoader.jsx";
+import PreLoader from "../../Components/Preloader/Preloader.jsx";
 
 const AdminPanel = React.lazy(() => import("../../Components/Admin/Admin.jsx"));
 const AdminLogin = React.lazy(() =>

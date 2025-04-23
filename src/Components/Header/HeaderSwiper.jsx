@@ -63,19 +63,6 @@ const SwiperComponent = () => {
 
     return (
         <div className='header-swiper-wrapper'>
-            {/* <div className='static-slide intro-slide'>
-                    <img src={havalH9} alt='YANGI HAVAL H9' className='slide-img' />
-                    <div className='swiper-slide-content minus-top'>
-                        <h1 className='slide-title'>YANGI HAVAL H9</h1>
-                        <p className='slide-description'>
-                            O'ZBEKISTON YOLLARIDA ALLAQACHON
-                        </p>
-                        <Link to='/models/haval-h9' className='slide-btn'>
-                            Batafsil
-                        </Link>
-                    </div>
-                </div> */}
-
             <Swiper
                 parallax={parallaxEnabled}
                 speed={2277}
