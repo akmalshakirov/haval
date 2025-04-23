@@ -294,6 +294,7 @@
 }
 .about-gwm-active-one ul a {
     letter-spacing: 0;
+    font-size: inherit;
 }
 .about-gwm-active-one ul {
     display: flex;
