@@ -1,10 +1,13 @@
-import { Button, Drawer } from "antd";
-import { useState } from "react";
+import { Button, Drawer, message, Spin } from "antd";
+import { useEffect, useState } from "react";
 import "./CarDetailsDrawer.css";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
 
 const CarDetailsDrawer = ({ car, open, onClose }) => {
     const userData = JSON?.parse(localStorage.getItem("userData"));
     const userName = userData ? userData[0].name : userData;
+    const [loader, setLoader] = useState(false);
     const [formData, setFormData] = useState({
         userId: localStorage.getItem("userID"),
         fullname: userName ? userName : "USER",
@@ -16,6 +19,10 @@ const CarDetailsDrawer = ({ car, open, onClose }) => {
         payment: car?.payment || "Yo'q",
         price: car?.price,
     });
+
+    useEffect(() => {
+        document.title = `HAVAL | ${car?.model}`;
+    }, []);
 
     const handleChange = (e) => {
         const input = e.target.value;
@@ -32,14 +39,6 @@ const CarDetailsDrawer = ({ car, open, onClose }) => {
         setFormData((prev) => ({ ...prev, phone: formatted }));
     };
 
-    // const handleSelectChange = (e) => {
-    //     setFormData((prevData) => ({
-    //         ...prevData,
-    //         engine: e.target.value,
-    //     }));
-    //     console.log("------", formData.engine);
-    // };
-
     const handleChangeInput = (e) => {
         if (!car.engine.includes(e.target.value)) {
             return;
@@ -51,9 +50,44 @@ const CarDetailsDrawer = ({ car, open, onClose }) => {
         }
     };
 
-    const handleBuy = (e) => {
+    // Request to baclend
+    const handleBuy = async (e) => {
         e.preventDefault();
-        console.log(formData);
+        setLoader(true);
+        try {
+            const response = await axios.post(
+                "http://localhost:3000/generate-pdf",
+                formData,
+                { headers: { "Content-Type": "application/json" } }
+            );
+
+            if (response.status === 201) {
+                onClose();
+                toast.success(
+                    `HAVALning ${car?.model} modeliga shartnoma muvaffaqiyatli olindi.`,
+                    {
+                        autoClose: 7777,
+                        draggable: "mouse",
+                        closeButton: false,
+                    }
+                );
+                toast.success(
+                    "Barcha shartnomalarni shaxsiy kabinetingizda ko'rishingiz mumkin.",
+                    {
+                        delay: 7777,
+                        autoClose: 7777,
+                        draggable: "mouse",
+                        closeButton: false,
+                    }
+                );
+            } else {
+                toast.info(response?.data?.message || response?.data?.error);
+            }
+        } catch (error) {
+            toast.error(error?.response?.data?.message);
+        } finally {
+            setLoader(false);
+        }
     };
 
     return (
@@ -68,77 +102,96 @@ const CarDetailsDrawer = ({ car, open, onClose }) => {
             closable={true}
             onClose={onClose}
             open={open}>
-            <form onSubmit={handleBuy}>
-                <p>
-                    <strong>To'liq ism</strong>: {formData.fullname}
-                </p>
-                <div>
-                    <b>
-                        <label htmlFor='phoneNumber'>Telefon raqam:</label>
-                    </b>
-                    <input
-                        type='tel'
-                        id='phoneNumber'
-                        value={formData.phone}
-                        onChange={handleChange}
-                        required
-                        placeholder='+998'
-                    />
+            {loader ? (
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: "20px",
+                        marginTop: "50px",
+                    }}>
+                    <h1>Yuklanmoqda</h1>
+                    <Spin size='large' />
                 </div>
-                <p>
-                    <strong>Model:</strong> {car?.model}
-                </p>
-                <p>
-                    <strong>Rangi:</strong> {car?.color}
-                </p>
-                <p>
-                    <strong>Narxi:</strong> {car?.price}
-                </p>
-                <p>
-                    <strong>Drayv:</strong> {car?.transmission}
-                </p>
-                <div>
-                    <label
-                        htmlFor='transmission'
-                        style={{
-                            fontWeight: "bold",
-                        }}>
-                        Uzatmalar qutisi:
-                    </label>
-                    <input
-                        type='text'
-                        name='engine'
-                        id='transmission'
-                        list='engine-list'
-                        multiple
-                        required
-                        onChange={handleChangeInput}
-                    />
-                    <datalist id='engine-list'>
-                        {car.engine && car.engine.length > 0 ? (
-                            car.engine.map((eng, index) => (
-                                <option value={eng} key={index}>
-                                    {eng}
+            ) : (
+                <form onSubmit={handleBuy}>
+                    <p>
+                        <strong>To'liq ism</strong>: {formData.fullname}
+                    </p>
+                    <div>
+                        <b>
+                            <label htmlFor='phoneNumber'>Telefon raqam:</label>
+                        </b>
+                        <input
+                            type='tel'
+                            id='phoneNumber'
+                            value={formData.phone}
+                            onChange={handleChange}
+                            required
+                            placeholder='+998'
+                        />
+                    </div>
+                    <p>
+                        <strong>Model:</strong> {car?.model}
+                    </p>
+                    <p>
+                        <strong>Rangi:</strong> {car?.color}
+                    </p>
+                    <p>
+                        <strong>Narxi:</strong> {car?.price}
+                    </p>
+                    <p>
+                        <strong>Drayv:</strong> {car?.transmission}
+                    </p>
+                    <div>
+                        <label
+                            htmlFor='transmission'
+                            style={{
+                                fontWeight: "bold",
+                            }}>
+                            Uzatmalar qutisi:
+                        </label>
+                        <input
+                            type='text'
+                            name='engine'
+                            id='transmission'
+                            list='engine-list'
+                            multiple
+                            required
+                            onChange={handleChangeInput}
+                        />
+                        <datalist id='engine-list'>
+                            {car.engine && car.engine.length > 0 ? (
+                                car.engine.map((eng, index) => (
+                                    <option value={eng} key={index}>
+                                        {eng}
+                                    </option>
+                                ))
+                            ) : (
+                                <option value="Ma'lumotlar topilmadi">
+                                    Yo'q
                                 </option>
-                            ))
-                        ) : (
-                            <option value="Ma'lumotlar topilmadi">Yo'q</option>
-                        )}
-                    </datalist>
-                </div>
+                            )}
+                        </datalist>
+                    </div>
 
-                <p>
-                    <strong>To'lov turi:</strong> {car?.payment}
-                </p>
-                <div className='car-details-drawer-footer'>
-                    <Button onClick={onClose} style={{ marginRight: 8 }}>
-                        Bekor qilish
-                    </Button>
-                    <Button type='primary' htmlType='submit'>
-                        Sotib olish
-                    </Button>
-                </div>
-            </form>
+                    <p>
+                        <strong>To'lov turi:</strong> {car?.payment}
+                    </p>
+                    <div className='car-details-drawer-footer'>
+                        <Button onClick={onClose} style={{ marginRight: 8 }}>
+                            Bekor qilish
+                        </Button>
+                        <Button
+                            type='primary'
+                            htmlType='submit'
+                            disabled={loader}>
+                            Sotib olish
+                        </Button>
+                    </div>
+                </form>
+            )}
         </Drawer>
     );
 };

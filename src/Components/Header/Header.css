@@ -514,6 +514,7 @@
         padding: 5px;
         color: #fff;
         transition: 0.2s;
+        text-align: start;
     }
     .header__responsive.show .header-responsive__links button:hover,
     .header__responsive.show .header-responsive__links li a:hover,
