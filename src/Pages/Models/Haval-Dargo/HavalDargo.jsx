@@ -1,3 +1,4 @@
+import { message } from "antd";
 import Aos from "aos";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -7,19 +8,47 @@ import GWM_WINGLE_7_eksteryer from "../../../Images/gwm-wingle-7-eksteryer-1.jpg
 import GWM_WINGLE_7 from "../../../Images/gwm-wingle-7-large.jpg";
 import GWM_WINGLE_7_PNG_WHITE from "../../../Images/m-gwm-wingle-7-white.png";
 import GWM_WINGLE_7_PNG from "../../../Images/m-gwm-wingle-7.png";
-import "../GWM-wingle-7/GWM-wingle-7.css";
+import CarDetailsDrawer from "../../../Utils/CarDetails/CarDetailsDrawer";
+import { UserService } from "../../User/UserService";
+import { ToastContainer } from "react-toastify";
+import "./HavalDargo.css";
 
 function HavalDargo() {
     const [carImg, setCarImg] = useState(GWM_WINGLE_7_PNG);
+    const [drawerVisible, setDrawerVisible] = useState(false);
 
     useEffect(() => {
         Aos.init();
+        document.title = `HAVAL | ${car?.model}`;
     }, []);
+
+    const car = {
+        brend: "HAVAL",
+        model: "HAVAL DARGO",
+        price: "359 900 000",
+        transmission: "To'liq",
+        engine: ["Mexanik", "Avto"],
+        payment: "Naqd",
+        description: "KO‘PROQ JOY - KO‘PROQ IMKONIYATLAR",
+        color: carImg === GWM_WINGLE_7_PNG ? "Qora" : "Oq",
+    };
+
+    const handleBuy = () => {
+        if (!UserService.TOKEN) {
+            message.warning("Avtomobil sotib olish uchun login qilish shart!", [
+                4,
+            ]);
+            message.config({ maxCount: 3 });
+        } else {
+            setDrawerVisible(true);
+        }
+    };
 
     return (
         <div className='gwm-wingle-7-page'>
             <>
                 <HeaderNavBar />
+                <ToastContainer />
             </>
             <div className='add-agreement-wrapper'>
                 <div>
@@ -41,8 +70,8 @@ function HavalDargo() {
                                 style={{
                                     marginBottom: "100px",
                                 }}>
-                                <h2 about='OAIUXHNBYOXIUAHNAOUYBI'>HAVAL</h2>
-                                <h1>GWM WINGLE 7</h1>
+                                <h2>{car.brend}</h2>
+                                <h1>{car.model}</h1>
                                 <hr />
                             </div>
                             <h1>Modifikatsiya</h1>
@@ -59,6 +88,20 @@ function HavalDargo() {
                                         setCarImg(GWM_WINGLE_7_PNG_WHITE)
                                     }></span>
                             </div>
+                            <ul
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    fontFamily: "var(--font-roboto)",
+                                    color: "inherit",
+                                    fontSize: "16px",
+                                    marginTop: "5px",
+                                }}>
+                                <li>Dvigatel</li>
+                                <li>2.4(4WD)MT</li>
+                                <li>149</li>
+                                <li>Benzin</li>
+                            </ul>
                             <hr
                                 style={{
                                     marginTop: "20px",
@@ -68,11 +111,16 @@ function HavalDargo() {
                                 <p>
                                     Narxi:{" "}
                                     <span>
-                                        <b>359 000 000 so'm</b>
+                                        <b>{car.price} so'm</b>
                                     </span>
                                 </p>
-                                <button>Sotib olish</button>
+                                <button onClick={handleBuy}>Sotib olish</button>
                             </div>
+                            <CarDetailsDrawer
+                                car={car}
+                                open={drawerVisible}
+                                onClose={() => setDrawerVisible(false)}
+                            />
                         </div>
                     </div>
                 </div>
@@ -146,7 +194,7 @@ function HavalDargo() {
                         style={{
                             padding: "10px",
                         }}>
-                        <h3>GWM WINGLE 7</h3>
+                        <h3>{car.model}</h3>
                         <span>|</span>
                         <p>359 900 000 so'm</p>
                     </div>
@@ -159,8 +207,8 @@ function HavalDargo() {
                             />
                             <span></span>
                             <div>
-                                <h1>GWM WINGLE 7</h1>
-                                <p>KO‘PROQ JOY - KO‘PROQ IMKONIYATLAR</p>
+                                <h1>{car.model}</h1>
+                                <p>{car.description}</p>
                             </div>
                         </div>
                     </div>
