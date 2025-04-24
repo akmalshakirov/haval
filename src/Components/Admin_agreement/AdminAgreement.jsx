@@ -8,7 +8,7 @@ import "./AdminAgreement.css";
 function AdminAgreement() {
     const navigate = useNavigate();
     const [loader, setLoader] = useState(false);
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("authToken");
     // const [loadPDF, setLoadPDF] = useState(false);
     const [allContracts, setAllContracts] = useState([]);
     const [isLoadingBtn, setIsLoadingBtn] = useState(false);
@@ -82,7 +82,7 @@ function AdminAgreement() {
             const formData = new FormData();
             formData.append("id", id);
             const response = await axios.post(
-                `http://localhost:3000/orders-pay/`,
+                `http://localhost:3000/orders-pay`,
                 formData,
                 {
                     headers: {
