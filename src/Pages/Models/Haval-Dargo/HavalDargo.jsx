@@ -5,10 +5,12 @@ import { Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import FooterComponent from "../../../Components/Footer/Footer";
 import HeaderNavBar from "../../../Components/Header/HeaderNavBar";
+import HAVAL_DARGO from "../../../Images/m-haval-dargo.png";
+import HAVAL_DARGO_BLUE from "../../../Images/m-haval-dargo-blue.png";
+import HAVAL_DARGO_BLACK from "../../../Images/m-haval-dargo-black.png";
+import HAVAL_DARGO_WHITE from "../../../Images/m-haval-dargo-white.png";
 import GWM_WINGLE_7_eksteryer from "../../../Images/gwm-wingle-7-eksteryer-1.jpg";
 import GWM_WINGLE_7 from "../../../Images/gwm-wingle-7-large.jpg";
-import GWM_WINGLE_7_PNG_WHITE from "../../../Images/m-gwm-wingle-7-white.png";
-import HAVAL_DARGO from "../../../Images/m-haval-dargo.png";
 import CarDetailsDrawer from "../../../Utils/CarDetails/CarDetailsDrawer";
 import { UserService } from "../../User/UserService";
 import "./HavalDargo.css";
@@ -85,7 +87,17 @@ function HavalDargo() {
                                 <span
                                     id='two'
                                     onClick={() =>
-                                        setCarImg(GWM_WINGLE_7_PNG_WHITE)
+                                        setCarImg(HAVAL_DARGO_BLUE)
+                                    }></span>
+                                <span
+                                    id='three'
+                                    onClick={() =>
+                                        setCarImg(HAVAL_DARGO_BLACK)
+                                    }></span>
+                                <span
+                                    id='four'
+                                    onClick={() =>
+                                        setCarImg(HAVAL_DARGO_WHITE)
                                     }></span>
                             </div>
                             <ul

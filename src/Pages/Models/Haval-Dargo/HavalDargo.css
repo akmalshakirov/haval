@@ -132,7 +132,8 @@
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background-color: #0c0d11;
+    background-color: #f35b06;
+    border: 1px solid black;
     margin-left: 10px;
     cursor: pointer;
 }
@@ -142,7 +143,29 @@
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background-color: white;
+    background-color: #4f5f76;
+    border: 1px solid black;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.add-agreement-model-color #three {
+    display: block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #37393e;
+    border: 1px solid black;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.add-agreement-model-color #four {
+    display: block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #cacccb;
     border: 1px solid black;
     cursor: pointer;
     margin-left: 5px;
