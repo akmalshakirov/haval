@@ -7,6 +7,7 @@ import havalH6 from "../../Images/haval-h6.jpg";
 import havalM6 from "../../Images/haval-m6.jpg";
 import gwmWingle7 from "../../Images/gwm-wingle-7.jpg";
 import { Link } from "react-router-dom";
+import FooterComponent from "../../Components/Footer/Footer";
 
 function Models() {
     const carModels = [
@@ -14,8 +15,8 @@ function Models() {
             id: 1,
             name: "Haval H9",
             image: havalH9,
-            price: "Xali aniq emas",
-            specs: "Xali aniq emas",
+            price: "Tez orada",
+            specs: "Tez orada",
             link: "/models",
         },
         {
@@ -97,6 +98,12 @@ function Models() {
                         </div>
                     ))}
                 </div>
+            </div>
+            <div
+                style={{
+                    marginTop: "60px",
+                }}>
+                <FooterComponent />
             </div>
         </div>
     );
