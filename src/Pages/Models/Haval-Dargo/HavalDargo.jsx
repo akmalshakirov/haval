@@ -2,19 +2,19 @@ import { message } from "antd";
 import Aos from "aos";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import FooterComponent from "../../../Components/Footer/Footer";
 import HeaderNavBar from "../../../Components/Header/HeaderNavBar";
 import GWM_WINGLE_7_eksteryer from "../../../Images/gwm-wingle-7-eksteryer-1.jpg";
 import GWM_WINGLE_7 from "../../../Images/gwm-wingle-7-large.jpg";
 import GWM_WINGLE_7_PNG_WHITE from "../../../Images/m-gwm-wingle-7-white.png";
-import GWM_WINGLE_7_PNG from "../../../Images/m-gwm-wingle-7.png";
+import HAVAL_DARGO from "../../../Images/m-haval-dargo.png";
 import CarDetailsDrawer from "../../../Utils/CarDetails/CarDetailsDrawer";
 import { UserService } from "../../User/UserService";
-import { ToastContainer } from "react-toastify";
 import "./HavalDargo.css";
 
 function HavalDargo() {
-    const [carImg, setCarImg] = useState(GWM_WINGLE_7_PNG);
+    const [carImg, setCarImg] = useState(HAVAL_DARGO);
     const [drawerVisible, setDrawerVisible] = useState(false);
 
     useEffect(() => {
@@ -25,12 +25,12 @@ function HavalDargo() {
     const car = {
         brend: "HAVAL",
         model: "HAVAL DARGO",
-        price: "359 900 000",
+        price: "399 900 000",
         transmission: "To'liq",
-        engine: ["Mexanik", "Avto"],
+        engine: ["Avtomatik"],
         payment: "Naqd",
-        description: "KO‘PROQ JOY - KO‘PROQ IMKONIYATLAR",
-        color: carImg === GWM_WINGLE_7_PNG ? "Qora" : "Oq",
+        description: "TRASSADA MUKAMMAL, YO'LSIZLIKDA ISHONCHLI.",
+        color: carImg === HAVAL_DARGO ? "Qora" : "Oq" /* ISHLASH GARAK */,
     };
 
     const handleBuy = () => {
@@ -80,7 +80,7 @@ function HavalDargo() {
                                 <span
                                     id='one'
                                     onClick={() =>
-                                        setCarImg(GWM_WINGLE_7_PNG)
+                                        setCarImg(HAVAL_DARGO)
                                     }></span>
                                 <span
                                     id='two'

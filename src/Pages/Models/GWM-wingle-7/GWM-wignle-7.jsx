@@ -2,6 +2,7 @@ import { message } from "antd";
 import Aos from "aos";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import FooterComponent from "../../../Components/Footer/Footer";
 import HeaderNavBar from "../../../Components/Header/HeaderNavBar";
 import GWM_WINGLE_7_eksteryer from "../../../Images/gwm-wingle-7-eksteryer-1.jpg";
@@ -11,7 +12,6 @@ import GWM_WINGLE_7_PNG from "../../../Images/m-gwm-wingle-7.png";
 import CarDetailsDrawer from "../../../Utils/CarDetails/CarDetailsDrawer";
 import { UserService } from "../../User/UserService";
 import "./GWM-wingle-7.css";
-import { ToastContainer } from "react-toastify";
 
 function GWMwignle7() {
     const [carImg, setCarImg] = useState(GWM_WINGLE_7_PNG);
