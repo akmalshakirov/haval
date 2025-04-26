@@ -3,11 +3,13 @@ import {
     CarOutlined,
     DeleteOutlined,
     EditOutlined,
+    EnvironmentOutlined,
     HomeOutlined,
     IdcardOutlined,
     LogoutOutlined,
     NotificationOutlined,
     OrderedListOutlined,
+    PlusCircleOutlined,
     StockOutlined,
     UnorderedListOutlined,
     UserOutlined,
@@ -36,6 +38,7 @@ import AdminNews from "../Admin_news/AdminNews";
 import AdminUsers from "../Admin_users/AdminUsers";
 import AdminVideos from "../Admin_videos/AdminVideos";
 import "./Admin.css";
+import AdminDealer from "../Admin_dealer/AdminDealer";
 
 const { Header, Sider, Content, Footer } = Layout;
 
@@ -563,6 +566,11 @@ const AdminPanel = () => {
                             icon: <OrderedListOutlined />,
                             label: "Shartnomalar",
                         },
+                        {
+                            key: "8",
+                            icon: <EnvironmentOutlined />,
+                            label: "Dilerlar",
+                        },
                     ]}
                 />
                 <div
@@ -591,27 +599,6 @@ const AdminPanel = () => {
                     />
                 </div>
             </Sider>
-            {/* <div
-                style={{
-                    display: "flex",
-                    gap: "20px",
-                    position: "absolute",
-                    top: 0,
-                    right: 0,
-                    margin: 16,
-                }}>
-                <Button type='primary'>Day/night</Button>
-                <Tooltip title='Chiqish' className='tooltip-logout'>
-                    <Popconfirm
-                        title='Chiqish'
-                        description='Haqiqatan ham chiqishni istaysizmi?'
-                        onConfirm={handleLogout}
-                        okText='Ha'
-                        cancelText='Yoq'>
-                        <LogoutOutlined />
-                    </Popconfirm>
-                </Tooltip>
-            </div> */}
             <Layout>
                 <Header style={{ padding: 0 }}>
                     <div
@@ -1079,6 +1066,11 @@ const AdminPanel = () => {
                         {selectedKey === "7" && (
                             <>
                                 <AdminAgreement />
+                            </>
+                        )}
+                        {selectedKey === "8" && (
+                            <>
+                                <AdminDealer />
                             </>
                         )}
                     </div>
