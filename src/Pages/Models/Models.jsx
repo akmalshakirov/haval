@@ -99,12 +99,7 @@ function Models() {
                     ))}
                 </div>
             </div>
-            <div
-                style={{
-                    marginTop: "60px",
-                }}>
-                <FooterComponent />
-            </div>
+            <FooterComponent />
         </div>
     );
 }

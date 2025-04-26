@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "swiper/css";
 import "swiper/css/parallax";
-import { Parallax } from "swiper/modules";
+import { Autoplay, Parallax } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
 import gwmWingle7 from "../../Images/gwm-wingle-7.jpg";
@@ -65,8 +65,11 @@ const SwiperComponent = () => {
         <div className='header-swiper-wrapper'>
             <Swiper
                 parallax={parallaxEnabled}
-                speed={2277}
-                modules={[Parallax]}
+                speed={1577}
+                autoplay={{
+                    delay: 2200,
+                }}
+                modules={[Parallax, Autoplay]}
                 className='swiper-container'>
                 {images.map(({ src, title, desc, link }, index) => (
                     <SwiperSlide

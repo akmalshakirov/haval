@@ -1,0 +1,79 @@
+.card {
+    border: 1px solid #f0f0f0;
+    border-radius: 2px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.09);
+    border-radius: 10px;
+    font-family: var(--font-roboto);
+}
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #f0f0f0;
+}
+.card-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+}
+.card-body {
+    padding: 16px;
+}
+.descriptions {
+    display: grid;
+    row-gap: 16px;
+}
+.descriptions-row {
+    display: flex;
+}
+.descriptions-label {
+    width: 150px;
+    color: rgba(0, 0, 0, 0.45);
+}
+.descriptions-content {
+    flex: 1;
+}
+.input,
+.time-input,
+.select,
+.input-number {
+    width: 100%;
+    padding: 4px 11px;
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+    font-size: 14px;
+}
+.input:focus,
+.time-input:focus,
+.select:focus,
+.input-number:focus {
+    outline: none;
+    border-color: #40a9ff;
+}
+.btn {
+    padding: 4px 15px;
+    font-size: 14px;
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+    background: #fff;
+    cursor: pointer;
+    font-family: inherit;
+}
+.primary-btn {
+    background: #1890ff;
+    border-color: #1890ff;
+    color: #fff;
+}
+.icon-btn {
+    padding: 4px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn:hover {
+    opacity: 0.85;
+}
