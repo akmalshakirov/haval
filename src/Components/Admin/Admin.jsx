@@ -75,6 +75,26 @@ const AdminPanel = () => {
         setChangePass(true);
     };
 
+    const onMenuClick = (e) => {
+        setSelectedKey(e.key);
+        switch (e.key) {
+            case "1":
+                navigate("/admin/s");
+                break;
+            case "2":
+                break;
+            case "3":
+                break;
+            case "4":
+                break;
+            case "5":
+                break;
+            default:
+                navigate("/admin");
+                break;
+        }
+    };
+
     const fetchCars = async () => {
         try {
             const token = localStorage.getItem("authToken");
@@ -533,7 +553,7 @@ const AdminPanel = () => {
                     theme='dark'
                     mode='inline'
                     defaultSelectedKeys={["1"]}
-                    onClick={(e) => setSelectedKey(e.key)}
+                    onClick={onMenuClick}
                     items={[
                         { key: "1", icon: <HomeOutlined />, label: "Adminlar" },
                         {
@@ -569,7 +589,7 @@ const AdminPanel = () => {
                         {
                             key: "8",
                             icon: <EnvironmentOutlined />,
-                            label: "Dilerlar",
+                            label: <Link to='/admin/dealers'>Dilerlar</Link>,
                         },
                     ]}
                 />

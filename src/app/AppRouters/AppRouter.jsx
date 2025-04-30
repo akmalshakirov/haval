@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import PreLoader from "../../Components/Preloader/Preloader.jsx";
+import AdminDealer from "../../Components/Admin_dealer/AdminDealer.jsx";
 
 const AdminPanel = React.lazy(() => import("../../Components/Admin/Admin.jsx"));
 const AdminLogin = React.lazy(() =>
@@ -86,6 +87,7 @@ const AppRouter = () => {
                     }
                 />
                 <Route path='/admin/auth' element={<AdminLogin />} />
+                <Route path='/admin/dealers' element={<AdminDealer />} />
                 <Route path='/dealers' element={<Dealers />} />
                 <Route path='/models' element={<Models />} />
                 <Route path='/models/haval-dargo' element={<HavalDargo />} />

@@ -1,11 +1,14 @@
-import { message, Spin } from "antd";
+import { Button, message, Spin } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import "./AdminUsers.css";
+import { toast } from "react-toastify";
 
 function AdminUsers() {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [loadingStates, setLoadingStates] = useState({});
+    const token = localStorage.getItem("authToken");
     const fetchUsers = async () => {
         setLoading(true);
         try {
@@ -30,6 +33,35 @@ function AdminUsers() {
             setLoading(false);
         }
     };
+
+    async function deleteUser(id) {
+        setLoadingStates((prev) => ({ ...prev, [id]: true }));
+        try {
+            const resposne = await axios.delete(
+                `http://localhost:3000/users/${id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            if (resposne.status === 200) {
+                toast.success(resposne.data && resposne.data.message);
+            } else {
+                toast.error(resposne.statusText, resposne.data);
+            }
+        } catch (error) {
+            toast.error(
+                error?.resposne?.data?.message || error?.resposne?.data?.error
+            );
+        } finally {
+            setLoadingStates((prev) => ({
+                ...prev,
+                [id]: false,
+            }));
+        }
+    }
+
     useEffect(() => {
         fetchUsers();
     }, []);
@@ -80,9 +112,14 @@ function AdminUsers() {
                             <div style={{ flex: "0 0 200px" }}>
                                 {user.orders.length}
                             </div>
-                            <button className='users-card-button'>
+                            <Button
+                                danger
+                                loading={loadingStates}
+                                disabled={loadingStates}
+                                className='users-card-button'
+                                onClick={() => deleteUser(user._id)}>
                                 O'chirish
-                            </button>
+                            </Button>
                         </div>
                     ))}
                 </>
