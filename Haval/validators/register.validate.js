@@ -1,6 +1,6 @@
 const { checkSchema } = require("express-validator");
 
-exports.validateRegister = checkSchema({
+exports.validateRegister = {
     name: {
         in: ["body"],
         isString: { errorMessage: "Ism string bo'lishi kerak!" },
@@ -8,19 +8,19 @@ exports.validateRegister = checkSchema({
         isLength: [
             {
                 options: { min: 2 },
-                errorMessage: "Ism 2 ta belgidan kam bo'lmasligi kerak!"
+                errorMessage: "Ism 2 ta belgidan kam bo'lmasligi kerak!",
             },
             {
                 options: { max: 50 },
-                errorMessage: "Ism 50 ta belgidan ko'p bo'lmasligi kerak!"
-            }
-        ]
+                errorMessage: "Ism 50 ta belgidan ko'p bo'lmasligi kerak!",
+            },
+        ],
     },
     email: {
         in: ["body"],
         isString: { errorMessage: "Email string bo'lishi kerak!" },
         isEmail: { errorMessage: "Email noto'g'ri formatda!" },
-        notEmpty: { errorMessage: "Email bo'sh bo'lmasligi kerak!" }
+        notEmpty: { errorMessage: "Email bo'sh bo'lmasligi kerak!" },
     },
     password: {
         in: ["body"],
@@ -29,12 +29,12 @@ exports.validateRegister = checkSchema({
         isLength: [
             {
                 options: { min: 6 },
-                errorMessage: "Parol 6 ta belgidan kam bo'lmasligi kerak!"
+                errorMessage: "Parol 6 ta belgidan kam bo'lmasligi kerak!",
             },
             {
                 options: { max: 20 },
-                errorMessage: "Parol 20 ta belgidan ko'p bo'lmasligi kerak!"
-            }
-        ]
-    }
-});
+                errorMessage: "Parol 20 ta belgidan ko'p bo'lmasligi kerak!",
+            },
+        ],
+    },
+};

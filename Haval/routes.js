@@ -312,7 +312,7 @@ router
         [...validateTest_drayver],
         addTestDriver
     )
-    .post("/register", [...validateRegister], register)
+    .post("/register", checkSchema(validateRegister), register)
     .post("/loginUser", loginLimiter, [...validateLogin], login)
     .get(
         "/users",
