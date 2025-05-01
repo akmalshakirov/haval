@@ -1,6 +1,7 @@
-import { Button, Card, Form, Image, Input, message, Modal, Spin } from "antd";
+import { Button, Card, Form, Image, Input, Modal, Spin } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 import "./AdminNews.css";
 
 function AdminNews() {
@@ -16,7 +17,7 @@ function AdminNews() {
         try {
             const token = localStorage.getItem("authToken");
             if (!token) {
-                message.error("Token topilmadi, qayta tizimga kiring!");
+                toast.error("Token topilmadi, qayta tizimga kiring!");
                 return;
             }
 
@@ -37,14 +38,14 @@ function AdminNews() {
             setAdminNewsList(newsData);
 
             if (newsData.length === 0) {
-                message.info("Yangiliklar topilmadi");
+                toast.info("Yangiliklar topilmadi");
             }
         } catch (error) {
             const response = error.response;
             if (response?.status === 401) {
-                message.info("Token vaqti tugagan!");
+                toast.info("Token vaqti tugagan!");
             } else {
-                message.error(
+                toast.error(
                     `Yangiliklarni yuklashda xatolik yuz berdi: ${
                         error.response?.data?.message || error.message
                     }`
@@ -59,7 +60,7 @@ function AdminNews() {
         try {
             const token = localStorage.getItem("authToken");
             if (!token) {
-                message.error("Token topilmadi");
+                toast.error("Token topilmadi");
                 return;
             }
 
@@ -80,11 +81,10 @@ function AdminNews() {
                     },
                 }
             );
-            console.log(formData.title);
 
             if (response.status === 200) {
                 setAddNewsModal(false);
-                message.success("Yangilik muvaffaqiyatli qo'shildi!");
+                toast.success("Yangilik muvaffaqiyatli qo'shildi!");
                 setAdminNewsList([
                     ...adminNewsList,
                     { key: `${adminNewsList.length + 1}`, ...values },
@@ -96,14 +96,14 @@ function AdminNews() {
                 await fetchNews();
             }
             if (response.status === 500) {
-                message.error("Bazaga ulanishda xatolik yuz berdi!");
+                toast.error("Bazaga ulanishda xatolik yuz berdi!");
             }
         } catch (error) {
             const response = error.response;
             if (response?.status === 401) {
-                message.info("Token vaqti tugagan!");
+                toast.info("Token vaqti tugagan!");
             } else {
-                message.error(
+                toast.error(
                     `Xatolik yuz berdi: ${
                         response?.data?.message || error.message
                     }`
@@ -123,6 +123,7 @@ function AdminNews() {
 
     return (
         <div className='admin-news'>
+            <ToastContainer />
             <Button
                 type='primary'
                 id='admin-news-button-primary'

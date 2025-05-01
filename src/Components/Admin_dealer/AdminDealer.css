@@ -61,3 +61,49 @@
     border-color: #000000b0;
     color: inherit;
 }
+
+/* MODAL */
+.admin-add-diler {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+}
+.admin-add-diler div {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.admin-add-diler div label {
+    margin-right: auto;
+}
+
+.admin-add-diler div input {
+    width: 63%;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #adabab;
+    transition: 222ms;
+}
+
+.admin-add-diler div input:focus {
+    outline: 1px solid rgb(0, 162, 255);
+}
+
+.admin-add-diler button {
+    background-color: transparent;
+    border: 1px solid rgba(0, 68, 255, 0.678);
+    border-radius: 5px;
+    font-family: var(--font-roboto);
+    padding: 8px;
+    margin-left: auto;
+    margin-top: 10px;
+    transition: 0.3s;
+}
+
+.admin-add-diler button:hover {
+    background-color: rgba(0, 119, 255, 0.212);
+}

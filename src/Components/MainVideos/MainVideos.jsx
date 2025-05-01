@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
-import "./MainVideos.css";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { Card, message } from "antd";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
+import React, { useEffect } from "react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import axios from "axios";
+import { Navigation, Pagination } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "./MainVideos.css";
 
 const VideosArr = [
     {
@@ -42,7 +40,7 @@ function MainVideos() {
     //         );
     //         setMainVideos(response.data);
     //     } catch (error) {
-    //         message.error(
+    //         toast.error(
     //             `Videolarni yuklashda xatolik yuz berdi: ${error.response?.data?.message}`
     //         );
     //     }

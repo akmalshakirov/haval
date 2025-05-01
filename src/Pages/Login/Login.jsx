@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { Form, Input, Button, Checkbox, Typography, Card, message } from "antd";
-import "./Login.css";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { Button, Card, Checkbox, Form, Input, Typography } from "antd";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { toast, ToastContainer } from "react-toastify";
+import "./Login.css";
 
 const { Title, Text } = Typography;
 
@@ -27,12 +28,13 @@ const Login = () => {
             if (response.status === 200 && response.data?.token) {
                 localStorage.setItem("token", response.data.token);
                 localStorage.setItem("userID", response.data.userId);
-                navigate("/user");
+                toast.success("Siz muvaffaqiyatli login qildingiz");
+                setTimeout(() => {
+                    navigate("/user");
+                }, 2000);
             }
         } catch (error) {
-            message.error(
-                error?.response?.data?.message || "Xatolik yuz berdi"
-            );
+            toast.error(error?.response?.data?.message || "Xatolik yuz berdi");
         } finally {
             setOnClick(false);
         }
@@ -40,6 +42,7 @@ const Login = () => {
 
     return (
         <div className='login-container'>
+            <ToastContainer />
             <Card className='login-card'>
                 <Title level={4} className='login-title'>
                     Войдите в свой аккаунт

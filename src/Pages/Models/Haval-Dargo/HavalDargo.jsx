@@ -1,16 +1,15 @@
-import { message } from "antd";
 import Aos from "aos";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import FooterComponent from "../../../Components/Footer/Footer";
 import HeaderNavBar from "../../../Components/Header/HeaderNavBar";
-import HAVAL_DARGO from "../../../Images/m-haval-dargo.png";
-import HAVAL_DARGO_BLUE from "../../../Images/m-haval-dargo-blue.png";
-import HAVAL_DARGO_BLACK from "../../../Images/m-haval-dargo-black.png";
-import HAVAL_DARGO_WHITE from "../../../Images/m-haval-dargo-white.png";
 import GWM_WINGLE_7_eksteryer from "../../../Images/gwm-wingle-7-eksteryer-1.jpg";
 import GWM_WINGLE_7 from "../../../Images/gwm-wingle-7-large.jpg";
+import HAVAL_DARGO_BLACK from "../../../Images/m-haval-dargo-black.png";
+import HAVAL_DARGO_BLUE from "../../../Images/m-haval-dargo-blue.png";
+import HAVAL_DARGO_WHITE from "../../../Images/m-haval-dargo-white.png";
+import HAVAL_DARGO from "../../../Images/m-haval-dargo.png";
 import CarDetailsDrawer from "../../../Utils/CarDetails/CarDetailsDrawer";
 import { UserService } from "../../User/UserService";
 import "./HavalDargo.css";
@@ -37,10 +36,9 @@ function HavalDargo() {
 
     const handleBuy = () => {
         if (!UserService.TOKEN) {
-            message.warning("Avtomobil sotib olish uchun login qilish shart!", [
+            toast.warning("Avtomobil sotib olish uchun login qilish shart!", [
                 4,
             ]);
-            message.config({ maxCount: 3 });
         } else {
             setDrawerVisible(true);
         }
@@ -48,9 +46,9 @@ function HavalDargo() {
 
     return (
         <div className='gwm-wingle-7-page'>
+            <ToastContainer />
             <>
                 <HeaderNavBar />
-                <ToastContainer />
             </>
             <div className='add-agreement-wrapper'>
                 <div>

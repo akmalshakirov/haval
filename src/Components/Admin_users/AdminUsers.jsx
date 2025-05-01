@@ -1,8 +1,8 @@
-import { Button, message, Spin } from "antd";
+import { Button, Spin } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 import "./AdminUsers.css";
-import { toast } from "react-toastify";
 
 function AdminUsers() {
     const [users, setUsers] = useState([]);
@@ -12,9 +12,8 @@ function AdminUsers() {
     const fetchUsers = async () => {
         setLoading(true);
         try {
-            const token = localStorage.getItem("authToken");
             if (!token) {
-                message.error("Token topilmadi, qayta tizimga kiring!");
+                toast.error("Token topilmadi, qayta tizimga kiring!");
                 return;
             }
 
@@ -25,10 +24,8 @@ function AdminUsers() {
                 },
             });
             setUsers(resposne.data);
-            console.log("Kelgan ma'lumotlar (users)", resposne.data);
         } catch (error) {
-            console.log(error);
-            message.error(error.data?.message);
+            toast.error(error.data?.message);
         } finally {
             setLoading(false);
         }
@@ -45,11 +42,7 @@ function AdminUsers() {
                     },
                 }
             );
-            if (resposne.status === 200) {
-                toast.success(resposne.data && resposne.data.message);
-            } else {
-                toast.error(resposne.statusText, resposne.data);
-            }
+            toast.success(resposne.data && resposne.data.message);
         } catch (error) {
             toast.error(
                 error?.resposne?.data?.message || error?.resposne?.data?.error
@@ -67,7 +60,8 @@ function AdminUsers() {
     }, []);
     return (
         <div>
-            <h1 style={{ marginBottom: "20px" }}>Users</h1>
+            <ToastContainer />
+            <h1 style={{ marginBottom: "20px" }}>Foydalanuvchilar</h1>
             {loading ? (
                 <div
                     style={{
@@ -83,15 +77,16 @@ function AdminUsers() {
             ) : (
                 <>
                     <div style={{ display: "flex" }}>
-                        <div style={{ flex: "0 0 200px" }}>
-                            <strong>Name:</strong>
+                        <div style={{ flex: "1", marginLeft: "10px" }}>
+                            <strong>Ism:</strong>
                         </div>
-                        <div style={{ flex: "0 0 200px" }}>
+                        <div style={{ flex: "1", marginLeft: "10px" }}>
                             <strong>Email:</strong>
                         </div>
                         <div
                             style={{
-                                flex: "0 0 200px",
+                                flex: "1",
+                                marginLeft: "10px",
                             }}>
                             <strong>Shartnomalari:</strong>
                         </div>
@@ -101,21 +96,19 @@ function AdminUsers() {
                     </div>
                     {users.map((user, index) => (
                         <div
-                            key={user.id || index}
-                            style={{ display: "flex", margin: "7px 0" }}>
-                            <div style={{ flex: "0 0 200px" }}>
+                            className='admin-users-list'
+                            key={user.id || index}>
+                            <div>
                                 <span>{user.name}</span>
                             </div>
-                            <div style={{ flex: "0 0 200px" }}>
+                            <div>
                                 <span>{user.email}</span>
                             </div>
-                            <div style={{ flex: "0 0 200px" }}>
-                                {user.orders.length}
-                            </div>
+                            <div>{user.orders.length}</div>
                             <Button
                                 danger
-                                loading={loadingStates}
-                                disabled={loadingStates}
+                                loading={loadingStates[user._id]}
+                                disabled={loadingStates[user._id]}
                                 className='users-card-button'
                                 onClick={() => deleteUser(user._id)}>
                                 O'chirish

@@ -1,6 +1,6 @@
-import { message } from "antd";
 import axios from "axios";
 import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 import "./DownloadPdf.css";
 
 export default function DownloadPdf() {
@@ -68,14 +68,14 @@ export default function DownloadPdf() {
             );
 
             if (response.status === 201) {
-                message.success(
+                toast.success(
                     "Shartnoma yaratildi, shartnomalarni shaxsiy kabinetingizda ko'rishingiz mumkin."
                 );
             } else {
-                console.error("Xatolik yuz berdi:", response.data.error);
+                "Xatolik yuz berdi:", response.data.error;
             }
         } catch (error) {
-            console.error("Serverga ulanishda xatolik:", error);
+            toast.error(error);
         } finally {
             setLoadingBtn(false);
         }
@@ -83,6 +83,7 @@ export default function DownloadPdf() {
 
     return (
         <div className='download-pdf-page'>
+            <ToastContainer />
             <div className='download-pdf-container'>
                 <form onSubmit={generatePDF} className='download-pdf-form'>
                     <div>

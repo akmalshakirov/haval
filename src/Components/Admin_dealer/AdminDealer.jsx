@@ -1,18 +1,7 @@
+import { Button, Modal } from "antd";
 import React, { useState } from "react";
-import "./AdminDealer.css";
-import { toast, ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
-import { Button } from "antd";
-
-const defaultDealer = {
-    title: "",
-    phone: "",
-    address: "",
-    region: "Toshkent",
-    days: 1,
-    startTime: "09:00",
-    endTime: "18:00",
-};
+import "./AdminDealer.css";
 
 const locations = [
     {
@@ -110,6 +99,13 @@ const locations = [
 ];
 
 const AdminDealer = () => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        alert("Finish");
+    };
+
     return (
         <div className='admin-dealers'>
             <Button
@@ -118,7 +114,7 @@ const AdminDealer = () => {
                     display: "inline-block",
                     marginBottom: "20px",
                 }}
-                onClick={() => alert("XILLO")}>
+                onClick={() => setIsModalOpen(true)}>
                 Diler qo'shish
             </Button>
             <table className='admin-dealers-table'>
@@ -134,18 +130,18 @@ const AdminDealer = () => {
                     </tr>
                     <tr></tr>
                 </thead>
-                {locations.map((location) => (
+                {locations?.map((location) => (
                     <tbody
                         className='admin-dealers-table-body'
-                        key={location.id}>
+                        key={location?.id}>
                         <tr>
-                            <td scope='row'>#{location.id}</td>
+                            <td scope='row'>#{location?.id}</td>
                         </tr>
                         <tr>
-                            <td scope='row'>{location.name}</td>
+                            <td scope='row'>{location?.name}</td>
                         </tr>
                         <tr>
-                            <td scope='row'>{location.description}</td>
+                            <td scope='row'>{location?.description}</td>
                         </tr>
                         <tr>
                             <td>
@@ -155,6 +151,79 @@ const AdminDealer = () => {
                     </tbody>
                 ))}
             </table>
+            <Modal
+                open={isModalOpen}
+                onCancel={() => setIsModalOpen(false)}
+                title="Yangi diler qo'shish"
+                footer={false}
+                centered>
+                <form className='admin-add-diler' onSubmit={handleSubmit}>
+                    <div>
+                        <label htmlFor='dilername'>Dilerning nomi:</label>
+                        <input
+                            type='text'
+                            id='dilername'
+                            placeholder='Masalan: HAVAL Toshkent'
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor='dilerphone'>
+                            Dilerning telefon raqami:
+                        </label>
+                        <input
+                            type='number'
+                            id='dilerphone'
+                            min={1}
+                            placeholder='+998'
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor='dileraddress'>Dilerning manzili:</label>
+                        <input
+                            type='text'
+                            id='dileraddress'
+                            placeholder='Masalan: Toshkent sh, Olmazor tumani'
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor='dilerworks'>Ish kunlari:</label>
+                        <input
+                            type='number'
+                            id='dilerworks'
+                            min={1}
+                            max={7}
+                            placeholder='Masalan: 7'
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor='dilerworkshourstart'>
+                            Ishlash soat (boshlash):
+                        </label>
+                        <input
+                            type='time'
+                            id='dilerworkshourstart'
+                            value={"09:00"}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor='dilerworkshourend'>
+                            Ishlash soat (tugash):
+                        </label>
+                        <input
+                            type='time'
+                            id='dilerworkshourend'
+                            value={"20:00"}
+                            required
+                        />
+                    </div>
+                    <button type='submit'>Yuborish</button>
+                </form>
+            </Modal>
         </div>
     );
 };

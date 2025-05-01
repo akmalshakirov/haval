@@ -4,10 +4,11 @@ import {
     FieldTimeOutlined,
     PieChartOutlined,
 } from "@ant-design/icons";
-import { message, Spin } from "antd";
+import { Spin } from "antd";
 import axios from "axios";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 import "./UserAgreement.css";
 
 const UserAgreement = ({ data, theme }) => {
@@ -33,14 +34,14 @@ const UserAgreement = ({ data, theme }) => {
             document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
         } catch (error) {
-            console.log(error);
-            message.error(error.message || "PDFni yuklab olishda xatolik");
+            toast.error(error.message || "PDFni yuklab olishda xatolik");
         } finally {
             setLoadingStates((prev) => ({ ...prev, [id]: false }));
         }
     };
     return (
         <>
+            <ToastContainer />
             <div
                 style={{
                     marginBottom: "30px",

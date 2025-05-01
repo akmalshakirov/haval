@@ -1,8 +1,7 @@
-import { message } from "antd";
 import Aos from "aos";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import FooterComponent from "../../../Components/Footer/Footer";
 import HeaderNavBar from "../../../Components/Header/HeaderNavBar";
 import GWM_WINGLE_7_eksteryer from "../../../Images/gwm-wingle-7-eksteryer-1.jpg";
@@ -34,10 +33,9 @@ function GWMwignle7() {
 
     const handleBuy = () => {
         if (!UserService.TOKEN) {
-            message.warning("Avtomobil sotib olish uchun login qilish shart!", [
+            toast.warning("Avtomobil sotib olish uchun login qilish shart!", [
                 4,
             ]);
-            message.config({ maxCount: 3 });
         } else {
             setDrawerVisible(true);
         }
@@ -45,9 +43,9 @@ function GWMwignle7() {
 
     return (
         <div className='gwm-wingle-7-page'>
+            <ToastContainer />
             <>
                 <HeaderNavBar />
-                <ToastContainer />
             </>
             <div className='add-agreement-wrapper'>
                 <div>
