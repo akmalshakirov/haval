@@ -3,10 +3,11 @@ import {
     ScheduleOutlined,
     UserOutlined,
 } from "@ant-design/icons";
-import { Button, Card, Checkbox, Form, Input, message, Typography } from "antd";
+import { Button, Card, Checkbox, Form, Input, Typography } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 import "./Register.css";
 
 const { Title, Text } = Typography;
@@ -32,7 +33,7 @@ const Registration = () => {
 
     const handleSubmit = async () => {
         if (name === "" && email === "" && inputPasswordValue === "") {
-            return message.error("Заполните все поля");
+            return toast.error("Заполните все поля");
         }
         setOnClick(true);
         try {
@@ -42,18 +43,19 @@ const Registration = () => {
                 { name, email, password: inputPasswordValue },
                 { headers: { "Content-Type": "application/json" } }
             );
-            localStorage.setItem("authToken", response.data.token);
-            message.success("Siz muvaffaqiyatli ro'yxatdan o'tdingiz.");
-            navigate("/login");
+            toast.success("Siz muvaffaqiyatli ro'yxatdan o'tdingiz.");
+            setTimeout(() => {
+                navigate("/login");
+            }, 2000);
         } catch (error) {
             if (error.code === "ERR_NETWORK") {
-                message.warning("Server ishlamayotgan bo'lishi mumkin");
+                toast.warning("Server ishlamayotgan bo'lishi mumkin");
             } else if (
                 error.response &&
                 error.response.data &&
                 error.response.data.error
             ) {
-                message.error(error.response.data.error);
+                toast.error(error.response.data.error);
             }
         } finally {
             setOnClick(false);
@@ -62,6 +64,7 @@ const Registration = () => {
 
     return (
         <div className='register-container'>
+            <ToastContainer />
             <Card className='register-card'>
                 <Title level={4} className='register-title'>
                     Регистрация

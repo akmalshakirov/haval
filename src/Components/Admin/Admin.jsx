@@ -9,7 +9,6 @@ import {
     LogoutOutlined,
     NotificationOutlined,
     OrderedListOutlined,
-    PlusCircleOutlined,
     StockOutlined,
     UnorderedListOutlined,
     UserOutlined,
@@ -23,7 +22,6 @@ import {
     InputNumber,
     Layout,
     Menu,
-    message,
     Modal,
     Spin,
     Switch,
@@ -32,13 +30,14 @@ import {
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 import Logo from "../../Images/haval.svg";
 import AdminAgreement from "../Admin_agreement/AdminAgreement";
+import AdminDealer from "../Admin_dealer/AdminDealer";
 import AdminNews from "../Admin_news/AdminNews";
 import AdminUsers from "../Admin_users/AdminUsers";
 import AdminVideos from "../Admin_videos/AdminVideos";
 import "./Admin.css";
-import AdminDealer from "../Admin_dealer/AdminDealer";
 
 const { Header, Sider, Content, Footer } = Layout;
 
@@ -75,31 +74,11 @@ const AdminPanel = () => {
         setChangePass(true);
     };
 
-    const onMenuClick = (e) => {
-        setSelectedKey(e.key);
-        switch (e.key) {
-            case "1":
-                navigate("/admin/s");
-                break;
-            case "2":
-                break;
-            case "3":
-                break;
-            case "4":
-                break;
-            case "5":
-                break;
-            default:
-                navigate("/admin");
-                break;
-        }
-    };
-
     const fetchCars = async () => {
         try {
             const token = localStorage.getItem("authToken");
             if (!token) {
-                message.error("Token topilmadi, qayta tizimga kiring!");
+                toast.error("Token topilmadi, qayta tizimga kiring!");
                 return;
             }
 
@@ -114,21 +93,17 @@ const AdminPanel = () => {
                 }
             );
             setCars([response.data.cars]);
-            console.log(
-                "Kelgan ma'lumotlar (avtomobillar):",
-                response.data.cars
-            );
         } catch (error) {
             const response = error.response;
             if (error.code === "ERR_NETWORK") {
-                return message.warning("Server ishlamayotgan bo'lishi mumkin");
+                return toast.warning("Server ishlamayotgan bo'lishi mumkin");
             } else if (response?.message === "Invalid token!") {
                 localStorage.removeItem("authToken");
                 navigate("/");
             } else if (response.status === 401) {
-                message.info("Token vaqti tugagan!");
+                toast.warn("Token vaqti tugagan!");
             } else {
-                message.error(
+                toast.error(
                     `Avtomobillarni yuklashda xatolik yuz berdi: ${error.response?.data?.message}` ||
                         error.message
                 );
@@ -159,12 +134,11 @@ const AdminPanel = () => {
             );
             await fetchCars();
             setCars([...cars, { key: `${cars.length + 1}`, ...values }]);
-            message.success("Avtomobil muvaffaqiyatli qo'shildi!");
+            toast.success("Avtomobil muvaffaqiyatli qo'shildi!");
             setIsModalOpen(false);
             form.resetFields();
         } catch (error) {
-            console.error("Avtomobil qo'shishda xatolik yuz berdi:", error);
-            message.error(
+            toast.error(
                 `Avtomobil qo'shishda xatolik yuz berdi: ${
                     error.response?.data?.message || error.message
                 }`
@@ -200,18 +174,12 @@ const AdminPanel = () => {
                 setActionModal(false);
                 setEditingCar(null);
                 form.resetFields();
-                message.success(response.data.message);
+                toast.success(response.data.message);
             }
         } catch (error) {
             const errorMessage =
-                error?.response?.data?.message ||
-                error.message ||
-                "Avtomobil ma'lumotlarini yangilashda xatolik yuz berdi!";
-            console.error(
-                "Avtomobil ma'lumotlarini yangilashda xatolik yuz berdi!:",
-                errorMessage
-            );
-            message.error(errorMessage);
+                error?.response?.data?.message || error.message;
+            toast.error(errorMessage);
         } finally {
             setOnClickBtn(false);
         }
@@ -230,16 +198,12 @@ const AdminPanel = () => {
             );
             if (response.status === 200) {
                 setDeleteModal(false);
-                message.success("Avtomobil muvaffaqiyatli o'chirildi!");
+                toast.success("Avtomobil muvaffaqiyatli o'chirildi!");
                 form.resetFields();
                 await fetchCars();
             }
         } catch (error) {
-            console.error(
-                "Avtomobilni o'chirishda xatolik yuz berdi:",
-                error.response?.data || error.message
-            );
-            message.error(
+            toast.error(
                 `Avtomobilni o'chirishda xatolik yuz berdi: ${
                     error.response?.data?.message || error.message
                 }`
@@ -253,7 +217,7 @@ const AdminPanel = () => {
         try {
             const token = localStorage.getItem("authToken");
             if (!token) {
-                message.error("Token topilmadi, qayta tizimga kiring!");
+                toast.error("Token topilmadi, qayta tizimga kiring!");
                 return;
             }
 
@@ -267,21 +231,16 @@ const AdminPanel = () => {
                     },
                 }
             );
-            // if (response.data.message === "Invalid token!") {
-            //     navigate("/");
-            // }
             setAdmins([response.data.admins]);
-            console.log("Kelgan ma'lumotlar (admin):", response.data.admins);
         } catch (error) {
             const response = error.response;
             if (error.code === "ERR_NETWORK") {
-                message.warning("Server ishlamayotgan bo'lishi mumkin");
+                toast.warning("Server ishlamayotgan bo'lishi mumkin");
             } else if (response?.status === 401) {
-                message.info("Token vaqti tugagan!");
+                toast.info("Token vaqti tugagan!");
             } else {
-                message.error(
-                    `Adminlarni yuklashda xatolik yuz berdi: ${error.response?.data?.message}` ||
-                        error.message
+                toast.error(
+                    `Adminlarni yuklashda xatolik yuz berdi: ${error.response.data.error}`
                 );
             }
         } finally {
@@ -323,7 +282,7 @@ const AdminPanel = () => {
                     ...admins,
                     { key: `${admins.length + 1}`, ...values },
                 ]);
-                message.success("Admin muvaffaqiyatli qo'shildi!");
+                toast.success("Admin muvaffaqiyatli qo'shildi!");
                 setIsModalOpen(false);
                 form.resetFields();
             }
@@ -333,11 +292,11 @@ const AdminPanel = () => {
                 error.response.data &&
                 error.response.data.error
             ) {
-                message.error(
+                toast.error(
                     `Admin qo'shishda xatolik yuz berdi: ${error?.response?.data?.error}`
                 );
             } else {
-                message.error("Admin qo'shishda xatolik yuz berdi:");
+                toast.error("Admin qo'shishda xatolik yuz berdi:");
             }
         } finally {
             setOnClickBtn(false);
@@ -371,14 +330,10 @@ const AdminPanel = () => {
                 setAactionModal(false);
                 setEditingAdmin(null);
                 form.resetFields();
-                message.success("Admin muvaffaqiyatli o'zgartirildi!");
+                toast.success("Admin muvaffaqiyatli o'zgartirildi!");
             }
         } catch (error) {
-            console.error(
-                "Adminni yangilashda xatolik yuz berdi:",
-                error.response?.data || error.message
-            );
-            message.error(
+            toast.error(
                 `Adminni yangilashda xatolik yuz berdi: ${error.response?.data?.message}`
             );
         } finally {
@@ -401,14 +356,10 @@ const AdminPanel = () => {
             setDeleteAdminModal(false);
             if (response.status === 200) {
                 await fetchAdmins();
-                message.success("Admin muvaffaqiyatli o'chirildi!");
+                toast.success("Admin muvaffaqiyatli o'chirildi!");
             }
         } catch (error) {
-            console.error(
-                "Adminni o'chirishda xatolik yuz berdi:",
-                error.response?.data || error.message
-            );
-            message.error(
+            toast.error(
                 `Adminni o'chirishda xatolik yuz berdi: ${error.response?.data?.message}`
             );
         }
@@ -523,7 +474,6 @@ const AdminPanel = () => {
     const handleLogout = () => {
         localStorage.removeItem("authToken");
         navigate("/");
-        message.info("ADMIN PANELDAN CHIQILDI");
     };
 
     const handleClickBtn = () => {
@@ -532,6 +482,7 @@ const AdminPanel = () => {
 
     return (
         <Layout style={{ minHeight: "100vh" }} className='admin'>
+            <ToastContainer />
             <Sider>
                 <div className='admin-sidebar-top-logo'>
                     <Link
@@ -553,7 +504,7 @@ const AdminPanel = () => {
                     theme='dark'
                     mode='inline'
                     defaultSelectedKeys={["1"]}
-                    onClick={onMenuClick}
+                    onClick={(e) => setSelectedKey(e.key)}
                     items={[
                         { key: "1", icon: <HomeOutlined />, label: "Adminlar" },
                         {
@@ -589,7 +540,7 @@ const AdminPanel = () => {
                         {
                             key: "8",
                             icon: <EnvironmentOutlined />,
-                            label: <Link to='/admin/dealers'>Dilerlar</Link>,
+                            label: "Dilerlar",
                         },
                     ]}
                 />

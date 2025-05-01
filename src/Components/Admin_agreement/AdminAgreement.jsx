@@ -1,25 +1,26 @@
-import { FileUnknownOutlined, ReloadOutlined } from "@ant-design/icons";
-import { Button, message } from "antd";
+import { FileUnknownOutlined } from "@ant-design/icons";
+import { Button, Pagination, Spin } from "antd";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 import "./AdminAgreement.css";
 
 function AdminAgreement() {
     const navigate = useNavigate();
     const [loader, setLoader] = useState(false);
-    const token = localStorage.getItem("authToken");
-    // const [loadPDF, setLoadPDF] = useState(false);
     const [allContracts, setAllContracts] = useState([]);
     const [isLoadingBtn, setIsLoadingBtn] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 20;
+
+    const token = localStorage.getItem("authToken");
 
     const fetchAllContracts = async () => {
         try {
             setLoader(true);
-            const token = localStorage.getItem("authToken");
             if (!token) {
                 navigate("/");
-                message.error("Bu sahifa faqat adminlar uchun!");
                 return;
             }
             const response = await axios.get("http://localhost:3000/orders", {
@@ -28,38 +29,26 @@ function AdminAgreement() {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            setAllContracts(response.data.orders);
+            setAllContracts(response.data.orders || []);
         } catch (error) {
-            console.log(error);
+            toast.error("Shartnomalarni yuklashda xato yuz berdi.");
         } finally {
             setLoader(false);
         }
     };
 
-    // const downloadPdf = async (fileUrl) => {
-    //     setLoadPDF(true);
-    //     try {
-    //         const response = await axios.get(fileUrl, {
-    //             responseType: "blob",
-    //         });
-    //         const url = window.URL.createObjectURL(new Blob([response.data]));
-    //         const a = document.createElement("a");
-    //         a.href = url;
-    //         a.download = fileUrl.split("/").pop();
-    //         document.body.appendChild(a);
-    //         a.click();
-    //         document.body.removeChild(a);
-    //         window.URL.revokeObjectURL(url);
-    //     } catch (error) {
-    //         console.log(error);
-    //     } finally {
-    //         setLoadPDF(false);
-    //     }
-    // };
-
     useEffect(() => {
         fetchAllContracts();
     }, []);
+
+    const sortedContracts = useMemo(() => {
+        return allContracts.slice().reverse();
+    }, [allContracts]);
+
+    const paginatedContracts = useMemo(() => {
+        const start = (currentPage - 1) * pageSize;
+        return sortedContracts.slice(start, start + pageSize);
+    }, [sortedContracts, currentPage]);
 
     const headerStyle = {
         display: "flex",
@@ -74,6 +63,7 @@ function AdminAgreement() {
         display: "flex",
         padding: "10px",
         alignItems: "center",
+        marginLeft: "15px",
     });
 
     const makePayment = async (id) => {
@@ -92,16 +82,15 @@ function AdminAgreement() {
                 }
             );
             if (response.status === 200) {
-                message.success("Shartnomani statusi Paid ga o'zgardi");
+                toast.success("Shartnomani statusi Paid ga o'zgardi");
                 await fetchAllContracts();
             } else if (response.status === 400) {
-                message.warning(
+                toast.warning(
                     "Shartnomani statusi allaqachon Paid ga o'zgartirilgan"
                 );
             }
         } catch (error) {
-            message.error(error);
-            console.log(error);
+            toast.error("To'lovni amalga oshirishda xato yuz berdi.");
         } finally {
             setIsLoadingBtn(false);
         }
@@ -109,6 +98,7 @@ function AdminAgreement() {
 
     return (
         <div className='admin-agreement'>
+            <ToastContainer />
             {loader ? (
                 <div
                     style={{
@@ -119,28 +109,17 @@ function AdminAgreement() {
                         marginTop: "50px",
                     }}>
                     <h1>Yuklanmoqda</h1>
-                    <ReloadOutlined spin size='large' />
+                    <Spin size='large' />
                 </div>
             ) : (
                 <div>
                     <div
                         style={{
-                            display: "flex",
-                            alignItems: "center",
                             marginBottom: "20px",
                         }}>
                         <h2>Barcha shartnomalar</h2>
-                        <div>
-                            <ReloadOutlined
-                                style={{
-                                    padding: "10px",
-                                    margin: "5px 0 0 0",
-                                }}
-                                spin={loader}
-                                onClick={fetchAllContracts}
-                            />
-                        </div>
                     </div>
+
                     <div style={headerStyle}>
                         <div style={cellStyle()}>
                             <strong>To'liq ism, familiya</strong>
@@ -149,18 +128,18 @@ function AdminAgreement() {
                             <strong>Email</strong>
                         </div>
                         <div style={cellStyle()}>
-                            <strong>Shartnomani nomi</strong>
+                            <strong>Shartnoma nomi</strong>
                         </div>
                         <div style={cellStyle()}>
-                            <strong>Shartnomani statusi</strong>
+                            <strong>Status</strong>
                         </div>
                         <div style={cellStyle()}></div>
                     </div>
 
-                    {allContracts && allContracts.length > 0 ? (
-                        allContracts.map((contract) => (
+                    {allContracts.length > 0 ? (
+                        paginatedContracts.map((contract) => (
                             <div
-                                className='contact-card'
+                                className='contract-card'
                                 key={contract._id}
                                 style={{
                                     display: "flex",
@@ -176,23 +155,22 @@ function AdminAgreement() {
                                 </div>
                                 <div style={cellStyle()}>{contract.status}</div>
                                 <div style={cellStyle()}>
-                                    <div>
-                                        <Button
-                                            style={{
-                                                marginRight: "10px",
-                                                fontSize: "14px",
-                                            }}
-                                            onClick={() => {
-                                                makePayment(contract?._id);
-                                            }}>
-                                            To'lash
-                                        </Button>
-                                        <Button
-                                            danger
-                                            style={{ marginRight: "10px" }}>
-                                            O'chirish
-                                        </Button>
-                                    </div>
+                                    <Button
+                                        loading={isLoadingBtn}
+                                        onClick={() =>
+                                            makePayment(contract._id)
+                                        }
+                                        style={{
+                                            marginRight: "10px",
+                                            fontSize: "14px",
+                                        }}>
+                                        To'lash
+                                    </Button>
+                                    <Button
+                                        danger
+                                        style={{ marginRight: "10px" }}>
+                                        O'chirish
+                                    </Button>
                                 </div>
                             </div>
                         ))
@@ -200,6 +178,18 @@ function AdminAgreement() {
                         <h1 style={{ textAlign: "center", marginTop: "70px" }}>
                             Shartnomalar yo'q <FileUnknownOutlined />
                         </h1>
+                    )}
+
+                    {allContracts.length > pageSize && (
+                        <div style={{ textAlign: "center", marginTop: "20px" }}>
+                            <Pagination
+                                current={currentPage}
+                                pageSize={pageSize}
+                                total={allContracts.length}
+                                onChange={(page) => setCurrentPage(page)}
+                                showSizeChanger={false}
+                            />
+                        </div>
                     )}
                 </div>
             )}

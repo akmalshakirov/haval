@@ -1,8 +1,8 @@
-import { Button, Drawer, message, Spin } from "antd";
-import { useEffect, useState } from "react";
-import "./CarDetailsDrawer.css";
+import { Button, Drawer, Spin } from "antd";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import "./CarDetailsDrawer.css";
 
 const CarDetailsDrawer = ({ car, open, onClose }) => {
     const userData = JSON?.parse(localStorage.getItem("userData"));

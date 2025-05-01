@@ -6,12 +6,13 @@ import {
     SunOutlined,
     UserOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu, message, Switch } from "antd";
+import { Layout, Menu, Switch } from "antd";
 import { Content, Header } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 import Logo from "../../Images/haval.svg";
 import "./User.css";
 import UserAgreement from "./UserAgreement.jsx";
@@ -28,8 +29,10 @@ const UserPage = () => {
 
     useEffect(() => {
         if (!UserService.TOKEN) {
-            message.error("Token topilmadi, qayta tizimga kiring!");
-            navigate("/login");
+            toast.error("Token topilmadi, qayta tizimga kiring!");
+            setTimeout(() => {
+                navigate("/login");
+            }, 2000);
         }
         document.title = "HAVAL | Shaxsiy kabinet";
         fetchUserData();
@@ -56,14 +59,14 @@ const UserPage = () => {
             }
         } catch (error) {
             if (error.code === "ERR_NETWORK") {
-                return message.warning("Server ishlamayotgan bo'lishi mumkin");
+                return toast.warning("Server ishlamayotgan bo'lishi mumkin");
             } else if (
                 error.message === "Token has expired!" ||
                 error.status === 401
             ) {
-                return message.warning("Token vaqti tugagan!");
+                return toast.warning("Token vaqti tugagan!");
             } else {
-                message.error(error.message || "Ma'lumotlarni olishda xatolik");
+                toast.error(error.message || "Ma'lumotlarni olishda xatolik");
             }
         }
     };
@@ -72,12 +75,12 @@ const UserPage = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("userID");
         localStorage.removeItem("userData");
-        message.success("Shaxsiy kabinetdan chiqildi");
         navigate("/");
     };
 
     return (
         <div className='user-page-wrapper'>
+            <ToastContainer />
             <Layout style={{ minHeight: "100vh" }} className='user-page-layout'>
                 <Sider
                     style={{

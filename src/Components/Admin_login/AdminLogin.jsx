@@ -1,8 +1,9 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Card, Checkbox, Form, Input, message, Typography } from "antd";
+import { Button, Card, Checkbox, Form, Input, Typography } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 import "./AdminLogin.css";
 
 const { Title, Text } = Typography;
@@ -35,26 +36,25 @@ const AdminLogin = () => {
             );
             if (response.status === 200 && response.data?.token) {
                 localStorage.setItem("authToken", response.data.token);
-                message.success("Admin panelga muvaffaqiyatli kirildi!");
                 navigate("/admin");
             } else if (response.status === 500 || response.status === 400) {
-                message.error(response.error);
+                toast.error(response.error);
             }
         } catch (error) {
             if (error.code === "ERR_NETWORK") {
-                message.warning("Server ishlamayotgan bo'lishi mumkin");
+                toast.warning("Server ishlamayotgan bo'lishi mumkin");
             } else if (
                 error.response &&
                 error.response.data &&
                 error.response.data.error
             ) {
-                message.error(error.response.data.error);
+                toast.error(error.response.data.error);
             } else if (error.status === 429) {
-                message.error(
+                toast.error(
                     "Juda ko'p so'rov yubordingiz, keyinroq urinib ko'ring!"
                 );
             } else {
-                message.error(error.status);
+                toast.error(error.status);
             }
         } finally {
             setOnClick(false);
@@ -63,6 +63,7 @@ const AdminLogin = () => {
 
     return (
         <div className='admin-login-container'>
+            <ToastContainer />
             <Card className='admin-login-card'>
                 <Title level={4} className='admin-login-title'>
                     Войдите в свой аккаунт

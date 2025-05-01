@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import { EditOutlined } from "@ant-design/icons";
-import { Card, message, Spin } from "antd";
+import { Card, Spin } from "antd";
 // const { Meta } = Card;
 import "./AdminVideos.css";
 
@@ -9,6 +9,7 @@ import "./AdminVideos.css";
 // import AdminVideoImg3 from "../../Images/admin-video-img3.jpg";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 // const initialCardsData = [
 //     {
@@ -54,7 +55,7 @@ const AdminVideos = () => {
         try {
             const token = localStorage.getItem("authToken");
             if (!token) {
-                message.error("Token topilmadi, qayta tizimga kiring!");
+                toast.error("Token topilmadi, qayta tizimga kiring!");
                 return;
             }
 
@@ -68,13 +69,12 @@ const AdminVideos = () => {
                 }
             );
             setVideos(response.data);
-            console.log("Kelgan ma'lumotlar (video):", response.data);
         } catch (error) {
             const response = error.response;
             if (response.status === 401) {
-                message.info("Token vaqti tugagan!");
+                toast.info("Token vaqti tugagan!");
             } else {
-                message.error(
+                toast.error(
                     `Videolarni yuklashda xatolik yuz berdi: ${error.response?.data?.message}` ||
                         error.message
                 );
@@ -131,6 +131,7 @@ const AdminVideos = () => {
 
     return (
         <div className='admin-videos'>
+            <ToastContainer />
             <h1>Videolar</h1>
             {/* {cards.map((card) => (
                 <div className='card' key={card.id}>

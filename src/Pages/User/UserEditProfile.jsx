@@ -1,6 +1,6 @@
-import { message } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 import AVA from "../../Images/userimage.png";
 import "./UserEditProfile.css";
 import { UserService } from "./UserService.tsx";
@@ -41,7 +41,7 @@ const UserEditProfile = ({ theme }) => {
         setLoading(true);
         try {
             if (!token) {
-                message.warning("Token topilmadi, tizimga boshqadan kiring");
+                toast.warning("Token topilmadi, tizimga boshqadan kiring");
                 return;
             }
             const formData = {
@@ -58,11 +58,10 @@ const UserEditProfile = ({ theme }) => {
                     },
                 }
             );
-            message.success(response.data.message);
+            toast.success(response.data.message);
             localStorage.setItem("userData", JSON.stringify([response.data]));
         } catch (error) {
-            console.error(error);
-            message.error(
+            toast.error(
                 error.response?.data?.message || "Yangilashda xatolik yuz berdi"
             );
         } finally {
@@ -81,6 +80,7 @@ const UserEditProfile = ({ theme }) => {
 
     return (
         <div className='user-edit-profile-wrapper'>
+            <ToastContainer />
             <div
                 className='user-edit-profile-content'
                 style={{

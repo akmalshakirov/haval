@@ -1,10 +1,9 @@
-.contact-card {
-    border: 1px solid #dddddd79;
+.contract-card {
+    border: 1px solid rgba(0, 0, 0, 0.192);
     border-radius: 7px;
-    transition: 0.3s;
+    transition: 0.2s;
 }
 
-.contact-card:hover {
-    border-color: gray;
-    background-color: #dddddd;
+.contract-card:hover {
+    background-color: #8b7b7b18;
 }
