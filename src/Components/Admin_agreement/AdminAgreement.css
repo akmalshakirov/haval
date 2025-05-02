@@ -7,3 +7,26 @@
 .contract-card:hover {
     background-color: #8b7b7b18;
 }
+
+.contract-card-status span {
+    padding: 5px;
+    border-radius: 5px;
+}
+.contract-card-status.pending span,
+.contract-card-status.Pending span {
+    border: 1px solid rgb(255, 136, 0);
+    color: #ff7b00;
+    background-color: #ffbb002f;
+}
+.contract-card-status.paid span,
+.contract-card-status.Paid span {
+    border: 1px solid green;
+    color: rgb(0, 204, 0);
+    background-color: #19e0191c;
+}
+.contract-card-status.cancelled span,
+.contract-card-status.Cancelled span {
+    border: 1px solid red;
+    color: red;
+    background-color: #f7012234;
+}
