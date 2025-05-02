@@ -125,7 +125,7 @@ function AdminAgreement() {
                             <strong>To'liq ism, familiya</strong>
                         </div>
                         <div style={cellStyle()}>
-                            <strong>Email</strong>
+                            <strong>Telefon raqami</strong>
                         </div>
                         <div style={cellStyle()}>
                             <strong>Shartnoma nomi</strong>
@@ -149,7 +149,7 @@ function AdminAgreement() {
                                 <div style={cellStyle()}>
                                     {contract.fullname}
                                 </div>
-                                <div style={cellStyle()}>{contract.email}</div>
+                                <div style={cellStyle()}>{contract.phone}</div>
                                 <div style={cellStyle()}>
                                     {contract.filename}
                                 </div>

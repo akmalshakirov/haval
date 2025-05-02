@@ -64,7 +64,6 @@ function AdminNews() {
                 return;
             }
 
-            // const values = await form.validateFields();
             const formData = new FormData();
             formData.append("title", values.title);
             formData.append("description", values.description);

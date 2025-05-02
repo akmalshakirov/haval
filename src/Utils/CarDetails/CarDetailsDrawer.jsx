@@ -50,7 +50,6 @@ const CarDetailsDrawer = ({ car, open, onClose }) => {
         }
     };
 
-    // Request to baclend
     const handleBuy = async (e) => {
         e.preventDefault();
         setLoader(true);

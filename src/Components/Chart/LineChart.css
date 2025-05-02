@@ -1,0 +1,22 @@
+.chart-wrapper {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    max-width: 100%;
+    max-height: 100vh;
+}
+
+.chart-title {
+    margin-bottom: 105px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #222;
+    text-align: center;
+}
+
+.chart-loading {
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+}

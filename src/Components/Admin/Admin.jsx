@@ -38,6 +38,7 @@ import AdminNews from "../Admin_news/AdminNews";
 import AdminUsers from "../Admin_users/AdminUsers";
 import AdminVideos from "../Admin_videos/AdminVideos";
 import "./Admin.css";
+import AdminStatistics from "../Admin_statistics/AdminStatistics";
 
 const { Header, Sider, Content, Footer } = Layout;
 
@@ -1028,7 +1029,11 @@ const AdminPanel = () => {
                                 <AdminVideos />
                             </div>
                         )}
-                        {selectedKey === "5" && <h1>Savdo statistikasi</h1>}
+                        {selectedKey === "5" && (
+                            <>
+                                <AdminStatistics />
+                            </>
+                        )}
                         {selectedKey === "6" && (
                             <>
                                 <AdminUsers />
