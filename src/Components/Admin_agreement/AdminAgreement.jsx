@@ -153,7 +153,11 @@ function AdminAgreement() {
                                 <div style={cellStyle()}>
                                     {contract.filename}
                                 </div>
-                                <div style={cellStyle()}>{contract.status}</div>
+                                <div
+                                    style={cellStyle()}
+                                    className={`contract-card-status ${contract?.status}`}>
+                                    <span>{contract.status}</span>
+                                </div>
                                 <div style={cellStyle()}>
                                     <Button
                                         loading={isLoadingBtn}
