@@ -43,6 +43,9 @@ function AdminUsers() {
                 }
             );
             toast.success(resposne.data && resposne.data.message);
+            setTimeout(() => {
+                fetchUsers();
+            }, 2000);
         } catch (error) {
             toast.error(
                 error?.resposne?.data?.message || error?.resposne?.data?.error
@@ -80,17 +83,19 @@ function AdminUsers() {
                         <div style={{ flex: "1", marginLeft: "10px" }}>
                             <strong>Ism:</strong>
                         </div>
-                        <div style={{ flex: "1", marginLeft: "10px" }}>
+                        <div style={{ flex: "1" }}>
                             <strong>Email:</strong>
                         </div>
                         <div
                             style={{
                                 flex: "1",
-                                marginLeft: "10px",
                             }}>
                             <strong>Shartnomalari:</strong>
                         </div>
-                        <div>
+                        <div
+                            style={{
+                                marginRight: "20px",
+                            }}>
                             <strong>Harakat:</strong>
                         </div>
                     </div>

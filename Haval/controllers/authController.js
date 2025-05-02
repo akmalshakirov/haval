@@ -9,7 +9,9 @@ exports.register = async (req, res) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            return res.status(400).json({
+                error: errors.array().map((error) => error.msg),
+            });
         }
 
         // const { name, email, password, role } = req.body;
@@ -30,13 +32,13 @@ exports.register = async (req, res) => {
             password: hashedPassword,
         });
 
-        res.status(200).json({
+        return res.status(200).json({
             message: "Foydalanuvchi muvaffaqiyatli ro‘yxatdan o‘tdi.",
             user,
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Serverda xatolik yuz berdi." });
+        return res.status(500).json({ message: "Serverda xatolik yuz berdi." });
     }
 };
 

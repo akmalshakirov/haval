@@ -56,6 +56,8 @@ const UserPage = () => {
                 ];
                 localStorage.setItem("userData", JSON.stringify(userInfo));
                 setData(response.data.orders);
+            } else {
+                toast.error(response?.data && response?.data?.error);
             }
         } catch (error) {
             if (error.code === "ERR_NETWORK") {
@@ -66,7 +68,10 @@ const UserPage = () => {
             ) {
                 return toast.warning("Token vaqti tugagan!");
             } else {
-                toast.error(error.message || "Ma'lumotlarni olishda xatolik");
+                toast.error(
+                    error?.response?.data?.error ||
+                        "Ma'lumotlarni olishda xatolik"
+                );
             }
         }
     };

@@ -43,19 +43,19 @@ const Registration = () => {
                 { name, email, password: inputPasswordValue },
                 { headers: { "Content-Type": "application/json" } }
             );
-            toast.success("Siz muvaffaqiyatli ro'yxatdan o'tdingiz.");
+            toast.success(response.data.message);
             setTimeout(() => {
                 navigate("/login");
             }, 2000);
         } catch (error) {
             if (error.code === "ERR_NETWORK") {
                 toast.warning("Server ishlamayotgan bo'lishi mumkin");
-            } else if (
-                error.response &&
-                error.response.data &&
-                error.response.data.error
-            ) {
-                toast.error(error.response.data.error);
+            } else if (error.response && error.response.data) {
+                toast.error(
+                    (error.response.data && error.response.data.error) ||
+                        error.response.data.error[0] ||
+                        error.response.data.error
+                );
             }
         } finally {
             setOnClick(false);
