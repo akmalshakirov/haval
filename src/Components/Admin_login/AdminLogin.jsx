@@ -63,7 +63,7 @@ const AdminLogin = () => {
 
     return (
         <div className='admin-login-container'>
-            <ToastContainer />
+            <ToastContainer limit={3} />
             <Card className='admin-login-card'>
                 <Title level={4} className='admin-login-title'>
                     Войдите в свой аккаунт

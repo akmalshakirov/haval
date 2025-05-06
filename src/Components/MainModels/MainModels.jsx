@@ -50,7 +50,7 @@ function MainModels() {
                 <SwiperSlide>
                     <div className='custom-card first-card'>
                         <div className='card-image'>
-                            <Link to='models/gwm-wingle-7'>
+                            <Link to='/models/gwm-wingle-7'>
                                 <img src={HavalGwmWingle7} alt='haval h6' />
                             </Link>
                         </div>
@@ -78,7 +78,7 @@ function MainModels() {
                                     <p>359 900 000 so'm</p>
                                     <button>
                                         <Link
-                                            to='/'
+                                            to='/models/gwm-wingle-7'
                                             className='card-content-bottom-link'>
                                             Batafsilroq
                                         </Link>
@@ -97,7 +97,7 @@ function MainModels() {
                 <SwiperSlide>
                     <div className='custom-card second-card'>
                         <div className='card-image'>
-                            <Link to='models/gwm-wingle-7'>
+                            <Link to='/models/haval-dargo'>
                                 <img src={HavalDargo} alt='haval h6' />
                             </Link>
                         </div>
@@ -125,7 +125,7 @@ function MainModels() {
                                     <p>399 900 000 so'mdan</p>
                                     <button>
                                         <Link
-                                            to='/'
+                                            to='/models/haval-dargo'
                                             className='card-content-bottom-link'>
                                             Batafsilroq
                                         </Link>
@@ -144,7 +144,7 @@ function MainModels() {
                 <SwiperSlide>
                     <div className='custom-card third-card'>
                         <div className='card-image'>
-                            <Link to='models/gwm-wingle-7'>
+                            <Link to='/models/haval-jolion'>
                                 <img src={HavalJolion} alt='haval h6' />
                             </Link>
                         </div>
@@ -155,7 +155,7 @@ function MainModels() {
                             <div className='card-content-center'>
                                 <h3>
                                     <Link
-                                        to='/models/gwm-wingle-7'
+                                        to='/models/haval-jolion'
                                         className='card-content-link'>
                                         HAVAL JOLION
                                     </Link>
@@ -172,13 +172,13 @@ function MainModels() {
                                     <p>269 900 000 so'm</p>
                                     <button>
                                         <Link
-                                            to='/'
+                                            to='/models/haval-jolion'
                                             className='card-content-bottom-link'>
                                             Batafsilroq
                                         </Link>
                                     </button>
                                     <Link
-                                        to='/models/gwm-wingle-7'
+                                        to='/models/haval-jolion'
                                         className='card-content-bottom-configurator'>
                                         Konfigurator
                                     </Link>
@@ -191,7 +191,7 @@ function MainModels() {
                 <SwiperSlide>
                     <div className='custom-card fourth-card'>
                         <div className='card-image'>
-                            <Link to='models/gwm-wingle-7'>
+                            <Link to='/models/haval-m6'>
                                 <img src={HavalM6} alt='haval h6' />
                             </Link>
                         </div>
@@ -202,7 +202,7 @@ function MainModels() {
                             <div className='card-content-center'>
                                 <h3>
                                     <Link
-                                        to='/models/gwm-wingle-7'
+                                        to='/models/haval-m6'
                                         className='card-content-link'>
                                         HAVAL M6
                                     </Link>
@@ -219,13 +219,13 @@ function MainModels() {
                                     <p>242 900 000 so'm</p>
                                     <button>
                                         <Link
-                                            to='/'
+                                            to='/models/haval-m6'
                                             className='card-content-bottom-link'>
                                             Batafsilroq
                                         </Link>
                                     </button>
                                     <Link
-                                        to='/models/gwm-wingle-7'
+                                        to='/models/haval-m6'
                                         className='card-content-bottom-configurator'>
                                         Konfigurator
                                     </Link>
@@ -238,7 +238,7 @@ function MainModels() {
                 <SwiperSlide>
                     <div className='custom-card fiveth-card'>
                         <div className='card-image'>
-                            <Link to='models/gwm-wingle-7'>
+                            <Link to='models/haval-h6'>
                                 <img src={HavalH6} alt='haval h6' />
                             </Link>
                         </div>
@@ -249,7 +249,7 @@ function MainModels() {
                             <div className='card-content-center'>
                                 <h3>
                                     <Link
-                                        to='/models/gwm-wingle-7'
+                                        to='/models/haval-h6'
                                         className='card-content-link'>
                                         HAVAL H6
                                     </Link>
@@ -268,13 +268,13 @@ function MainModels() {
                                     <p>342 900 000 so'm</p>
                                     <button>
                                         <Link
-                                            to='/'
+                                            to='/models/haval-h6'
                                             className='card-content-bottom-link'>
                                             Batafsilroq
                                         </Link>
                                     </button>
                                     <Link
-                                        to='/models/gwm-wingle-7'
+                                        to='/models/haval-h6'
                                         className='card-content-bottom-configurator'>
                                         Konfigurator
                                     </Link>

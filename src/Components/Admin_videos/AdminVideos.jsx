@@ -131,7 +131,7 @@ const AdminVideos = () => {
 
     return (
         <div className='admin-videos'>
-            <ToastContainer />
+            <ToastContainer limit={3} />
             <h1>Videolar</h1>
             {/* {cards.map((card) => (
                 <div className='card' key={card.id}>

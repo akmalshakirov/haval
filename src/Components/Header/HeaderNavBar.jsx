@@ -409,7 +409,7 @@ function HeaderNavBar() {
                                                 </div>
                                                 {/* 4 */}
                                                 <div className='models-modal-card'>
-                                                    <Link to='/models/haval-jolion'>
+                                                    <Link to='/models/haval-m6'>
                                                         <img
                                                             src={HavalM6}
                                                             alt='haval-dargo'
@@ -433,7 +433,7 @@ function HeaderNavBar() {
                                                         />
                                                     </Link>
                                                     <div>
-                                                        <Link to='/models/haval-jolion'>
+                                                        <Link to='/models/haval-h6'>
                                                             HAVAL H6
                                                         </Link>
                                                         <p>

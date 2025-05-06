@@ -21,7 +21,6 @@ function GWMwignle7() {
     }, []);
 
     const car = {
-        brend: "HAVAL",
         model: "GWM WINGLE 7",
         price: "359 900 000",
         transmission: "To'liq",
@@ -43,7 +42,7 @@ function GWMwignle7() {
 
     return (
         <div className='gwm-wingle-7-page'>
-            <ToastContainer />
+            <ToastContainer limit={3} />
             <>
                 <HeaderNavBar />
             </>
@@ -67,7 +66,6 @@ function GWMwignle7() {
                                 style={{
                                     marginBottom: "100px",
                                 }}>
-                                <h2>{car.brend}</h2>
                                 <h1>{car.model}</h1>
                                 <hr />
                             </div>
@@ -75,16 +73,24 @@ function GWMwignle7() {
                             <div className='add-agreement-model-color'>
                                 <p>Kuzov rangi:</p>
                                 <span
+                                    title='Qora'
                                     id='one'
                                     onClick={() =>
                                         setCarImg(GWM_WINGLE_7_PNG)
                                     }></span>
                                 <span
+                                    title='Oq'
                                     id='two'
                                     onClick={() =>
                                         setCarImg(GWM_WINGLE_7_PNG_WHITE)
                                     }></span>
                             </div>
+                            <span
+                                style={{
+                                    fontFamily: "var(--font-roboto)",
+                                }}>
+                                ({car.color})
+                            </span>
                             <ul
                                 style={{
                                     display: "flex",
@@ -193,7 +199,7 @@ function GWMwignle7() {
                         }}>
                         <h3>{car.model}</h3>
                         <span>|</span>
-                        <p>359 900 000 so'm</p>
+                        <p>{car?.price} so'm</p>
                     </div>
                     <div className='gwm-wingle-7-page-hero'>
                         <div className='gwm-wingle-7-page-hero-info'>

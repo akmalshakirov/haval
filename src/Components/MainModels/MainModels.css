@@ -3,6 +3,7 @@
     padding: 1.464vw 1.464vw;
     background-color: #e3e6e8;
     margin: 0 auto;
+    user-select: none;
 }
 .models-header {
     text-align: center;

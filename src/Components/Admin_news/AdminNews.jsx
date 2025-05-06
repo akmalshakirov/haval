@@ -122,7 +122,7 @@ function AdminNews() {
 
     return (
         <div className='admin-news'>
-            <ToastContainer />
+            <ToastContainer limit={3} />
             <Button
                 type='primary'
                 id='admin-news-button-primary'

@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import FooterComponent from "../../../Components/Footer/Footer";
 import HeaderNavBar from "../../../Components/Header/HeaderNavBar";
-import GWM_WINGLE_7_eksteryer from "../../../Images/gwm-wingle-7-eksteryer-1.jpg";
-import GWM_WINGLE_7 from "../../../Images/gwm-wingle-7-large.jpg";
+import HAVAL_DARGO_eksteryer from "../../../Images/haval-dargo-large.jpg";
+import HAVAL_DARGO_LARGE from "../../../Images/haval-dargo.jpg";
 import HAVAL_DARGO_BLACK from "../../../Images/m-haval-dargo-black.png";
 import HAVAL_DARGO_BLUE from "../../../Images/m-haval-dargo-blue.png";
 import HAVAL_DARGO_WHITE from "../../../Images/m-haval-dargo-white.png";
@@ -23,15 +23,28 @@ function HavalDargo() {
         document.title = `HAVAL | ${car?.model}`;
     }, []);
 
+    const handleCheckColor = (color) => {
+        if (color === HAVAL_DARGO) {
+            return "Olov rang";
+        } else if (color === HAVAL_DARGO_BLUE) {
+            return "Ko'k";
+        } else if (color === HAVAL_DARGO_BLACK) {
+            return "Qora";
+        } else if (color === HAVAL_DARGO_WHITE) {
+            return "Oq";
+        } else {
+            return "Olov rang";
+        }
+    };
+
     const car = {
-        brend: "HAVAL",
         model: "HAVAL DARGO",
         price: "399 900 000",
         transmission: "To'liq",
         engine: ["Avtomatik"],
         payment: "Naqd",
         description: "TRASSADA MUKAMMAL, YO'LSIZLIKDA ISHONCHLI.",
-        color: carImg === HAVAL_DARGO ? "Qora" : "Oq" /* ISHLASH GARAK */,
+        color: handleCheckColor(carImg),
     };
 
     const handleBuy = () => {
@@ -46,7 +59,7 @@ function HavalDargo() {
 
     return (
         <div className='gwm-wingle-7-page'>
-            <ToastContainer />
+            <ToastContainer limit={3} />
             <>
                 <HeaderNavBar />
             </>
@@ -70,7 +83,6 @@ function HavalDargo() {
                                 style={{
                                     marginBottom: "100px",
                                 }}>
-                                <h2>{car.brend}</h2>
                                 <h1>{car.model}</h1>
                                 <hr />
                             </div>
@@ -169,8 +181,8 @@ function HavalDargo() {
                                 data-aos-duration='1555'
                                 data-aos-easign='linear'
                                 data-aos-offset='300'
-                                src={GWM_WINGLE_7_eksteryer}
-                                alt={GWM_WINGLE_7_eksteryer}
+                                src={HAVAL_DARGO_eksteryer}
+                                alt={HAVAL_DARGO_eksteryer}
                             />
                         </div>
                         <div
@@ -181,20 +193,13 @@ function HavalDargo() {
                             <h1>EKSTERYER</h1>
                             <p>
                                 <br />
-                                GWM Wingle 7 ni kutib oling. Ishonchli va
-                                bardoshli pikap. GWM Wingle 7 pikaplarning
-                                klassik belgilari bilan zamonaviy va tajovuzkor
-                                ko‘rinishni uyg‘unlashtiradi. Uning yo‘ltanlamas
-                                xususiyatini radiatorning yirik panjarasi va
-                                baland g‘ildirak arkalari belgilaydi. <br />
+                                PERFOROTSIYALANGAN HAQIQIY CHARM BILAN
+                                BEZATILGAN O'RINDIQLAR
                                 <br />
-                                Oldinda juda ko‘p muhim maqsadlar kutganda,
-                                haqiqatan ham ishonsa bo‘ladiganiga ehtiyoj
-                                seziladi. Benzinli dvigatel, to‘liqyuritmali
-                                transmissiya, keng salon va kuzov. Siz unga eng
-                                mashaqqatli vazifalarni ishonib topshirishingiz
-                                va natijasiga ishonchingiz komil bo‘lishi
-                                mumkin.
+                                HAVAL DARGOning o'rindiqlari Perforotsiyalangan
+                                haqiqiy charmdan ishlangan, nafas oladigan
+                                material yuqori darajadagi qulaylikni
+                                ta'minlaydi.
                             </p>
                         </div>
                     </div>
@@ -212,7 +217,7 @@ function HavalDargo() {
                         <div className='gwm-wingle-7-page-hero-info'>
                             <img
                                 className='gwm-wingle-7-page-hero-img'
-                                src={GWM_WINGLE_7}
+                                src={HAVAL_DARGO_LARGE}
                                 alt='gwm-wingle-7-page-hero-img'
                             />
                             <span></span>

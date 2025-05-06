@@ -483,7 +483,7 @@ const AdminPanel = () => {
 
     return (
         <Layout style={{ minHeight: "100vh" }} className='admin'>
-            <ToastContainer />
+            <ToastContainer limit={3} />
             <Sider>
                 <div className='admin-sidebar-top-logo'>
                     <Link

@@ -116,22 +116,6 @@ const CarDetailsDrawer = ({ car, open, onClose }) => {
             ) : (
                 <form onSubmit={handleBuy}>
                     <p>
-                        <strong>To'liq ism</strong>: {formData.fullname}
-                    </p>
-                    <div>
-                        <b>
-                            <label htmlFor='phoneNumber'>Telefon raqam:</label>
-                        </b>
-                        <input
-                            type='tel'
-                            id='phoneNumber'
-                            value={formData.phone}
-                            onChange={handleChange}
-                            required
-                            placeholder='+998'
-                        />
-                    </div>
-                    <p>
                         <strong>Model:</strong> {car?.model}
                     </p>
                     <p>

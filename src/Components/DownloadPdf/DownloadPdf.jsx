@@ -83,7 +83,7 @@ export default function DownloadPdf() {
 
     return (
         <div className='download-pdf-page'>
-            <ToastContainer />
+            <ToastContainer limit={3} />
             <div className='download-pdf-container'>
                 <form onSubmit={generatePDF} className='download-pdf-form'>
                     <div>
