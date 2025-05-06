@@ -85,7 +85,7 @@ const UserPage = () => {
 
     return (
         <div className='user-page-wrapper'>
-            <ToastContainer />
+            <ToastContainer limit={3} />
             <Layout style={{ minHeight: "100vh" }} className='user-page-layout'>
                 <Sider
                     style={{

@@ -80,7 +80,7 @@ const UserEditProfile = ({ theme }) => {
 
     return (
         <div className='user-edit-profile-wrapper'>
-            <ToastContainer />
+            <ToastContainer limit={3} />
             <div
                 className='user-edit-profile-content'
                 style={{

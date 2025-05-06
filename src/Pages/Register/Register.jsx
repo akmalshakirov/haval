@@ -64,7 +64,7 @@ const Registration = () => {
 
     return (
         <div className='register-container'>
-            <ToastContainer />
+            <ToastContainer limit={3} />
             <Card className='register-card'>
                 <Title level={4} className='register-title'>
                     Регистрация

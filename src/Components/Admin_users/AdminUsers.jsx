@@ -63,7 +63,7 @@ function AdminUsers() {
     }, []);
     return (
         <div>
-            <ToastContainer />
+            <ToastContainer limit={3} />
             <h1 style={{ marginBottom: "20px" }}>Foydalanuvchilar</h1>
             {loading ? (
                 <div

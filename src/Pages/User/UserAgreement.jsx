@@ -41,7 +41,7 @@ const UserAgreement = ({ data, theme }) => {
     };
     return (
         <>
-            <ToastContainer />
+            <ToastContainer limit={3} />
             <div
                 style={{
                     marginBottom: "30px",

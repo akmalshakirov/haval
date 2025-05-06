@@ -98,7 +98,7 @@ function AdminAgreement() {
 
     return (
         <div className='admin-agreement'>
-            <ToastContainer />
+            <ToastContainer limit={3} />
             {loader ? (
                 <div
                     style={{

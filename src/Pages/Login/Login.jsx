@@ -28,7 +28,7 @@ const Login = () => {
             if (response.status === 200 && response.data?.token) {
                 localStorage.setItem("token", response.data.token);
                 localStorage.setItem("userID", response.data.userId);
-                toast.success("Siz muvaffaqiyatli login qildingiz");
+                toast.success("Siz muvaffaqiyatli tizimga kirdingiz");
                 setTimeout(() => {
                     navigate("/user");
                 }, 2000);
@@ -42,7 +42,7 @@ const Login = () => {
 
     return (
         <div className='login-container'>
-            <ToastContainer />
+            <ToastContainer limit={3} />
             <Card className='login-card'>
                 <Title level={4} className='login-title'>
                     Войдите в свой аккаунт

@@ -132,7 +132,7 @@
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background-color: #f35b06;
+    background-color: #4fbee9;
     border: 1px solid black;
     margin-left: 10px;
     transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -167,6 +167,18 @@
 }
 
 .add-agreement-model-color #four {
+    display: block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #cacccb;
+    border: 1px solid black;
+    cursor: pointer;
+    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin-left: 5px;
+}
+
+.add-agreement-model-color #five {
     display: block;
     width: 30px;
     height: 30px;
