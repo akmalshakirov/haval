@@ -41,7 +41,7 @@ function HavalDargo() {
         model: "HAVAL DARGO",
         price: "399 900 000",
         transmission: "To'liq",
-        engine: ["Avtomatik"],
+        engine: ["Avtomatik", "Mexanik"],
         payment: "Naqd",
         description: "TRASSADA MUKAMMAL, YO'LSIZLIKDA ISHONCHLI.",
         color: handleCheckColor(carImg),

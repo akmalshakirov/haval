@@ -8,13 +8,15 @@ const CarDetailsDrawer = ({ car, open, onClose }) => {
     const userData = JSON?.parse(localStorage.getItem("userData"));
     const userName = userData ? userData[0].name : userData;
     const [loader, setLoader] = useState(false);
+    const { engine } = car;
+    const [selectedEngine, setSelectedEngine] = useState(engine[0]);
     const [formData, setFormData] = useState({
         userId: localStorage.getItem("userID"),
-        fullname: userName ? userName : "USER",
+        fullname: userName ? userName : "Loading user name...",
         phone: "",
         model: car?.model,
         color: car?.color,
-        engine: car?.engine,
+        engine: selectedEngine,
         transmission: car?.transmission,
         payment: car?.payment || "Yo'q",
         price: car?.price,
@@ -24,69 +26,58 @@ const CarDetailsDrawer = ({ car, open, onClose }) => {
         document.title = `HAVAL | ${car?.model}`;
     }, []);
 
-    const handleChange = (e) => {
-        const input = e.target.value;
-        let numbers = input.replace(/\D/g, "");
-        numbers = numbers.substring(0, 9);
-
-        let formatted = "";
-        for (let i = 0; i < numbers.length; i++) {
-            if (i === 2) formatted += "-";
-            if (i === 5) formatted += "-";
-            if (i === 7) formatted += "-";
-            formatted += numbers[i];
-        }
-        setFormData((prev) => ({ ...prev, phone: formatted }));
-    };
-
-    const handleChangeInput = (e) => {
-        if (!car.engine.includes(e.target.value)) {
-            return;
-        } else {
-            setFormData((prev) => ({
-                ...prev,
-                engine: e.target.value,
-            }));
-        }
-    };
+    // const handleChangeInput = (e) => {
+    //     if (!car.engine.includes(e.target.value)) {
+    //         return;
+    //     } else {
+    //         setFormData((prev) => ({
+    //             ...prev,
+    //             engine: e.target.value,
+    //         }));
+    //     }
+    // };
 
     const handleBuy = async (e) => {
         e.preventDefault();
-        setLoader(true);
-        try {
-            const response = await axios.post(
-                "http://localhost:3000/generate-pdf",
-                formData,
-                { headers: { "Content-Type": "application/json" } }
-            );
+        // setLoader(true);
+        // setTimeout(() => {
+        //     setLoader(false);
+        // }, 2000);
+        console.log(formData);
+        // try {
+        //     const response = await axios.post(
+        //         "http://localhost:3000/generate-pdf",
+        //         formData,
+        //         { headers: { "Content-Type": "application/json" } }
+        //     );
 
-            if (response.status === 201) {
-                onClose();
-                toast.success(
-                    `HAVALning ${car?.model} modeliga shartnoma muvaffaqiyatli olindi.`,
-                    {
-                        autoClose: 7777,
-                        draggable: "mouse",
-                        closeButton: false,
-                    }
-                );
-                toast.success(
-                    "Barcha shartnomalarni shaxsiy kabinetingizda ko'rishingiz mumkin.",
-                    {
-                        delay: 7777,
-                        autoClose: 7777,
-                        draggable: "mouse",
-                        closeButton: false,
-                    }
-                );
-            } else {
-                toast.info(response?.data?.message || response?.data?.error);
-            }
-        } catch (error) {
-            toast.error(error?.response?.data?.message);
-        } finally {
-            setLoader(false);
-        }
+        //     if (response.status === 201) {
+        //         onClose();
+        //         toast.success(
+        //             `HAVALning ${car?.model} modeliga shartnoma muvaffaqiyatli olindi.`,
+        //             {
+        //                 autoClose: 7777,
+        //                 draggable: "mouse",
+        //                 closeButton: false,
+        //             }
+        //         );
+        //         toast.success(
+        //             "Barcha shartnomalarni shaxsiy kabinetingizda ko'rishingiz mumkin.",
+        //             {
+        //                 delay: 7777,
+        //                 autoClose: 7777,
+        //                 draggable: "mouse",
+        //                 closeButton: false,
+        //             }
+        //         );
+        //     } else {
+        //         toast.info(response?.data?.message || response?.data?.error);
+        //     }
+        // } catch (error) {
+        //     toast.error(error?.response?.data?.message);
+        // } finally {
+        //     setLoader(false);
+        // }
     };
 
     return (
@@ -132,31 +123,20 @@ const CarDetailsDrawer = ({ car, open, onClose }) => {
                             htmlFor='transmission'
                             style={{
                                 fontWeight: "bold",
+                                marginRight: "10px",
                             }}>
                             Uzatmalar qutisi:
                         </label>
-                        <input
-                            type='text'
-                            name='engine'
-                            id='transmission'
-                            list='engine-list'
-                            multiple
-                            required
-                            onChange={handleChangeInput}
-                        />
-                        <datalist id='engine-list'>
-                            {car.engine && car.engine.length > 0 ? (
-                                car.engine.map((eng, index) => (
-                                    <option value={eng} key={index}>
-                                        {eng}
-                                    </option>
-                                ))
-                            ) : (
-                                <option value="Ma'lumotlar topilmadi">
-                                    Yo'q
+                        <select
+                            value={selectedEngine}
+                            onChange={(e) => setSelectedEngine(e.target.value)}
+                            disabled={engine?.length === 1}>
+                            {engine?.map((type, index) => (
+                                <option key={index} value={type}>
+                                    {type}
                                 </option>
-                            )}
-                        </datalist>
+                            ))}
+                        </select>
                     </div>
 
                     <p>

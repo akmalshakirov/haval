@@ -82,7 +82,7 @@ function AdminAgreement() {
                 }
             );
             if (response.status === 200) {
-                toast.success("Shartnomani statusi Paid ga o'zgardi");
+                toast.success(response.data.message);
                 await fetchAllContracts();
             } else if (response.status === 400) {
                 toast.warning(
@@ -90,7 +90,7 @@ function AdminAgreement() {
                 );
             }
         } catch (error) {
-            toast.error("To'lovni amalga oshirishda xato yuz berdi.");
+            toast.error(error.response.data.message);
         } finally {
             setIsLoadingBtn(false);
         }
