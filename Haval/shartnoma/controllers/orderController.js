@@ -105,14 +105,22 @@ exports.makePayment = async (req, res) => {
         }
 
         if (order.status === "Paid") {
-            return res.status(400).json({ message: "Order is already paid!" });
+            return res
+                .status(400)
+                .json({ message: "Shartnomaga allaqachon to'lov qilingan!" });
+        }
+
+        if (order.status === "Cancelled") {
+            return res
+                .status(400)
+                .json({ message: "Shartnoma bekor qilingan!" });
         }
 
         order.status = "Paid";
         await order.save();
         return res
             .status(200)
-            .json({ message: "Status updated to Paid", result: order });
+            .json({ message: "Shartnomaga to'lov qilindi!", result: order });
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Serverda xatolik yuz berdi!" });

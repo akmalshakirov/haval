@@ -26,62 +26,65 @@ const getCars = async (req, res) => {
 
 const addCar = async (req, res) => {
     try {
-      const { model, year, price } = req.body;
-      
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-      }
-  
-      console.log(req.files);
-      if (!req.files || req.files.length === 0) {
-        return res.status(404).json({ message: "Fayllar topilmadi" });
-      }
-  
-      const bucketName = "Haval";
-      const imageUrls = [];
-  
-      for (const file of req.files) {
-        const { buffer, originalname, mimetype } = file;
-        const fileBuffer = Buffer.from(buffer)
-        const fileName = `cars/${Date.now()}_${originalname}`;
-  
-        const { data: uploadData, error: uploadError } = await supabase.storage
-          .from(bucketName)
-          .upload(fileName, fileBuffer, {
-            cacheControl: "3600",
-            upsert: false,
-            contentType: mimetype,
-          });
-  
-        if (uploadError) {
-          console.error("Tasvirni yuklashda xato:", uploadError.message);
-          return res.status(500).json({ error: "Tasvirni yuklashda xatolik yuz berdi." });
+        const { model, year, price } = req.body;
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
         }
-  
-        const { data: publicUrlData } = supabase.storage
-          .from(bucketName)
-          .getPublicUrl(fileName);
-  
-        imageUrls.push(publicUrlData.publicUrl);
-      }
-  
-      const result = await Car.create({
-        model,
-        year,
-        price,
-        images: imageUrls
-      });
-  
-      res.status(200).json({
-        message: "Mashina muvaffaqiyatli qo'shildi",
-        data: result,
-      });
+
+        console.log(req.files);
+        if (!req.files || req.files.length === 0) {
+            return res.status(404).json({ message: "Fayllar topilmadi" });
+        }
+
+        const bucketName = "Haval";
+        const imageUrls = [];
+
+        for (const file of req.files) {
+            const { buffer, originalname, mimetype } = file;
+            const fileBuffer = Buffer.from(buffer);
+            const fileName = `cars/${Date.now()}_${originalname}`;
+
+            const { data: uploadData, error: uploadError } =
+                await supabase.storage
+                    .from(bucketName)
+                    .upload(fileName, fileBuffer, {
+                        cacheControl: "3600",
+                        upsert: false,
+                        contentType: mimetype,
+                    });
+
+            if (uploadError) {
+                console.error("Tasvirni yuklashda xato:", uploadError.message);
+                return res
+                    .status(500)
+                    .json({ error: "Tasvirni yuklashda xatolik yuz berdi." });
+            }
+
+            const { data: publicUrlData } = supabase.storage
+                .from(bucketName)
+                .getPublicUrl(fileName);
+
+            imageUrls.push(publicUrlData.publicUrl);
+        }
+
+        const result = await Car.create({
+            model,
+            year,
+            price,
+            images: imageUrls,
+        });
+
+        res.status(200).json({
+            message: "Mashina muvaffaqiyatli qo'shildi",
+            data: result,
+        });
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: "Ichki server xatosi yuz berdi." });
+        console.error(err);
+        res.status(500).json({ error: "Ichki server xatosi yuz berdi." });
     }
-  };
+};
 
 const updateCar = async (req, res) => {
     const {
@@ -107,7 +110,10 @@ const updateCar = async (req, res) => {
             const fileName = `cars/${Date.now()}_${originalname}`;
 
             if (existingCar.image) {
-                const oldImagePath = existingCar.image.replace(`${storageUrl}/object/public/Haval/`, "");
+                const oldImagePath = existingCar.image.replace(
+                    `${storageUrl}/object/public/Haval/`,
+                    ""
+                );
 
                 console.log(oldImagePath);
                 const { error: removeError } = await supabase.storage
@@ -115,7 +121,10 @@ const updateCar = async (req, res) => {
                     .remove([oldImagePath]);
 
                 if (removeError) {
-                    console.error("❌ Eski tasvirni o‘chirishda xato:", removeError.message);
+                    console.error(
+                        "❌ Eski tasvirni o‘chirishda xato:",
+                        removeError.message
+                    );
                     return res.status(500).json({
                         error: "Eski tasvirni o‘chirishda xatolik yuz berdi.",
                     });
@@ -131,8 +140,13 @@ const updateCar = async (req, res) => {
                 });
 
             if (uploadError) {
-                console.error("❌ Tasvirni yuklashda xato:", uploadError.message);
-                return res.status(500).json({ error: "Tasvirni yuklashda xatolik yuz berdi." });
+                console.error(
+                    "❌ Tasvirni yuklashda xato:",
+                    uploadError.message
+                );
+                return res
+                    .status(500)
+                    .json({ error: "Tasvirni yuklashda xatolik yuz berdi." });
             }
 
             const { data: publicUrlData } = supabase.storage
@@ -149,9 +163,11 @@ const updateCar = async (req, res) => {
             image: imageUrl,
         };
 
-        const carUpdate = await Car.findByIdAndUpdate(id, updateData, { new: true });
+        const carUpdate = await Car.findByIdAndUpdate(id, updateData, {
+            new: true,
+        });
 
-        res.status(200).json({
+        return res.status(200).json({
             message: "✅ Mashina muvaffaqiyatli yangilandi",
             data: carUpdate,
         });
@@ -160,7 +176,6 @@ const updateCar = async (req, res) => {
         res.status(500).json({ error: "Ichki server xatosi yuz berdi." });
     }
 };
-
 
 const deleteCar = async (req, res) => {
     const carId = req.params.id;

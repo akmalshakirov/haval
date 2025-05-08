@@ -66,6 +66,7 @@ const AdminPanel = () => {
     const [changePassInputValue, setChangePassInputValue] = useState("");
     const [deleteAdminModal, setDeleteAdminModal] = useState(false);
     const [adminToDelete, setAdminToDelete] = useState(null);
+    const [deleteAdmin, setDeleteAdmin] = useState(false);
     const navigate = useNavigate();
 
     const handleChangePassInput = (e) => {
@@ -115,6 +116,7 @@ const AdminPanel = () => {
     };
 
     const handleAddCar = async (values) => {
+        setOnClickBtn(true);
         try {
             const token = localStorage.getItem("authToken");
 
@@ -171,11 +173,11 @@ const AdminPanel = () => {
             );
 
             if (response.status === 200) {
-                await fetchCars();
+                toast.success(response.data.message);
                 setActionModal(false);
                 setEditingCar(null);
                 form.resetFields();
-                toast.success(response.data.message);
+                await fetchCars();
             }
         } catch (error) {
             const errorMessage =
@@ -259,6 +261,7 @@ const AdminPanel = () => {
     }, []);
 
     const handleAddAdmin = async (values) => {
+        setOnClickBtn(true);
         try {
             const token = localStorage.getItem("authToken");
             const addAdmin = {
@@ -278,14 +281,14 @@ const AdminPanel = () => {
                 }
             );
             if (response.status === 200 || response.status === 201) {
-                await fetchAdmins();
                 setAdmins([
                     ...admins,
                     { key: `${admins.length + 1}`, ...values },
                 ]);
-                toast.success("Admin muvaffaqiyatli qo'shildi!");
+                toast.success(response.data.message);
                 setIsModalOpen(false);
                 form.resetFields();
+                await fetchAdmins();
             }
         } catch (error) {
             if (
@@ -327,11 +330,11 @@ const AdminPanel = () => {
             );
 
             if (response.status === 200) {
-                await fetchAdmins();
                 setAactionModal(false);
+                toast.success("Admin muvaffaqiyatli o'zgartirildi!");
                 setEditingAdmin(null);
                 form.resetFields();
-                toast.success("Admin muvaffaqiyatli o'zgartirildi!");
+                await fetchAdmins();
             }
         } catch (error) {
             toast.error(
@@ -343,6 +346,7 @@ const AdminPanel = () => {
     };
 
     const handleDeleteAdmin = async (adminId) => {
+        setDeleteAdmin(true);
         try {
             const token = localStorage.getItem("authToken");
             const response = await axios.delete(
@@ -354,15 +358,17 @@ const AdminPanel = () => {
                     },
                 }
             );
-            setDeleteAdminModal(false);
             if (response.status === 200) {
-                await fetchAdmins();
                 toast.success("Admin muvaffaqiyatli o'chirildi!");
+                setDeleteAdminModal(false);
+                await fetchAdmins();
             }
         } catch (error) {
             toast.error(
                 `Adminni o'chirishda xatolik yuz berdi: ${error.response?.data?.message}`
             );
+        } finally {
+            setDeleteAdmin(false);
         }
     };
 
@@ -629,7 +635,7 @@ const AdminPanel = () => {
                                     />
                                 )}
                                 <Modal
-                                    title='Yangi Admin Qoshish'
+                                    title="Yangi Admin Qo'shish"
                                     open={isModalOpen}
                                     onCancel={() => setIsModalOpen(false)}
                                     footer={null}>
@@ -646,8 +652,9 @@ const AdminPanel = () => {
                                                     message:
                                                         "Admin nomini kiriting!",
                                                 },
-                                            ]}>
-                                            <Input />
+                                            ]}
+                                            required>
+                                            <Input required />
                                         </Form.Item>
                                         <Form.Item
                                             name='email'
@@ -656,15 +663,16 @@ const AdminPanel = () => {
                                                 {
                                                     required: true,
                                                     message:
-                                                        "emailni kiriting!",
+                                                        "Emailni kiriting!",
                                                 },
                                                 {
-                                                    // type: "email",
+                                                    type: "email",
                                                     message:
-                                                        "to'g'ri email formatini kiriting! (misol: example@gmail.com)",
+                                                        "To'g'ri email formatini kiriting! (misol: example@gmail.com)",
                                                 },
-                                            ]}>
-                                            <Input />
+                                            ]}
+                                            required>
+                                            <Input required />
                                         </Form.Item>
                                         <Form.Item
                                             name='password'
@@ -673,22 +681,22 @@ const AdminPanel = () => {
                                                 {
                                                     required: true,
                                                     message:
-                                                        "parolni kiriting!",
+                                                        "Parolni kiriting!",
                                                 },
                                                 {
                                                     min: 6,
                                                     message:
                                                         "Parol kamida 6 ta belgi bo'lishi kerak!",
                                                 },
-                                            ]}>
-                                            <Input.Password />
+                                            ]}
+                                            required>
+                                            <Input.Password required />
                                         </Form.Item>
                                         <Button
                                             type='primary'
                                             htmlType='submit'
                                             block
-                                            loading={onClickBtn}
-                                            onClick={handleClickBtn}>
+                                            loading={onClickBtn}>
                                             Tasdiqlash
                                         </Button>
                                     </Form>
@@ -920,10 +928,9 @@ const AdminPanel = () => {
                                     </div>
                                 )}
                                 <Modal
-                                    title='Yangi Avtomobil Qoshish'
+                                    title="Yangi Avtomobil Qo'shish"
                                     open={isModalOpen}
                                     onCancel={() => setIsModalOpen(false)}
-                                    onFinish={handleAddCar}
                                     footer={null}>
                                     <Form
                                         form={form}
@@ -938,8 +945,9 @@ const AdminPanel = () => {
                                                     message:
                                                         "avtomobil modelini kiriting!",
                                                 },
-                                            ]}>
-                                            <Input />
+                                            ]}
+                                            required>
+                                            <Input required />
                                         </Form.Item>
                                         <Form.Item
                                             name='year'
@@ -949,8 +957,9 @@ const AdminPanel = () => {
                                                     required: true,
                                                     message: "yilni kiriting!",
                                                 },
-                                            ]}>
-                                            <Input />
+                                            ]}
+                                            required>
+                                            <Input required />
                                         </Form.Item>
                                         <Form.Item
                                             name='price'
@@ -960,8 +969,9 @@ const AdminPanel = () => {
                                                     required: true,
                                                     message: "narxni kiriting!",
                                                 },
-                                            ]}>
-                                            <Input />
+                                            ]}
+                                            required>
+                                            <Input required />
                                         </Form.Item>
                                         <input
                                             type='file'
@@ -996,8 +1006,7 @@ const AdminPanel = () => {
                                             type='primary'
                                             htmlType='submit'
                                             block
-                                            loading={onClickBtn}
-                                            onClick={handleClickBtn}>
+                                            loading={onClickBtn}>
                                             Tasdiqlash
                                         </Button>
                                     </Form>
@@ -1151,6 +1160,7 @@ const AdminPanel = () => {
                 }}
                 okText="O'chirish"
                 okButtonProps={{
+                    loading: deleteAdmin,
                     style: {
                         backgroundColor: "red",
                         color: "white",

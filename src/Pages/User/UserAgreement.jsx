@@ -173,7 +173,8 @@ const UserAgreement = ({ data, theme }) => {
                                                 }}>
                                                 {loadingStates[item._id] ? (
                                                     <>
-                                                        Yuklanmoqda <Spin />
+                                                        Yuklanmoqda{" "}
+                                                        <Spin size='small' />
                                                     </>
                                                 ) : (
                                                     "PDFni yuklab olish"
