@@ -35,7 +35,6 @@ import Logo from "../../Images/haval.svg";
 import AdminAgreement from "../Admin_agreement/AdminAgreement";
 import AdminDealer from "../Admin_dealer/AdminDealer";
 import AdminNews from "../Admin_news/AdminNews";
-import AdminStatistics from "../Admin_statistics/AdminStatistics";
 import AdminUsers from "../Admin_users/AdminUsers";
 import AdminVideos from "../Admin_videos/AdminVideos";
 import "./Admin.css";
@@ -533,21 +532,16 @@ const AdminPanel = () => {
                         },
                         {
                             key: "5",
-                            icon: <StockOutlined />,
-                            label: "Savdo statistikasi",
-                        },
-                        {
-                            key: "6",
                             icon: <UserOutlined />,
                             label: "Foydalanuvchilar",
                         },
                         {
-                            key: "7",
+                            key: "6",
                             icon: <OrderedListOutlined />,
                             label: "Shartnomalar",
                         },
                         {
-                            key: "8",
+                            key: "7",
                             icon: <EnvironmentOutlined />,
                             label: "Dilerlar",
                         },
@@ -1042,20 +1036,15 @@ const AdminPanel = () => {
                         )}
                         {selectedKey === "5" && (
                             <>
-                                <AdminStatistics />
+                                <AdminUsers />
                             </>
                         )}
                         {selectedKey === "6" && (
                             <>
-                                <AdminUsers />
-                            </>
-                        )}
-                        {selectedKey === "7" && (
-                            <>
                                 <AdminAgreement />
                             </>
                         )}
-                        {selectedKey === "8" && (
+                        {selectedKey === "7" && (
                             <>
                                 <AdminDealer />
                             </>
