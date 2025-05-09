@@ -62,7 +62,7 @@ export default function DownloadPdf() {
         setLoadingBtn(true);
         try {
             const response = await axios.post(
-                "http://localhost:3000/generate-pdf",
+                "https://haval-uz.onrender.com/generate-pdf",
                 formData,
                 { headers: { "Content-Type": "application/json" } }
             );

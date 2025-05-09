@@ -23,12 +23,15 @@ function AdminAgreement() {
                 navigate("/");
                 return;
             }
-            const response = await axios.get("http://localhost:3000/orders", {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            const response = await axios.get(
+                "https://haval-uz.onrender.com/orders",
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
             setAllContracts(response.data.orders || []);
         } catch (error) {
             toast.error("Shartnomalarni yuklashda xato yuz berdi.");
@@ -72,7 +75,7 @@ function AdminAgreement() {
             const formData = new FormData();
             formData.append("id", id);
             const response = await axios.post(
-                `http://localhost:3000/orders-pay`,
+                `https://haval-uz.onrender.com/orders-pay`,
                 formData,
                 {
                     headers: {

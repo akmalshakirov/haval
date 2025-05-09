@@ -22,8 +22,7 @@ function AdminNews() {
             }
 
             const response = await axios.get(
-                // "https://haval-uz.onrender.com/news",
-                "http://localhost:3000/news",
+                "https://haval-uz.onrender.com/news",
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -72,7 +71,7 @@ function AdminNews() {
             }
 
             const response = await axios.post(
-                "http://localhost:3000/add-news",
+                "https://haval-uz.onrender.com/add-news",
                 formData,
                 {
                     headers: {

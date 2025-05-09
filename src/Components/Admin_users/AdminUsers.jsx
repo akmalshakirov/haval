@@ -17,12 +17,15 @@ function AdminUsers() {
                 return;
             }
 
-            const resposne = await axios.get("http://localhost:3000/users", {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            const resposne = await axios.get(
+                "https://haval-uz.onrender.com/users",
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
             setUsers(resposne.data);
         } catch (error) {
             toast.error(error.data?.message);
@@ -35,17 +38,18 @@ function AdminUsers() {
         setLoadingStates((prev) => ({ ...prev, [id]: true }));
         try {
             const resposne = await axios.delete(
-                `http://localhost:3000/users/${id}`,
+                `https://haval-uz.onrender.com/users/${id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 }
             );
-            toast.success(resposne.data && resposne.data.message);
-            setTimeout(() => {
-                fetchUsers();
-            }, 2000);
+            toast.success(
+                (resposne.data && resposne.data.message) ||
+                    "Foydalanuvchi muvaffaqiyatli o'chirildi"
+            );
+            fetchUsers();
         } catch (error) {
             toast.error(
                 error?.resposne?.data?.message || error?.resposne?.data?.error

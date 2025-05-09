@@ -1,22 +1,16 @@
 .ripple-container {
     position: relative;
-    display: inline-flex;
+    /* display: inline-flex; */
     width: 100%;
     align-items: center;
-    padding: 10px 15px;
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    cursor: pointer;
     overflow: hidden;
-    user-select: none;
 }
 
 .ripple {
     position: absolute;
     width: 20px;
     height: 20px;
-    background: rgba(255, 255, 255, 0.4);
+    background: rgba(0, 0, 0, 0.555);
     border-radius: 50%;
     transform: scale(0);
     animation: ripple-effect 777ms ease;
@@ -25,7 +19,7 @@
 
 @keyframes ripple-effect {
     to {
-        transform: scale(22);
+        transform: scale(10);
         opacity: 0;
     }
 }

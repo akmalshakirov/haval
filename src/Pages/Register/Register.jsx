@@ -39,14 +39,12 @@ const Registration = () => {
         try {
             const response = await axios.post(
                 // "https://haval-uz.onrender.com/register",
-                "http://localhost:3000/register",
+                "https://haval-uz.onrender.com/register",
                 { name, email, password: inputPasswordValue },
                 { headers: { "Content-Type": "application/json" } }
             );
             toast.success(response.data.message);
-            setTimeout(() => {
-                navigate("/login");
-            }, 2000);
+            navigate("/login");
         } catch (error) {
             if (error.code === "ERR_NETWORK") {
                 toast.warning("Server ishlamayotgan bo'lishi mumkin");

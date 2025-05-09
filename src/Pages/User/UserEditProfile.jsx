@@ -50,7 +50,7 @@ const UserEditProfile = ({ theme }) => {
                 password: userData.password || "",
             };
             const response = await axios.put(
-                `http://localhost:3000/profil-edit/${userID}`,
+                `https://haval-uz.onrender.com/profil-edit/${userID}`,
                 formData,
                 {
                     headers: {
