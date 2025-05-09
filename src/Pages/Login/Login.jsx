@@ -3,7 +3,7 @@ import { Button, Card, Checkbox, Form, Input, Typography } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "./Login.css";
 
 const { Title, Text } = Typography;
@@ -29,12 +29,13 @@ const Login = () => {
                 localStorage.setItem("token", response.data.token);
                 localStorage.setItem("userID", response.data.userId);
                 toast.success("Siz muvaffaqiyatli tizimga kirdingiz");
-                setTimeout(() => {
-                    navigate("/user");
-                }, 2000);
+                navigate("/user");
             }
         } catch (error) {
-            toast.error(error?.response?.data?.message || "Xatolik yuz berdi");
+            toast.error(
+                error?.response?.data?.message ||
+                    `Xatolik yuz berdi: ${error?.response?.data?.error}`
+            );
         } finally {
             setOnClick(false);
         }
@@ -42,7 +43,6 @@ const Login = () => {
 
     return (
         <div className='login-container'>
-            <ToastContainer limit={3} />
             <Card className='login-card'>
                 <Title level={4} className='login-title'>
                     Войдите в свой аккаунт

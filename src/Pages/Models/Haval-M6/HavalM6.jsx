@@ -1,15 +1,17 @@
 import Aos from "aos";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import FooterComponent from "../../../Components/Footer/Footer";
 import HeaderNavBar from "../../../Components/Header/HeaderNavBar";
-import HAVAL_M6 from "../../../Images/m-haval-m6.png";
-import HAVAL_M6_BLACK from "../../../Images/haval-m6.jpg";
-import HAVAL_M6_GRAY from "../../../Images/haval-m6.jpg";
-import HAVAL_M6_WHITE from "../../../Images/haval-m6.jpg";
-import HAVAL_M6_eksteryer from "../../../Images/haval-m6.jpg";
 import HAVAL_M6_large from "../../../Images/haval-m6-large.jpg";
+import {
+    default as HAVAL_M6_BLACK,
+    default as HAVAL_M6_eksteryer,
+    default as HAVAL_M6_GRAY,
+    default as HAVAL_M6_WHITE,
+} from "../../../Images/haval-m6.jpg";
+import HAVAL_M6 from "../../../Images/m-haval-m6.png";
 import CarDetailsDrawer from "../../../Utils/CarDetails/CarDetailsDrawer";
 import { UserService } from "../../User/UserService";
 import "./HavalM6.css";
@@ -58,7 +60,6 @@ function HavalM6() {
 
     return (
         <div className='gwm-wingle-7-page'>
-            <ToastContainer limit={3} />
             <>
                 <HeaderNavBar />
             </>

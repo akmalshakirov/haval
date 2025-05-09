@@ -12,7 +12,7 @@ import Sider from "antd/es/layout/Sider";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import Logo from "../../Images/haval.svg";
 import "./User.css";
 import UserAgreement from "./UserAgreement.jsx";
@@ -85,7 +85,6 @@ const UserPage = () => {
 
     return (
         <div className='user-page-wrapper'>
-            <ToastContainer limit={3} />
             <Layout style={{ minHeight: "100vh" }} className='user-page-layout'>
                 <Sider
                     style={{

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "./DownloadPdf.css";
 
 export default function DownloadPdf() {
@@ -83,7 +83,6 @@ export default function DownloadPdf() {
 
     return (
         <div className='download-pdf-page'>
-            <ToastContainer limit={3} />
             <div className='download-pdf-container'>
                 <form onSubmit={generatePDF} className='download-pdf-form'>
                     <div>

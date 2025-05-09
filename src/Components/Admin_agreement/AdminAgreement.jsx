@@ -3,7 +3,7 @@ import { Button, Pagination, Spin } from "antd";
 import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "./AdminAgreement.css";
 
 function AdminAgreement() {
@@ -98,7 +98,6 @@ function AdminAgreement() {
 
     return (
         <div className='admin-agreement'>
-            <ToastContainer limit={3} />
             {loader ? (
                 <div
                     style={{

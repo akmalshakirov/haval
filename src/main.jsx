@@ -1,5 +1,6 @@
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import "./App.css";
 import App from "./App.jsx";
 import "./i18n.js";
@@ -12,5 +13,6 @@ createRoot(document.getElementById("root")).render(
             v7_startTransition: true,
         }}>
         <App />
+        <ToastContainer limit={3} />
     </BrowserRouter>
 );
