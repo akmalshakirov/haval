@@ -85,8 +85,7 @@ const AdminPanel = () => {
             }
 
             const response = await axios.get(
-                // "https://haval-uz.onrender.com/cars",
-                "http://localhost:3000/cars",
+                "https://haval-uz.onrender.com/cars",
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -127,7 +126,7 @@ const AdminPanel = () => {
             formData.append("images", fileList[0]);
 
             const response = await axios.post(
-                `http://localhost:3000/add-car`,
+                `https://haval-uz.onrender.com/add-car`,
                 formData,
                 {
                     headers: {
@@ -161,8 +160,7 @@ const AdminPanel = () => {
             formData.append("image", fileList[0]);
 
             const response = await axios.put(
-                // `https://haval-uz.onrender.com/cars/${editingCar._id}`,
-                `http://localhost:3000/cars/${editingCar._id}` /* LOCLA EDIT CAR */,
+                `https://haval-uz.onrender.com/cars/${editingCar._id}`,
                 formData,
                 {
                     headers: {
@@ -193,7 +191,7 @@ const AdminPanel = () => {
         try {
             const token = localStorage.getItem("authToken");
             const response = await axios.delete(
-                `http://localhost:3000/cars/${carToDelete._id}`,
+                `https://haval-uz.onrender.com/cars/${carToDelete._id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -227,8 +225,7 @@ const AdminPanel = () => {
             }
 
             const response = await axios.get(
-                // "https://haval-uz.onrender.com/admins",
-                "http://localhost:3000/admins",
+                "https://haval-uz.onrender.com/admins",
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -272,8 +269,7 @@ const AdminPanel = () => {
                 password: values.password,
             };
             const response = await axios.post(
-                // `https://haval-uz.onrender.com/add-admin`,
-                `http://localhost:3000/add-admin`,
+                `https://haval-uz.onrender.com/add-admin`,
                 addAdmin,
                 {
                     headers: {
@@ -320,8 +316,7 @@ const AdminPanel = () => {
             };
 
             const response = await axios.put(
-                // `https://haval-uz.onrender.com/admins/${editingAdmin._id}`,
-                `http://localhost:3000/admins/${editingAdmin._id}`,
+                `https://haval-uz.onrender.com/admins/${editingAdmin._id}`,
                 updateData,
                 {
                     headers: {
@@ -352,8 +347,7 @@ const AdminPanel = () => {
         try {
             const token = localStorage.getItem("authToken");
             const response = await axios.delete(
-                // `https://haval-uz.onrender.com/admins/${adminId}`,
-                `http://localhost:3000/admins/${adminId}`,
+                `https://haval-uz.onrender.com/admins/${adminId}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,

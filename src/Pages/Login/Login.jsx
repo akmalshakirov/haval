@@ -21,7 +21,7 @@ const Login = () => {
         setOnClick(true);
         try {
             const response = await axios.post(
-                "http://localhost:3000/loginUser",
+                "https://haval-uz.onrender.com/loginUser",
                 { email: values.email, password: values.password },
                 { headers: { "Content-Type": "application/json" } }
             );

@@ -30,9 +30,7 @@ const UserPage = () => {
     useEffect(() => {
         if (!UserService.TOKEN) {
             toast.error("Token topilmadi, qayta tizimga kiring!");
-            setTimeout(() => {
-                navigate("/login");
-            }, 2000);
+            navigate("/login");
         }
         document.title = "HAVAL | Shaxsiy kabinet";
         fetchUserData();
@@ -41,7 +39,7 @@ const UserPage = () => {
     const fetchUserData = async () => {
         try {
             const response = await axios.get(
-                `http://localhost:3000/profil/${UserService.USER_ID}`,
+                `https://haval-uz.onrender.com/profil/${UserService.USER_ID}`,
                 {
                     headers: {
                         "Content-Type": "application/json",
