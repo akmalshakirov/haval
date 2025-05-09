@@ -1,7 +1,7 @@
 import { Button, Spin } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "./AdminUsers.css";
 
 function AdminUsers() {
@@ -63,7 +63,6 @@ function AdminUsers() {
     }, []);
     return (
         <div>
-            <ToastContainer limit={3} />
             <h1 style={{ marginBottom: "20px" }}>Foydalanuvchilar</h1>
             {loading ? (
                 <div

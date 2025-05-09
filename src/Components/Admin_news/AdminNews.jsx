@@ -1,7 +1,7 @@
 import { Button, Card, Form, Image, Input, Modal, Spin } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "./AdminNews.css";
 
 function AdminNews() {
@@ -122,7 +122,6 @@ function AdminNews() {
 
     return (
         <div className='admin-news'>
-            <ToastContainer limit={3} />
             <Button
                 type='primary'
                 id='admin-news-button-primary'

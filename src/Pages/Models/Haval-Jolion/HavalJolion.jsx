@@ -1,15 +1,15 @@
 import Aos from "aos";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import FooterComponent from "../../../Components/Footer/Footer";
 import HeaderNavBar from "../../../Components/Header/HeaderNavBar";
-import HAVAL_JOLION from "../../../Images/m-haval-jolion-blue.png";
-import HAVAL_JOLION_BLACK from "../../../Images/m-haval-jolion-black.png";
-import HAVAL_JOLION_GRAY from "../../../Images/m-haval-jolion-gray.png";
-import HAVAL_JOLION_WHITE from "../../../Images/m-haval-jolion-white.png";
 import HAVAL_JOLION_eksteryer from "../../../Images/haval-jolion-large.jpg";
 import HAVAL_JOLION_large from "../../../Images/haval-jolion.jpg";
+import HAVAL_JOLION_BLACK from "../../../Images/m-haval-jolion-black.png";
+import HAVAL_JOLION from "../../../Images/m-haval-jolion-blue.png";
+import HAVAL_JOLION_GRAY from "../../../Images/m-haval-jolion-gray.png";
+import HAVAL_JOLION_WHITE from "../../../Images/m-haval-jolion-white.png";
 import CarDetailsDrawer from "../../../Utils/CarDetails/CarDetailsDrawer";
 import { UserService } from "../../User/UserService";
 import "./HavalJolion.css";
@@ -57,7 +57,6 @@ function HavalJolion() {
 
     return (
         <div className='gwm-wingle-7-page'>
-            <ToastContainer limit={3} />
             <>
                 <HeaderNavBar />
             </>

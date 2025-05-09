@@ -30,15 +30,15 @@ import {
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import Logo from "../../Images/haval.svg";
 import AdminAgreement from "../Admin_agreement/AdminAgreement";
 import AdminDealer from "../Admin_dealer/AdminDealer";
 import AdminNews from "../Admin_news/AdminNews";
+import AdminStatistics from "../Admin_statistics/AdminStatistics";
 import AdminUsers from "../Admin_users/AdminUsers";
 import AdminVideos from "../Admin_videos/AdminVideos";
 import "./Admin.css";
-import AdminStatistics from "../Admin_statistics/AdminStatistics";
 
 const { Header, Sider, Content, Footer } = Layout;
 
@@ -67,6 +67,7 @@ const AdminPanel = () => {
     const [deleteAdminModal, setDeleteAdminModal] = useState(false);
     const [adminToDelete, setAdminToDelete] = useState(null);
     const [deleteAdmin, setDeleteAdmin] = useState(false);
+    const [deleteCar, setDeleteCar] = useState(false);
     const navigate = useNavigate();
 
     const handleChangePassInput = (e) => {
@@ -137,7 +138,7 @@ const AdminPanel = () => {
             );
             await fetchCars();
             setCars([...cars, { key: `${cars.length + 1}`, ...values }]);
-            toast.success("Avtomobil muvaffaqiyatli qo'shildi!");
+            toast.success(response.data.message);
             setIsModalOpen(false);
             form.resetFields();
         } catch (error) {
@@ -189,6 +190,7 @@ const AdminPanel = () => {
     };
 
     const handleDeleteCar = async () => {
+        setDeleteCar(true);
         try {
             const token = localStorage.getItem("authToken");
             const response = await axios.delete(
@@ -201,8 +203,7 @@ const AdminPanel = () => {
             );
             if (response.status === 200) {
                 setDeleteModal(false);
-                toast.success("Avtomobil muvaffaqiyatli o'chirildi!");
-                form.resetFields();
+                toast.success(response.data.message);
                 await fetchCars();
             }
         } catch (error) {
@@ -211,6 +212,8 @@ const AdminPanel = () => {
                     error.response?.data?.message || error.message
                 }`
             );
+        } finally {
+            setDeleteCar(false);
         }
     };
 
@@ -489,7 +492,6 @@ const AdminPanel = () => {
 
     return (
         <Layout style={{ minHeight: "100vh" }} className='admin'>
-            <ToastContainer limit={3} />
             <Sider>
                 <div className='admin-sidebar-top-logo'>
                     <Link
@@ -1193,6 +1195,7 @@ const AdminPanel = () => {
                 }}
                 okText="O'chirish"
                 okButtonProps={{
+                    loading: deleteCar,
                     style: {
                         backgroundColor: "red",
                         color: "white",

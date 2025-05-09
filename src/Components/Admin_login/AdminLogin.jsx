@@ -3,7 +3,7 @@ import { Button, Card, Checkbox, Form, Input, Typography } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "./AdminLogin.css";
 
 const { Title, Text } = Typography;
@@ -35,6 +35,7 @@ const AdminLogin = () => {
                 { headers: { "Content-Type": "application/json" } }
             );
             if (response.status === 200 && response.data?.token) {
+                toast.success(response.data.message);
                 localStorage.setItem("authToken", response.data.token);
                 navigate("/admin");
             } else if (response.status === 500 || response.status === 400) {
@@ -63,7 +64,6 @@ const AdminLogin = () => {
 
     return (
         <div className='admin-login-container'>
-            <ToastContainer limit={3} />
             <Card className='admin-login-card'>
                 <Title level={4} className='admin-login-title'>
                     Войдите в свой аккаунт

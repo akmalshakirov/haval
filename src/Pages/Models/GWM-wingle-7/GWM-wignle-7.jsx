@@ -1,7 +1,7 @@
 import Aos from "aos";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import FooterComponent from "../../../Components/Footer/Footer";
 import HeaderNavBar from "../../../Components/Header/HeaderNavBar";
 import GWM_WINGLE_7_eksteryer from "../../../Images/gwm-wingle-7-eksteryer-1.jpg";
@@ -42,7 +42,6 @@ function GWMwignle7() {
 
     return (
         <div className='gwm-wingle-7-page'>
-            <ToastContainer limit={3} />
             <>
                 <HeaderNavBar />
             </>

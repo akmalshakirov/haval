@@ -7,7 +7,7 @@ import { Button, Card, Checkbox, Form, Input, Typography } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "./Register.css";
 
 const { Title, Text } = Typography;
@@ -64,7 +64,6 @@ const Registration = () => {
 
     return (
         <div className='register-container'>
-            <ToastContainer limit={3} />
             <Card className='register-card'>
                 <Title level={4} className='register-title'>
                     Регистрация

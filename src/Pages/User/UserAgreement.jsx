@@ -8,7 +8,7 @@ import { Spin } from "antd";
 import axios from "axios";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "./UserAgreement.css";
 
 const UserAgreement = ({ data, theme }) => {
@@ -41,7 +41,6 @@ const UserAgreement = ({ data, theme }) => {
     };
     return (
         <>
-            <ToastContainer limit={3} />
             <div
                 style={{
                     marginBottom: "30px",

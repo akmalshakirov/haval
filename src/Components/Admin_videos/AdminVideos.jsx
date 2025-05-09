@@ -9,7 +9,7 @@ import "./AdminVideos.css";
 // import AdminVideoImg3 from "../../Images/admin-video-img3.jpg";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 // const initialCardsData = [
 //     {
@@ -131,7 +131,6 @@ const AdminVideos = () => {
 
     return (
         <div className='admin-videos'>
-            <ToastContainer limit={3} />
             <h1>Videolar</h1>
             {/* {cards.map((card) => (
                 <div className='card' key={card.id}>

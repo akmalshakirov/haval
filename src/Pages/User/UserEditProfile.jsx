@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import AVA from "../../Images/userimage.png";
 import "./UserEditProfile.css";
 import { UserService } from "./UserService.tsx";
@@ -80,7 +80,6 @@ const UserEditProfile = ({ theme }) => {
 
     return (
         <div className='user-edit-profile-wrapper'>
-            <ToastContainer limit={3} />
             <div
                 className='user-edit-profile-content'
                 style={{
