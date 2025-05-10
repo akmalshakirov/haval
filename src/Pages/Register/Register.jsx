@@ -38,7 +38,6 @@ const Registration = () => {
         setOnClick(true);
         try {
             const response = await axios.post(
-                // "https://haval-uz.onrender.com/register",
                 "https://haval-uz.onrender.com/register",
                 { name, email, password: inputPasswordValue },
                 { headers: { "Content-Type": "application/json" } }

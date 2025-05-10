@@ -204,10 +204,7 @@ function AdminNews() {
                 okText='Yangilik qoshish'
                 onOk={handleAddNews}
                 cancelText='Bekor qilish'>
-                <Form
-                    form={form}
-                    // onFinish={handleAddNews}
-                    layout='vertical'>
+                <Form form={form} layout='vertical'>
                     <Form.Item
                         label='Yanglikning sarlavhasi'
                         name='title'
