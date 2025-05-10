@@ -29,7 +29,7 @@ const Login = () => {
                 localStorage.setItem("token", response.data.token);
                 localStorage.setItem("userID", response.data.userId);
                 toast.success("Siz muvaffaqiyatli tizimga kirdingiz");
-                navigate("/user");
+                navigate("/user", { replace: true });
             }
         } catch (error) {
             toast.error(
