@@ -31,7 +31,7 @@ const VideosArr = [
 
 function MainVideos() {
     // const [mainVideos, setMainVideos] = useState([]);
-    // const [selectedVideo, setSelectedVideo] = useState();
+    // const [selectedVideo, setSelectedVideo] = useState(null);
 
     // const fetchMainVideos = async () => {
     //     try {
