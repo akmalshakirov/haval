@@ -36,7 +36,7 @@ const AdminLogin = () => {
             if (response.status === 200 && response.data?.token) {
                 toast.success(response.data.message);
                 localStorage.setItem("authToken", response.data.token);
-                navigate("/admin");
+                navigate("/admin", { replace: true });
             } else if (response.status === 500 || response.status === 400) {
                 toast.error(response.error);
             }

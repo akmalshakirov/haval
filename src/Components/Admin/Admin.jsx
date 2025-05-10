@@ -99,7 +99,7 @@ const AdminPanel = () => {
                 return toast.warning("Server ishlamayotgan bo'lishi mumkin");
             } else if (response?.message === "Invalid token!") {
                 localStorage.removeItem("authToken");
-                navigate("/");
+                navigate("/", { replace: true });
             } else if (response.status === 401) {
                 toast.warn("Token vaqti tugagan!");
             } else {
@@ -475,7 +475,7 @@ const AdminPanel = () => {
 
     const handleLogout = () => {
         localStorage.removeItem("authToken");
-        navigate("/");
+        navigate("/", { replace: true });
     };
 
     const handleClickBtn = () => {

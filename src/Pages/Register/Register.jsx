@@ -43,7 +43,7 @@ const Registration = () => {
                 { headers: { "Content-Type": "application/json" } }
             );
             toast.success(response.data.message);
-            navigate("/login");
+            navigate("/login", { replace: true });
         } catch (error) {
             if (error.code === "ERR_NETWORK") {
                 toast.warning("Server ishlamayotgan bo'lishi mumkin");

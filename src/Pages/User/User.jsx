@@ -30,7 +30,7 @@ const UserPage = () => {
     useEffect(() => {
         if (!UserService.TOKEN) {
             toast.error("Token topilmadi, qayta tizimga kiring!");
-            navigate("/login");
+            navigate("/login", { replace: true });
         }
         document.title = "HAVAL | Shaxsiy kabinet";
         fetchUserData();
@@ -78,7 +78,7 @@ const UserPage = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("userID");
         localStorage.removeItem("userData");
-        navigate("/");
+        navigate("/", { replace: true });
     };
 
     return (

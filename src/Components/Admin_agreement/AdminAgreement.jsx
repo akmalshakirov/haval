@@ -20,7 +20,7 @@ function AdminAgreement() {
         try {
             setLoader(true);
             if (!token) {
-                navigate("/");
+                navigate("/", { replace: true });
                 return;
             }
             const response = await axios.get(
