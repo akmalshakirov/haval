@@ -190,7 +190,7 @@ const UserAgreement = ({ data, theme }) => {
                                             textAlign: "center",
                                             padding: "20px",
                                         }}>
-                                        Ma'lumotlar yo'q
+                                        Ma'lumotlar yo'q yoki hali yuklanayabdi
                                     </td>
                                 </tr>
                             )}

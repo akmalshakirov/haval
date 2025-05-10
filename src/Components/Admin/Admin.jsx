@@ -9,7 +9,6 @@ import {
     LogoutOutlined,
     NotificationOutlined,
     OrderedListOutlined,
-    StockOutlined,
     UnorderedListOutlined,
     UserOutlined,
     VideoCameraOutlined,

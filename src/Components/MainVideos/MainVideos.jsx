@@ -30,32 +30,13 @@ const VideosArr = [
 ];
 
 function MainVideos() {
-    // const [mainVideos, setMainVideos] = useState([]);
-    // const [selectedVideo, setSelectedVideo] = useState(null);
-
-    // const fetchMainVideos = async () => {
-    //     try {
-    //         const response = await axios.get(
-    //             "https://haval-uz.onrender.com/videos"
-    //         );
-    //         setMainVideos(response.data);
-    //     } catch (error) {
-    //         toast.error(
-    //             `Videolarni yuklashda xatolik yuz berdi: ${error.response?.data?.message}`
-    //         );
-    //     }
-    // };
-
-    // useEffect(() => {
-    //     fetchMainVideos();
-    // }, []);
-
     useEffect(() => {
         AOS.init({
             duration: 1000,
             easing: "ease-out",
         });
     }, []);
+
     return (
         <div className='main-videos'>
             <div>
