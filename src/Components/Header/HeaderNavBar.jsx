@@ -2,18 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import headerAsideBtnPhone from "../../Images/aa.png";
-import havalLogo from "../../Images/haval.svg";
 import headerAsideBtnCar from "../../Images/header-aside-btn-car.png";
-// import Logo from "../../Images/logo.png";
-import Logo from "../../Images/limonauto.png";
+import BYDChazorM from "../../Images/byd-chazor-m.webp";
+import BYDSongPlusDmiCHampionM from "../../Images/byd-song-plus-champion-m.webp";
+import BYDSongPlusEvM from "../../Images/byd-song-plus-ev-m.webp";
+import BYDSongProDmiM from "../../Images/byd-song-pro-dmi-m.webp";
 import LogoBlack from "../../Images/limonauto-black.png";
+import Logo from "../../Images/limonauto.png";
 import GWMwingle7 from "../../Images/m-gwm-wingle-7.png";
 import HavalDargo from "../../Images/m-haval-dargo.png";
 import HavalJolion from "../../Images/m-haval-jolion.png";
-import BYDChazorM from "../../Images/byd-chazor-m.webp";
-import BYDSongProDmiM from "../../Images/byd-song-pro-dmi-m.webp";
-import BYDSongPlusEvM from "../../Images/byd-song-plus-ev-m.webp";
-import BYDSongPlusDmiCHampionM from "../../Images/byd-song-plus-champion-m.webp";
 import "./Header.css";
 
 const HeaderModels = [
