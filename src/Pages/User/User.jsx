@@ -32,7 +32,7 @@ const UserPage = () => {
             toast.error("Token topilmadi, qayta tizimga kiring!");
             navigate("/login", { replace: true });
         }
-        document.title = "HAVAL | Shaxsiy kabinet";
+        document.title = "LIMON-AUTO | Shaxsiy kabinet";
         fetchUserData();
     }, [location]);
 

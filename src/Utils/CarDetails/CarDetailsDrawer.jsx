@@ -1,38 +1,63 @@
-import { Button, Drawer, Spin } from "antd";
+import {
+    CarOutlined,
+    CreditCardOutlined,
+    DollarOutlined,
+} from "@ant-design/icons";
+import { Card, Divider, Drawer, Space, Spin, Tag } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import styles from "./CarDetails.module.css";
 import "./CarDetailsDrawer.css";
+
+const variantOptions = [
+    { label: "55 KM Active", value: "55km_active", price: 273900000 },
+    { label: "55 KM Luxe", value: "55km_luxe", price: 288100000 },
+    { label: "CHAZOR 120km Comfort", value: "120km_comfort", price: 302300000 },
+    {
+        label: "CHAZOR 120km Flagship",
+        value: "120km_flagship",
+        price: 315200000,
+    },
+];
 
 const CarDetailsDrawer = ({ car, open, onClose }) => {
     const userData = JSON?.parse(localStorage.getItem("userData"));
     const userName = userData ? userData[0].name : userData;
     const [loader, setLoader] = useState(false);
+    const navigate = useNavigate();
+
+    const basePrice = car?.price || 0;
+    const [selectedVariant, setSelectedVariant] = useState(
+        variantOptions[0].value
+    );
+    const [currentPrice, setCurrentPrice] = useState(
+        variantOptions[0].price || basePrice
+    );
+
     const [formData, setFormData] = useState({
         userId: localStorage.getItem("userID"),
-        fullname: userName ? userName : "Loading user name...",
-        phone: "",
+        fullname: userName || "Loading user name...",
         model: car?.model,
         color: car?.color,
         engine: car?.engine,
         transmission: car?.transmission,
         payment: car?.payment || "Yo'q",
-        price: car?.price,
+        price: variantOptions[0].price || basePrice,
+        variant: variantOptions[0].value,
     });
 
     useEffect(() => {
-        document.title = `HAVAL | ${car?.model}`;
-    }, []);
+        document.title = `LIMON-AUTO | ${car?.model}`;
+    }, [car]);
 
-    const handleChangeInput = (e) => {
-        if (!car.engine.includes(e.target.value)) {
-            return;
-        } else {
-            setFormData((prev) => ({
-                ...prev,
-                engine: e.target.value,
-            }));
-        }
+    const selectVariant = (value) => {
+        const variant = variantOptions.find((opt) => opt.value === value);
+        const newPrice = variant ? variant.price : basePrice;
+        setSelectedVariant(value);
+        setCurrentPrice(newPrice);
+        setFormData((prev) => ({ ...prev, variant: value, price: newPrice }));
     };
 
     const handleBuy = async (e) => {
@@ -40,30 +65,20 @@ const CarDetailsDrawer = ({ car, open, onClose }) => {
         setLoader(true);
         try {
             const response = await axios.post(
-                "https://haval-uz.onrender.com/generate-pdf",
+                "https://haval-xx6f.onrender.com/generate-pdf",
                 formData,
                 { headers: { "Content-Type": "application/json" } }
             );
-
             if (response.status === 201) {
                 onClose();
                 toast.success(
-                    `HAVALning ${car?.model} modeliga shartnoma muvaffaqiyatli olindi.`,
-                    {
-                        autoClose: 7777,
-                        draggable: "mouse",
-                        closeButton: false,
-                    }
+                    `HAVALning ${car?.model} (${
+                        variantOptions.find((v) => v.value === selectedVariant)
+                            ?.label
+                    }) modeliga shartnoma muvaffaqiyatli olindi.`,
+                    { autoClose: 7777, draggable: "mouse", closeButton: false }
                 );
-                toast.success(
-                    "Barcha shartnomalarni shaxsiy kabinetingizda ko'rishingiz mumkin.",
-                    {
-                        delay: 7777,
-                        autoClose: 7777,
-                        draggable: "mouse",
-                        closeButton: false,
-                    }
-                );
+                navigate("/user");
             } else {
                 toast.info(response?.data?.message || response?.data?.error);
             }
@@ -79,82 +94,146 @@ const CarDetailsDrawer = ({ car, open, onClose }) => {
     return (
         <Drawer
             classNames={{
-                mask: "car-drawer-mask",
-                wrapper: "car-drawer-wrapper",
-                body: "car-drawer-body",
+                mask: styles.carDrawerMask,
+                wrapper: styles.carDrawerWrapper,
+                body: styles.carDrawerBody,
             }}
-            title='Avtomobil tafsilotlari'
+            title={
+                <div className={styles.drawerHeader}>
+                    Avtomobil tafsilotlari
+                </div>
+            }
             placement='right'
-            closable={true}
+            closable
             onClose={onClose}
-            open={open}>
+            open={open}
+            width={500}>
             {loader ? (
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        gap: "20px",
-                        marginTop: "50px",
-                    }}>
-                    <h1>Yuklanmoqda</h1>
+                <div className={styles.loadingContainer}>
                     <Spin size='large' />
+                    <h3 className={styles.loadingText}>Yuklanmoqda...</h3>
                 </div>
             ) : (
                 <form onSubmit={handleBuy}>
-                    <p>
-                        <strong>Model:</strong> {car?.model}
-                    </p>
-                    <p>
-                        <strong>Rangi:</strong> {car?.color}
-                    </p>
-                    <p>
-                        <strong>Narxi:</strong> {car?.price}
-                    </p>
-                    <p>
-                        <strong>Drayv:</strong> {car?.transmission}
-                    </p>
-                    <div>
-                        <label htmlFor='transmission'>
-                            <b>Transmissiya:</b>
-                        </label>
-                        <input
-                            type='text'
-                            name='engine'
-                            id='transmission'
-                            list='engine-list'
-                            multiple
-                            required
-                            onChange={handleChangeInput}
-                        />
-                        <datalist id='engine-list'>
-                            {car.engine && car.engine.length > 0 ? (
-                                car.engine.map((eng, index) => (
-                                    <option value={eng} key={index}>
-                                        {eng}
-                                    </option>
-                                ))
-                            ) : (
-                                <option value="Ma'lumotlar topilmadi">
-                                    Yo'q
-                                </option>
-                            )}
-                        </datalist>
-                    </div>
+                    <Card bordered={false} className={styles.heroCard}>
+                        <div className={styles.carImageContainer}>
+                            {car?.image ? (
+                                <img
+                                    src={car.image}
+                                    alt={car?.model}
+                                    className={styles.carImage}
+                                    onError={(e) => {
+                                        e.target.style.display = "none";
+                                        e.target.nextSibling.style.display =
+                                            "flex";
+                                    }}
+                                />
+                            ) : null}
+                            <div
+                                className={styles.placeholderImage}
+                                style={{
+                                    display: car?.image ? "none" : "flex",
+                                }}>
+                                <CarOutlined
+                                    className={styles.placeholderIcon}
+                                />
+                                <p className={styles.placeholderText}>
+                                    Rasm yuklanmoqda...
+                                </p>
+                            </div>
+                        </div>
+                        <h2 className={styles.heroTitle}>{car?.model}</h2>
+                    </Card>
 
-                    <p>
-                        <strong>To'lov turi:</strong> {car?.payment}
-                    </p>
-                    <div className='car-details-drawer-footer'>
-                        <Button onClick={onClose} style={{ marginRight: 8 }}>
+                    <Space
+                        direction='vertical'
+                        size='middle'
+                        style={{ width: "100%" }}>
+                        {/* Variantlarni Card ko'rinishida ko'rsatish */}
+                        <div className={styles.variantGrid}>
+                            {variantOptions.map((opt) => (
+                                <Card
+                                    key={opt.value}
+                                    hoverable
+                                    bordered
+                                    className={`${styles.variantCard} ${
+                                        selectedVariant === opt.value
+                                            ? styles.selectedCard
+                                            : ""
+                                    }`}
+                                    onClick={() => selectVariant(opt.value)}>
+                                    <div className={styles.variantLabel}>
+                                        {opt.label}
+                                    </div>
+                                    <div className={styles.variantPrice}>
+                                        {opt.price.toLocaleString("uz-UZ")} so'm
+                                    </div>
+                                </Card>
+                            ))}
+                        </div>
+
+                        <Card size='small' className={styles.contentCard}>
+                            <Space
+                                direction='vertical'
+                                size='middle'
+                                style={{ width: "100%" }}>
+                                <div className={styles.infoRow}>
+                                    <span className={styles.infoLabel}>
+                                        Rangi:
+                                    </span>
+                                    <Tag
+                                        color='blue'
+                                        className={styles.colorTag}>
+                                        {car?.color}
+                                    </Tag>
+                                </div>
+                                <div className={styles.infoRow}>
+                                    <span className={styles.infoLabel}>
+                                        <DollarOutlined
+                                            className={styles.infoIcon}
+                                        />{" "}
+                                        Narxi:
+                                    </span>
+                                    <span className={styles.priceValue}>
+                                        {currentPrice.toLocaleString("uz-UZ")}{" "}
+                                        so'm
+                                    </span>
+                                </div>
+                            </Space>
+                        </Card>
+
+                        <Card size='small' className={styles.contentCard}>
+                            <div className={styles.infoRow}>
+                                <span className={styles.infoLabel}>
+                                    <CreditCardOutlined
+                                        className={styles.infoIcon}
+                                    />{" "}
+                                    To'lov turi:
+                                </span>
+                                <Tag
+                                    color='green'
+                                    className={styles.paymentTag}>
+                                    {car?.payment}
+                                </Tag>
+                            </div>
+                        </Card>
+                    </Space>
+
+                    <Divider />
+
+                    <div className={styles.buttonContainer}>
+                        <button
+                            type='button'
+                            onClick={onClose}
+                            className={`${styles.customButton} ${styles.cancelButton}`}>
                             Bekor qilish
-                        </Button>
-                        <Button
-                            type='primary'
-                            htmlType='submit'
-                            disabled={loader}>
-                            Sotib olish
-                        </Button>
+                        </button>
+                        <button
+                            type='submit'
+                            disabled={loader}
+                            className={`${styles.customButton} ${styles.buyButton}`}>
+                            {loader ? "Yuklanmoqda..." : "Sotib olish"}
+                        </button>
                     </div>
                 </form>
             )}

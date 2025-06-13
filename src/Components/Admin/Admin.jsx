@@ -255,7 +255,7 @@ const AdminPanel = () => {
             fetchCars();
             fetchAdmins();
         }
-        document.title = "Haval | Admin Panel";
+        document.title = "LIMON-AUTO | Admin Panel";
     }, []);
 
     const handleAddAdmin = async (values) => {

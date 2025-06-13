@@ -1,0 +1,172 @@
+.gwm-wingle-7-page {
+    display: flex;
+    flex-direction: column;
+    max-width: 1920px;
+    margin: 0 auto;
+}
+.gwm-wingle-7-page-intro {
+    padding-top: 100px;
+}
+
+.gwm-wingle-7-page-intro div:first-child {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 17px;
+}
+
+.gwm-wingle-7-page-hero-info {
+    position: relative;
+}
+.gwm-wingle-7-page-hero-img {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.gwm-wingle-7-page-hero-info span {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        180deg,
+        rgba(30, 30, 30, 0.1) 65%,
+        #1e1e1e 100%
+    );
+    pointer-events: none;
+}
+.gwm-wingle-7-page-hero-info div {
+    position: absolute;
+    bottom: 100px;
+    left: 30px;
+    font-size: 25px;
+    color: #fff;
+}
+.gwm-wingle-7-page-hero-info div h1 {
+    letter-spacing: 4px;
+}
+
+.gwm-wingle-7-page-hero-info div p {
+    font-size: 20px;
+    font-family: var(--font-roboto);
+}
+
+/* MAIN */
+
+.gwm-wingle-7-page-main {
+    background-color: #e2e6e9;
+}
+
+.gwm-wingle-7-main-cards {
+    margin-top: 30px;
+    padding: 0 10px;
+    overflow: hidden;
+}
+
+.gwm-wingle-7-main-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.gwm-wingle-7-main-card:first-child img {
+    max-width: 725px;
+    max-height: 617px;
+}
+
+/* ADD AGREEMENT */
+
+.add-agreement-wrapper {
+    background-color: #313131;
+    overflow: hidden;
+}
+
+.add-agreement-wrapper > div {
+    display: flex;
+    align-items: center;
+    gap: 70px;
+    padding-top: 50px;
+    min-height: 100vh;
+    transition: 0.3s ease;
+}
+
+.add-agreement-image {
+    max-width: 60vw;
+}
+.add-agreement-image img {
+    width: 100%;
+}
+.add-agreement-model-color {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.modifikatsiya {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: #c4c9cd17;
+    padding: 25px 40px;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.158) 0px 5px 15px;
+    color: #fff;
+}
+
+.modifikatsiya h1,
+.modifikatsiya h2,
+.modifikatsiya div p {
+    font-family: var(--font-roboto);
+    color: inherit;
+}
+
+.add-agreement-model-color #one {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #0c0d11;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.add-agreement-model-color #two {
+    display: block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: white;
+    border: 1px solid black;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.add-agreement-buy {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+.add-agreement-buy button {
+    background-color: #0d6efd;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 17px;
+    font-family: var(--font-roboto);
+}
+
+.add-agreement-buy p span {
+    font-size: 19px;
+    font-weight: 500;
+}
+
+.mx-auto {
+    margin-left: 15vw;
+}

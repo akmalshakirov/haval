@@ -22,7 +22,7 @@ const AdminLogin = () => {
     };
 
     useEffect(() => {
-        document.title = "Haval | Admin Login";
+        document.title = "LIMON-AUTO | Admin Login";
     }, []);
 
     const handleSubmit = async () => {

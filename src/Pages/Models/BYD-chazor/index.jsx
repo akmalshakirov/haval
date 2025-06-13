@@ -4,52 +4,34 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import FooterComponent from "../../../Components/Footer/Footer";
 import HeaderNavBar from "../../../Components/Header/HeaderNavBar";
-import HAVAL_JOLION_eksteryer from "../../../Images/haval-jolion-large.jpg";
-import HAVAL_JOLION_large from "../../../Images/haval-jolion.jpg";
-import HAVAL_JOLION_BLACK from "../../../Images/m-haval-jolion-black.png";
-import HAVAL_JOLION from "../../../Images/m-haval-jolion-blue.png";
-import HAVAL_JOLION_GRAY from "../../../Images/m-haval-jolion-gray.png";
-import HAVAL_JOLION_WHITE from "../../../Images/m-haval-jolion-white.png";
+import BYDChazorM from "../../../Images/byd-chazor-m.webp";
+import BYDChazor from "../../../Images/byd-chazor.webp";
 import CarDetailsDrawer from "../../../Utils/CarDetails/CarDetailsDrawer";
 import { UserService } from "../../User/UserService";
-import "./HavalJolion.css";
+import "./BYD-chazor.css";
 
-function HavalJolion() {
-    const [carImg, setCarImg] = useState(HAVAL_JOLION);
+function Chazor() {
+    const [carImg, setCarImg] = useState(BYDChazorM);
     const [drawerVisible, setDrawerVisible] = useState(false);
 
     useEffect(() => {
         Aos.init();
-        document.title = `LIMON-AUTO | ${car?.model}`;
     }, []);
 
-    const handleCheckColor = (color) => {
-        if (color === HAVAL_JOLION) {
-            return "Samoviy metall";
-        } else if (color === HAVAL_JOLION_BLACK) {
-            return "Qora metall";
-        } else if (color === HAVAL_JOLION_GRAY) {
-            return "Kulrang metall";
-        } else if (color === HAVAL_JOLION_WHITE) {
-            return "Oq";
-        } else {
-            return "Samoviy metall";
-        }
-    };
-
     const car = {
-        model: "HAVAL JOLION",
-        price: "279 900 000",
-        transmission: "To'liq",
-        engine: ["Avtomatik"],
-        payment: "Naqd",
-        description: "ZAMONAVIY SHAHAR KROSSOVERI",
-        color: handleCheckColor(carImg),
+        model: "BYD - Chazor",
+        price: "273900000",
+        engine: "Avto",
+        payment: "Onlayn",
+        color: "Qora",
+        image: BYDChazorM,
     };
 
     const handleBuy = () => {
         if (!UserService.TOKEN) {
-            toast.warning("Avtomobil sotib olish uchun login qilish shart!");
+            toast.warning("Avtomobil sotib olish uchun login qilish shart!", [
+                4,
+            ]);
         } else {
             setDrawerVisible(true);
         }
@@ -61,7 +43,7 @@ function HavalJolion() {
                 <HeaderNavBar />
             </>
             <div className='add-agreement-wrapper'>
-                <div>
+                <div className='mx-auto'>
                     <div
                         className='add-agreement-image'
                         data-aos='fade-right'
@@ -85,49 +67,15 @@ function HavalJolion() {
                             </div>
                             <h1>Modifikatsiya</h1>
                             <div className='add-agreement-model-color'>
-                                <p>Kuzov rangi:</p>
+                                <p>Kuzov rangi: </p>
                                 <span
-                                    title={handleCheckColor(HAVAL_JOLION)}
-                                    id='one'
-                                    onClick={() =>
-                                        setCarImg(HAVAL_JOLION)
-                                    }></span>
-                                <span
-                                    title={handleCheckColor(HAVAL_JOLION_BLACK)}
-                                    id='two'
-                                    onClick={() =>
-                                        setCarImg(HAVAL_JOLION_BLACK)
-                                    }></span>
-                                <span
-                                    title={handleCheckColor(HAVAL_JOLION_GRAY)}
-                                    id='three'
-                                    onClick={() =>
-                                        setCarImg(HAVAL_JOLION_GRAY)
-                                    }></span>
-                                <span
-                                    title={handleCheckColor(HAVAL_JOLION_WHITE)}
-                                    id='four'
-                                    onClick={() =>
-                                        setCarImg(HAVAL_JOLION_WHITE)
-                                    }></span>
+                                    style={{
+                                        fontFamily: "var(--font-roboto)",
+                                        marginLeft: "3px",
+                                    }}>
+                                    {car.color}
+                                </span>
                             </div>
-                            <span style={{ fontFamily: "var(--font-roboto)" }}>
-                                ({car.color})
-                            </span>
-                            <ul
-                                style={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    fontFamily: "var(--font-roboto)",
-                                    color: "inherit",
-                                    fontSize: "16px",
-                                    marginTop: "5px",
-                                }}>
-                                <li>Dvigatel</li>
-                                <li>2.4(4WD)MT</li>
-                                <li>149</li>
-                                <li>Benzin</li>
-                            </ul>
                             <hr
                                 style={{
                                     marginTop: "20px",
@@ -185,8 +133,8 @@ function HavalJolion() {
                                 data-aos-duration='1555'
                                 data-aos-easign='linear'
                                 data-aos-offset='300'
-                                src={HAVAL_JOLION_eksteryer}
-                                alt={HAVAL_JOLION_eksteryer}
+                                src={BYDChazor}
+                                alt={BYDChazor}
                             />
                         </div>
                         <div
@@ -194,16 +142,15 @@ function HavalJolion() {
                             data-aos-duration='1555'
                             data-aos-easign='linear'
                             data-aos-offset='300'>
-                            <h1>HAVAL JOLION BILAN KO'PROQ IMKONIYATLAR</h1>
+                            <h1>Shaffof panoramik 360° tasvir</h1>
                             <p>
                                 <br />
-                                Zamonaviy shahar krossoveri HAVAL JOLION doim
-                                diqqat markazida bo'lish uchun yaratilgan.
-                                Avtomobilning yorqin, jozibali siluetini shahar
-                                oqimida birgina qarashda oson tanib olish
-                                mumkin, uning super zamonaviy optsiyalari esa
-                                har bir sayohatni yanada qulayroq qilishga
-                                yordam beradi.
+                                Ko'rinmas zonalarini qoldirmasdan barcha
+                                tafsilotlarni sezish uchun a'lo darajada
+                                jihozlangan. Yuqori aniqlikdagi kameralar
+                                yordamida atrofga qarab va oson parkovka qilish
+                                uchun hech qanday to'siqlar yo'qligiga ishonch
+                                hosil qilasiz.
                             </p>
                         </div>
                     </div>
@@ -221,7 +168,7 @@ function HavalJolion() {
                         <div className='gwm-wingle-7-page-hero-info'>
                             <img
                                 className='gwm-wingle-7-page-hero-img'
-                                src={HAVAL_JOLION_large}
+                                src={BYDChazor}
                                 alt='gwm-wingle-7-page-hero-img'
                             />
                             <span></span>
@@ -238,4 +185,4 @@ function HavalJolion() {
     );
 }
 
-export default HavalJolion;
+export default Chazor;

@@ -35,3 +35,57 @@
     padding: 10px;
     font-size: 18px;
 }
+
+.ua-container {
+    padding: 24px;
+    background: #f0f2f5;
+}
+
+.ua-header {
+    margin-bottom: 24px;
+}
+
+.ua-summary .ua-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border-radius: 8px;
+    min-height: 100px;
+}
+
+.ua-icon {
+    font-size: 32px;
+}
+
+.ua-icon.total {
+    color: #1890ff;
+}
+.ua-icon.paid {
+    color: #52c41a;
+}
+.ua-icon.pending {
+    color: #faad14;
+}
+.ua-icon.cancelled {
+    color: #f5222d;
+}
+
+.ua-card.paid {
+    background-color: #f6ffed;
+}
+.ua-card.pending {
+    background-color: #fff7e6;
+}
+.ua-card.cancelled {
+    background-color: #fff1f0;
+}
+
+.ua-table-card {
+    margin-top: 24px;
+    border-radius: 8px;
+}
+
+.ua-table .ant-table-thead > tr > th {
+    background: #fafafa;
+    font-weight: 600;
+}

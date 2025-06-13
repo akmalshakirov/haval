@@ -43,9 +43,9 @@
     position: relative;
 }
 .header__nav {
-    flex-grow: 1;
     display: flex;
-    flex-direction: row;
+    align-items: center;
+    margin-right: 40px;
 }
 .header-nav__links {
     display: flex;
@@ -119,8 +119,15 @@
     width: 100%;
 }
 .header__logo {
-    margin-right: 7.32064vw;
-    max-width: 5.12445vw;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-roboto);
+    letter-spacing: 2px;
+    margin-right: 6.3vw;
+    margin-left: 0.5vw;
+    max-width: 7.1vw;
+    color: #fff;
 }
 .header__logo img {
     width: 100%;
@@ -255,7 +262,7 @@
 }
 .owners-modal-overlay {
     position: fixed;
-    top: 90px;
+    top: 10vh;
     left: 0;
     width: 100%;
     height: 100%;
@@ -269,11 +276,11 @@
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: scale(0.98);
+        transform: translateY(-1%);
     }
     to {
         opacity: 1;
-        transform: scale(1);
+        transform: translateX(0);
     }
 }
 .about-gwm-active {
@@ -336,7 +343,7 @@
 .owners-modal.active a:hover {
     text-decoration: underline;
 }
-.models-modal-cards {
+.header__models-modal-cards {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -344,22 +351,18 @@
     gap: 10px;
     margin-top: 30px;
 }
-.models-modal-card {
+.header__models-modal-card {
     border-radius: 20px;
     border: 1px solid #ccc;
-    padding: 40px 10px;
-    transition: 0.7s !important;
+    padding: 30px;
+    transition: 0.2s !important;
+    text-decoration: none !important;
 }
 
-.models-modal-card:hover {
-    background-color: #76bbc4;
+.header__models-modal-card:hover {
+    background-color: #3641475e;
 }
 
-.models-modal-card img {
-    max-width: 397px;
-    max-height: 117px;
-    object-fit: cover;
-}
 .swiper-slide-3 {
     margin-top: 50px;
     color: #ffffff08;
