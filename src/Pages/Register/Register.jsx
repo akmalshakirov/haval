@@ -28,7 +28,7 @@ const Registration = () => {
     };
 
     useEffect(() => {
-        document.title = "Haval | Register";
+        document.title = "LIMON-AUTO | Register";
     }, []);
 
     const handleSubmit = async () => {

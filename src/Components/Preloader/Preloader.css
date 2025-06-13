@@ -6,6 +6,7 @@
     background-color: rgb(20, 20, 20);
     width: 100vw;
     height: 100vh;
+    animation: fadeIn 2s ease-in-out alternate;
 }
 .loader {
     width: 100px;
@@ -18,8 +19,9 @@
     mask: var(--_m);
     -webkit-mask-composite: source-out;
     mask-composite: subtract;
-    animation: l3 1s 0.01s infinite linear, fadeIn 1s;
+    animation: l3 1s 0.01s infinite linear, fadeIn 2s;
 }
+
 @keyframes l3 {
     to {
         transform: rotate(1turn);

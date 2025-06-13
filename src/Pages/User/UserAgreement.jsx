@@ -1,7 +1,9 @@
 import {
     CheckCircleOutlined,
     CloseCircleOutlined,
+    DownloadOutlined,
     FieldTimeOutlined,
+    Loading3QuartersOutlined,
     PieChartOutlined,
 } from "@ant-design/icons";
 import { Spin } from "antd";
@@ -132,9 +134,9 @@ const UserAgreement = ({ data, theme }) => {
                                     style={{
                                         padding: "8px",
                                     }}>
-                                    Telefon raqam
+                                    Model
                                 </th>
-                                <th>Model</th>
+                                <th>Avtomobil rangi</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -147,8 +149,8 @@ const UserAgreement = ({ data, theme }) => {
                                             className={`user-main-body-status ${item.status}`}>
                                             <span>{item.status}</span>
                                         </td>
-                                        <td>{item.phone}</td>
                                         <td>{item.model}</td>
+                                        <td>{item.color}</td>
                                         <td>
                                             <button
                                                 disabled={
@@ -176,7 +178,10 @@ const UserAgreement = ({ data, theme }) => {
                                                         <Spin size='small' />
                                                     </>
                                                 ) : (
-                                                    "PDFni yuklab olish"
+                                                    <>
+                                                        PDFni yuklab olish{" "}
+                                                        <DownloadOutlined />{" "}
+                                                    </>
                                                 )}
                                             </button>
                                         </td>
@@ -190,7 +195,13 @@ const UserAgreement = ({ data, theme }) => {
                                             textAlign: "center",
                                             padding: "20px",
                                         }}>
-                                        Ma'lumotlar yo'q yoki hali yuklanayabdi
+                                        <Loading3QuartersOutlined
+                                            spin
+                                            style={{
+                                                fontSize: "40px",
+                                                margin: "50px 0",
+                                            }}
+                                        />
                                     </td>
                                 </tr>
                             )}

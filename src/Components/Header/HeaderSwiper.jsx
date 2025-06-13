@@ -5,51 +5,37 @@ import "swiper/css/parallax";
 import { Autoplay, Parallax } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
-import gwmWingle7 from "../../Images/gwm-wingle-7.jpg";
-import havalDargo from "../../Images/haval-dargo.jpg";
-import havalH6 from "../../Images/haval-h6.jpg";
-import havalH9 from "../../Images/haval-h9.jpg";
-import havalJolion from "../../Images/haval-jolion.jpg";
-import havalM6 from "../../Images/haval-m6.jpg";
+import BYDChazor from "../../Images/byd-chazor.webp";
+import BYDSongPlusChampion from "../../Images/byd-song-plus-champion.webp";
+import BYDSongPlusEv from "../../Images/byd-song-plus-ev.webp";
+import BYDSongProDmi from "../../Images/byd-song-pro-dmi.webp";
 import "./Header.css";
 import "./HeaderSwiper.css";
 
 const images = [
     {
-        src: havalH9,
-        title: "YANGI HAVAL H9",
-        desc: "O'ZBEKISTON YOLLARIDA ALLAQACHON",
+        src: BYDChazor,
+        title: "BYD CHAZOR CHAMPION",
+        price: "273 900 000",
         link: "/models/haval-h9",
     },
     {
-        src: havalDargo,
-        title: "YANGI HAVAL DARGO",
-        desc: "TRASSADA MUKAMMAL, YO'LSIZLIKDA ISHONCHLI.",
+        src: BYDSongProDmi,
+        title: "SONG PRO DM-i Champion",
+        price: "321 800 000",
         link: "/models/haval-dargo",
     },
     {
-        src: havalJolion,
-        title: "YANGILANGAN HAVAL JOLION",
-        desc: "SO'NGI URFDAGI SHAHAR KROSSOVERI",
+        src: BYDSongPlusEv,
+        title: "SONG PLUS EV Champion",
+        price: "395 300 000",
         link: "/models/haval-jolion",
     },
     {
-        src: havalM6,
-        title: "HAVAL M6",
-        desc: "XARID UCHUN ENG QULAY MAVJUD KROSSOVERLARDAN BIRI",
+        src: BYDSongPlusChampion,
+        title: "SONG PLUS DM-i Champion",
+        price: "387 200 000",
         link: "/models/haval-m6",
-    },
-    {
-        src: havalH6,
-        title: "HAVAL H6",
-        desc: "IDEAL OILAVIY AVTOMOBIL",
-        link: "/models/haval-h6",
-    },
-    {
-        src: gwmWingle7,
-        title: "GWM WINGLE 7",
-        desc: "KO‘PROQ JOY - KO‘PROQ IMKONIYATLAR",
-        link: "/models/gwm-wingle-7",
     },
 ];
 
@@ -71,7 +57,7 @@ const SwiperComponent = () => {
                 }}
                 modules={[Parallax, Autoplay]}
                 className='swiper-container'>
-                {images.map(({ src, title, desc, link }, index) => (
+                {images.map(({ src, title, price, link }, index) => (
                     <SwiperSlide
                         key={index}
                         className='swiper-slide1 intro-slide'>
@@ -85,7 +71,7 @@ const SwiperComponent = () => {
                             <p
                                 className='slide-description'
                                 data-swiper-parallax='-500'>
-                                {desc}
+                                {price} so'm
                             </p>
                             <Link
                                 to={link}

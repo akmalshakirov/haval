@@ -22,7 +22,7 @@ function HavalM6() {
 
     useEffect(() => {
         Aos.init();
-        document.title = `HAVAL | ${car?.model}`;
+        document.title = `LIMON-AUTO | ${car?.model}`;
     }, []);
 
     const handleCheckColor = (color) => {

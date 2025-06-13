@@ -4,13 +4,48 @@ import { Link } from "react-router-dom";
 import headerAsideBtnPhone from "../../Images/aa.png";
 import havalLogo from "../../Images/haval.svg";
 import headerAsideBtnCar from "../../Images/header-aside-btn-car.png";
-import Logo from "../../Images/logo.png";
+// import Logo from "../../Images/logo.png";
+import Logo from "../../Images/limonauto.png";
+import LogoBlack from "../../Images/limonauto-black.png";
 import GWMwingle7 from "../../Images/m-gwm-wingle-7.png";
 import HavalDargo from "../../Images/m-haval-dargo.png";
-import HavalH6 from "../../Images/m-haval-h6.png";
 import HavalJolion from "../../Images/m-haval-jolion.png";
-import HavalM6 from "../../Images/m-haval-m6.png";
+import BYDChazorM from "../../Images/byd-chazor-m.webp";
+import BYDSongProDmiM from "../../Images/byd-song-pro-dmi-m.webp";
+import BYDSongPlusEvM from "../../Images/byd-song-plus-ev-m.webp";
+import BYDSongPlusDmiCHampionM from "../../Images/byd-song-plus-champion-m.webp";
 import "./Header.css";
+
+const HeaderModels = [
+    {
+        id: 1,
+        title: "BYD CHAZOR CHAMPION",
+        link: "/models/chazor",
+        price: "249 900 000",
+        img: BYDChazorM,
+    },
+    {
+        id: 2,
+        title: "SONG PRO DM-i Champion",
+        link: "/models",
+        price: "249 900 000",
+        img: BYDSongProDmiM,
+    },
+    {
+        id: 3,
+        title: "SONG PLUS EV Champion",
+        link: "/models",
+        price: "249 900 000",
+        img: BYDSongPlusEvM,
+    },
+    {
+        id: 4,
+        title: "SONG PLUS DM-i Champion",
+        link: "/models",
+        price: "249 900 000",
+        img: BYDSongPlusDmiCHampionM,
+    },
+];
 
 function HeaderNavBar() {
     const { t, i18n } = useTranslation();
@@ -21,6 +56,7 @@ function HeaderNavBar() {
     const [isAboutGwmOpen, setAboutGwmOpen] = useState(false);
     const [isSelection, setIsSelection] = useState(false);
     const token = localStorage.getItem("token");
+    const [header, setHeader] = useState(false);
     const changeLanguage = (lang) => {
         i18n.changeLanguage(lang);
     };
@@ -39,8 +75,7 @@ function HeaderNavBar() {
     }, [window.location.href]);
 
     useEffect(() => {
-        document.title =
-            "Bosh sahifa - HAVALning O'zbekistondagi rasmiy distribyutori";
+        document.title = "LIMON-AUTO`ning O'zbekistondagi rasmiy distribyutori";
         window.addEventListener("scroll", headerActive);
         return () => {
             window.removeEventListener("scroll", headerActive);
@@ -52,9 +87,11 @@ function HeaderNavBar() {
         const headerItem = document.querySelector(".header__item");
         const scrollTop = window.scrollY;
         if (scrollTop >= 70) {
+            setHeader(true);
             header?.classList?.add("header-active");
             headerItem?.classList?.add("header-item-active");
         } else {
+            setHeader(false);
             header?.classList?.remove("header-active");
             headerItem?.classList?.remove("header-item-active");
         }
@@ -73,12 +110,7 @@ function HeaderNavBar() {
         <div className={`${headerClass} header-section`}>
             <div className='header__inner'>
                 <Link to='/' className='header__logo'>
-                    <img
-                        src={Logo}
-                        alt={t("company")}
-                        width={69.98}
-                        height={56.98}
-                    />
+                    <img src={header ? LogoBlack : Logo} alt={t("company")} />
                 </Link>
                 <div
                     className='header__burger'
@@ -170,7 +202,7 @@ function HeaderNavBar() {
                                             <div className='header__models-modal-card'>
                                                 <Link to='/models/haval-jolion'>
                                                     <img
-                                                        src={HavalM6}
+                                                        src={BYDSongProDmiM}
                                                         alt='haval-dargo'
                                                     />
                                                 </Link>
@@ -179,21 +211,6 @@ function HeaderNavBar() {
                                                         HAVAL M6
                                                     </Link>
                                                     <p>249 900 000 so'mdan</p>
-                                                </div>
-                                            </div>
-                                            {/* 5 */}
-                                            <div className='header__models-modal-card'>
-                                                <Link to='/models/haval-h6'>
-                                                    <img
-                                                        src={HavalH6}
-                                                        alt='haval-dargo'
-                                                    />
-                                                </Link>
-                                                <div>
-                                                    <Link to='/models/haval-jolion'>
-                                                        HAVAL H6
-                                                    </Link>
-                                                    <p>324 900 000 so'mdan</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -356,91 +373,63 @@ function HeaderNavBar() {
                                         }`}
                                         onClick={(e) => e.stopPropagation()}>
                                         <div>
-                                            <h3>Mavjud avtomobillar</h3>
-                                            <div className='models-modal-cards'>
-                                                {/* 1 */}
-                                                <div className='models-modal-card'>
-                                                    <Link to='/models/gwm-wingle-7'>
-                                                        <img
-                                                            src={GWMwingle7}
-                                                            alt='haval-dargo'
-                                                        />
+                                            <div
+                                                style={{
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    justifyContent:
+                                                        "space-between",
+                                                }}>
+                                                <h3>Mavjud avtomobillar</h3>
+                                                <span
+                                                    style={{
+                                                        cursor: "pointer",
+                                                        padding: "5px 9px",
+                                                        backgroundColor:
+                                                            "rgba(0,0,0,0.2)",
+                                                        borderRadius: "5px",
+                                                    }}
+                                                    onClick={() =>
+                                                        setOpenModels(false)
+                                                    }>
+                                                    <i
+                                                        class='fa-solid fa-xmark'
+                                                        style={{
+                                                            fontSize: "20px",
+                                                        }}></i>
+                                                </span>
+                                            </div>
+                                            <div className='header__models-modal-cards'>
+                                                {HeaderModels.map((model) => (
+                                                    <Link
+                                                        to={model.link}
+                                                        key={model.id}>
+                                                        <div className='header__models-modal-card'>
+                                                            <img
+                                                                src={model.img}
+                                                                alt={
+                                                                    model.title
+                                                                }
+                                                                width={300}
+                                                            />
+                                                            <div>
+                                                                <Link
+                                                                    to={
+                                                                        model.link
+                                                                    }>
+                                                                    {
+                                                                        model.title
+                                                                    }
+                                                                </Link>
+                                                                <p>
+                                                                    {
+                                                                        model.price
+                                                                    }
+                                                                </p>
+                                                            </div>
+                                                        </div>
                                                     </Link>
-                                                    <div>
-                                                        <Link to='/models/gwm-wingle-7'>
-                                                            GWM WINGLE 7
-                                                        </Link>
-                                                        <p>359 900 000 so'm</p>
-                                                    </div>
-                                                </div>
-                                                {/* 2 */}
-                                                <div className='models-modal-card'>
-                                                    <Link to='/models/haval-dargo'>
-                                                        <img
-                                                            src={HavalDargo}
-                                                            alt='haval-dargo'
-                                                        />
-                                                    </Link>
-                                                    <div>
-                                                        <Link to='/models/haval-dargo'>
-                                                            HAVAL DARGO
-                                                        </Link>
-                                                        <p>
-                                                            399 900 000 so'mdan
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                {/* 3 */}
-                                                <div className='models-modal-card'>
-                                                    <Link to='/models/haval-jolion'>
-                                                        <img
-                                                            src={HavalJolion}
-                                                            alt='haval-dargo'
-                                                        />
-                                                    </Link>
-                                                    <div>
-                                                        <Link to='/models/haval-jolion'>
-                                                            HAVAL JOLION
-                                                        </Link>
-                                                        <p>
-                                                            399 900 000 so'mdan
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                {/* 4 */}
-                                                <div className='models-modal-card'>
-                                                    <Link to='/models/haval-m6'>
-                                                        <img
-                                                            src={HavalM6}
-                                                            alt='haval-dargo'
-                                                        />
-                                                    </Link>
-                                                    <div>
-                                                        <Link to='/models/haval-m6'>
-                                                            HAVAL M6
-                                                        </Link>
-                                                        <p>
-                                                            249 900 000 so'mdan
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                {/* 5 */}
-                                                <div className='models-modal-card'>
-                                                    <Link to='/models/haval-h6'>
-                                                        <img
-                                                            src={HavalH6}
-                                                            alt='haval-dargo'
-                                                        />
-                                                    </Link>
-                                                    <div>
-                                                        <Link to='/models/haval-h6'>
-                                                            HAVAL H6
-                                                        </Link>
-                                                        <p>
-                                                            324 900 000 so'mdan
-                                                        </p>
-                                                    </div>
-                                                </div>
+                                                ))}
                                             </div>
                                         </div>
                                     </div>
@@ -613,14 +602,6 @@ function HeaderNavBar() {
                             </li>
                         </ul>
                     </div>
-                    <Link to='/'>
-                        <img
-                            src={havalLogo}
-                            alt='haval-logo'
-                            width={125}
-                            height={13}
-                        />
-                    </Link>
                 </div>
             </div>
 

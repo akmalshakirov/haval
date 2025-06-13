@@ -7,16 +7,16 @@ const FooterComponent = () => {
             <footer className='footer'>
                 <div>
                     <p>
-                        Saytda joylashtirilgan HAVAL brendi mahsulotlari
+                        Saytda joylashtirilgan LIMON-AUTO brendi mahsulotlari
                         narxlari haqidagi ma'lumotlar faqat axborot tariqasida
-                        keltirilgan. Ko'rsatilgan narxlar HAVAL dilerlaridagi
-                        haqiqiy narxlardan farq qilishi mumkin. Joriy mahsulot
-                        narxlari haqida batafsil ma'lumotlarni olish uchun
-                        HAVALning dilerlariga murojaat qiling. Har qanday HAVAL
-                        brendi mahsulotini sotib olish shaxsiy oldi-sotdi
-                        shartnomasi shartlariga muvofiq amalga oshiriladi.
-                        Ko'rsatilgan avtomobil tasvirlari sotilayotgan
-                        avtomobilnikidan farq qilishi mumkin.
+                        keltirilgan. Ko'rsatilgan narxlar LIMON-AUTO
+                        dilerlaridagi haqiqiy narxlardan farq qilishi mumkin.
+                        Joriy mahsulot narxlari haqida batafsil ma'lumotlarni
+                        olish uchun HAVALning dilerlariga murojaat qiling. Har
+                        qanday LIMON-AUTO brendi mahsulotini sotib olish shaxsiy
+                        oldi-sotdi shartnomasi shartlariga muvofiq amalga
+                        oshiriladi. Ko'rsatilgan avtomobil tasvirlari
+                        sotilayotgan avtomobilnikidan farq qilishi mumkin.
                     </p>
                     <hr
                         style={{
@@ -34,7 +34,7 @@ const FooterComponent = () => {
                                 color: "#b7babb",
                                 margin: "7px 0",
                             }}>
-                            HAVAL axborot liniyasi
+                            LIMON-AUTO axborot liniyasi
                         </h3>
                         <a
                             href='tel:+998712878888'
@@ -49,7 +49,7 @@ const FooterComponent = () => {
                                 style={{
                                     margin: "0 0 7px 0",
                                 }}>
-                                HAVAL ijtimoiy tarmoqlarda
+                                LIMON-AUTO ijtimoiy tarmoqlarda
                             </p>
                             <div className='footer-info-social'>
                                 <a href='https://t.me' target='_blank'>
@@ -88,7 +88,7 @@ const FooterComponent = () => {
                             </li>
                         </ul>
                         <ul>
-                            <h2>HAVAL brendi</h2>
+                            <h2>LIMON-AUTO brendi</h2>
                             <li>
                                 <a href='/'>Configurator</a>
                             </li>
@@ -97,7 +97,7 @@ const FooterComponent = () => {
                             </li>
                         </ul>
                         <ul>
-                            <h2>HAVAL O'zbekistonda</h2>
+                            <h2>LIMON-AUTO O'zbekistonda</h2>
                             <li>
                                 <a href='/dealers'>Dilerlar</a>
                             </li>
@@ -121,7 +121,7 @@ const FooterComponent = () => {
                             <li>
                                 <a href='/'>
                                     <i className='fa-solid fa-envelope'></i>
-                                    info@haval.uz
+                                    info@limon.uz
                                 </a>
                             </li>
                             <li>

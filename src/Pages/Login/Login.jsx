@@ -14,7 +14,7 @@ const Login = () => {
     const [form] = Form.useForm();
 
     useEffect(() => {
-        document.title = "Haval | Login";
+        document.title = "LIMON-AUTO | Login";
     }, []);
 
     const handleSubmit = async (values) => {

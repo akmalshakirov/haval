@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
-import PreLoader from "../../Components/Preloader/Preloader.jsx";
 import AdminDealer from "../../Components/Admin_dealer/AdminDealer.jsx";
+import PreLoader from "../../Components/Preloader/Preloader.jsx";
 
 const AdminPanel = React.lazy(() => import("../../Components/Admin/Admin.jsx"));
 const AdminLogin = React.lazy(() =>
@@ -60,6 +60,9 @@ const TestDrive = React.lazy(() =>
 );
 const User = React.lazy(() => import("../../Pages/User/User.jsx"));
 const AuthRouter = React.lazy(() => import("../AuthRouters/AuthRouter.jsx"));
+const ModelsChazor = React.lazy(() =>
+    import("../../Pages/Models/BYD-chazor/index.jsx")
+);
 
 const AppRouter = () => {
     return (
@@ -90,6 +93,7 @@ const AppRouter = () => {
                 <Route path='/admin/dealers' element={<AdminDealer />} />
                 <Route path='/dealers' element={<Dealers />} />
                 <Route path='/models' element={<Models />} />
+                <Route path='/models/chazor' element={<ModelsChazor />} />
                 <Route path='/models/haval-dargo' element={<HavalDargo />} />
                 <Route path='/models/haval-jolion' element={<HavalJolion />} />
                 <Route path='/models/haval-m6' element={<HavalM6 />} />
